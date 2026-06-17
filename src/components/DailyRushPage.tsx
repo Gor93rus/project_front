@@ -1,10 +1,6 @@
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import {
-  ChevronLeft, Zap, Target, Trash2, ShoppingCart, History,
-  Flame, Snowflake, Trophy, Star, TrendingUp,
-  Sparkles, RotateCcw, Clock, HelpCircle, X,
-} from 'lucide-react';
+import { ChevronLeft, Zap, Target, Trash2, ShoppingCart, History, Flame, Snowflake, Trophy, Star, TrendingUp, Sparkles, RotateCcw, Clock, CircleHelp as HelpCircle, X } from 'lucide-react';
 import type { DailyLotteryConfig } from '../data/lottery-configs';
 import { DAILY_RUSH_CONFIG, computePrizeTiers, computeHTPRules } from '../data/lottery-configs';
 import { useLotteryDrawData } from '../hooks/useLotteryDrawData';
@@ -655,6 +651,3 @@ export function DailyRushPage({ config:cfg=DAILY_RUSH_CONFIG }: { config?:DailyL
   );
 }
 
-
-
-export { DailyRushPage }
