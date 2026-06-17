@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import { TonConnectUIProvider } from '@tonconnect/ui-react';
 import { Header } from './components/Header';
@@ -17,16 +17,89 @@ import {
   WEEKEND_SPECIAL_CONFIG, BIG_WEEKEND_CONFIG, BOUNTY_CONFIG,
   FLASH_START_CONFIG, FLASH_DRIVE_CONFIG, FLASH_PRO_CONFIG,
 } from './data/lottery-configs';
+import { LOTTERIES } from './data/lotteries';
 import { AuroraBackground } from './components/AuroraBackground';
 import { AnimatedSection } from './components/AnimatedSection';
 import { stagger, fadeUp, fadeUpCard } from './lib/animations';
 
+// ── Global Jackpot Strip ─────────────────────────────────────────────────────
+const BASE_JACKPOT = LOTTERIES.reduce((s, l) => s + l.jackpot, 0);
+
+function GlobalJackpotStrip() {
+  const [value, setValue] = useState(BASE_JACKPOT);
+  const raf = useRef<number>(0);
+  const last = useRef(Date.now());
+
+  useEffect(() => {
+    const tick = () => {
+      const now = Date.now();
+      const dt = now - last.current;
+      last.current = now;
+      // ~0.3 TON per second simulated growth
+      setValue(v => v + (dt / 1000) * 0.31);
+      raf.current = requestAnimationFrame(tick);
+    };
+    raf.current = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf.current);
+  }, []);
+
+  const formatted = value.toLocaleString('en-US', { maximumFractionDigits: 0 });
+
+  return (
+    <div className="jackpot-strip mx-4 mb-1" style={{ borderRadius: 14 }}>
+      <div className="flex items-center justify-between px-4 py-3">
+        <div className="flex items-center gap-2">
+          <span className="flex items-center gap-1 text-[8px] font-extrabold uppercase tracking-widest px-1.5 py-0.5 rounded-full"
+            style={{ background: 'rgba(244,63,94,0.18)', color: 'var(--coral)', border: '1px solid rgba(244,63,94,0.35)' }}>
+            <span className="w-1.5 h-1.5 rounded-full" style={{ background: 'var(--coral)', animation: 'livePulse 1s ease-in-out infinite' }} />
+            LIVE
+          </span>
+          <span className="text-[10px] font-bold uppercase tracking-wide" style={{ color: 'rgba(255,255,255,0.55)' }}>
+            Total Prize Pool
+          </span>
+        </div>
+        <div className="flex items-baseline gap-1.5">
+          <span className="jackpot-number text-[22px]">{formatted}</span>
+          <span className="text-[10px] font-bold" style={{ color: 'rgba(255,255,255,0.55)' }}>TON</span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ── Global Winners Ticker ────────────────────────────────────────────────────
+const GLOBAL_WINNERS = [
+  { user: 'Alex K.', prize: '1,200 TON', game: 'Weekend Special' },
+  { user: 'Maria S.', prize: '340 TON', game: 'Daily Rush' },
+  { user: 'D***ov', prize: '88 TON', game: 'Flash Pro' },
+  { user: 'Tony W.', prize: '2,500 TON', game: 'Big Weekend' },
+  { user: 'N***a', prize: '120 TON', game: 'Daily Thunder' },
+  { user: 'Jake M.', prize: '670 TON', game: 'Daily Strike' },
+];
+
+function GlobalWinnersTicker() {
+  return (
+    <div className="winners-ticker mx-4 mb-3" style={{ borderRadius: 8 }}>
+      <div className="winners-scroll">
+        {[...GLOBAL_WINNERS, ...GLOBAL_WINNERS].map((w, i) => (
+          <span key={i} className="flex items-center gap-1.5 shrink-0">
+            <span style={{ color: 'var(--gold)', fontSize: 9 }}>&#9733;</span>
+            <span style={{ color: 'rgba(255,255,255,0.85)', fontSize: 9.5, fontWeight: 600 }}>{w.user}</span>
+            <span style={{ color: 'var(--emerald)', fontSize: 9.5, fontWeight: 700 }}>{w.prize}</span>
+            <span style={{ color: 'rgba(255,255,255,0.38)', fontSize: 8.5 }}>{w.game}</span>
+            <span style={{ color: 'rgba(255,255,255,0.15)', fontSize: 8, marginLeft: 4 }}>·</span>
+          </span>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 function HomePage() {
   return (
-    <div className="flex flex-col gap-4 pb-2">
-      <AnimatedSection variants={fadeUpCard}>
-        <FeaturesBanner />
-      </AnimatedSection>
+    <div className="flex flex-col gap-3 pb-2">
+      <GlobalJackpotStrip />
+      <GlobalWinnersTicker />
 
       <AnimatedSection variants={fadeUp}>
         <HeroCarousel />
@@ -38,6 +111,10 @@ function HomePage() {
 
       <AnimatedSection variants={stagger}>
         <ScratchCarousel />
+      </AnimatedSection>
+
+      <AnimatedSection variants={fadeUpCard}>
+        <FeaturesBanner />
       </AnimatedSection>
 
       <AnimatedSection variants={fadeUpCard}>
@@ -58,7 +135,7 @@ function PlaceholderPage({ title }: { title: string }) {
         <circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/>
       </svg>
       <p className="text-[14px] font-semibold" style={{ color: 'var(--ink-2)' }}>{title}</p>
-      <p className="text-[11px]">Скоро</p>
+      <p className="text-[11px]">Coming soon</p>
     </div>
   );
 }
@@ -117,13 +194,13 @@ function AppLayout() {
     <div className="relative min-h-screen" style={{ background: 'var(--bg-0)' }}>
       {!isLotteryPage && <AuroraBackground />}
       <div className="relative z-10 flex flex-col min-h-screen">
-        <Header />
+        {!isLotteryPage && <Header />}
         <main className="flex-1 overflow-y-auto pt-2" style={{ paddingBottom: isLotteryPage ? 0 : 72 }}>
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/live" element={<PlaceholderPage title="Live Draw" />} />
-            <Route path="/cart" element={<PlaceholderPage title="Корзина" />} />
-            <Route path="/history" element={<PlaceholderPage title="История" />} />
+            <Route path="/cart" element={<PlaceholderPage title="Cart" />} />
+            <Route path="/history" element={<PlaceholderPage title="History" />} />
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/lottery/daily-rush" element={<DailyRushPage config={DAILY_RUSH_CONFIG} />} />
             <Route path="/lottery/daily-thunder-5x36" element={<DailyRushPage config={DAILY_THUNDER_CONFIG} />} />

@@ -39,7 +39,7 @@ export function GamificationBanner() {
                     WebkitBackgroundClip: 'text',
                     WebkitTextFillColor: 'transparent',
                   }}>
-                  Играй и получай награды
+                  Play & Earn Rewards
                 </h2>
                 <span className="text-[7.5px] px-1 py-px rounded-full font-extrabold"
                   style={{ background: 'rgba(240,185,11,0.15)', color: 'var(--gold)', border: '1px solid rgba(240,185,11,0.35)' }}>
@@ -92,7 +92,7 @@ export function GamificationBanner() {
                 <p className="text-[12px] font-black leading-none" style={{ color: '#FF8E53' }}>
                   {progress?.streak_days ?? 0}
                 </p>
-                <p className="text-[8px] font-bold uppercase leading-none mt-0.5" style={{ color: 'var(--ink-2)' }}>Стрик</p>
+                <p className="text-[8px] font-bold uppercase leading-none mt-0.5" style={{ color: 'var(--ink-2)' }}>Streak</p>
               </div>
             </div>
             <div className="flex-1 flex items-center gap-1.5 px-2 py-1.5 rounded-lg"
@@ -102,7 +102,7 @@ export function GamificationBanner() {
                 <p className="text-[12px] font-black leading-none" style={{ color: '#FFD200' }}>
                   {progress?.bonus_count ?? 0}
                 </p>
-                <p className="text-[8px] font-bold uppercase leading-none mt-0.5" style={{ color: 'var(--ink-2)' }}>Бонусы</p>
+                <p className="text-[8px] font-bold uppercase leading-none mt-0.5" style={{ color: 'var(--ink-2)' }}>Bonuses</p>
               </div>
             </div>
             <div className="flex-1 flex items-center gap-1.5 px-2 py-1.5 rounded-lg"
@@ -112,7 +112,7 @@ export function GamificationBanner() {
                 <p className="text-[12px] font-black leading-none" style={{ color: '#c4b5fd' }}>
                   {progress?.badges_count ?? 0}
                 </p>
-                <p className="text-[8px] font-bold uppercase leading-none mt-0.5" style={{ color: 'var(--ink-2)' }}>Бейджи</p>
+                <p className="text-[8px] font-bold uppercase leading-none mt-0.5" style={{ color: 'var(--ink-2)' }}>Badges</p>
               </div>
             </div>
           </div>

@@ -10,7 +10,7 @@ interface Props {
 
 const TABS: { id: NavTab; label: string; icon: React.ReactNode; live?: boolean }[] = [
   {
-    id: 'home', label: 'Главная',
+    id: 'home', label: 'Home',
     icon: (
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>
@@ -26,7 +26,7 @@ const TABS: { id: NavTab; label: string; icon: React.ReactNode; live?: boolean }
     ),
   },
   {
-    id: 'cart', label: 'Корзина',
+    id: 'cart', label: 'Cart',
     icon: (
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
@@ -35,7 +35,7 @@ const TABS: { id: NavTab; label: string; icon: React.ReactNode; live?: boolean }
     ),
   },
   {
-    id: 'history', label: 'История',
+    id: 'history', label: 'History',
     icon: (
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <polyline points="12 8 12 12 14 14"/>
@@ -44,7 +44,7 @@ const TABS: { id: NavTab; label: string; icon: React.ReactNode; live?: boolean }
     ),
   },
   {
-    id: 'profile', label: 'Профиль',
+    id: 'profile', label: 'Profile',
     icon: (
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>

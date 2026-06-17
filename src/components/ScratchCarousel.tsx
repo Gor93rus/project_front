@@ -170,7 +170,7 @@ function ScratchCard({ game }: { game: typeof SCRATCH_GAMES[0] }) {
         </div>
 
         <div className="flex justify-between text-[9px] font-semibold text-white/85">
-          <span>Осталось</span>
+          <span>Remaining</span>
           <span>{game.remainingTickets.toLocaleString()}</span>
         </div>
 
@@ -191,12 +191,12 @@ export function ScratchCarousel() {
     <section className="px-4">
       <div className="flex items-center justify-between mb-3">
         <div>
-          <h2 className="font-extrabold text-[14px]" style={{ color: 'var(--ink-0)' }}>Мгновенные игры</h2>
-          <p className="text-[10px] mt-0.5" style={{ color: 'var(--ink-3)' }}>5 игр — мгновенный результат</p>
+          <h2 className="font-extrabold text-[14px]" style={{ color: 'var(--ink-0)' }}>Instant Games</h2>
+          <p className="text-[10px] mt-0.5" style={{ color: 'var(--ink-3)' }}>5 games — instant results</p>
         </div>
         <button className="text-[11px] font-semibold px-3 py-1.5 rounded-full flex items-center gap-1"
           style={{ background: 'var(--surface-2)', border: '1px solid var(--line)', color: 'var(--ton)' }}>
-          Все
+          All
           <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6"><path d="M9 6l6 6-6 6"/></svg>
         </button>
       </div>
