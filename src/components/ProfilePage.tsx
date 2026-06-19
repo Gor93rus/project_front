@@ -46,8 +46,8 @@ function LevelProgress({ level, levelName, xp, xpForNext, nextLevelName }: {
     <div
       className="rounded-2xl p-4"
       style={{
-        background: 'linear-gradient(135deg, rgba(255,122,42,0.15) 0%, rgba(255,179,71,0.08) 100%)',
-        border: '1px solid rgba(255,122,42,0.2)',
+        background: 'linear-gradient(135deg, var(--gold-dim) 0%, var(--secondary-dim) 100%)',
+        border: '1px solid var(--gold-dim)',
       }}
     >
       <div className="flex items-center justify-between mb-2">
@@ -55,9 +55,9 @@ function LevelProgress({ level, levelName, xp, xpForNext, nextLevelName }: {
           <div
             className="w-9 h-9 rounded-xl flex items-center justify-center font-black text-[15px]"
             style={{
-              background: 'linear-gradient(135deg, var(--amber-brand), var(--amber-soft))',
+              background: 'linear-gradient(135deg, var(--gold), var(--gold-soft))',
               color: '#fff',
-              boxShadow: '0 4px 12px rgba(255,122,42,0.35)',
+              boxShadow: '0 4px 12px var(--gold-glow)',
             }}
           >
             {level}
@@ -71,7 +71,7 @@ function LevelProgress({ level, levelName, xp, xpForNext, nextLevelName }: {
         </div>
         <div className="text-right">
           <p className="text-[9px] font-semibold" style={{ color: 'var(--ink-3)' }}>Следующий</p>
-          <p className="text-[10px] font-bold" style={{ color: 'var(--amber-soft)' }}>{nextLevelName}</p>
+          <p className="text-xs font-bold" style={{ color: 'var(--gold-soft)' }}>{nextLevelName}</p>
         </div>
       </div>
 
@@ -83,8 +83,8 @@ function LevelProgress({ level, levelName, xp, xpForNext, nextLevelName }: {
         <motion.div
           className="h-full rounded-full"
           style={{
-            background: 'linear-gradient(90deg, var(--amber-brand), var(--amber-soft))',
-            boxShadow: '0 0 12px rgba(255,122,42,0.4)',
+        background: 'linear-gradient(90deg, var(--gold), var(--gold-soft))',
+        boxShadow: '0 0 12px var(--gold-glow)',
           }}
           initial={{ width: 0 }}
           animate={{ width: `${pct}%` }}
@@ -151,9 +151,9 @@ function StreakSection({ days }: { days: number }) {
         <div
           className="text-[10px] font-bold px-2.5 py-1 rounded-full"
           style={{
-            background: 'linear-gradient(135deg, rgba(255,122,42,0.2), rgba(255,179,71,0.1))',
-            color: 'var(--amber-soft)',
-            border: '1px solid rgba(255,122,42,0.25)',
+            background: 'linear-gradient(135deg, var(--gold-dim), var(--secondary-dim))',
+            color: 'var(--gold-soft)',
+            border: '1px solid var(--gold-dim)',
           }}
         >
           +{days * 10} XP бонус
@@ -175,12 +175,12 @@ function StreakSection({ days }: { days: number }) {
                   'w-8 h-8 rounded-lg flex items-center justify-center text-[11px] font-bold transition-all duration-300',
                 )}
                 style={{
-                  background: isActive
-                    ? 'linear-gradient(135deg, var(--amber-brand), var(--amber-soft))'
-                    : 'var(--surface-2)',
-                  color: isActive ? '#fff' : 'var(--ink-3)',
-                  border: isToday && !isActive ? '1px solid var(--amber-brand)' : '1px solid transparent',
-                  boxShadow: isActive ? '0 4px 12px rgba(255,122,42,0.3)' : 'none',
+                    background: isActive
+                      ? 'linear-gradient(135deg, var(--gold), var(--gold-soft))'
+                      : 'var(--surface-2)',
+                    color: isActive ? '#fff' : 'var(--ink-3)',
+                    border: isToday && !isActive ? '1px solid var(--gold)' : '1px solid transparent',
+                    boxShadow: isActive ? '0 4px 12px var(--gold-glow)' : 'none',
                 }}
               >
                 {d.getDate()}
@@ -379,7 +379,7 @@ function SettingsSection() {
         onClick={() => hapticImpact('heavy')}
       >
         <span className="text-[16px]">🚪</span>
-        <p className="text-[12px] font-bold" style={{ color: 'var(--red)' }}>Выйти</p>
+            <p className="text-sm font-bold" style={{ color: 'var(--coral)' }}>Выйти</p>
       </button>
     </div>
   );
@@ -462,7 +462,7 @@ export function ProfilePage() {
         <StatCard label="Выигрыши" value={profile.totalWins} />
         <StatCard label="Билеты" value={profile.totalTickets} />
         <StatCard label="Игры" value={profile.totalGames} />
-        <StatCard label="Выиграно" value={profile.totalWonAmount} suffix="TON" accent="var(--green)" />
+        <StatCard label="Выиграно" value={profile.totalWonAmount} suffix="TON" accent="var(--emerald)" />
       </motion.div>
 
       {/* ── Streak ── */}

@@ -2,22 +2,85 @@
 
 > Telegram Mini App · TON Blockchain · 10 тиражных + 5 скретч-лотерей  
 > Фокус: визуал, эмоции игрока, гэмблинг UX  
-> Последнее обновление: 15.06.2026 (конец 2-й итерации DailyRushPage)
+> Последнее обновление: 19.06.2026
 
 ---
 
-## 📌 Методология
+## 📌 Методология — Huashu Design Framework
 
-- **Huashu Design** — Junior Designer Pass, Position Four Questions, анти-AI-slope
-- **M-Design System** — единый источник цветовых токенов (Level/Color/Tone)
-- **Bolt.new прототип** — эталон визуального качества (CSS-классы перенесены, кнопки и selected сохранены)
-- **Luminous Gradient** — фирменная мультицветная схема (синий+фиолетовый+бирюзовый, Stake/BC.Game стиль)
+> **Huashu Design** — обязательный фреймворк для всех дизайн-решений.  
+> Все пять инструкций применяются при создании новых страниц (V9, V10 и далее).
 
-### Position Four Questions (Huashu)
-1. **Who is the user?** Игрок Telegram Mini App, 18-45 лет, крипто-энтузиаст
-2. **What is the context?** Мобильный телефон, вертикальная ориентация, 390×~750px полезной области
-3. **What is the emotional arc?** Предвкушение → выбор чисел → подтверждение → ожидание розыгрыша → выигрыш/проигрыш. Пик эмоции: джекпот и confetti
-4. **What is the visual narrative?** Ночное небо (Aurora) → огонь/сияние (Hot picks) → золото (Jackpot) → стеклянный 3D (glass-кнопки/selected)
+---
+
+### 1. Position Four Questions
+_Фундаментальные вопросы перед началом любой дизайн-задачи._
+
+| # | Вопрос | Текущий ответ |
+|---|--------|---------------|
+| **Who is the user?** | Игрок Telegram Mini App, 18-45 лет, крипто-энтузиаст |
+| **What is the context?** | Мобильный телефон, вертикальная ориентация, 390×~750px полезной области |
+| **What is the emotional arc?** | Предвкушение → выбор чисел → подтверждение → ожидание розыгрыша → выигрыш/проигрыш. Пик эмоции: джекпот + confetti |
+| **What is the visual narrative?** | Глубокий тёмный фон → electric blue неоны → vivid glassmorphism → 3D-карточки → neon glow на кнопках |
+
+---
+
+### 2. Anti-AI Slop Baseline
+_Правила, предотвращающие «AI-slope» — безликий, сгенерированный дизайн без характера._
+
+- ❌ Избегать web-design tropes: стандартные Hero-секции, generic gradient buttons, скучные white cards
+- ❌ Не использовать дефолтные цвета/material-палитры без контекста проекта
+- ✅ Каждый визуальный элемент должен иметь **причину** в контексте гэмблинг-эмоций
+- ✅ Типографика — bold, punchy, с характером (никаких Roboto/Inter по умолчанию)
+- ✅ Цвета — saturated, vivid, с neon-glow акцентами (не пастельные, не muddy)
+
+---
+
+### 3. Brand Asset Protocol
+_Правила работы с брендовыми активами — токены, шрифты, иконки._
+
+- **Единый источник правды:** `src/styles/design-tokens.css` (Dark Vault)
+- **Шрифты:** Space Grotesk (основной) + JetBrains Mono (только числа)
+- **Иконки:** lucide-react — единая библиотека, не смешивать с emoji/SVG
+- **Цвета:** только через CSS-переменные или Tailwind-токены. Никаких сырых HEX/rgba()
+- **Glow-эффекты:** `--primary-glow`, `--secondary-glow`, `--gold-glow`, `--coral-glow`
+- **Opacity-варианты:** `--primary-18`, `--coral-35` и т.д. — не хардкодить rgba()
+- **Glass-3D:** через `.glass-3d` класс (border-top светлый, border-bottom тёмный, box-shadow)
+- **Правило анимаций:** Framer Motion — для entrance/layout, CSS keyframes — только looping
+
+---
+
+### 4. 5-Dimensional Critique
+_Чек-лист для самопроверки перед завершением задачи._
+
+| Измерение | Вопрос |
+|-----------|--------|
+| **1. Clarity** | Понятно ли игроку что делать? Видит ли он CTA с первого взгляда? |
+| **2. Emotion** | Вызывает ли дизайн азарт? Где пик эмоции на этой странице? |
+| **3. Consistency** | Соответствует ли элемент Dark Vault токенам? Использует ли общие компоненты? |
+| **4. Performance** | Нет ли тяжёлых анимаций на 60fps mobile? Оптимизированы ли re-render'ы? |
+| **5. Accessibility** | Достаточный ли контраст текста? Работает ли с клавиатуры? |
+
+---
+
+### 5. The Lifecycle Workflow
+_Порядок работы над каждой задачей._
+
+1. **Position Four Questions** — определить пользователя, контекст, эмоцию, нарратив
+2. **Explore variants** — 2-3 разных подхода к решению
+3. **Anti-AI Slop check** — убрать generic паттерны
+4. **Brand Asset check** — привести к токенам, убрать rgba() и text-[Npx]
+5. **5-Dimensional Critique** — самопроверка по всем 5 измерениям
+6. **Playwright 390×844** — визуальная проверка на мобильном viewport
+7. **Commit** — атомарный коммит, одна задача = один коммит
+
+---
+
+### Базовая техническая методология
+
+- **Dark Vault Design System** — единый источник токенов (`design-tokens.css`), electric blue + deep purple
+- **Premium Web3 Casino** — vivid glassmorphism, 3D cards, neon glow, bold punchy типографика
+- **Tailwind-классы** вместо арбитрарных `text-[Npx]`
 
 ---
 
@@ -25,13 +88,16 @@
 
 | Файл | Назначение |
 |------|-----------|
-| `src/index.css` | M-Design токены + Luminous Gradient схема + базовые стили |
+| `src/styles/design-tokens.css` | Единый источник дизайн-токенов (Dark Vault) |
 | `src/styles/lottery-cards.css` | 50+ компонентных классов (glass-panel, hero-card, num-cell, кнопки, карточки) |
+| `src/index.css` | Мастер-стиль: импорты + Tailwind + компонентные стили |
 | `src/components/DailyRushPage.tsx` | Универсальная страница N×M лотерей (эталон) |
 | `src/data/lottery-configs.ts` | Конфиги 10 лотерей (цвета, aurora, темы) |
 | `src/hooks/useLotteryDrawData.ts` | API-гибрид (live data → mock fallback) |
-| `DESIGN_SYSTEM.md` | Полная спецификация M-Design (27+ цветов) |
-| `FINANCIAL_MODEL.md` | Фин. модель распределения средств (изучена для прозрачности) |
+| `src/lib/api.ts` | API-клиент для бэкенда (10+ методов) |
+| `src/hooks/useTonWallet.ts` | TON Connect — авторизация через кошелёк |
+| `tailwind.config.js` | Расширен: типографика 3xs-4xl, цвета, glow-тени, анимации |
+| `DESIGN_SYSTEM.md` | Полная спецификация Dark Vault (палитра, типографика, правила) |
 
 ---
 
@@ -50,7 +116,7 @@
 
 ### Итерация 2: Полировка (15.06.2026)
 - [x] Confetti убран со страницы выбора чисел (A)
-- [x] Мультицветный градиент (синий `#1A3A8A` + фиолетовый `#6D28D9` + бирюзовый `#0E7490`) в glass-panel, hero-card (B)
+- [x] Luminous Gradient схемы в glass-panel, hero-card (B)
 - [x] Градиент num-cell — монохромный (не пёстрый) (#1)
 - [x] Яркость поднята (убраны избыточные тени, blur уменьшен) (#2)
 - [x] HeroCard инлайн-градиент заменён на CSS-класс (#3)
@@ -58,19 +124,16 @@
 - [x] Активные состояния: `num-cell.selected` + `ticket-ball` — Luminous Gradient (#4)
 - [x] Progress-bar + Selected counter — Luminous Gradient (#5)
 - [x] `prev-ball` (Previous Draws) — Luminous Gradient (#6)
-- [x] Сжатие под первый экран: Jackpot 38px, Ticker убран из Hero, Countdown 32×42, HeroCard padding 14/12/12, кнопки py-2 (D)
-- [x] Прозрачность распределения средств: 50% Prize / 15% Jackpot / 5% Reserve / 30% Platform (E) — требует доработки (#10)
+- [x] Сжатие под первый экран (D)
+- [x] Прозрачность распределения средств: 50% / 15% / 5% (#10)
 
-### Оставшиеся правки для следующей сессии:
-
-| # | Задача | Приоритет |
-|---|--------|-----------|
-| 7 | Add Numbers: убрать `anim-pulse-glow` (scale 1.12 заходит на соседей), усилить прозрачность active | 🔴 |
-| 8 | Убрать My Stats (перенести в отдельную страницу профиля позже) | 🟡 |
-| 9 | Вернуть Ticker в Hero (победители последнего тиража, если нет — полезная информация) | 🟡 |
-| 10 | Фонд: убрать Platform (30%), оставить 3 статьи (50/15/5%) | 🟡 |
-| 11 | Glass-3D эффект на все блоки (как `num-cell.selected` — выпуклый, стеклянный) | 🟢 |
-| 12 | Джекпот: пересмотреть шрифт, эффект, компактное размещение | 🟡 |
+### Оставшиеся правки (#7-#12) — ✅ Выполнены 16.06.2026
+- [x] **#7** — `anim-pulse-glow` заменён на `pulse-glow` (box-shadow без scale)
+- [x] **#8** — My Stats удалён, перенесён в профиль
+- [x] **#9** — Ticker возвращён между Hero и гридом
+- [x] **#10** — Platform 30% убран, отображается 50/15/5
+- [x] **#11** — Glass-3D эффект на всех блоках + tier-glass-3d для PrizeTiers
+- [x] **#12** — Джекпот: glitch-эффект + одна строка "XXXX TON"
 
 ---
 
@@ -78,59 +141,77 @@
 
 - [x] P0 #1: Параметризация DailyRushPage (10 конфигов + `computePrizeTiers` + `computeHTPRules`)
 - [x] P0 #2: API-интеграция (гибрид: `useLotteryDrawData` → live data с mock fallback)
-- [x] 10 маршрутов лотерей в App.tsx
+- [x] 9 маршрутов лотерей в App.tsx (дубликат `/daily-rush-4x20` удалён)
 - [x] Кнопка Назад работает (`window.history.back()`)
 - [x] `freqMap` стабильна (через `useMemo`, без `Math.random()`)
 - [x] Тепловая карта: cold(`blue`) → warm(`orange`) → hot(`red`) — статика, без анимации
 
 ---
 
+## ✅ Выполнено — Дизайн-система (Рефакторинг 19.06.2026)
+
+- [x] **Токены:** единый `design-tokens.css`, удалены дубликаты (`--amber-brand`, `--green`, `--red`)
+- [x] **Палитра:** electric blue `--primary: #0A7CFF` + deep purple `--secondary: #7C3AED`
+- [x] **Типографика:** Tailwind-шкала 3xs-4xl (включая 7px, 8px для mobile)
+- [x] **Анимации:** Framer Motion → entrance, CSS → looping, Tailwind-классы → в компонентах
+- [x] **Матовость убрана:** все `backdrop-filter` удалены, `AuroraBackground` скрыт на лотерейных страницах
+- [x] **Мёртвые зависимости удалены:** Three.js, Chakra UI, Emotion, Radix (174 пакета)
+- [x] **Сырые `rgba()`:** заменены на opacity-варианты токенов (`--primary-18`, `--coral-35`, etc.)
+- [x] **Компоненты обновлены:** AuroraBackground, Header, NavBar, LotteryCarousel, PremiumButton, ProfilePage
+- [x] **DailyRushPage:** полностью переведён на токены и Tailwind-классы
+- [x] **Новый `DESIGN_SYSTEM.md`** — полный reference
+
+---
+
+## ✅ Выполнено — TON Connect (16.06.2026)
+
+- [x] Интеграция `@tonconnect/ui-react` — провайдер в `App.tsx`
+- [x] `TonConnectButton` в Header
+- [x] Хук `useTonWallet.ts` — connected, walletAddress, connect, disconnect
+- [x] Авто-авторизация через `POST /api/auth/wallet` + сохранение JWT
+- [ ] Оплата билетов через TON — отложена до продакшена (не работает в dev)
+
+---
+
 ## 🎯 В плане — Priority 3: Остальные лотереи
 
-> **Примечание:** V8 (распространение на другие лотереи) отложена. Каждая лотерея будет иметь уникальный визуальный стиль, отталкиваясь от лучших практик DailyRushPage, но не копируя её.
+> **Примечание:** Каждая лотерея будет иметь уникальный визуальный стиль, отталкиваясь от лучших практик DailyRushPage, но не копируя её.
 
 ### V9: Weekend Special — Bingo UI
 - [ ] Вместо NumberGrid 9×10 сделать Bingo-карточку (15 из 90)
 - [ ] Альтернативный UI: автовыбор 15 чисел + Quick Pick
-- [ ] Адаптировать Luminous Gradient под Weekend Special
+- [ ] Адаптировать Dark Vault палитру под Weekend Special
 
 ### V10: Scratch-игры визуал
-- [ ] Адаптировать ScratchCarousel под M-Design + Luminous Gradient
+- [ ] Адаптировать ScratchCarousel под Dark Vault + Luminous Gradient
 - [ ] Проработать анимацию «стирания» скретч-слоя
-
-### TON Connect
-- [ ] Интеграция `@tonconnect/ui-react`
-- [ ] Оплата билетов через TON
-- [ ] Связка с `api.buyTicket()`
 
 ---
 
 ## ❌ Исключено из MVP
 
 ### V7: Dark Theme Telegram ❌
-**Решение:** не внедрять. Luminous Gradient — уникальный визуал, подмена на пользовательскую тему сломает нарратив.
+**Решение:** не внедрять. Dark Vault — уникальный визуал.
+
+### M-Design System ❌
+**Решение:** удалена. Заменена на Dark Vault (electric blue + deep purple). Файл `DESIGN_SYSTEM.md` переписан.
 
 ---
 
-## 🎨 Luminous Gradient — Color Map (M-Design)
+## 🎨 Dark Vault — Color Map
 
 | Токен | HEX | Роль |
 |-------|-----|------|
-| `--md-bg-page` | `#040D21` | Фон страницы |
-| `--md-bg-card` | `#0E2560` | Фон карточек |
-| `--md-bg-raised` | `#163580` | Фон приподнятых элементов |
-| `--md-blue-400` | `#69B1FF` | Акцент / подсветка |
-| `--md-blue-600` | `#1677FF` | Hover-состояния |
-| `--md-orange-500` | `#FFA940` | Fire / Hot / Add Numbers |
-| `--md-yellow-600` | `#FADB14` | Джекпот / Золото |
-| `--md-green-500` | `#73D13D` | Quick Pick / Успех |
-| `--md-red-500` | `#FF4D4F` | Urgent / Ошибка |
-| `--md-ink-0` | `#FFFFFF` | Текст основной |
-| `--md-ink-1` | `#D6E4FF` | Текст яркий |
-| `--md-ink-2` | `#89AADD` | Текст вторичный |
-| `--md-ink-3` | `#5A78AA` | Текст третичный |
-
-**Градиент Luminous Gradient:** `#1A3A8A → #6D28D9 → #0E7490`
+| `--primary` | `#0A7CFF` | Electric Blue — CTA, акценты, TON |
+| `--secondary` | `#7C3AED` | Deep Purple — hover, фон карточек |
+| `--gold` | `#FADB14` | Джекпот, выигрыши |
+| `--emerald` | `#52C41A` | Успех, Quick Pick |
+| `--coral` | `#FF4D4F` | Urgent, LIVE, ошибки |
+| `--bg-0` | `#06071A` | Фон страницы |
+| `--bg-1` | `#0B1028` | Фон карточек |
+| `--ink-0` | `#F0F4FF` | Текст основной |
+| `--ink-2` | `#7B95B8` | Текст вторичный |
+| `--ink-3` | `#3D5878` | Текст третичный |
 
 ---
 
@@ -142,16 +223,22 @@
 | 4 | Старые активные цвета (selected, ticket-ball) | ✅ Заменены на Luminous Gradient |
 | 5 | Progress-bar + Selected counter — старые цвета | ✅ Заменены |
 | 6 | Previous Draws (`prev-ball`) — старые цвета | ✅ Заменены |
-| 7 | Add Numbers тусклая + scale заходит на соседей | ⏳ След. сессия |
-| 8-12 | My Stats, Ticker, фонд, glass-3D, джекпот | ⏳ След. сессия |
+| 7 | Add Numbers тусклая + scale заходит на соседей | ✅ `pulse-glow` без scale |
+| 8-12 | My Stats, Ticker, фонд, glass-3D, джекпот | ✅ Выполнены |
+| — | Мёртвый роутинг `/daily-rush-4x20` | ✅ Удалён |
+| — | Дубликаты токенов (`--amber-brand`, `--green`, `--red`) | ✅ Удалены |
+| — | `text-[Npx]` арбитрарные размеры | ✅ Заменены на Tailwind |
+| — | `rgba()` хардкоды | ✅ Заменены на CSS-токены |
+| — | `backdrop-filter` матовость | ✅ Убрана |
 
 ---
 
 ## 📝 Примечания
 
-- **Кнопки и selected-состояния** — теперь используют Luminous Gradient (не хардкод). Glass-3D эффект `num-cell.selected` — эталон для всех блоков (#11).
-- **Каждая новая лотерея** — уникальный визуальный стиль, общие только механика (NumberGrid/TicketRow/PrizeTiers) и Luminous Gradient база.
-- **Перед каждым изменением** — проверять на мобильном viewport 390×844 через Playwright.
-- **Коммиты** — атомарные, одна задача = один коммит.
-- **Правило MCP:** если сервер недоступен — пауза, уведомление пользователю.
-- **Без согласования — никаких действий.**
+- **Токены:** единый источник правды — `src/styles/design-tokens.css`
+- **Правило анимаций:** Framer Motion для mount/unmount, CSS keyframes для looping
+- **Типографика:** Tailwind-классы `text-2xs` (8px) … `text-4xl` (36px)
+- **Цвета:** opacity-варианты токенов (`--primary-18`, `--coral-35`) вместо `rgba()`
+- **Перед каждым изменением** — проверять на мобильном viewport 390×844 через Playwright
+- **Коммиты** — атомарные, одна задача = один коммит
+- **Без согласования — никаких действий**

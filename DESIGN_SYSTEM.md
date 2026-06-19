@@ -1,259 +1,124 @@
-# M-Design System — Color Palette
+# Dark Vault — Дизайн-система Premium Web3 Casino
 
-> Источник: Figma Community · [Greatest Color Palette System](https://www.figma.com/design/oTu78nZEPRxY0tpZ1Kw6kw/Untitled)  
-> Автор: M-Design System (mdesign.systems)  
-> Дата импорта: 2026-06-12
-
----
-
-## 🏗️ Структура
-
-Все цвета организованы по схеме **Level/Color/Tone**:
-
-```
-Primary/Blue/Default    → #0A7CFF
-Primary/Purple/Default  → #9360FF
-Functional/Success/Default → #58CB24
-```
-
-Каждый цвет имеет 9 градаций (100–900) + BG + Default + Hover + Pressed:
-
-| Tone | Назначение | Пример (Blue) |
-|------|-----------|---------------|
-| **BG** | Фоновый, самый светлый | `#E6F6FF` |
-| **100** | Самый светлый оттенок | `#E6F4FF` |
-| **200** | Светлый | `#BAE0FF` |
-| **300** | Средне-светлый | `#91CAFF` |
-| **400** | Средний | `#69B1FF` |
-| **500** | **Default** — основной цвет | `#4096FF` |
-| **600** | Hover — темнее default | `#1677FF` |
-| **700** | Pressed — ещё темнее | `#0958D9` |
-| **800** | Тёмный | `#003EB3` |
-| **900** | Самый тёмный | `#002C8C` |
+> Electric Blue + Deep Purple · Vivid Glassmorphism · 3D Cards · Neon Glow  
+> Единый источник правды: `src/styles/design-tokens.css`  
+> Последнее обновление: 2026-06-19
 
 ---
 
-## 🎨 Primary Colors
-
-| Токен | HEX |
-|-------|-----|
-| `Primary/Blue/Default` | `#0A7CFF` |
-| `Primary/Purple/Default` | `#9360FF` |
-
----
-
-## ⚙️ Functional Colors
+## 🎨 Цветовая палитра
 
 | Токен | HEX | Роль |
 |-------|-----|------|
-| `Functional/Success/Default` | `#58CB24` | Успех, подтверждение |
-| `Functional/Attention/Default` | `#FAC714` | Предупреждение, акцент |
-| `Functional/Error/Default` | `#FF222E` | Ошибка, удаление |
+| `--primary` | `#0A7CFF` | Electric Blue — CTA, акценты, TON |
+| `--primary-soft` | `#3B9AFF` | Ховеры, второстепенный blue |
+| `--primary-bright` | `#69B1FF` | Яркие акценты, glow-текст |
+| `--primary-glow` | `rgba(10,124,255,0.45)` | Neon свечение |
+| `--secondary` | `#7C3AED` | Deep Purple — hover, фон карточек |
+| `--secondary-soft` | `#9F67FF` | Второстепенный purple |
+| `--secondary-glow` | `rgba(124,58,237,0.35)` | Purple свечение |
+| `--gold` | `#FADB14` | Джекпот, выигрыши |
+| `--gold-soft` | `#FFEC3D` | Второстепенный gold |
+| `--gold-glow` | `rgba(250,219,20,0.50)` | Золотое свечение |
+| `--emerald` | `#52C41A` | Успех, Quick Pick |
+| `--emerald-glow` | `rgba(82,196,26,0.40)` | Emerald свечение |
+| `--coral` | `#FF4D4F` | Urgent, LIVE, ошибки |
+| `--coral-glow` | `rgba(255,77,79,0.45)` | Красное свечение |
+
+### Фон
+| Токен | HEX |
+|-------|-----|
+| `--bg-0` (page) | `#06071A` |
+| `--bg-1` (card) | `#0B1028` |
+| `--bg-2` (raised) | `#111B3A` |
+| `--bg-3` (deep) | `#1A2D55` |
+
+### Текст
+| Токен | HEX | Роль |
+|-------|-----|------|
+| `--ink-0` | `#F0F4FF` | Основной |
+| `--ink-1` | `#C4D0E8` | Яркий |
+| `--ink-2` | `#7B95B8` | Вторичный |
+| `--ink-3` | `#3D5878` | Третичный |
+
+### Opacity-варианты (для границ/фонов)
+- `--primary-18`, `--primary-35`
+- `--secondary-18`
+- `--coral-18`, `--coral-35`
 
 ---
 
-## 🏔️ Neutral Colors
+## 🔤 Типографика
 
-### Mid Night (основной нейтральный)
+| Класс Tailwind | Размер | line-height | Назначение |
+|---------------|--------|-------------|------------|
+| `text-3xs` | 7px | 1.3 | Частотные бейджи, микро-лейблы |
+| `text-2xs` | 8px | 1.3 | Таймеры, small caps, NavBar |
+| `text-xs` | 10px | 1.4 | TON rate, бейджи |
+| `text-sm` | 12px | 1.4 | Описания, кнопки |
+| `text-base` | 14px | 1.5 | Основной текст, заголовки секций |
+| `text-lg` | 16px | 1.5 | Подзаголовки |
+| `text-xl` | 18px | 1.4 | Hero-заголовки |
+| `text-2xl` | 22px | 1.3 | Countdown цифры |
+| `text-3xl` | 28px | 1.2 | Крупные числа |
+| `text-4xl` | 36px | 1.1 | Джекпот |
 
-| Tone | HEX |
-|------|-----|
-| 100 | `#F8FAFC` |
-| 200 | `#E2E8F0` |
-| 300 | `#CBD5E1` |
-| 400 | `#94A3B8` |
-| 500 | `#64748B` |
-| 600 | `#475569` |
-| 700 | `#334155` |
-| 800 | `#1E293B` |
-| 900 | `#0F172A` |
+### Шрифты
+- **Space Grotesk** (`--font-display`) — основной: заголовки, кнопки, body
+- **JetBrains Mono** (`--font-mono`) — только числа: цены, таймеры, TON
 
-### Gray (дополнительный нейтральный)
-
-| Tone | HEX |
-|------|-----|
-| 100 | `#F4F4F5` |
-| 200 | `#E4E4E7` |
-| 300 | `#D4D4D8` |
-| 400 | `#A1A1AA` |
-| 500 | `#71717A` |
-| 600 | `#52525B` |
-| 700 | `#3F3F46` |
-| 800 | `#27272A` |
-| 900 | `#18181B` |
+### Правило
+Использовать Tailwind-классы (`text-2xs`, `text-base`) вместо арбитрарных `text-[8px]`.
 
 ---
 
-## 🌈 Accent Colors (полная палитра)
+## 🎬 Анимации
 
-### Blue
-| Tone | HEX |
-|------|-----|
-| 100 | `#E6F4FF` |
-| 200 | `#BAE0FF` |
-| 300 | `#91CAFF` |
-| 400 | `#69B1FF` |
-| 500 | `#4096FF` |
-| 600 | `#1677FF` |
-| 700 | `#0958D9` |
-| 800 | `#003EB3` |
-| 900 | `#002C8C` |
+| Тип | Инструмент | Примеры |
+|-----|-----------|--------|
+| **Entrance / Layout** | Framer Motion | `animate={{ opacity: 1, y: 0 }}`, `AnimatePresence` |
+| **Looping (бесконечные)** | CSS keyframes | pulse, shimmer, glow, float, ticker |
+| **В компонентах** | Tailwind-классы | `animate-pulse-glow`, `animate-float-y`, `animate-ticker` |
 
-### Purple
-| Tone | HEX |
-|------|-----|
-| 100 | `#F9F0FF` |
-| 200 | `#EFDBFF` |
-| 300 | `#D3ADF7` |
-| 400 | `#B37FEB` |
-| 500 | `#9254DE` |
-| 600 | `#722ED1` |
-| 700 | `#531DAB` |
-| 800 | `#391085` |
-| 900 | `#22075E` |
-
-### Pink
-| Tone | HEX |
-|------|-----|
-| 100 | `#FFF0F6` |
-| 200 | `#FFD6E7` |
-| 300 | `#FFADD2` |
-| 400 | `#FF85C0` |
-| 500 | `#F759AB` |
-| 600 | `#EB2F96` |
-| 700 | `#C41D7F` |
-| 800 | `#9E1068` |
-| 900 | `#780650` |
-
-### Red
-| Tone | HEX |
-|------|-----|
-| 100 | `#FFF1F0` |
-| 200 | `#FFCCC7` |
-| 300 | `#FFA39E` |
-| 400 | `#FF7875` |
-| 500 | `#FF4D4F` |
-| 600 | `#F5222D` |
-| 700 | `#CF1322` |
-| 800 | `#A8071A` |
-| 900 | `#820014` |
-
-### Orange
-| Tone | HEX |
-|------|-----|
-| 100 | `#FFF7E6` |
-| 200 | `#FFE7BA` |
-| 300 | `#FFD591` |
-| 400 | `#FFC069` |
-| 500 | `#FFA940` |
-| 600 | `#FA8C16` |
-| 700 | `#D46B08` |
-| 800 | `#AD4E00` |
-| 900 | `#873800` |
-
-### Yellow (Gold)
-| Tone | HEX |
-|------|-----|
-| 100 | `#FEFFE6` |
-| 200 | `#FFFFB8` |
-| 300 | `#FFFB8F` |
-| 400 | `#FFF566` |
-| 500 | `#FFEC3D` |
-| 600 | `#FADB14` |
-| 700 | `#D4B106` |
-| 800 | `#AD8B00` |
-| 900 | `#876800` |
-
-### Light Green
-| Tone | HEX |
-|------|-----|
-| 100 | `#FCFFE6` |
-| 200 | `#F4FFB8` |
-| 300 | `#EAFF8F` |
-| 400 | `#D3F261` |
-| 500 | `#BAE637` |
-| 600 | `#A0D911` |
-| 700 | `#7CB305` |
-| 800 | `#5B8C00` |
-| 900 | `#3F6600` |
-
-### Green
-| Tone | HEX |
-|------|-----|
-| 100 | `#F6FFED` |
-| 200 | `#D9F7BE` |
-| 300 | `#B7EB8F` |
-| 400 | `#95DE64` |
-| 500 | `#73D13D` |
-| 600 | `#52C41A` |
-| 700 | `#389E0D` |
-| 800 | `#237804` |
-| 900 | `#135200` |
-
-### Cyan
-| Tone | HEX |
-|------|-----|
-| 100 | `#E6FFFB` |
-| 200 | `#B5F5EC` |
-| 300 | `#87E8DE` |
-| 400 | `#5CDBD3` |
-| 500 | `#36CFC9` |
-| 600 | `#13C2C2` |
-| 700 | `#08979C` |
-| 800 | `#006D75` |
-| 900 | `#00474F` |
+### Правило
+Framer Motion — для mount/unmount и layout-анимаций. CSS keyframes — только для бесконечных looping-эффектов. Не смешивать.
 
 ---
 
-## 📐 Правила использования
+## 🧩 Компонентные классы
 
-### Primary/Secondary
-```
-Naming format: Level/Color/Tone
-Пример: Primary/Blue/Default
-Состояния: BG → Default → Hover → Pressed
-```
+### Glass-3D (`.glass-3d` в `lottery-cards.css`)
+Выпуклый стеклянный 3D-эффект:
+- `border-top`: светлый (1.5px)
+- `border-bottom`: тёмный (2px)
+- `box-shadow`: inset + внешнее свечение primary + secondary
 
-### Functional
-```
-Naming format: Level/Function/Tone
-Пример: Functional/Success/Default
-Состояния: Background → Default → Hover → Pressed
-```
+### NumberCell (`.num-cell` / `.num-cell.selected`)
+- Неактивные: тёмно-синий градиент, микро-pulse на border-top
+- Активные: Luminous Gradient (синий+фиолетовый+бирюзовый), 3D glass эффект
 
-### Text
-```
-Naming format: Level/Style
-Пример: Text/Primary
-Стили: Headings, Primary, Secondary, Disabled, Dividers, Table Header
-```
+### PremiumButton
+- Градиент: `var(--primary)` → `var(--secondary)`
+- Shimmer-анимация (Framer Motion `backgroundPosition`)
 
-### Gradient (опционально)
+---
+
+## 📁 Структура CSS
+
 ```
-Naming format: Level/Style/Tone (Optional)
-Пример: Gradient/Primary
+index.css
+  ├── @import design-tokens.css   ← ЕДИНЫЙ источник токенов
+  ├── @import lottery-cards.css   ← компонентные классы
+  ├── @fontsource/*               ← шрифты
+  └── tailwind                    ← утилиты + компонентные стили
 ```
 
 ---
 
-## 🎯 Назначение для нашего проекта
+## 🚫 Запрещено
 
-| Роль | M-Design токен | HEX |
-|------|---------------|-----|
-| **Основной акцент** | `Primary/Blue/500` | `#4096FF` |
-| **Вторичный акцент** | `Colors/Orange/500` | `#FFA940` |
-| **Джекпот / Золото** | `Colors/Yellow/600` | `#FADB14` (≈ `#FFCA00`) |
-| **Quick Pick / Успех** | `Colors/Green/500` | `#73D13D` |
-| **Ошибка / Срочность** | `Functional/Error/500` | `#FF4D4F` |
-| **Фон страницы** | `Neutral/Mid Night/900` | `#0F172A` |
-| **Фон карточек** | `Neutral/Mid Night/800` | `#1E293B` |
-| **Текст основной** | `Neutral/White → Black/White` | `#FFFFFF` |
-| **Текст вторичный** | `Neutral/Mid Night/200` | `#E2E8F0` |
-
----
-
-## 📂 Файлы
-
-- `DESIGN_SYSTEM.md` — этот документ (полная спецификация)
-- `src/index.css` — CSS-токены в формате `:root { ... }`
-- `src/styles/` — компонентные стили (glass-panel, hero-card, num-cell, etc.)
+- `rgba(244,63,94,0.18)` → `var(--coral-18)` / `bg-coral-dim`
+- `style={{ borderRadius: 14 }}` → `rounded-xl` / `rounded-2xl`
+- `text-[8px]` → `text-2xs`
+- `color: '#fff'` → `text-ink-0`
+- `backdrop-filter: blur(...)` — убран из всех компонентов

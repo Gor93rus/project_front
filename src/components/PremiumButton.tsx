@@ -15,17 +15,17 @@ export function PremiumButton({ label, accent, gradient, onClick, className = ''
       onClick={() => { hapticImpact('medium'); onClick?.(); }}
       className={`w-full text-[11px] font-extrabold py-2.5 rounded-lg relative overflow-hidden ${className}`}
       style={{
-        background: `linear-gradient(135deg, ${gradient[0]} 0%, ${gradient[1]} 100%)`,
-        color: '#fff',
-        fontFamily: "'Space Grotesk', sans-serif",
-        border: '1px solid rgba(255,255,255,0.15)',
-        boxShadow: `
-          0 4px 14px ${accent}60,
-          0 8px 28px ${accent}30,
-          inset 0 1px 0 rgba(255,255,255,0.25),
-          inset 0 -1px 0 rgba(0,0,0,0.15)
-        `,
-        textShadow: '0 1px 2px rgba(0,0,0,0.3)',
+    background: `linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%)`,
+    color: '#fff',
+    fontFamily: "'Space Grotesk', sans-serif",
+    border: '1px solid rgba(255,255,255,0.15)',
+    boxShadow: `
+      0 4px 14px var(--primary-glow),
+      0 8px 28px var(--secondary-glow),
+      inset 0 1px 0 rgba(255,255,255,0.25),
+      inset 0 -1px 0 rgba(0,0,0,0.15)
+    `,
+    textShadow: '0 1px 2px rgba(0,0,0,0.3)',
       }}
       whileHover={{
         scale: 1.03,

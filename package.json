@@ -11,13 +11,8 @@
     "typecheck": "tsc --noEmit -p tsconfig.app.json"
   },
   "dependencies": {
-    "@chakra-ui/react": "^3.36.0",
-    "@emotion/react": "^11.14.0",
     "@fontsource/jetbrains-mono": "^5.2.8",
     "@fontsource/space-grotesk": "^5.2.10",
-    "@radix-ui/react-slot": "^1.2.4",
-    "@react-three/drei": "^10.7.7",
-    "@react-three/fiber": "^9.6.1",
     "@supabase/supabase-js": "^2.57.4",
     "@tonconnect/ui-react": "^2.4.4",
     "@twa-dev/sdk": "^8.0.2",
@@ -32,14 +27,12 @@
     "react-dom": "^19.2.0",
     "react-router-dom": "^7.0.0",
     "tailwind-merge": "^3.5.0",
-    "tailwindcss-animate": "^1.0.7",
-    "three": "^0.160.1"
+    "tailwindcss-animate": "^1.0.7"
   },
   "devDependencies": {
     "@eslint/js": "^9.9.1",
     "@types/react": "^19.2.0",
     "@types/react-dom": "^19.2.0",
-    "@types/three": "^0.184.1",
     "@vitejs/plugin-react": "^4.4.0",
     "autoprefixer": "^10.4.18",
     "eslint": "^9.9.1",

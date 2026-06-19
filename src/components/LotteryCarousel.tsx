@@ -17,7 +17,7 @@ function GlitchJackpot({ target }: { target: number }) {
     <motion.div style={{ textAlign: 'center', marginBottom: 6 }} initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }}>
       <span style={{ position: 'relative', display: 'inline-block', fontSize: 22, fontWeight: 700, color: 'var(--gold)', fontFamily: "var(--font-mono)", textShadow: '0 0 24px var(--gold-glow)', lineHeight: 1 }}>
         {display.toLocaleString()}<span style={{ fontSize: 11, marginLeft: 3, opacity: 0.75, fontFamily: "'Space Grotesk', sans-serif" }}>TON</span>
-        <span style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', color: 'var(--ton)', animation: 'glitchShift 0.5s ease-in-out infinite alternate', clipPath: 'polygon(0 0, 100% 0, 100% 35%, 0 55%)', pointerEvents: 'none' }}>{display.toLocaleString()}<span style={{ fontSize: 11, marginLeft: 3, opacity: 0.75 }}>TON</span></span>
+        <span style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', color: 'var(--primary)', animation: 'glitchShift 0.5s ease-in-out infinite alternate', clipPath: 'polygon(0 0, 100% 0, 100% 35%, 0 55%)', pointerEvents: 'none' }}>{display.toLocaleString()}<span style={{ fontSize: 11, marginLeft: 3, opacity: 0.75 }}>TON</span></span>
         <span style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', color: 'var(--coral)', animation: 'glitchShift 0.7s ease-in-out infinite alternate-reverse', clipPath: 'polygon(0 55%, 100% 35%, 100% 100%, 0 100%)', pointerEvents: 'none' }}>{display.toLocaleString()}<span style={{ fontSize: 11, marginLeft: 3, opacity: 0.75 }}>TON</span></span>
       </span>
     </motion.div>

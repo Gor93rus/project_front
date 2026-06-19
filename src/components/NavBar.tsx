@@ -66,11 +66,11 @@ export function NavBar({ active, onTabChange }: Props) {
   return (
     <nav className="fixed bottom-0 left-0 right-0 z-50 flex items-center justify-around py-2 px-1"
       style={{
-        background: scrolled ? 'rgba(10,10,14,0.88)' : 'rgba(10,10,14,0.96)',
-        borderTop: scrolled ? '1px solid rgba(255,255,255,0.04)' : '1px solid var(--line)',
-        backdropFilter: scrolled ? 'blur(28px)' : 'blur(20px)',
-        WebkitBackdropFilter: scrolled ? 'blur(28px)' : 'blur(20px)',
-        transition: 'background 0.3s, backdrop-filter 0.3s, border-color 0.3s',
+        background: scrolled
+          ? 'linear-gradient(0deg, rgba(6,7,26,0.96) 0%, rgba(11,16,40,0.94) 100%)'
+          : 'linear-gradient(0deg, rgba(6,7,26,0.98) 0%, rgba(11,16,40,0.96) 100%)',
+        borderTop: scrolled ? '1px solid var(--primary-18)' : '1px solid var(--line)',
+        transition: 'background 0.3s, border-color 0.3s',
         paddingBottom: 'calc(8px + var(--safe-area-bottom, env(safe-area-inset-bottom, 0px)))',
       }}>
       {TABS.map(tab => {
@@ -79,23 +79,23 @@ export function NavBar({ active, onTabChange }: Props) {
           <button key={tab.id} onClick={() => { hapticImpact('light'); onTabChange(tab.id); }}
             className="relative flex flex-col items-center gap-1 px-3 py-1 rounded-xl transition-all duration-200"
             style={{ 
-        color: isActive ? 'var(--gold)' : 'var(--ink-3)', 
+        color: isActive ? 'var(--primary-bright)' : 'var(--ink-3)', 
         minWidth: 52,
-        textShadow: isActive ? '0 0 12px var(--gold-glow)' : 'none',
+        textShadow: isActive ? '0 0 12px var(--primary-glow)' : 'none',
       }}>
             <span className="relative">
               {tab.icon}
               {tab.live && !isActive && (
-                <span className="absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full bg-red-500"
-                  style={{ animation: 'pulse-dot 1.5s ease-in-out infinite' }} />
+                <span className="absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full"
+                  style={{ background: 'var(--coral)', animation: 'pulse-dot 1.5s ease-in-out infinite' }} />
               )}
             </span>
-            <span className="text-[9px] font-semibold">{tab.label}</span>
+            <span className="text-2xs font-semibold">{tab.label}</span>
             {isActive && (
               <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-4 h-0.5 rounded-full"
                 style={{ 
-                  background: 'var(--gold)',
-                  boxShadow: '0 0 8px var(--gold-glow)',
+                  background: 'var(--primary-bright)',
+                  boxShadow: '0 0 8px var(--primary-glow)',
                 }} />
             )}
           </button>
