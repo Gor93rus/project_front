@@ -230,7 +230,7 @@ function BadgeCard({ badge }: { badge: Badge }) {
             className="h-full rounded-full"
             style={{
               width: `${badge.progress}%`,
-              background: 'var(--amber-brand)',
+              background: 'var(--gold)',
             }}
           />
         </div>
@@ -259,7 +259,7 @@ function BadgeCard({ badge }: { badge: Badge }) {
               </p>
             )}
             {!badge.unlocked && badge.progress !== undefined && (
-              <p className="text-[8px] mt-1 text-center font-bold" style={{ color: 'var(--amber-soft)' }}>
+              <p className="text-[8px] mt-1 text-center font-bold" style={{ color: 'var(--gold-soft)' }}>
                 {badge.progress}%
               </p>
             )}
@@ -310,7 +310,7 @@ function BadgesSection({ badges }: { badges: Badge[] }) {
               'text-[9px] font-bold px-2.5 py-1.5 rounded-full transition-all',
             )}
             style={{
-              background: filter === f ? 'var(--amber-brand)' : 'var(--surface-2)',
+              background: filter === f ? 'var(--primary)' : 'var(--surface-2)',
               color: filter === f ? '#fff' : 'var(--ink-2)',
             }}
             onClick={() => { hapticImpact('light'); setFilter(f); }}
@@ -408,9 +408,9 @@ export function ProfilePage() {
         <div
           className="w-14 h-14 rounded-full flex items-center justify-center font-black text-[18px] shrink-0"
           style={{
-            background: 'linear-gradient(135deg, var(--amber-brand), var(--amber-soft))',
+            background: 'linear-gradient(135deg, var(--primary), var(--secondary))',
             color: '#fff',
-            boxShadow: '0 4px 16px rgba(255,122,42,0.35)',
+            boxShadow: '0 4px 16px rgba(10,124,255,0.35)',
           }}
         >
           {initials}

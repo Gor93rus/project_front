@@ -1,29 +1,38 @@
 # Dark Vault — Дизайн-система Premium Web3 Casino
 
-> Electric Blue + Deep Purple · Vivid Glassmorphism · 3D Cards · Neon Glow  
+> Role-based palette · Navy база · Vivid Glassmorphism · 3D Cards · Neon Glow  
+> Референс направления: The Market (Telegram Mini App)  
 > Единый источник правды: `src/styles/design-tokens.css`  
-> Последнее обновление: 2026-06-19
+> Последнее обновление: 2026-06-20
 
 ---
 
-## 🎨 Цветовая палитра
+## 🎨 Цветовая палитра — РОЛЕВАЯ МОДЕЛЬ
 
-| Токен | HEX | Роль |
-|-------|-----|------|
-| `--primary` | `#0A7CFF` | Electric Blue — CTA, акценты, TON |
-| `--primary-soft` | `#3B9AFF` | Ховеры, второстепенный blue |
-| `--primary-bright` | `#69B1FF` | Яркие акценты, glow-текст |
-| `--primary-glow` | `rgba(10,124,255,0.45)` | Neon свечение |
-| `--secondary` | `#7C3AED` | Deep Purple — hover, фон карточек |
-| `--secondary-soft` | `#9F67FF` | Второстепенный purple |
-| `--secondary-glow` | `rgba(124,58,237,0.35)` | Purple свечение |
-| `--gold` | `#FADB14` | Джекпот, выигрыши |
-| `--gold-soft` | `#FFEC3D` | Второстепенный gold |
-| `--gold-glow` | `rgba(250,219,20,0.50)` | Золотое свечение |
-| `--emerald` | `#52C41A` | Успех, Quick Pick |
-| `--emerald-glow` | `rgba(82,196,26,0.40)` | Emerald свечение |
-| `--coral` | `#FF4D4F` | Urgent, LIVE, ошибки |
-| `--coral-glow` | `rgba(255,77,79,0.45)` | Красное свечение |
+Цвет назначается по **роли**, а не по вкусу. Это и есть канон проекта:
+
+| Роль | Токен | Где применять |
+|------|-------|---------------|
+| **Структура** | `--bg-0…3` | Navy-база: весь холст, панели, поверхности |
+| **Primary action** | `--primary` (`#0A7CFF`) | Главные CTA-кнопки UI, активные состояния, выбор, TON |
+| **Brand secondary** | `--secondary` (`#7C3AED`) | Бренд-айдентика, аватар, второстепенные акценты |
+| **Деньги / выигрыш / CTA покупки** | `--gold` (`#FADB14`) | Джекпот, выбранное число, кнопка покупки билета, призы, баланс. Редкий, дорогой акцент |
+| **Success** | `--emerald` (`#52C41A`) | Победа, Quick Pick, подтверждение |
+| **Live / срочность / ошибка** | `--coral` (`#FF4D4F`) | LIVE-бейджи, таймер на исходе, ошибки. **ОДИН красный на проект** |
+| **Per-game акценты** | `accentColor` в конфигах | Неоновые обложки лотерей (по одному цвету на игру, как плитки The Market) |
+
+### Полный список токенов
+
+| Токен | HEX | Назначение |
+|-------|-----|------------|
+| `--primary` / `-soft` / `-bright` | `#0A7CFF` / `#3B9AFF` / `#69B1FF` | Primary action + ховеры + glow-текст |
+| `--secondary` / `-soft` | `#7C3AED` / `#9F67FF` | Brand |
+| `--gold` / `-soft` / `-bright` | `#FADB14` / `#FFEC3D` / `#FFF566` | Деньги/выигрыш |
+| `--emerald` / `-soft` | `#52C41A` / `#73D13D` | Success |
+| `--coral` / `-soft` | `#FF4D4F` / `#FF7875` | Live/urgent |
+| glow: `--primary-glow` `--secondary-glow` `--gold-glow` `--coral-glow` | — | Neon-свечение |
+
+> **Legacy (сводится к канону):** оранжевый (`#F97316`) и второй синий (`#0EA5E9`) — артефакты ранних версий. Orange → `--coral`, второй blue → `--primary`. Новый код их не использует.
 
 ### Фон
 | Токен | HEX |

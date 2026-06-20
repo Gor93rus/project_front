@@ -36,18 +36,18 @@
   display: flex; align-items: center; gap: 5px; padding: 4px 9px; border-radius: 8px;
   font-size: 9px; font-weight: 800; font-family: 'JetBrains Mono', monospace;
   text-transform: uppercase; letter-spacing: 0.10em;
-  background: rgba(244,63,94,0.14);
-  border: 1px solid rgba(244,63,94,0.40);
-  box-shadow: 0 0 12px rgba(244,63,94,0.30);
-  color: var(--coral-soft); text-shadow: 0 0 8px rgba(244,63,94,0.80);
+  background: rgba(255,77,79,0.14);
+  border: 1px solid rgba(255,77,79,0.40);
+  box-shadow: 0 0 12px rgba(255,77,79,0.30);
+  color: var(--coral-soft); text-shadow: 0 0 8px rgba(255,77,79,0.80);
 }
 .live-dot {
   width: 6px; height: 6px; border-radius: 50%;
   background: var(--coral);
-  box-shadow: 0 0 6px rgba(244,63,94,0.95);
+  box-shadow: 0 0 6px rgba(255,77,79,0.95);
   animation: livePulse 1.4s ease-in-out infinite;
 }
-@keyframes livePulse { 0%,100%{opacity:1;box-shadow:0 0 7px rgba(244,63,94,0.95)} 50%{opacity:0.20;box-shadow:0 0 0 7px rgba(244,63,94,0)} }
+@keyframes livePulse { 0%,100%{opacity:1;box-shadow:0 0 7px rgba(255,77,79,0.95)} 50%{opacity:0.20;box-shadow:0 0 0 7px rgba(255,77,79,0)} }
 
 /* ─── GLASS PANEL ──────────────────────────────────────────────────────────── */
 .glass-panel {
@@ -158,8 +158,8 @@
 .cd-digit::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 50%; background: linear-gradient(180deg, rgba(255,255,255,0.04) 0%, transparent 100%); pointer-events: none; }
 .cd-digit::after { content: ''; position: absolute; top: 50%; left: 4px; right: 4px; height: 1px; background: rgba(0,0,0,0.60); pointer-events: none; }
 .cd-digit.urgent {
-  color: var(--coral-soft); text-shadow: 0 0 14px rgba(244,63,94,0.95), 0 0 30px rgba(244,63,94,0.45);
-  border-top-color: rgba(244,63,94,0.40); animation: urgentBlink 0.65s ease-in-out infinite;
+  color: var(--coral-soft); text-shadow: 0 0 14px rgba(255,77,79,0.95), 0 0 30px rgba(255,77,79,0.45);
+  border-top-color: rgba(255,77,79,0.40); animation: urgentBlink 0.65s ease-in-out infinite;
 }
 @keyframes urgentBlink { 0%,100%{opacity:1} 50%{opacity:0.30} }
 
@@ -209,13 +209,13 @@
   z-index: 2;
 }
 .num-cell.hot-glow {
-  border-color: rgba(249,115,22,0.50) !important;
-  box-shadow: inset 0 1px 0 rgba(251,146,60,0.14), 0 2px 8px rgba(0,0,0,0.55), 0 0 8px rgba(249,115,22,0.28) !important;
+  border-color: rgba(255,77,79,0.50) !important;
+  box-shadow: inset 0 1px 0 rgba(251,146,60,0.14), 0 2px 8px rgba(0,0,0,0.55), 0 0 8px rgba(255,77,79,0.28) !important;
 }
 .num-cell .freq-badge {
   position: absolute; top: 2px; right: 3px; font-size: 6.5px; font-weight: 800;
-  color: var(--md-orange-400); opacity: 0; transition: opacity 0.25s;
-  font-family: 'JetBrains Mono', monospace; text-shadow: 0 0 4px var(--md-orange-400);
+  color: var(--coral-soft); opacity: 0; transition: opacity 0.25s;
+  font-family: 'JetBrains Mono', monospace; text-shadow: 0 0 4px var(--coral);
 }
 .num-cell.hot-glow .freq-badge { opacity: 0.85; }
 
@@ -293,7 +293,7 @@
 /* ─── HOT RING ─────────────────────────────────────────────────────────────── */
 .hot-ring {
   position: absolute; inset: -2px; border-radius: 12px;
-  background: conic-gradient(from 0deg, rgba(253,230,138,0.75) 0%, rgba(249,115,22,0.92) 18%, rgba(244,63,94,0.65) 38%, rgba(245,158,11,0.52) 58%, rgba(253,230,138,0.75) 100%);
+  background: conic-gradient(from 0deg, rgba(253,230,138,0.75) 0%, rgba(255,77,79,0.92) 18%, rgba(255,77,79,0.65) 38%, rgba(245,158,11,0.52) 58%, rgba(253,230,138,0.75) 100%);
   animation: hotSpin 4.5s linear infinite; z-index: -1; filter: blur(1.5px); opacity: 0.88;
 }
 @keyframes hotSpin { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
@@ -470,7 +470,7 @@
 }
 
 /* ─── ICON GLOW ────────────────────────────────────────────────────────────── */
-.icon-fire { filter: drop-shadow(0 0 4px rgba(249,115,22,0.95)) drop-shadow(0 0 12px rgba(234,88,12,0.55)); }
+.icon-fire { filter: drop-shadow(0 0 4px rgba(255,77,79,0.95)) drop-shadow(0 0 12px rgba(229,49,51,0.55)); }
 .icon-gold  { filter: drop-shadow(0 0 4px rgba(245,158,11,0.95)) drop-shadow(0 0 12px rgba(217,119,6,0.55)); }
 .icon-cyan  { filter: drop-shadow(0 0 4px rgba(14,165,233,0.95)) drop-shadow(0 0 12px rgba(2,132,199,0.55)); }
 .icon-lime  { filter: drop-shadow(0 0 4px rgba(16,217,138,0.95)) drop-shadow(0 0 12px rgba(5,150,105,0.55)); }
