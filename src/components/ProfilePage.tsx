@@ -83,8 +83,8 @@ function LevelProgress({ level, levelName, xp, xpForNext, nextLevelName }: {
         <motion.div
           className="h-full rounded-full"
           style={{
-        background: 'linear-gradient(90deg, var(--gold), var(--gold-soft))',
-        boxShadow: '0 0 12px var(--gold-glow)',
+        background: 'linear-gradient(90deg, var(--primary), var(--primary-soft))',
+        boxShadow: '0 0 12px var(--primary-glow)',
           }}
           initial={{ width: 0 }}
           animate={{ width: `${pct}%` }}
@@ -151,9 +151,9 @@ function StreakSection({ days }: { days: number }) {
         <div
           className="text-[10px] font-bold px-2.5 py-1 rounded-full"
           style={{
-            background: 'linear-gradient(135deg, var(--gold-dim), var(--secondary-dim))',
-            color: 'var(--gold-soft)',
-            border: '1px solid var(--gold-dim)',
+            background: 'linear-gradient(135deg, var(--primary-dim), var(--secondary-dim))',
+            color: 'var(--primary-soft)',
+            border: '1px solid var(--primary-dim)',
           }}
         >
           +{days * 10} XP бонус
@@ -176,11 +176,11 @@ function StreakSection({ days }: { days: number }) {
                 )}
                 style={{
                     background: isActive
-                      ? 'linear-gradient(135deg, var(--gold), var(--gold-soft))'
+                      ? 'linear-gradient(135deg, var(--primary), var(--primary-soft))'
                       : 'var(--surface-2)',
                     color: isActive ? '#fff' : 'var(--ink-3)',
-                    border: isToday && !isActive ? '1px solid var(--gold)' : '1px solid transparent',
-                    boxShadow: isActive ? '0 4px 12px var(--gold-glow)' : 'none',
+                    border: isToday && !isActive ? '1px solid var(--primary)' : '1px solid transparent',
+                    boxShadow: isActive ? '0 4px 12px var(--primary-glow)' : 'none',
                 }}
               >
                 {d.getDate()}
@@ -230,7 +230,7 @@ function BadgeCard({ badge }: { badge: Badge }) {
             className="h-full rounded-full"
             style={{
               width: `${badge.progress}%`,
-              background: 'var(--gold)',
+              background: 'var(--primary)',
             }}
           />
         </div>
@@ -259,7 +259,7 @@ function BadgeCard({ badge }: { badge: Badge }) {
               </p>
             )}
             {!badge.unlocked && badge.progress !== undefined && (
-              <p className="text-[8px] mt-1 text-center font-bold" style={{ color: 'var(--gold-soft)' }}>
+              <p className="text-[8px] mt-1 text-center font-bold" style={{ color: 'var(--primary-soft)' }}>
                 {badge.progress}%
               </p>
             )}
