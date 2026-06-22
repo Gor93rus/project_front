@@ -119,7 +119,7 @@ _Порядок работы над каждой задачей._
 - [x] Luminous Gradient схемы в glass-panel, hero-card (B)
 - [x] Градиент num-cell — монохромный (не пёстрый) (#1)
 - [x] Яркость поднята (убраны избыточные тени, blur уменьшен) (#2)
-- [x] HeroCard инлайн-градиент заменён на CSS-класс (#3)
+- [x] HeroCard инлайн-градиент заменён на CSS-��ласс (#3)
 - [x] ��олупрозрачные кнопки (fire/emerald/ghost/htp) — без чёрных градиентов (C)
 - [x] Активные состояния: `num-cell.selected` + `ticket-ball` — Luminous Gradient (#4)
 - [x] Progress-bar + Selected counter — Luminous Gradient (#5)
@@ -158,7 +158,8 @@ _Порядок работы над каждой задачей._
 - [x] **Orange сведён:** stray `#F97316` (hot-glow, freq-badge, icon-fire, hot-ring) → `--coral`
 - [x] **Сломанные `--amber-brand` / `--amber-soft`:** убраны из `ProfilePage` (аватар→brand, прогресс→gold, фильтр→primary); мёртвый `HeroSection.tsx` удалён
 - [x] **Анимации:** Framer Motion → entrance, CSS → looping
-- [x] **Матовость:** `backdrop-filter` убран из большинства компонентов
+- [x] **Эталон объёма поверхностей (фаза A):** формула `.glass-panel` (Daily Rush) принята за единый «объём» проекта — токены `--surface-gradient`, `--bevel-light-top/-side`, `--bevel-dark-side/-bottom`, `--elev-1..3`; `.glass-card` приведён к ней (Главная получила ту же глубину)
+- [x] **Матовость добита:** `backdrop-filter` убран с `.tier-card` и `.modal-overlay` (оверлей компенсирован непрозрачностью 0.94). Остатков `backdrop-filter` в проекте больше нет
 - [x] **Мёртвые зависимости удалены:** Three.js, Chakra UI, Emotion, Radix
 - [ ] **Сырые `rgba()`:** ЧАСТИЧНО. `lottery-cards.css` и инлайн-стили (`LotteryPage`) всё ещё содержат сырые `rgba()` для 3D-светотени — намеренно (token-сведение этих стоп-цветов — отдельная задача)
 - [ ] **Второй blue `#0EA5E9`:** ещё не сведён к `--primary` (используется в tier-cyan, htp-btn, ticket-badge). Тоновый сдвиг — требует визуальной проверки (фаза 2)
@@ -236,7 +237,8 @@ _Порядок работы над каждой задачей._
 | — | Второй blue `#0EA5E9` vs `--primary` | ⬜ Не сведён (фаза 2) |
 | — | `text-[Npx]` арбитрарные размеры | ⬜ НЕ заменены (App/LotteryPage/ProfilePage) |
 | — | `rgba()` хардкоды | ⬜ Частично (3D-светотень намеренно сырая) |
-| — | `backdrop-filter` матовость | ⚠️ Убрана не везде (LotteryPage, modal) |
+| — | `backdrop-filter` матовость | ✅ Убрана полностью (tier-card, modal-overlay) 20.06 |
+| — | Эталон объёма поверхностей (.glass-panel → токены) | ✅ Закреплён 20.06 (фаза A) |
 
 ---
 

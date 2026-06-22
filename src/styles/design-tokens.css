@@ -78,8 +78,15 @@
   --surface-panel: var(--bg-1);
   --surface-card: var(--bg-2);
   --surface-raised: var(--bg-3);
-  /* Верхний хайлайт — «стекло» без матовости (inset light edge) */
-  --surface-highlight: inset 0 1px 0 rgba(255,255,255,0.05);
+  /* Эталонный navy-градиент объёма (из .glass-panel Daily Rush) — единый «объём» проекта */
+  --surface-gradient: linear-gradient(155deg, rgba(18,32,53,0.96) 0%, rgba(12,22,41,0.98) 50%, rgba(8,15,30,1) 100%);
+  /* Верхний световой кант — «стекло» без матовости */
+  --surface-highlight: inset 0 1px 0 rgba(255,255,255,0.07);
+  /* Фаска (directional bevel) — светлый верх/левый край, тёмный низ/правый */
+  --bevel-light-top: rgba(255,255,255,0.08);
+  --bevel-light-side: rgba(255,255,255,0.05);
+  --bevel-dark-side: rgba(0,0,0,0.60);
+  --bevel-dark-bottom: rgba(0,0,0,0.80);
   /* Legacy aliases — старые полупрозрачные поверхности теперь указывают на плотные слои */
   --surface: var(--surface-panel);
   --surface-1: var(--surface-card);
@@ -92,10 +99,10 @@
   --r-xl: 20px;
   --r-pill: 999px;
 
-  /* ── Тени / высоты (лестница elevation) ── */
-  --elev-1: 0 2px 8px rgba(0,0,0,0.40), var(--surface-highlight);
-  --elev-2: 0 8px 24px rgba(0,0,0,0.55), var(--surface-highlight);
-  --elev-3: 0 16px 40px rgba(0,0,0,0.65), var(--surface-highlight);
+  /* ── Тени / высоты (лестница elevation, формула .glass-panel) ── */
+  --elev-1: var(--surface-highlight), 0 4px 20px rgba(0,0,0,0.45), 0 1px 4px rgba(0,0,0,0.35);
+  --elev-2: var(--surface-highlight), 0 8px 28px rgba(0,0,0,0.55), 0 2px 6px rgba(0,0,0,0.40);
+  --elev-3: var(--surface-highlight), 0 16px 40px rgba(0,0,0,0.65), 0 4px 10px rgba(0,0,0,0.45);
   --shadow-card: var(--elev-2);
   --shadow-glow-primary: 0 0 20px var(--primary-glow);
   --shadow-glow-secondary: 0 0 20px var(--secondary-glow);
@@ -194,16 +201,18 @@ button { font-family: inherit; cursor: pointer; }
 .scrollbar-none { -ms-overflow-style: none; scrollbar-width: none; }
 .scrollbar-none::-webkit-scrollbar { display: none; }
 
-/* ── Card utility — плотный navy-слой (глубина = ступень + elevation + световой кант) ── */
+/* ── Card utility — единый navy-объём проекта (эталон .glass-panel Daily Rush) ── */
 .glass-card {
-  background: var(--surface-card);
-  border: 1px solid var(--line);
+  background: var(--surface-gradient);
   border-radius: var(--r-lg);
+  border-top: 1px solid var(--bevel-light-top);
+  border-left: 1px solid var(--bevel-light-side);
+  border-right: 1px solid var(--bevel-dark-side);
+  border-bottom: 1px solid var(--bevel-dark-bottom);
   box-shadow: var(--elev-1);
 }
-.glass-card-hover { transition: border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease; }
+.glass-card-hover { transition: transform 0.2s ease, box-shadow 0.2s ease; }
 .glass-card-hover:hover {
-  border-color: var(--line-strong);
   transform: translateY(-2px);
   box-shadow: var(--elev-2);
 }
