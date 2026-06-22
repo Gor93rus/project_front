@@ -73,13 +73,30 @@
   --line: rgba(255,255,255,0.06);
   --line-strong: rgba(255,255,255,0.12);
 
-  /* ── Поверхности ── */
-  --surface: rgba(255,255,255,0.03);
-  --surface-1: rgba(255,255,255,0.04);
-  --surface-2: rgba(255,255,255,0.06);
+  /* ── Поверхности — ПЛОТНЫЕ navy-слои (глубина = ступени + тень, не белая плёнка) ──
+     Иерархия: page(bg-0) → panel(bg-1) → card(bg-2) → raised(bg-3) */
+  --surface-panel: var(--bg-1);
+  --surface-card: var(--bg-2);
+  --surface-raised: var(--bg-3);
+  /* Верхний хайлайт — «стекло» без матовости (inset light edge) */
+  --surface-highlight: inset 0 1px 0 rgba(255,255,255,0.05);
+  /* Legacy aliases — старые полупрозрачные поверхности теперь указывают на плотные слои */
+  --surface: var(--surface-panel);
+  --surface-1: var(--surface-card);
+  --surface-2: var(--surface-raised);
 
-  /* ── Тени ── */
-  --shadow-card: 0 8px 32px rgba(0,0,0,0.60), 0 2px 8px rgba(0,0,0,0.45);
+  /* ── Радиусы (шкала) ── */
+  --r-sm: 8px;
+  --r-md: 12px;
+  --r-lg: 16px;
+  --r-xl: 20px;
+  --r-pill: 999px;
+
+  /* ── Тени / высоты (лестница elevation) ── */
+  --elev-1: 0 2px 8px rgba(0,0,0,0.40), var(--surface-highlight);
+  --elev-2: 0 8px 24px rgba(0,0,0,0.55), var(--surface-highlight);
+  --elev-3: 0 16px 40px rgba(0,0,0,0.65), var(--surface-highlight);
+  --shadow-card: var(--elev-2);
   --shadow-glow-primary: 0 0 20px var(--primary-glow);
   --shadow-glow-secondary: 0 0 20px var(--secondary-glow);
   --shadow-glow-gold: 0 0 20px var(--gold-glow);
