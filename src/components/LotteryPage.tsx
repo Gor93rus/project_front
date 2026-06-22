@@ -254,7 +254,7 @@ export function LotteryPage() {
           <span style={{ flex: 1, fontSize: 17, fontWeight: 700, color: '#fff', letterSpacing: '-0.02em', fontFamily: "'Space Grotesk', sans-serif", background: `linear-gradient(135deg, #fff, ${accent})`, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
             {name}
           </span>
-          <span style={{ fontSize: 9, fontWeight: 700, textTransform: 'uppercase', padding: '4px 10px', borderRadius: 8, background: 'rgba(244,63,94,0.18)', color: '#F43F5E', border: '1px solid rgba(244,63,94,0.3)', fontFamily: "'Geist Mono', monospace" }}>
+          <span style={{ fontSize: 9, fontWeight: 700, textTransform: 'uppercase', padding: '4px 10px', borderRadius: 8, background: 'var(--coral-18)', color: 'var(--coral)', border: '1px solid var(--coral-35)', fontFamily: "'Geist Mono', monospace" }}>
             {meta?.drawLabel ?? 'LIVE'}
           </span>
         </div>

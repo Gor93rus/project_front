@@ -50,7 +50,7 @@ function GlobalJackpotStrip() {
       <div className="flex items-center justify-between px-4 py-3">
         <div className="flex items-center gap-2">
           <span className="flex items-center gap-1 text-[8px] font-extrabold uppercase tracking-widest px-1.5 py-0.5 rounded-full"
-            style={{ background: 'rgba(244,63,94,0.18)', color: 'var(--coral)', border: '1px solid rgba(244,63,94,0.35)' }}>
+            style={{ background: 'var(--coral-18)', color: 'var(--coral)', border: '1px solid var(--coral-35)' }}>
             <span className="w-1.5 h-1.5 rounded-full" style={{ background: 'var(--coral)', animation: 'livePulse 1s ease-in-out infinite' }} />
             LIVE
           </span>

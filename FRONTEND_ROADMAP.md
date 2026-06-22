@@ -119,8 +119,8 @@ _Порядок работы над каждой задачей._
 - [x] Luminous Gradient схемы в glass-panel, hero-card (B)
 - [x] Градиент num-cell — монохромный (не пёстрый) (#1)
 - [x] Яркость поднята (убраны избыточные тени, blur уменьшен) (#2)
-- [x] HeroCard инлайн-градиент заменён на CSS-класс (#3)
-- [x] Полупрозрачные кнопки (fire/emerald/ghost/htp) — без чёрных градиентов (C)
+- [x] HeroCard инлайн-градиент заменён на CSS-��ласс (#3)
+- [x] ��олупрозрачные кнопки (fire/emerald/ghost/htp) — без чёрных градиентов (C)
 - [x] Активные состояния: `num-cell.selected` + `ticket-ball` — Luminous Gradient (#4)
 - [x] Progress-bar + Selected counter — Luminous Gradient (#5)
 - [x] `prev-ball` (Previous Draws) — Luminous Gradient (#6)
@@ -148,18 +148,23 @@ _Порядок работы над каждой задачей._
 
 ---
 
-## ✅ Выполнено — Дизайн-система (Рефакторинг 19.06.2026)
+## ⚠️ Дизайн-система — фактический статус (ревизия 20.06.2026)
 
-- [x] **Токены:** единый `design-tokens.css`, удалены дубликаты (`--amber-brand`, `--green`, `--red`)
-- [x] **Палитра:** electric blue `--primary: #0A7CFF` + deep purple `--secondary: #7C3AED`
-- [x] **Типографика:** Tailwind-шкала 3xs-4xl (включая 7px, 8px для mobile)
-- [x] **Анимации:** Framer Motion → entrance, CSS → looping, Tailwind-классы → в компонентах
-- [x] **Матовость убрана:** все `backdrop-filter` удалены, `AuroraBackground` скрыт на лотерейных страницах
-- [x] **Мёртвые зависимости удалены:** Three.js, Chakra UI, Emotion, Radix (174 пакета)
-- [x] **Сырые `rgba()`:** заменены на opacity-варианты токенов (`--primary-18`, `--coral-35`, etc.)
-- [x] **Компоненты обновлены:** AuroraBackground, Header, NavBar, LotteryCarousel, PremiumButton, ProfilePage
-- [x] **DailyRushPage:** полностью переведён на токены и Tailwind-классы
-- [x] **Новый `DESIGN_SYSTEM.md`** — полный reference
+> Предыдущая версия этого раздела содержала аспирационные галочки, не отражавшие
+> код. Ниже — честный статус после ревизии.
+
+- [x] **Палитра:** ролевая модель закреплена (navy база, primary=action, secondary=brand, gold=деньги/выигрыш/CTA, coral=live, per-game accents)
+- [x] **Один красный:** дубликат rose `#F43F5E` / `rgba(244,63,94)` сведён к `--coral` во всех компонентах и `lottery-cards.css`
+- [x] **Orange сведён:** stray `#F97316` (hot-glow, freq-badge, icon-fire, hot-ring) → `--coral`
+- [x] **Сломанные `--amber-brand` / `--amber-soft`:** убраны из `ProfilePage` (аватар→brand, прогресс→gold, фильтр→primary); мёртвый `HeroSection.tsx` удалён
+- [x] **Анимации:** Framer Motion → entrance, CSS → looping
+- [x] **Эталон объёма поверхностей (фаза A):** формула `.glass-panel` (Daily Rush) принята за единый «объём» проекта — токены `--surface-gradient`, `--bevel-light-top/-side`, `--bevel-dark-side/-bottom`, `--elev-1..3`; `.glass-card` приведён к ней (Главная получила ту же глубину)
+- [x] **Матовость добита:** `backdrop-filter` убран с `.tier-card` и `.modal-overlay` (оверлей компенсирован непрозрачностью 0.94). Остатков `backdrop-filter` в проекте больше нет
+- [x] **Мёртвые зависимости удалены:** Three.js, Chakra UI, Emotion, Radix
+- [ ] **Сырые `rgba()`:** ЧАСТИЧНО. `lottery-cards.css` и инлайн-стили (`LotteryPage`) всё ещё содержат сырые `rgba()` для 3D-светотени — намеренно (token-сведение этих стоп-цветов — отдельная задача)
+- [ ] **Второй blue `#0EA5E9`:** ещё не сведён к `--primary` (используется в tier-cyan, htp-btn, ticket-badge). Тоновый сдвиг — требует визуальной проверки (фаза 2)
+- [ ] **`text-[Npx]` / `borderRadius: N` / `color:'#fff'`:** НЕ заменены — массово присутствуют в `App.tsx`, `LotteryPage.tsx`, `ProfilePage.tsx`
+- [x] **`DESIGN_SYSTEM.md`** переписан под ролевую модель
 
 ---
 
@@ -202,11 +207,11 @@ _Порядок работы над каждой задачей._
 
 | Токен | HEX | Роль |
 |-------|-----|------|
-| `--primary` | `#0A7CFF` | Electric Blue — CTA, акценты, TON |
-| `--secondary` | `#7C3AED` | Deep Purple — hover, фон карточек |
-| `--gold` | `#FADB14` | Джекпот, выигрыши |
-| `--emerald` | `#52C41A` | Успех, Quick Pick |
-| `--coral` | `#FF4D4F` | Urgent, LIVE, ошибки |
+| `--primary` | `#0A7CFF` | Primary action, активные состояния, выбор, TON |
+| `--secondary` | `#7C3AED` | Brand — аватар, бренд-акценты |
+| `--gold` | `#FADB14` | Деньги/выигрыш/CTA — джекпот, выбранное число, кнопка покупки, призы |
+| `--emerald` | `#52C41A` | Success — победа, Quick Pick |
+| `--coral` | `#FF4D4F` | Live/urgent/ошибки — единственный красный |
 | `--bg-0` | `#06071A` | Фон страницы |
 | `--bg-1` | `#0B1028` | Фон карточек |
 | `--ink-0` | `#F0F4FF` | Текст основной |
@@ -226,10 +231,14 @@ _Порядок работы над каждой задачей._
 | 7 | Add Numbers тусклая + scale заходит на соседей | ✅ `pulse-glow` без scale |
 | 8-12 | My Stats, Ticker, фонд, glass-3D, джекпот | ✅ Выполнены |
 | — | Мёртвый роутинг `/daily-rush-4x20` | ✅ Удалён |
-| — | Дубликаты токенов (`--amber-brand`, `--green`, `--red`) | ✅ Удалены |
-| — | `text-[Npx]` арбитрарные размеры | ✅ Заменены на Tailwind |
-| — | `rgba()` хардкоды | ✅ Заменены на CSS-токены |
-| — | `backdrop-filter` матовость | ✅ Убрана |
+| — | Сломанные `--amber-brand` / `--amber-soft` (ProfilePage, HeroSection) | ✅ Исправлены 20.06 |
+| — | Два красных (`#FF4D4F` vs `#F43F5E`) | ✅ Сведены к `--coral` 20.06 |
+| — | Stray orange `#F97316` (hot-glow и т.д.) | ✅ Сведён к `--coral` 20.06 |
+| — | Второй blue `#0EA5E9` vs `--primary` | ⬜ Не сведён (фаза 2) |
+| — | `text-[Npx]` арбитрарные размеры | ⬜ НЕ заменены (App/LotteryPage/ProfilePage) |
+| — | `rgba()` хардкоды | ⬜ Частично (3D-светотень намеренно сырая) |
+| — | `backdrop-filter` матовость | ✅ Убрана полностью (tier-card, modal-overlay) 20.06 |
+| — | Эталон объёма поверхностей (.glass-panel → токены) | ✅ Закреплён 20.06 (фаза A) |
 
 ---
 

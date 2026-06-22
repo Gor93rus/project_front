@@ -157,7 +157,7 @@ function LotteryCard({ lottery }: { lottery: Lottery }) {
           <span style={{ fontSize: 8, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.12em', color: 'rgba(255,255,255,0.65)', fontFamily: "var(--font-mono)" }}>
             {lottery.drawLabel}
           </span>
-          <span style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 7.5, fontWeight: 800, textTransform: 'uppercase', padding: '3px 7px', borderRadius: 6, background: 'rgba(244,63,94,0.18)', color: 'var(--coral)', border: '1px solid rgba(244,63,94,0.3)', boxShadow: '0 0 10px var(--coral-glow)', fontFamily: "var(--font-mono)" }}>
+          <span style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 7.5, fontWeight: 800, textTransform: 'uppercase', padding: '3px 7px', borderRadius: 6, background: 'var(--coral-18)', color: 'var(--coral)', border: '1px solid var(--coral-35)', boxShadow: '0 0 10px var(--coral-glow)', fontFamily: "var(--font-mono)" }}>
             <span style={{ width: 6, height: 6, borderRadius: '50%', background: 'var(--coral)', animation: 'livePulse 1s ease-in-out infinite' }} />
             LIVE
           </span>

@@ -40,9 +40,9 @@ function HeroSlide({ lottery }: { lottery: Lottery }) {
         </span>
         <span className="flex items-center gap-1 text-[7px] font-extrabold uppercase tracking-wider px-1.5 py-0.5 rounded-full"
           style={{
-            background: 'rgba(244,63,94,0.22)',
+            background: 'var(--coral-18)',
             color: 'var(--coral)',
-            border: '1px solid rgba(244,63,94,0.4)',
+            border: '1px solid var(--coral-35)',
           }}>
           <span className="w-1.5 h-1.5 rounded-full" style={{ background: 'var(--coral)', animation: 'livePulse 1s ease-in-out infinite' }} />
           LIVE

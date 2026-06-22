@@ -76,8 +76,8 @@ export function GamificationBanner() {
                 <div className="h-full rounded-full transition-all duration-700"
                   style={{
                     width: `${xpPct}%`,
-                    background: 'linear-gradient(90deg, var(--gold), var(--gold-soft))',
-                    boxShadow: '0 0 10px var(--gold-glow)',
+                    background: 'linear-gradient(90deg, var(--primary), var(--primary-soft))',
+                    boxShadow: '0 0 10px var(--primary-glow)',
                   }} />
               </div>
             </div>
