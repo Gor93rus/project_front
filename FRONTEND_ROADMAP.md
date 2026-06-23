@@ -119,7 +119,7 @@ _Порядок работы над каждой задачей._
 - [x] Luminous Gradient схемы в glass-panel, hero-card (B)
 - [x] Градиент num-cell — монохромный (не пёстрый) (#1)
 - [x] Яркость поднята (убраны избыточные тени, blur уменьшен) (#2)
-- [x] HeroCard инлайн-градиент заменён на CSS-��ласс (#3)
+- [x] HeroCard инлайн-градиент заменён на CSS-���ласс (#3)
 - [x] ��олупрозрачные кнопки (fire/emerald/ghost/htp) — без чёрных градиентов (C)
 - [x] Активные состояния: `num-cell.selected` + `ticket-ball` — Luminous Gradient (#4)
 - [x] Progress-bar + Selected counter — Luminous Gradient (#5)
@@ -163,7 +163,9 @@ _Порядок работы над каждой задачей._
 - [x] **Мёртвые зависимости удалены:** Three.js, Chakra UI, Emotion, Radix
 - [ ] **Сырые `rgba()`:** ЧАСТИЧНО. `lottery-cards.css` и инлайн-стили (`LotteryPage`) всё ещё содержат сырые `rgba()` для 3D-светотени — намеренно (token-сведение этих стоп-цветов — отдельная задача)
 - [ ] **Второй blue `#0EA5E9`:** ещё не сведён к `--primary` (используется в tier-cyan, htp-btn, ticket-badge). Тоновый сдвиг — требует визуальной проверки (фаза 2)
-- [ ] **`text-[Npx]` / `borderRadius: N` / `color:'#fff'`:** НЕ заменены — массово присутствуют в `App.tsx`, `LotteryPage.tsx`, `ProfilePage.tsx`
+- [x] **Типошкала: дно поднято (фаза C1-a):** `3xs` 7→11, `2xs` 8→12, `xs` 10→13, `sm` 12→14, `base` 14→15 — нечитаемых <11px размеров в шкале больше нет (монотонная, затронула обе страницы)
+- [x] **`text-[Npx]` на Главной убраны (фаза C1-b):** все арбитрарные размеры в `HeroCarousel`, `App.tsx`, `GamificationBanner`, `ScratchCarousel`, `LotteryCarousel`, `PageFooter`, `ExchangeRate` сведены к токенам шкалы (≤11px → `text-3xs`)
+- [ ] **`text-[Npx]` остаток / `borderRadius: N` / `color:'#fff'`:** ещё в `LotteryPage.tsx`, `ProfilePage.tsx`, `DailyRushPage` (C2 и далее)
 - [x] **`DESIGN_SYSTEM.md`** переписан под ролевую модель
 
 ---
@@ -235,7 +237,7 @@ _Порядок работы над каждой задачей._
 | — | Два красных (`#FF4D4F` vs `#F43F5E`) | ✅ Сведены к `--coral` 20.06 |
 | — | Stray orange `#F97316` (hot-glow и т.д.) | ✅ Сведён к `--coral` 20.06 |
 | — | Второй blue `#0EA5E9` vs `--primary` | ⬜ Не сведён (фаза 2) |
-| — | `text-[Npx]` арбитрарные размеры | ⬜ НЕ заменены (App/LotteryPage/ProfilePage) |
+| — | `text-[Npx]` арбитрарные размеры | ��� НЕ заменены (App/LotteryPage/ProfilePage) |
 | — | `rgba()` хардкоды | ⬜ Частично (3D-светотень намеренно сырая) |
 | — | `backdrop-filter` матовость | ✅ Убрана полностью (tier-card, modal-overlay) 20.06 |
 | — | Эталон объёма поверхностей (.glass-panel → токены) | ✅ Закреплён 20.06 (фаза A) |

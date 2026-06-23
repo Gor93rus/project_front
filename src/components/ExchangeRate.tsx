@@ -21,8 +21,8 @@ export function ExchangeRate() {
             </svg>
           </div>
           <div>
-            <p className="text-[12px] font-bold" style={{ color: 'var(--ink-0)' }}>TON / USDT</p>
-            <p className="text-[9.5px]" style={{ color: 'var(--ink-3)' }}>
+            <p className="text-2xs font-bold" style={{ color: 'var(--ink-0)' }}>TON / USDT</p>
+            <p className="text-3xs" style={{ color: 'var(--ink-3)' }}>
               CoinGecko · обновляется раз в минуту
             </p>
           </div>
@@ -34,10 +34,10 @@ export function ExchangeRate() {
             <div className="h-5 w-16 rounded animate-pulse" style={{ background: 'var(--surface-2)' }} />
           ) : (
             <>
-              <p className="text-[18px] font-black leading-none" style={{ color: 'var(--ton)' }}>
+              <p className="text-xl font-black leading-none" style={{ color: 'var(--ton)' }}>
                 ${usd.toFixed(3)}
               </p>
-              <p className="text-[10px] font-bold mt-0.5"
+              <p className="text-3xs font-bold mt-0.5"
                 style={{ color: positive ? '#4ade80' : '#f87171' }}>
                 {positive ? '+' : ''}{change24h.toFixed(2)}% 24ч
               </p>

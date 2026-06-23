@@ -35,10 +35,10 @@ function HeroSlide({ lottery }: { lottery: Lottery }) {
 
       {/* Draw label + LIVE badge top row */}
       <div className="absolute top-3 left-4 right-24 flex items-center gap-2">
-        <span className="text-[8px] font-extrabold uppercase tracking-widest text-white/70">
+        <span className="text-3xs font-extrabold uppercase tracking-widest text-white/70">
           {lottery.drawLabel}
         </span>
-        <span className="flex items-center gap-1 text-[7px] font-extrabold uppercase tracking-wider px-1.5 py-0.5 rounded-full"
+        <span className="flex items-center gap-1 text-3xs font-extrabold uppercase tracking-wider px-1.5 py-0.5 rounded-full"
           style={{
             background: 'var(--coral-18)',
             color: 'var(--coral)',
@@ -51,17 +51,17 @@ function HeroSlide({ lottery }: { lottery: Lottery }) {
 
       {/* Main content */}
       <div className="relative z-10 px-4 pt-9 pb-3 flex flex-col gap-1 max-w-[65%]">
-        <h2 className="text-white font-black text-[16px] leading-tight"
+        <h2 className="text-white font-black text-lg leading-tight"
           style={{ textShadow: '0 2px 8px rgba(0,0,0,0.6)' }}>
           {lottery.name}
         </h2>
         <div className="flex items-baseline gap-1.5">
-          <span className="text-[9px] font-bold uppercase tracking-wide text-white/60">Jackpot</span>
-          <span className="text-[16px] font-black leading-none"
+          <span className="text-3xs font-bold uppercase tracking-wide text-white/60">Jackpot</span>
+          <span className="text-lg font-black leading-none"
             style={{ color: lottery.accentColor, textShadow: `0 2px 8px ${lottery.accentColor}80` }}>
             {lottery.jackpot.toLocaleString()}
           </span>
-          <span className="text-[10px] font-semibold text-white/60">{lottery.currency}</span>
+          <span className="text-3xs font-semibold text-white/60">{lottery.currency}</span>
         </div>
       </div>
     </motion.div>

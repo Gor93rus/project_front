@@ -184,17 +184,17 @@ export function LotteryCarousel() {
     <section className="px-4">
       <div className="flex items-center justify-between mb-3">
         <div>
-          <h2 className="font-extrabold text-[14px]" style={{ color: 'var(--ink-0)' }}>Draw Lotteries</h2>
-          <p className="text-[10px] mt-0.5" style={{ color: 'var(--ink-3)' }}>10 draws at different frequencies</p>
+          <h2 className="font-extrabold text-sm" style={{ color: 'var(--ink-0)' }}>Draw Lotteries</h2>
+          <p className="text-3xs mt-0.5" style={{ color: 'var(--ink-3)' }}>10 draws at different frequencies</p>
         </div>
         <div className="flex items-center gap-2">
           <button onClick={() => setShowHowItWorks(true)}
-            className="text-[10px] font-semibold px-2.5 py-1.5 rounded-full flex items-center gap-1"
+            className="text-3xs font-semibold px-2.5 py-1.5 rounded-full flex items-center gap-1"
             style={{ background: 'var(--surface-2)', border: '1px solid var(--line)', color: 'var(--ink-2)' }}>
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>
             How it works
           </button>
-          <button className="text-[11px] font-semibold px-3 py-1.5 rounded-full flex items-center gap-1"
+          <button className="text-3xs font-semibold px-3 py-1.5 rounded-full flex items-center gap-1"
             style={{ background: 'var(--surface-2)', border: '1px solid var(--line)', color: 'var(--ton)' }}>
             All
             <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6"><path d="M9 6l6 6-6 6"/></svg>
@@ -214,14 +214,14 @@ export function LotteryCarousel() {
             style={{ background: 'var(--surface-1)', border: '1px solid var(--line)' }}
             onClick={e => e.stopPropagation()}>
             <div className="flex items-center justify-between mb-3">
-              <h3 className="text-[15px] font-extrabold" style={{ color: 'var(--ink-0)' }}>How it works</h3>
+              <h3 className="text-base font-extrabold" style={{ color: 'var(--ink-0)' }}>How it works</h3>
               <button onClick={() => setShowHowItWorks(false)}
                 className="w-7 h-7 rounded-full flex items-center justify-center"
                 style={{ background: 'var(--surface-2)' }}>
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M18 6 6 18M6 6l12 12"/></svg>
               </button>
             </div>
-            <div className="flex flex-col gap-3 text-[11px]" style={{ color: 'var(--ink-2)' }}>
+            <div className="flex flex-col gap-3 text-3xs" style={{ color: 'var(--ink-2)' }}>
               <p>1. Choose a lottery and buy your ticket</p>
               <p>2. Wait for the draw — results are published on-chain</p>
               <p>3. If your ticket matches — the prize is sent to your wallet automatically</p>

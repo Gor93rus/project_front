@@ -49,18 +49,18 @@ function GlobalJackpotStrip() {
     <div className="jackpot-strip mx-4 mb-1" style={{ borderRadius: 14 }}>
       <div className="flex items-center justify-between px-4 py-3">
         <div className="flex items-center gap-2">
-          <span className="flex items-center gap-1 text-[8px] font-extrabold uppercase tracking-widest px-1.5 py-0.5 rounded-full"
+          <span className="flex items-center gap-1 text-3xs font-extrabold uppercase tracking-widest px-1.5 py-0.5 rounded-full"
             style={{ background: 'var(--coral-18)', color: 'var(--coral)', border: '1px solid var(--coral-35)' }}>
             <span className="w-1.5 h-1.5 rounded-full" style={{ background: 'var(--coral)', animation: 'livePulse 1s ease-in-out infinite' }} />
             LIVE
           </span>
-          <span className="text-[10px] font-bold uppercase tracking-wide" style={{ color: 'rgba(255,255,255,0.55)' }}>
+          <span className="text-3xs font-bold uppercase tracking-wide" style={{ color: 'rgba(255,255,255,0.55)' }}>
             Total Prize Pool
           </span>
         </div>
         <div className="flex items-baseline gap-1.5">
-          <span className="jackpot-number text-[22px]">{formatted}</span>
-          <span className="text-[10px] font-bold" style={{ color: 'rgba(255,255,255,0.55)' }}>TON</span>
+          <span className="jackpot-number text-2xl">{formatted}</span>
+          <span className="text-3xs font-bold" style={{ color: 'rgba(255,255,255,0.55)' }}>TON</span>
         </div>
       </div>
     </div>
@@ -134,8 +134,8 @@ function PlaceholderPage({ title }: { title: string }) {
       <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
         <circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/>
       </svg>
-      <p className="text-[14px] font-semibold" style={{ color: 'var(--ink-2)' }}>{title}</p>
-      <p className="text-[11px]">Coming soon</p>
+      <p className="text-sm font-semibold" style={{ color: 'var(--ink-2)' }}>{title}</p>
+      <p className="text-3xs">Coming soon</p>
     </div>
   );
 }

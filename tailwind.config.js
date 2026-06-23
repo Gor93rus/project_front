@@ -3,13 +3,13 @@ export default {
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
   theme: {
     extend: {
-      // ── Типографическая шкала ──
+      // ── Типографическая шкала (дно поднято до читаемого ≥11px, фаза C1-a) ──
       fontSize: {
-        '3xs':   ['7px',  { lineHeight: '1.3' }],
-        '2xs':   ['8px',  { lineHeight: '1.3' }],
-        'xs':    ['10px', { lineHeight: '1.4' }],
-        'sm':    ['12px', { lineHeight: '1.4' }],
-        'base':  ['14px', { lineHeight: '1.5' }],
+        '3xs':   ['11px', { lineHeight: '1.35' }],
+        '2xs':   ['12px', { lineHeight: '1.35' }],
+        'xs':    ['13px', { lineHeight: '1.4' }],
+        'sm':    ['14px', { lineHeight: '1.45' }],
+        'base':  ['15px', { lineHeight: '1.55' }],
         'lg':    ['16px', { lineHeight: '1.5' }],
         'xl':    ['18px', { lineHeight: '1.4' }],
         '2xl':   ['22px', { lineHeight: '1.3' }],
