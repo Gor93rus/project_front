@@ -77,27 +77,31 @@ export function NavBar({ active, onTabChange }: Props) {
         const isActive = tab.id === active;
         return (
           <button key={tab.id} onClick={() => { hapticImpact('light'); onTabChange(tab.id); }}
-            className="relative flex flex-col items-center gap-1 px-3 py-1 rounded-xl transition-all duration-200"
-            style={{ 
-        color: isActive ? 'var(--primary-bright)' : 'var(--ink-3)', 
-        minWidth: 52,
-        textShadow: isActive ? '0 0 12px var(--primary-glow)' : 'none',
-      }}>
-            <span className="relative">
+            className="relative flex flex-col items-center gap-1 px-2 py-1 transition-all duration-200"
+            style={{ minWidth: 52 }}>
+            {/* Иконка в заполненной primary-пилюле при активном состоянии (паттерн The Market) */}
+            <span className="relative flex items-center justify-center transition-all duration-200"
+              style={{
+                width: 44,
+                height: 30,
+                borderRadius: 'var(--r-md)',
+                background: isActive
+                  ? 'linear-gradient(135deg, var(--primary), var(--primary-soft))'
+                  : 'transparent',
+                boxShadow: isActive ? '0 4px 14px var(--primary-glow)' : 'none',
+                color: isActive ? '#fff' : 'var(--ink-3)',
+                transform: isActive ? 'translateY(-1px)' : 'none',
+              }}>
               {tab.icon}
               {tab.live && !isActive && (
-                <span className="absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full"
+                <span className="absolute top-1 right-2.5 w-2 h-2 rounded-full"
                   style={{ background: 'var(--coral)', animation: 'pulse-dot 1.5s ease-in-out infinite' }} />
               )}
             </span>
-            <span className="text-2xs font-semibold">{tab.label}</span>
-            {isActive && (
-              <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-4 h-0.5 rounded-full"
-                style={{ 
-                  background: 'var(--primary-bright)',
-                  boxShadow: '0 0 8px var(--primary-glow)',
-                }} />
-            )}
+            <span className="text-2xs font-semibold transition-colors duration-200"
+              style={{ color: isActive ? 'var(--primary-bright)' : 'var(--ink-3)' }}>
+              {tab.label}
+            </span>
           </button>
         );
       })}
