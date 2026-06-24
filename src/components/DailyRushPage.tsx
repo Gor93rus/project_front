@@ -108,7 +108,7 @@ function HeroStrip({ config, diffMs, isLive, urgent }: { config:DailyLotteryConf
             <span className="glitch-r" style={{fontSize:30,fontWeight:800,lineHeight:1}}>{jackpotCurrent.toLocaleString()}</span>
             <span className="glitch-b" style={{fontSize:30,fontWeight:800,lineHeight:1}}>{jackpotCurrent.toLocaleString()}</span>
             <span className="glitch-scan"/>
-            <span className="mono font-semibold ml-1.5 text-ink-2" style={{fontSize:11}}>TON</span>
+            <span className="mono font-semibold ml-1.5 text-ink-2 text-3xs">TON</span>
           </div>
         </div>
 
@@ -611,8 +611,8 @@ export function DailyRushPage({ config:cfg=DAILY_RUSH_CONFIG }: { config?:DailyL
           <ShoppingCart size={20} color="#fff" strokeWidth={2.5} style={{filter:'drop-shadow(0 1px 4px rgba(0,0,0,0.70))'}}/>
         </div>
         {cartCount>0 && (
-          <div className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full flex items-center justify-center"
-            style={{background:'var(--coral)',border:'1.5px solid var(--bg-0)',boxShadow:'0 0 8px var(--coral-glow)',fontSize:9,fontWeight:800,color:'#fff',fontFamily:'var(--font-mono)'}}>
+          <div className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full flex items-center justify-center text-3xs"
+            style={{background:'var(--coral)',border:'1.5px solid var(--bg-0)',boxShadow:'0 0 8px var(--coral-glow)',fontWeight:800,color:'#fff',fontFamily:'var(--font-mono)'}}>
             {cartCount}
           </div>
         )}

@@ -53,7 +53,7 @@ function LevelProgress({ level, levelName, xp, xpForNext, nextLevelName }: {
       <div className="flex items-center justify-between mb-2">
         <div className="flex items-center gap-2">
           <div
-            className="w-9 h-9 rounded-xl flex items-center justify-center font-black text-[15px]"
+            className="w-9 h-9 rounded-xl flex items-center justify-center font-black text-base"
             style={{
               background: 'linear-gradient(135deg, var(--gold), var(--gold-soft))',
               color: '#fff',
@@ -63,14 +63,14 @@ function LevelProgress({ level, levelName, xp, xpForNext, nextLevelName }: {
             {level}
           </div>
           <div>
-            <p className="font-extrabold text-[13px]" style={{ color: 'var(--ink-0)' }}>{levelName}</p>
-            <p className="text-[9px] font-semibold" style={{ color: 'var(--ink-3)' }}>
+            <p className="font-extrabold text-xs" style={{ color: 'var(--ink-0)' }}>{levelName}</p>
+            <p className="text-3xs font-semibold" style={{ color: 'var(--ink-3)' }}>
               {xp.toLocaleString()} / {xpForNext.toLocaleString()} XP
             </p>
           </div>
         </div>
         <div className="text-right">
-          <p className="text-[9px] font-semibold" style={{ color: 'var(--ink-3)' }}>Следующий</p>
+          <p className="text-3xs font-semibold" style={{ color: 'var(--ink-3)' }}>Следующий</p>
           <p className="text-xs font-bold" style={{ color: 'var(--gold-soft)' }}>{nextLevelName}</p>
         </div>
       </div>
@@ -107,11 +107,11 @@ function StatCard({ label, value, suffix, accent }: { label: string; value: stri
         border: '1px solid var(--line)',
       }}
     >
-      <p className="text-[18px] font-black leading-none" style={{ color: accent ?? 'var(--ink-0)' }}>
+      <p className="text-xl font-black leading-none" style={{ color: accent ?? 'var(--ink-0)' }}>
         {typeof value === 'number' ? value.toLocaleString() : value}
-        {suffix && <span className="text-[10px] ml-0.5 font-bold" style={{ color: 'var(--ink-3)' }}>{suffix}</span>}
+        {suffix && <span className="text-3xs ml-0.5 font-bold" style={{ color: 'var(--ink-3)' }}>{suffix}</span>}
       </p>
-      <p className="text-[9px] font-semibold mt-1" style={{ color: 'var(--ink-3)' }}>{label}</p>
+      <p className="text-3xs font-semibold mt-1" style={{ color: 'var(--ink-3)' }}>{label}</p>
     </div>
   );
 }
@@ -140,16 +140,16 @@ function StreakSection({ days }: { days: number }) {
     >
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2">
-          <span className="text-[18px]">🔥</span>
+          <span className="text-xl">🔥</span>
           <div>
-            <p className="font-extrabold text-[13px]" style={{ color: 'var(--ink-0)' }}>Streak</p>
-            <p className="text-[9px] font-semibold" style={{ color: 'var(--ink-3)' }}>
+            <p className="font-extrabold text-xs" style={{ color: 'var(--ink-0)' }}>Streak</p>
+            <p className="text-3xs font-semibold" style={{ color: 'var(--ink-3)' }}>
               {days} {days === 1 ? 'день' : days < 5 ? 'дня' : 'дней'} подряд
             </p>
           </div>
         </div>
         <div
-          className="text-[10px] font-bold px-2.5 py-1 rounded-full"
+          className="text-3xs font-bold px-2.5 py-1 rounded-full"
           style={{
             background: 'linear-gradient(135deg, var(--primary-dim), var(--secondary-dim))',
             color: 'var(--primary-soft)',
@@ -167,12 +167,12 @@ function StreakSection({ days }: { days: number }) {
           const isActive = i >= 6 - days + 1; // последние N дней активны
           return (
             <div key={i} className="flex flex-col items-center gap-1">
-              <span className="text-[8px] font-semibold" style={{ color: 'var(--ink-3)' }}>
+              <span className="text-3xs font-semibold" style={{ color: 'var(--ink-3)' }}>
                 {dayNames[d.getDay() === 0 ? 6 : d.getDay() - 1]}
               </span>
               <div
                 className={cn(
-                  'w-8 h-8 rounded-lg flex items-center justify-center text-[11px] font-bold transition-all duration-300',
+                  'w-8 h-8 rounded-lg flex items-center justify-center text-3xs font-bold transition-all duration-300',
                 )}
                 style={{
                     background: isActive
@@ -219,8 +219,8 @@ function BadgeCard({ badge }: { badge: Badge }) {
       }}
       whileTap={{ scale: 0.95 }}
     >
-      <span className="text-[22px]">{badge.icon}</span>
-      <p className="text-[9px] font-bold text-center leading-tight" style={{ color: badge.unlocked ? 'var(--ink-0)' : 'var(--ink-3)' }}>
+      <span className="text-2xl">{badge.icon}</span>
+      <p className="text-3xs font-bold text-center leading-tight" style={{ color: badge.unlocked ? 'var(--ink-0)' : 'var(--ink-3)' }}>
         {badge.name}
       </p>
 
@@ -250,16 +250,16 @@ function BadgeCard({ badge }: { badge: Badge }) {
             exit={{ opacity: 0, y: 6, scale: 0.95 }}
             transition={{ duration: 0.15 }}
           >
-            <p className="text-[10px] font-semibold text-center leading-snug" style={{ color: 'var(--ink-2)' }}>
+            <p className="text-3xs font-semibold text-center leading-snug" style={{ color: 'var(--ink-2)' }}>
               {badge.description}
             </p>
             {badge.unlocked && badge.unlockedAt && (
-              <p className="text-[8px] mt-1 text-center" style={{ color: 'var(--ink-3)' }}>
+              <p className="text-3xs mt-1 text-center" style={{ color: 'var(--ink-3)' }}>
                 Получено {badge.unlockedAt}
               </p>
             )}
             {!badge.unlocked && badge.progress !== undefined && (
-              <p className="text-[8px] mt-1 text-center font-bold" style={{ color: 'var(--primary-soft)' }}>
+              <p className="text-3xs mt-1 text-center font-bold" style={{ color: 'var(--primary-soft)' }}>
                 {badge.progress}%
               </p>
             )}
@@ -291,10 +291,10 @@ function BadgesSection({ badges }: { badges: Badge[] }) {
     >
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2">
-          <span className="text-[16px]">🏅</span>
+          <span className="text-lg">🏅</span>
           <div>
-            <p className="font-extrabold text-[13px]" style={{ color: 'var(--ink-0)' }}>Бейджи</p>
-            <p className="text-[9px] font-semibold" style={{ color: 'var(--ink-3)' }}>
+            <p className="font-extrabold text-xs" style={{ color: 'var(--ink-0)' }}>Бейджи</p>
+            <p className="text-3xs font-semibold" style={{ color: 'var(--ink-3)' }}>
               {unlockedCount} / {badges.length} получено
             </p>
           </div>
@@ -307,7 +307,7 @@ function BadgesSection({ badges }: { badges: Badge[] }) {
           <button
             key={f}
             className={cn(
-              'text-[9px] font-bold px-2.5 py-1.5 rounded-full transition-all',
+              'text-3xs font-bold px-2.5 py-1.5 rounded-full transition-all',
             )}
             style={{
               background: filter === f ? 'var(--primary)' : 'var(--surface-2)',
@@ -352,7 +352,7 @@ function SettingsSection() {
       }}
     >
       <div className="p-4 pb-2">
-        <p className="font-extrabold text-[13px]" style={{ color: 'var(--ink-0)' }}>Настройки</p>
+        <p className="font-extrabold text-xs" style={{ color: 'var(--ink-0)' }}>Настройки</p>
       </div>
       {items.map((item, i) => (
         <button
@@ -361,10 +361,10 @@ function SettingsSection() {
           style={{ borderTop: i > 0 ? '1px solid var(--line)' : 'none' }}
           onClick={() => hapticImpact('light')}
         >
-          <span className="text-[16px]">{item.icon}</span>
+          <span className="text-lg">{item.icon}</span>
           <div className="flex-1 text-left">
-            <p className="text-[12px] font-bold" style={{ color: 'var(--ink-0)' }}>{item.label}</p>
-            <p className="text-[9px]" style={{ color: 'var(--ink-3)' }}>{item.desc}</p>
+            <p className="text-2xs font-bold" style={{ color: 'var(--ink-0)' }}>{item.label}</p>
+            <p className="text-3xs" style={{ color: 'var(--ink-3)' }}>{item.desc}</p>
           </div>
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" style={{ color: 'var(--ink-3)' }}>
             <path d="M9 6l6 6-6 6"/>
@@ -378,7 +378,7 @@ function SettingsSection() {
         style={{ borderTop: '1px solid var(--line)' }}
         onClick={() => hapticImpact('heavy')}
       >
-        <span className="text-[16px]">🚪</span>
+        <span className="text-lg">🚪</span>
             <p className="text-sm font-bold" style={{ color: 'var(--coral)' }}>Выйти</p>
       </button>
     </div>
@@ -406,7 +406,7 @@ export function ProfilePage() {
       >
         {/* Avatar */}
         <div
-          className="w-14 h-14 rounded-full flex items-center justify-center font-black text-[18px] shrink-0"
+          className="w-14 h-14 rounded-full flex items-center justify-center font-black text-xl shrink-0"
           style={{
             background: 'linear-gradient(135deg, var(--primary), var(--secondary))',
             color: '#fff',
@@ -417,10 +417,10 @@ export function ProfilePage() {
         </div>
 
         <div className="flex-1 min-w-0">
-          <p className="font-extrabold text-[16px] truncate" style={{ color: 'var(--ink-0)' }}>
+          <p className="font-extrabold text-lg truncate" style={{ color: 'var(--ink-0)' }}>
             {profile.firstName} {profile.lastName}
           </p>
-          <p className="text-[11px] font-semibold" style={{ color: 'var(--ink-3)' }}>
+          <p className="text-3xs font-semibold" style={{ color: 'var(--ink-3)' }}>
             @{profile.username}
           </p>
         </div>
