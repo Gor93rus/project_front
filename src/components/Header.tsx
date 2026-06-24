@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useTonRate } from '../hooks/useTonRate';
 import { useTonWallet } from '../hooks/useTonWallet';
-import { TonLogo } from './Icons';
 
 // ── TonRatePill — TON price + 24h change ──────────────────────────────────────
 function TonRatePill() {
@@ -124,11 +123,10 @@ export function Header() {
     >
       {/* Single row — brand · rate + wallet */}
       <div className="flex items-center justify-between px-4" style={{ height: 52 }}>
-        {/* Left — official TON logo + project name */}
+        {/* Left — project name */}
         <div className="flex items-center gap-2 shrink-0">
-          <TonLogo size={22} />
           <span
-            className="text-sm font-extrabold leading-none"
+            className="text-xs font-light leading-none"
             style={{
               fontFamily: 'var(--font-display)',
               color: 'var(--ink-0)',
