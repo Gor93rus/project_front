@@ -165,7 +165,8 @@ _Порядок работы над каждой задачей._
 - [ ] **Второй blue `#0EA5E9`:** ещё не сведён к `--primary` (используется в tier-cyan, htp-btn, ticket-badge). Тоновый сдвиг — требует визуальной проверки (фаза 2)
 - [x] **Типошкала: дно поднято (фаза C1-a):** `3xs` 7→11, `2xs` 8→12, `xs` 10→13, `sm` 12→14, `base` 14→15 — нечитаемых <11px размеров в шкале больше нет (монотонная, затронула обе страницы)
 - [x] **`text-[Npx]` на Главной убраны (фаза C1-b):** все арбитрарные размеры в `HeroCarousel`, `App.tsx`, `GamificationBanner`, `ScratchCarousel`, `LotteryCarousel`, `PageFooter`, `ExchangeRate` сведены к токенам шкалы (≤11px → `text-3xs`)
-- [ ] **`text-[Npx]` остаток / `borderRadius: N` / `color:'#fff'`:** ещё в `LotteryPage.tsx`, `ProfilePage.tsx`, `DailyRushPage` (C2 и далее)
+- [x] **Типографика Daily Rush (фаза C2):** страница уже была на токенах шкалы (выиграла от C1-a); добито 2 инлайн-хардкода — «TON» `fontSize:11→text-3xs`, бейдж корзины `fontSize:9→text-3xs`. Цифра джекпота оставлена 30px как осознанный «деньги»-акцент. Радиусы `50%`/конфетти не трогаем (не типографика)
+- [ ] **`text-[Npx]` остаток / `borderRadius: N` / `color:'#fff'`:** ещё в `LotteryPage.tsx`, `ProfilePage.tsx` (вне текущего фокуса Главная/Daily Rush)
 - [x] **`DESIGN_SYSTEM.md`** переписан под ролевую модель
 
 ---
@@ -248,7 +249,7 @@ _Порядок работы над каждой задачей._
 
 - **Токены:** единый источник правды — `src/styles/design-tokens.css`
 - **Правило анимаций:** Framer Motion для mount/unmount, CSS keyframes для looping
-- **Типографика:** Tailwind-классы `text-2xs` (8px) … `text-4xl` (36px)
+- **Типографика:** Tailwind-классы `text-3xs` (11px) … `text-4xl` (36px) — дно поднято до читаемого ≥11px (фаза C1-a)
 - **Цвета:** opacity-варианты токенов (`--primary-18`, `--coral-35`) вместо `rgba()`
 - **Перед каждым изменением** — проверять на мобильном viewport 390×844 через Playwright
 - **Коммиты** — атомарные, одна задача = один коммит
