@@ -66,8 +66,8 @@
 }
 
 .glass-panel--neon {
-  border-top: 1.5px solid rgba(14,165,233,0.28);
-  box-shadow: inset 0 1px 0 rgba(56,189,248,0.12), 0 0 0 1px rgba(14,165,233,0.06), 0 0 20px rgba(14,165,233,0.10), 0 8px 28px rgba(0,0,0,0.55);
+  border-top: 1.5px solid rgba(var(--cyan-400),0.28);
+  box-shadow: inset 0 1px 0 rgba(var(--cyan-100),0.12), 0 0 0 1px rgba(var(--cyan-400),0.06), 0 0 20px rgba(var(--cyan-400),0.10), 0 8px 28px rgba(0,0,0,0.55);
 }
 
 /* ─── HERO CARD (jackpot display on lottery page) ─────────────────────────── */
@@ -114,8 +114,8 @@
 /* ─── GLITCH ───────────────────────────────────────────────────────────────── */
 .glitch-r, .glitch-b { position: absolute; top: 0; left: 0; width: 100%; height: 100%; -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; pointer-events: none; opacity: 0; }
 .glitch-r { background-image: linear-gradient(135deg, #FCA5A5 0%, #F43F5E 50%, #BE123C 100%); animation: glitchR 8s ease-in-out infinite; }
-.glitch-b { background-image: linear-gradient(135deg, #7DD3FC 0%, #0EA5E9 50%, #0369A1 100%); animation: glitchB 8s ease-in-out infinite; }
-.glitch-scan { position: absolute; inset: 0; background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(14,165,233,0.012) 2px, rgba(14,165,233,0.012) 4px); pointer-events: none; border-radius: inherit; animation: scanlineFlicker 8s ease-in-out infinite; opacity: 0; }
+.glitch-b { background-image: linear-gradient(135deg, #7DD3FC 0%, rgb(var(--cyan-400)) 50%, #0369A1 100%); animation: glitchB 8s ease-in-out infinite; }
+.glitch-scan { position: absolute; inset: 0; background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(var(--cyan-400),0.012) 2px, rgba(var(--cyan-400),0.012) 4px); pointer-events: none; border-radius: inherit; animation: scanlineFlicker 8s ease-in-out infinite; opacity: 0; }
 @keyframes glitchR { 0%,88%,100%{opacity:0;transform:none} 89%{opacity:0.70;transform:translate(3px,0);clip-path:polygon(0 18%,100% 18%,100% 34%,0 34%)} 90%{opacity:0.75;transform:translate(-3px,0);clip-path:polygon(0 50%,100% 50%,100% 68%,0 68%)} 91%{opacity:0.55;transform:translate(4px,0);clip-path:polygon(0 4%,100% 4%,100% 14%,0 14%)} 92%{opacity:0} }
 @keyframes glitchB { 0%,88%,100%{opacity:0;transform:none} 89%{opacity:0.70;transform:translate(-3px,0);clip-path:polygon(0 52%,100% 52%,100% 70%,0 70%)} 90%{opacity:0.75;transform:translate(3px,0);clip-path:polygon(0 16%,100% 16%,100% 32%,0 32%)} 91%{opacity:0.55;transform:translate(-4px,0);clip-path:polygon(0 78%,100% 78%,100% 94%,0 94%)} 92%{opacity:0} }
 @keyframes scanlineFlicker { 0%,87%,100%{opacity:0} 88%,90%{opacity:1} 89%{opacity:0.4} }
@@ -191,7 +191,7 @@
   transform: translateY(-2px) scale(1.06);
   color: var(--ink-0);
   border-color: rgba(255,255,255,0.14);
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.10), 0 5px 16px rgba(0,0,0,0.65), 0 0 10px rgba(14,165,233,0.12);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.10), 0 5px 16px rgba(0,0,0,0.65), 0 0 10px rgba(var(--cyan-400),0.12);
 }
 .num-cell.selected {
   background: linear-gradient(155deg, rgba(var(--ga-400),0.24) 0%, rgba(var(--ga-600),0.30) 40%, rgba(var(--ga-700),0.22) 75%, rgba(6,12,26,0.96) 100%);
@@ -258,16 +258,16 @@
 .ghost-btn:active { transform: translateY(1px) scale(0.97); }
 
 .htp-btn {
-  background: linear-gradient(180deg, rgba(56,189,248,0.18) 0%, rgba(14,165,233,0.55) 35%, rgba(2,132,199,0.70) 65%, rgba(1,90,160,0.82) 100%);
-  border-top: 1.5px solid rgba(56,189,248,0.50);
-  border-left: 1px solid rgba(14,165,233,0.30);
-  border-right: 1px solid rgba(0,70,130,0.55);
-  border-bottom: 1.5px solid rgba(0,55,110,0.80);
-  box-shadow: inset 0 1px 0 rgba(56,189,248,0.28), 0 0 0 1px rgba(14,165,233,0.15), 0 4px 14px rgba(2,132,199,0.28), 0 1px 4px rgba(0,0,0,0.40);
+  background: linear-gradient(180deg, rgba(var(--primary-100),0.18) 0%, rgba(var(--primary-400),0.55) 35%, rgba(var(--primary-600),0.70) 65%, rgba(var(--primary-800),0.82) 100%);
+  border-top: 1.5px solid rgba(var(--primary-100),0.50);
+  border-left: 1px solid rgba(var(--primary-400),0.30);
+  border-right: 1px solid rgba(var(--primary-800),0.55);
+  border-bottom: 1.5px solid rgba(var(--primary-900),0.80);
+  box-shadow: inset 0 1px 0 rgba(var(--primary-100),0.28), 0 0 0 1px rgba(var(--primary-400),0.15), 0 4px 14px rgba(var(--primary-600),0.28), 0 1px 4px rgba(0,0,0,0.40);
   color: #fff; text-shadow: 0 1px 3px rgba(0,0,0,0.40);
   transition: all 0.14s cubic-bezier(0.34,1.56,0.64,1); border-radius: 12px; font-weight: 700; cursor: pointer;
 }
-.htp-btn:hover { transform: translateY(-2px); box-shadow: inset 0 1px 0 rgba(56,189,248,0.40), 0 0 0 1px rgba(14,165,233,0.30), 0 6px 22px rgba(2,132,199,0.45), 0 2px 6px rgba(0,0,0,0.50); }
+.htp-btn:hover { transform: translateY(-2px); box-shadow: inset 0 1px 0 rgba(var(--primary-100),0.40), 0 0 0 1px rgba(var(--primary-400),0.30), 0 6px 22px rgba(var(--primary-600),0.45), 0 2px 6px rgba(0,0,0,0.50); }
 .htp-btn:active { transform: translateY(1px) scale(0.97); }
 
 /* ─── PULSE GLOW (CTA button animation) ─────────────────────────────────── */
@@ -354,10 +354,10 @@
   width: 26px; height: 26px; border-radius: 9px; flex-shrink: 0;
   display: flex; align-items: center; justify-content: center;
   font-size: 10px; font-weight: 800; font-family: 'JetBrains Mono', monospace;
-  background: rgba(14,165,233,0.15);
-  border: 1px solid rgba(14,165,233,0.35);
-  box-shadow: 0 0 8px rgba(14,165,233,0.20), 0 2px 5px rgba(0,0,0,0.45);
-  color: var(--ton-soft); text-shadow: 0 0 8px rgba(14,165,233,0.60);
+  background: rgba(var(--primary-400),0.15);
+  border: 1px solid rgba(var(--primary-400),0.35);
+  box-shadow: 0 0 8px rgba(var(--primary-400),0.20), 0 2px 5px rgba(0,0,0,0.45);
+  color: var(--ton-soft); text-shadow: 0 0 8px rgba(var(--primary-400),0.60);
 }
 
 .ticket-ball {
@@ -401,9 +401,9 @@
 }
 /* Blue — mid match */
 .tier-cyan {
-  background: linear-gradient(160deg, rgba(14,165,233,0.18) 0%, rgba(2,132,199,0.12) 35%, rgba(1,90,160,0.06) 65%, rgba(6,12,26,0.98) 100%);
-  border-top-color: rgba(14,165,233,0.50);
-  box-shadow: inset 0 1px 0 rgba(56,189,248,0.22), 0 0 0 1px rgba(14,165,233,0.08), 0 0 18px rgba(14,165,233,0.16), 0 6px 22px rgba(0,0,0,0.65);
+  background: linear-gradient(160deg, rgba(var(--cyan-400),0.18) 0%, rgba(var(--cyan-600),0.12) 35%, rgba(var(--cyan-800),0.06) 65%, rgba(6,12,26,0.98) 100%);
+  border-top-color: rgba(var(--cyan-400),0.50);
+  box-shadow: inset 0 1px 0 rgba(var(--cyan-100),0.22), 0 0 0 1px rgba(var(--cyan-400),0.08), 0 0 18px rgba(var(--cyan-400),0.16), 0 6px 22px rgba(0,0,0,0.65);
 }
 /* Gold — jackpot */
 .tier-gold {
@@ -455,7 +455,7 @@
   width: 100%; max-width: 390px; border-radius: 24px 24px 0 0;
   background: linear-gradient(170deg, rgba(18,32,53,0.99) 0%, rgba(10,18,36,1) 60%, rgba(6,12,26,1) 100%);
   border-top: 1.5px solid rgba(255,255,255,0.10); border-left: 1px solid rgba(255,255,255,0.06); border-right: 1px solid rgba(255,255,255,0.06);
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.10), 0 -6px 30px rgba(14,165,233,0.12), 0 -24px 70px rgba(0,0,0,0.80);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.10), 0 -6px 30px rgba(var(--cyan-400),0.12), 0 -24px 70px rgba(0,0,0,0.80);
   padding: 20px 20px 28px; animation: slideUp 0.30s cubic-bezier(0.34,1.56,0.64,1);
 }
 @keyframes fadeIn { from{opacity:0} to{opacity:1} }
@@ -471,9 +471,9 @@
 /* ─── ICON GLOW ────────────────────────────────────────────────────────────── */
 .icon-fire { filter: drop-shadow(0 0 4px rgba(255,77,79,0.95)) drop-shadow(0 0 12px rgba(229,49,51,0.55)); }
 .icon-gold  { filter: drop-shadow(0 0 4px rgba(var(--ga-400),0.95)) drop-shadow(0 0 12px rgba(var(--ga-600),0.55)); }
-.icon-cyan  { filter: drop-shadow(0 0 4px rgba(14,165,233,0.95)) drop-shadow(0 0 12px rgba(2,132,199,0.55)); }
+.icon-cyan  { filter: drop-shadow(0 0 4px rgba(var(--cyan-400),0.95)) drop-shadow(0 0 12px rgba(var(--cyan-600),0.55)); }
 .icon-lime  { filter: drop-shadow(0 0 4px rgba(16,217,138,0.95)) drop-shadow(0 0 12px rgba(5,150,105,0.55)); }
-.icon-blue  { filter: drop-shadow(0 0 4px rgba(56,189,248,0.95)) drop-shadow(0 0 12px rgba(14,165,233,0.55)); }
+.icon-blue  { filter: drop-shadow(0 0 4px rgba(var(--cyan-100),0.95)) drop-shadow(0 0 12px rgba(var(--cyan-400),0.55)); }
 
 /* ─── AURORA BLOBS (lottery page scene) ─────────────────────────────────── */
 .aurora-b1 { animation: auroraBlob1 30s ease-in-out infinite alternate; }
