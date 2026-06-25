@@ -85,6 +85,10 @@ export function ScrollCarousel({ children, accent = '#3CB1FF', showProgress = tr
           ['--scroll-mask' as string]: maskFor(progress),
           paddingRight: 24,
           paddingLeft: 0,
+          // Вертикальные отступы дают тени карточек место для отрисовки:
+          // overflow-x:auto принудительно делает overflow-y:auto и иначе срезает нижнюю тень.
+          paddingTop: 10,
+          paddingBottom: 30,
           scrollSnapType: 'x mandatory',
         }}>
         {Array.isArray(children)
