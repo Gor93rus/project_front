@@ -106,18 +106,18 @@ function LotteryCard({ lottery }: { lottery: Lottery }) {
       style={{
         position: 'relative', borderRadius: 20, flexShrink: 0, cursor: 'pointer',
         width: 182, minHeight: 390,
-        // Направленная фаска (glass-3d): светлый верх/лево, тёмный низ/право — даёт выпуклый объём
-        borderTop: '1.5px solid rgba(255,255,255,0.12)',
-        borderLeft: '1px solid rgba(255,255,255,0.06)',
-        borderRight: '1px solid rgba(0,0,0,0.55)',
-        borderBottom: '2px solid rgba(0,0,0,0.78)',
+        // Усиленная направленная фаска (glass-3d): светлый верх/лево, тёмный низ/право
+        borderTop: '2px solid rgba(255,255,255,0.18)',
+        borderLeft: '1.5px solid rgba(255,255,255,0.09)',
+        borderRight: '1.5px solid rgba(0,0,0,0.6)',
+        borderBottom: '3px solid rgba(0,0,0,0.85)',
         boxShadow: `
-          inset 0 1px 0 rgba(255,255,255,0.14),
-          inset 0 -3px 10px rgba(0,0,0,0.45),
-          0 2px 6px rgba(0,0,0,0.55),
-          0 20px 38px -12px rgba(0,0,0,0.85),
-          0 10px 26px -8px ${accent}55,
-          0 0 22px ${accent}1f
+          inset 0 2px 0 rgba(255,255,255,0.18),
+          inset 0 -4px 14px rgba(0,0,0,0.5),
+          0 2px 6px rgba(0,0,0,0.6),
+          0 22px 42px -12px rgba(0,0,0,0.9),
+          0 12px 30px -8px ${accent}66,
+          0 0 26px ${accent}24
         `,
       }}
     >
