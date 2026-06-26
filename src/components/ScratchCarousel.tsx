@@ -2,6 +2,7 @@ import { motion } from 'framer-motion';
 import { SCRATCH_GAMES } from '../data/lotteries';
 import { ScrollCarousel } from './ScrollCarousel';
 import { PremiumButton } from './PremiumButton';
+import { GlitchJackpot } from './GlitchJackpot';
 
 const GAME_ICONS: Record<string, React.ReactNode> = {
   THREE_ACES: (
@@ -111,22 +112,12 @@ function ScratchCard({ game }: { game: typeof SCRATCH_GAMES[0] }) {
             {game.name}
           </p>
           <p style={{ fontSize: 7, fontWeight: 700, textTransform: 'uppercase', textAlign: 'center', color: 'rgba(255,255,255,0.45)', letterSpacing: '0.18em', marginBottom: 2, fontFamily: 'var(--font-mono)' }}>
-            Top Prize
+            Jackpot
           </p>
-          {/* Призовые — в стиле тиражных: золото, mono, свечение */}
-          <div style={{ textAlign: 'center', marginBottom: 8 }}>
-            <span style={{ fontSize: 22, fontWeight: 700, color: 'var(--gold)', fontFamily: 'var(--font-mono)', textShadow: '0 0 24px var(--gold-glow)', lineHeight: 1 }}>
-              {game.topPrize.toLocaleString()}
-              <span style={{ fontSize: 11, marginLeft: 3, opacity: 0.75, fontFamily: "'Space Grotesk', sans-serif" }}>{game.currency}</span>
-            </span>
-          </div>
-          {/* Остаток билетов */}
-          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 5, marginBottom: 9 }}>
-            <span style={{ fontSize: 8, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.12em', color: 'rgba(255,255,255,0.4)', fontFamily: 'var(--font-mono)' }}>Remaining</span>
-            <span style={{ fontSize: 12, fontWeight: 600, color: accent, textShadow: `0 0 10px ${accent}80`, fontFamily: 'var(--font-mono)' }}>
-              {game.remainingTickets.toLocaleString()}
-            </span>
-          </div>
+          {/* Призовые — в стиле тиражных: золото, mono, glitch-вспышка при появлении */}
+          <GlitchJackpot target={game.topPrize} currency={game.currency} />
+          {/* Небольшой отступ перед кнопкой (счётчик билетов убран — батч 1М) */}
+          <div style={{ height: 3 }} />
           <PremiumButton
             label={`Buy · ${game.ticketPrice} ${game.currency}`}
             accent={accent}
@@ -141,16 +132,9 @@ function ScratchCard({ game }: { game: typeof SCRATCH_GAMES[0] }) {
 export function ScratchCarousel() {
   return (
     <section className="px-4">
-      <div className="flex items-center justify-between mb-3">
-        <div>
-          <h2 className="font-extrabold text-sm" style={{ color: 'var(--ink-0)' }}>Instant Games</h2>
-          <p className="text-3xs mt-0.5" style={{ color: 'var(--ink-3)' }}>5 games — instant results</p>
-        </div>
-        <button className="text-3xs font-semibold px-3 py-1.5 rounded-full flex items-center gap-1"
-          style={{ background: 'var(--surface-2)', border: '1px solid var(--line)', color: 'var(--ton)' }}>
-          All
-          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6"><path d="M9 6l6 6-6 6"/></svg>
-        </button>
+      <div className="mb-3">
+        <h2 className="font-extrabold text-sm" style={{ color: 'var(--ink-0)' }}>Instant Games</h2>
+        <p className="text-3xs mt-0.5" style={{ color: 'var(--ink-3)' }}>5 games — instant results</p>
       </div>
 
       <ScrollCarousel accent="#4ade80" showProgress={false}>

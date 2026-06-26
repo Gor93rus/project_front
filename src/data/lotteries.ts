@@ -161,39 +161,43 @@ export interface LegacyScratchGame {
 }
 
 /**
- * Скретч-игры (мгновенные лотереи). Каждая со своим цветовым акцентом,
+ * Скретч-игры (мгновенные лотереи). Значения соответствуют реальным данным
+ * бэкенда (lottery-backend README): цена билета, джекпот (главный приз батча).
+ * Скретч-игры работают батчами по 1 000 000 билетов — поэтому счётчик
+ * «остатка» на карточке не показывается (он бессмыслен на старте).
  * gameType соответствует ключам GAME_ICONS в ScratchCarousel.
- * TODO: заменить на данные из API, когда бэкенд отдаёт скретч-каталог.
+ * TODO: при доступном бэкенде подтягивать через useScratchGames() (api.getScratchGames),
+ *       где jackpot = max(prizeStructure). Эти значения — фолбэк, синхронный с README.
  */
 export const SCRATCH_GAMES: LegacyScratchGame[] = [
   {
     id: 'three-aces', name: 'Three Aces',
-    ticketPrice: 1, currency: 'TON',
-    topPrize: 2500, totalTickets: 10000, remainingTickets: 6840,
+    ticketPrice: 2, currency: 'TON',
+    topPrize: 50000, totalTickets: 1000000, remainingTickets: 1000000,
     gradient: ['#F43F5E', '#FB7185'], gameType: 'THREE_ACES',
   },
   {
     id: 'one-shot', name: 'One Shot',
     ticketPrice: 0.5, currency: 'TON',
-    topPrize: 1000, totalTickets: 20000, remainingTickets: 14210,
+    topPrize: 10000, totalTickets: 1000000, remainingTickets: 1000000,
     gradient: ['#06B6D4', '#22D3EE'], gameType: 'ONE_SHOT',
   },
   {
     id: 'rapido-x', name: 'Rapido X',
-    ticketPrice: 2, currency: 'TON',
-    topPrize: 5000, totalTickets: 8000, remainingTickets: 3120,
+    ticketPrice: 1, currency: 'TON',
+    topPrize: 20000, totalTickets: 1000000, remainingTickets: 1000000,
     gradient: ['#FACC15', '#FDE047'], gameType: 'RAPIDO_X',
   },
   {
-    id: 'minefield', name: 'Minefield',
-    ticketPrice: 1.5, currency: 'TON',
-    topPrize: 3500, totalTickets: 12000, remainingTickets: 9430,
+    id: 'minesweeper', name: 'Minesweeper',
+    ticketPrice: 0.5, currency: 'TON',
+    topPrize: 10000, totalTickets: 1000000, remainingTickets: 1000000,
     gradient: ['#10B981', '#34D399'], gameType: 'MINESWEEPER',
   },
   {
     id: 'supernova', name: 'Supernova',
-    ticketPrice: 3, currency: 'TON',
-    topPrize: 10000, totalTickets: 6000, remainingTickets: 1875,
+    ticketPrice: 5, currency: 'TON',
+    topPrize: 250000, totalTickets: 1000000, remainingTickets: 1000000,
     gradient: ['#A855F7', '#C084FC'], gameType: 'SUPERNOVA',
   },
 ];
