@@ -1,4 +1,3 @@
-import { useEffect, useRef, useState } from 'react';
 import {
   RocketIcon, CoinIcon, DiamondIcon, TrophyIcon, ShieldIcon, ContractIcon,
 } from './AnimatedIcons';
@@ -6,109 +5,74 @@ import {
 const ITEMS = [
   {
     title: 'Instant Payouts',
-    desc: 'Prizes are sent to your wallet within seconds of the draw. Fully automatic via smart contract — no delays, no waiting.',
-    icon: <RocketIcon size={32} color="#FF6B6B" />,
+    desc: 'Winnings hit your wallet seconds after the draw — automatic, via smart contract.',
+    icon: <RocketIcon size={26} color="#FF6B6B" />,
     accent: '#FF8E53',
   },
   {
     title: 'TON & USDT',
-    desc: 'Deposit and withdraw your winnings in TON or USDT. All major TON-blockchain wallets supported.',
-    icon: <CoinIcon size={32} color="#FFD200" />,
+    desc: 'Deposit and cash out in TON or USDT. All major TON wallets supported.',
+    icon: <CoinIcon size={26} color="#FFD200" />,
     accent: '#FFD200',
   },
   {
     title: 'Provably Fair',
-    desc: 'Every draw runs on-chain — results are verifiable on the blockchain. Full transparency guaranteed.',
-    icon: <ShieldIcon size={32} color="#4ade80" />,
+    desc: 'Every draw runs on-chain — results are verifiable by anyone.',
+    icon: <ShieldIcon size={26} color="#4ade80" />,
     accent: '#4ade80',
   },
   {
     title: 'Massive Prizes',
-    desc: 'Jackpots up to 50,000 TON and regular draws with large prize pools. Every ticket is a shot at millions.',
-    icon: <TrophyIcon size={32} color="#FFB347" />,
+    desc: 'Jackpots up to 250,000 TON across draws and instant games.',
+    icon: <TrophyIcon size={26} color="#FFB347" />,
     accent: '#FFB347',
   },
   {
     title: 'Smart Contract',
-    desc: 'All funds are locked in a verified smart contract. Nobody can access the money except the winners.',
-    icon: <ContractIcon size={32} color="#a78bfa" />,
+    desc: 'Funds locked in a verified contract — only winners can claim them.',
+    icon: <ContractIcon size={26} color="#a78bfa" />,
     accent: '#c4b5fd',
   },
   {
     title: 'Audited Security',
-    desc: 'The project has passed a full security audit. Your funds and data are protected at every step.',
-    icon: <DiamondIcon size={32} color="#79e0ff" />,
+    desc: 'Passed a full security audit. Your funds and data stay protected.',
+    icon: <DiamondIcon size={26} color="#79e0ff" />,
     accent: '#79e0ff',
   },
 ];
 
 export function FeaturesBanner() {
-  const scrollerRef = useRef<HTMLDivElement>(null);
-  const [active, setActive] = useState(0);
-  const userInteractedRef = useRef(false);
-
-  useEffect(() => {
-    const id = setInterval(() => {
-      if (userInteractedRef.current) {
-        userInteractedRef.current = false;
-        return;
-      }
-      const el = scrollerRef.current;
-      if (!el) return;
-      const next = (active + 1) % ITEMS.length;
-      el.scrollTo({ left: el.clientWidth * next, behavior: 'smooth' });
-      setActive(next);
-    }, 3500);
-    return () => clearInterval(id);
-  }, [active]);
-
-  const onScroll = () => {
-    const el = scrollerRef.current;
-    if (!el) return;
-    userInteractedRef.current = true;
-    const idx = Math.round(el.scrollLeft / el.clientWidth);
-    if (idx !== active) setActive(idx);
-  };
-
-  const scrollTo = (i: number) => {
-    const el = scrollerRef.current;
-    if (!el) return;
-    el.scrollTo({ left: el.clientWidth * i, behavior: 'smooth' });
-    setActive(i);
-  };
-
   return (
     <section className="px-4 pt-3">
-      <div ref={scrollerRef} onScroll={onScroll}
-        className="flex gap-3 overflow-x-auto scrollbar-none"
-        style={{ scrollSnapType: 'x mandatory', WebkitOverflowScrolling: 'touch' }}>
+      <div className="grid grid-cols-2 gap-2.5">
         {ITEMS.map((item, i) => (
-          <div key={i} className="flex items-start gap-3 shrink-0 w-full"
-            style={{ scrollSnapAlign: 'center' }}>
-            <div className="shrink-0 mt-0.5 flex items-center justify-center"
-              style={{ filter: `drop-shadow(0 2px 8px ${item.accent}40)` }}>
+          <div
+            key={i}
+            className="flex flex-col gap-1.5 p-3"
+            style={{
+              borderRadius: 16,
+              background: 'linear-gradient(180deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 100%)',
+              // Направленная фаска (glass-3d): светлый верх/лево, тёмный низ/право
+              borderTop: '1.5px solid rgba(255,255,255,0.12)',
+              borderLeft: '1px solid rgba(255,255,255,0.06)',
+              borderRight: '1px solid rgba(0,0,0,0.45)',
+              borderBottom: '2px solid rgba(0,0,0,0.6)',
+              boxShadow: `inset 0 1px 0 rgba(255,255,255,0.1), 0 8px 18px -10px rgba(0,0,0,0.8), 0 0 14px -6px ${item.accent}55`,
+            }}
+          >
+            <div
+              className="flex items-center justify-center shrink-0"
+              style={{ width: 26, height: 26, filter: `drop-shadow(0 2px 8px ${item.accent}55)` }}
+            >
               {item.icon}
             </div>
-            <div className="min-w-0">
-              <p className="text-[13px] font-extrabold leading-tight" style={{ color: item.accent }}>
-                {item.title}
-              </p>
-              <p className="text-[10.5px] leading-snug mt-1" style={{ color: 'var(--ink-2)' }}>
-                {item.desc}
-              </p>
-            </div>
+            <p className="text-[12px] font-extrabold leading-tight" style={{ color: item.accent }}>
+              {item.title}
+            </p>
+            <p className="text-[10px] leading-snug" style={{ color: 'var(--ink-2)' }}>
+              {item.desc}
+            </p>
           </div>
-        ))}
-      </div>
-      <div className="flex justify-center gap-1.5 mt-2">
-        {ITEMS.map((_, i) => (
-          <button key={i} onClick={() => scrollTo(i)}
-            className="h-1 rounded-full transition-all duration-300"
-            style={{
-              width: i === active ? 18 : 5,
-              background: i === active ? 'var(--ton)' : 'var(--ink-3)',
-              opacity: i === active ? 1 : 0.45,
-            }} />
         ))}
       </div>
     </section>

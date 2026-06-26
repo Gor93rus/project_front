@@ -1,9 +1,8 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import { TonConnectUIProvider } from '@tonconnect/ui-react';
 import { Header } from './components/Header';
 import { NavBar, type NavTab } from './components/NavBar';
-import { HeroCarousel } from './components/HeroCarousel';
 import { FeaturesBanner } from './components/FeaturesBanner';
 import { LotteryCarousel } from './components/LotteryCarousel';
 import { ScratchCarousel } from './components/ScratchCarousel';
@@ -17,92 +16,20 @@ import {
   WEEKEND_SPECIAL_CONFIG, BIG_WEEKEND_CONFIG, BOUNTY_CONFIG,
   FLASH_START_CONFIG, FLASH_DRIVE_CONFIG, FLASH_PRO_CONFIG,
 } from './data/lottery-configs';
-import { LOTTERIES } from './data/lotteries';
 import { AuroraBackground } from './components/AuroraBackground';
 import { AnimatedSection } from './components/AnimatedSection';
+import { GlobalJackpotHero } from './components/GlobalJackpotHero';
 import { stagger, fadeUp, fadeUpCard } from './lib/animations';
-
-// ── Global Jackpot Strip ─────────────────────────────────────────────────────
-const BASE_JACKPOT = LOTTERIES.reduce((s, l) => s + l.jackpot, 0);
-
-function GlobalJackpotStrip() {
-  const [value, setValue] = useState(BASE_JACKPOT);
-  const raf = useRef<number>(0);
-  const last = useRef(Date.now());
-
-  useEffect(() => {
-    const tick = () => {
-      const now = Date.now();
-      const dt = now - last.current;
-      last.current = now;
-      // ~0.3 TON per second simulated growth
-      setValue(v => v + (dt / 1000) * 0.31);
-      raf.current = requestAnimationFrame(tick);
-    };
-    raf.current = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(raf.current);
-  }, []);
-
-  const formatted = value.toLocaleString('en-US', { maximumFractionDigits: 0 });
-
-  return (
-    <div className="jackpot-strip mx-4 mb-1" style={{ borderRadius: 14 }}>
-      <div className="flex items-center justify-between px-4 py-3">
-        <div className="flex items-center gap-2">
-          <span className="flex items-center gap-1 text-3xs font-extrabold uppercase tracking-widest px-1.5 py-0.5 rounded-full"
-            style={{ background: 'var(--coral-18)', color: 'var(--coral)', border: '1px solid var(--coral-35)' }}>
-            <span className="w-1.5 h-1.5 rounded-full" style={{ background: 'var(--coral)', animation: 'livePulse 1s ease-in-out infinite' }} />
-            LIVE
-          </span>
-          <span className="text-3xs font-bold uppercase tracking-wide" style={{ color: 'rgba(255,255,255,0.55)' }}>
-            Total Prize Pool
-          </span>
-        </div>
-        <div className="flex items-baseline gap-1.5">
-          <span className="jackpot-number text-2xl">{formatted}</span>
-          <span className="text-3xs font-bold" style={{ color: 'rgba(255,255,255,0.55)' }}>TON</span>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-// ── Global Winners Ticker ────────────────────────────────────────────────────
-const GLOBAL_WINNERS = [
-  { user: 'Alex K.', prize: '1,200 TON', game: 'Weekend Special' },
-  { user: 'Maria S.', prize: '340 TON', game: 'Daily Rush' },
-  { user: 'D***ov', prize: '88 TON', game: 'Flash Pro' },
-  { user: 'Tony W.', prize: '2,500 TON', game: 'Big Weekend' },
-  { user: 'N***a', prize: '120 TON', game: 'Daily Thunder' },
-  { user: 'Jake M.', prize: '670 TON', game: 'Daily Strike' },
-];
-
-function GlobalWinnersTicker() {
-  return (
-    <div className="winners-ticker mx-4 mb-3" style={{ borderRadius: 8 }}>
-      <div className="winners-scroll">
-        {[...GLOBAL_WINNERS, ...GLOBAL_WINNERS].map((w, i) => (
-          <span key={i} className="flex items-center gap-1.5 shrink-0">
-            <span style={{ color: 'var(--gold)', fontSize: 9 }}>&#9733;</span>
-            <span style={{ color: 'rgba(255,255,255,0.85)', fontSize: 9.5, fontWeight: 600 }}>{w.user}</span>
-            <span style={{ color: 'var(--emerald)', fontSize: 9.5, fontWeight: 700 }}>{w.prize}</span>
-            <span style={{ color: 'rgba(255,255,255,0.38)', fontSize: 8.5 }}>{w.game}</span>
-            <span style={{ color: 'rgba(255,255,255,0.15)', fontSize: 8, marginLeft: 4 }}>·</span>
-          </span>
-        ))}
-      </div>
-    </div>
-  );
-}
 
 function HomePage() {
   return (
     <div className="flex flex-col gap-3 pb-2">
-      <GlobalJackpotStrip />
-      <GlobalWinnersTicker />
-
       <AnimatedSection variants={fadeUp}>
-        <HeroCarousel />
+        <GlobalJackpotHero />
+      </AnimatedSection>
+
+      <AnimatedSection variants={fadeUpCard}>
+        <FeaturesBanner />
       </AnimatedSection>
 
       <AnimatedSection variants={stagger}>
@@ -111,10 +38,6 @@ function HomePage() {
 
       <AnimatedSection variants={stagger}>
         <ScratchCarousel />
-      </AnimatedSection>
-
-      <AnimatedSection variants={fadeUpCard}>
-        <FeaturesBanner />
       </AnimatedSection>
 
       <AnimatedSection variants={fadeUpCard}>

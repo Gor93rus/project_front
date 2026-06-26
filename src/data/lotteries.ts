@@ -160,5 +160,44 @@ export interface LegacyScratchGame {
   gameType: 'THREE_ACES' | 'ONE_SHOT' | 'RAPIDO_X' | 'MINESWEEPER' | 'SUPERNOVA';
 }
 
-/** @deprecated Временный алиас для обратной совместимости */
-export const SCRATCH_GAMES: LegacyScratchGame[] = [];
+/**
+ * Скретч-игры (мгновенные лотереи). Значения соответствуют реальным данным
+ * бэкенда (lottery-backend README): цена билета, джекпот (главный приз батча).
+ * Скретч-игры работают батчами по 1 000 000 билетов — поэтому счётчик
+ * «остатка» на карточке не показывается (он бессмыслен на старте).
+ * gameType соответствует ключам GAME_ICONS в ScratchCarousel.
+ * TODO: при доступном бэкенде подтягивать через useScratchGames() (api.getScratchGames),
+ *       где jackpot = max(prizeStructure). Эти значения — фолбэк, синхронный с README.
+ */
+export const SCRATCH_GAMES: LegacyScratchGame[] = [
+  {
+    id: 'three-aces', name: 'Three Aces',
+    ticketPrice: 2, currency: 'TON',
+    topPrize: 50000, totalTickets: 1000000, remainingTickets: 1000000,
+    gradient: ['#F43F5E', '#FB7185'], gameType: 'THREE_ACES',
+  },
+  {
+    id: 'one-shot', name: 'One Shot',
+    ticketPrice: 0.5, currency: 'TON',
+    topPrize: 10000, totalTickets: 1000000, remainingTickets: 1000000,
+    gradient: ['#06B6D4', '#22D3EE'], gameType: 'ONE_SHOT',
+  },
+  {
+    id: 'rapido-x', name: 'Rapido X',
+    ticketPrice: 1, currency: 'TON',
+    topPrize: 20000, totalTickets: 1000000, remainingTickets: 1000000,
+    gradient: ['#FACC15', '#FDE047'], gameType: 'RAPIDO_X',
+  },
+  {
+    id: 'minesweeper', name: 'Minesweeper',
+    ticketPrice: 0.5, currency: 'TON',
+    topPrize: 10000, totalTickets: 1000000, remainingTickets: 1000000,
+    gradient: ['#10B981', '#34D399'], gameType: 'MINESWEEPER',
+  },
+  {
+    id: 'supernova', name: 'Supernova',
+    ticketPrice: 5, currency: 'TON',
+    topPrize: 250000, totalTickets: 1000000, remainingTickets: 1000000,
+    gradient: ['#A855F7', '#C084FC'], gameType: 'SUPERNOVA',
+  },
+];
