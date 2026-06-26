@@ -3,7 +3,6 @@ import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import { TonConnectUIProvider } from '@tonconnect/ui-react';
 import { Header } from './components/Header';
 import { NavBar, type NavTab } from './components/NavBar';
-import { HeroCarousel } from './components/HeroCarousel';
 import { FeaturesBanner } from './components/FeaturesBanner';
 import { LotteryCarousel } from './components/LotteryCarousel';
 import { ScratchCarousel } from './components/ScratchCarousel';
