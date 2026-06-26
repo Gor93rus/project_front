@@ -6,18 +6,24 @@ import { LOTTERIES } from '../data/lotteries';
 const BASE_JACKPOT = LOTTERIES.reduce((s, l) => s + l.jackpot, 0);
 
 const GLOBAL_WINNERS = [
-  { user: 'Alex K.', prize: '1,200 TON', game: 'Weekend Special' },
-  { user: 'Maria S.', prize: '340 TON', game: 'Daily Rush' },
-  { user: 'D***ov', prize: '88 TON', game: 'Flash Pro' },
-  { user: 'Tony W.', prize: '2,500 TON', game: 'Big Weekend' },
-  { user: 'N***a', prize: '120 TON', game: 'Daily Thunder' },
-  { user: 'Jake M.', prize: '670 TON', game: 'Daily Strike' },
+  { user: 'Alex K.', prize: '1,200 TON' },
+  { user: 'Maria S.', prize: '340 TON' },
+  { user: 'D***ov', prize: '88 TON' },
+  { user: 'Tony W.', prize: '2,500 TON' },
+  { user: 'N***a', prize: '120 TON' },
+  { user: 'Jake M.', prize: '670 TON' },
 ];
 
 /**
- * Главный герой главной страницы — общий джекпот всех игр.
- * Премиальный glass-3d блок: золотая объёмная сумма с живым счётчиком,
- * интегрированный тикер победителей. Без бейджа LIVE. Радиус и цвета — из токенов.
+ * Главный герой главной — общий джекпот всех игр.
+ * Премиальный «minted» блок на дизайн-системе Dark Vault:
+ *  • чистая navy-панель (--surface-gradient), без коричневой мути;
+ *  • видимый золотой кант + направленная фаска (светлый верх → тёмный низ);
+ *  • сфокусированное золотое свечение ТОЛЬКО за числом;
+ *  • число — золотой градиент-текст (.jackpot-number) с tabular-nums (не «прыгает»);
+ *  • одна сигнатурная деталь: золотой хайрлайн с ромбом-разделителем;
+ *  • тикер победителей — отдельная аккуратная подвал-полоса.
+ * Без иконки-эмодзи, без scale-пульса, без бейджа LIVE.
  */
 export function GlobalJackpotHero() {
   const [value, setValue] = useState(BASE_JACKPOT);
@@ -41,59 +47,79 @@ export function GlobalJackpotHero() {
   return (
     <section className="mx-4">
       <motion.div
-        initial={{ opacity: 0, y: 10 }}
+        initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
+        transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
         style={{
           position: 'relative',
-          borderRadius: 'var(--r-lg)',
+          borderRadius: 'var(--r-xl)',
           overflow: 'hidden',
-          // Направленная фаска (glass-3d): светлый верх/лево, тёмный низ/право
-          borderTop: '2px solid var(--gold-dim)',
-          borderLeft: '1.5px solid rgba(255,255,255,0.08)',
-          borderRight: '1.5px solid rgba(0,0,0,0.55)',
-          borderBottom: '3px solid rgba(0,0,0,0.8)',
-          background:
-            'radial-gradient(ellipse 90% 120% at 50% -10%, var(--gold-dim) 0%, transparent 60%), linear-gradient(180deg, var(--bg-1) 0%, var(--bg-0) 100%)',
+          // Чистый navy-объём из дизайн-системы — НЕ коричневый радиал.
+          background: 'var(--surface-gradient)',
+          // Видимая направленная фаска: золотой светлый верх → глухой тёмный низ.
+          borderTop: '1.5px solid rgba(250,219,20,0.45)',
+          borderLeft: '1px solid rgba(250,219,20,0.16)',
+          borderRight: '1px solid var(--bevel-dark-side)',
+          borderBottom: '2px solid var(--bevel-dark-bottom)',
           boxShadow:
-            'inset 0 2px 0 rgba(255,246,102,0.18), inset 0 -6px 22px rgba(0,0,0,0.5), 0 18px 44px -14px rgba(0,0,0,0.85), var(--shadow-glow-gold)',
+            'inset 0 1px 0 rgba(255,246,102,0.28), inset 0 0 0 1px rgba(250,219,20,0.06), 0 0 44px -10px var(--gold-glow), 0 16px 40px rgba(0,0,0,0.6)',
         }}
       >
-        {/* Верхняя золотая неоновая линия */}
+        {/* Сфокусированное золотое свечение строго за числом */}
         <div
+          aria-hidden
           style={{
-            position: 'absolute', top: 0, left: '12%', right: '12%', height: 1,
-            background: 'linear-gradient(90deg, transparent, var(--gold), transparent)',
-            opacity: 0.75,
+            position: 'absolute',
+            top: -10,
+            left: '50%',
+            transform: 'translateX(-50%)',
+            width: '72%',
+            height: 130,
+            background: 'radial-gradient(ellipse at 50% 0%, var(--gold-dim) 0%, transparent 70%)',
+            pointerEvents: 'none',
+          }}
+        />
+        {/* Верхний стеклянный блик */}
+        <div
+          aria-hidden
+          style={{
+            position: 'absolute',
+            inset: 0,
+            pointerEvents: 'none',
+            background:
+              'linear-gradient(180deg, rgba(255,255,255,0.05) 0%, transparent 22%)',
           }}
         />
 
-        {/* Джекпот */}
-        <div className="flex flex-col items-center" style={{ padding: '18px 16px 14px' }}>
-          <div className="flex items-center" style={{ gap: 7, marginBottom: 7 }}>
-            <CoinMark />
-            <span
-              style={{
-                fontSize: 10, fontWeight: 800, letterSpacing: '0.22em', textTransform: 'uppercase',
-                fontFamily: 'var(--font-mono)', color: 'var(--gold-soft)',
-              }}
-            >
-              Global Jackpot
-            </span>
-          </div>
+        {/* ── Джекпот ── */}
+        <div className="flex flex-col items-center" style={{ padding: '20px 16px 16px', position: 'relative' }}>
+          <span
+            style={{
+              fontSize: 10,
+              fontWeight: 800,
+              letterSpacing: '0.28em',
+              textTransform: 'uppercase',
+              fontFamily: 'var(--font-mono)',
+              color: 'var(--gold-soft)',
+              marginBottom: 10,
+            }}
+          >
+            Global Jackpot
+          </span>
 
           <div className="flex items-baseline" style={{ gap: 8 }}>
-            <motion.span
-              className="jackpot-number"
-              style={{ fontSize: 46, lineHeight: 1, letterSpacing: '-0.02em' }}
-              animate={{ scale: [1, 1.012, 1] }}
-              transition={{ duration: 2.4, repeat: Infinity, ease: 'easeInOut' }}
+            <span
+              className="jackpot-number font-tabular"
+              style={{ fontSize: 52, lineHeight: 0.92, letterSpacing: '-0.02em' }}
             >
               {formatted}
-            </motion.span>
+            </span>
             <span
               style={{
-                fontSize: 13, fontWeight: 800, fontFamily: 'var(--font-mono)', color: 'var(--gold-soft)',
+                fontSize: 14,
+                fontWeight: 800,
+                fontFamily: 'var(--font-mono)',
+                color: 'var(--gold-soft)',
                 textShadow: '0 0 12px var(--gold-glow)',
               }}
             >
@@ -103,53 +129,107 @@ export function GlobalJackpotHero() {
 
           <span
             style={{
-              marginTop: 7, fontSize: 9.5, fontWeight: 600, letterSpacing: '0.08em',
-              textTransform: 'uppercase', color: 'var(--ink-3)', fontFamily: 'var(--font-mono)',
+              marginTop: 9,
+              fontSize: 9.5,
+              fontWeight: 600,
+              letterSpacing: '0.1em',
+              textTransform: 'uppercase',
+              color: 'var(--ink-2)',
+              fontFamily: 'var(--font-mono)',
             }}
           >
             Combined pool · all draws &amp; instant games
           </span>
         </div>
 
-        {/* Разделитель */}
-        <div style={{ height: 1, background: 'linear-gradient(90deg, transparent, var(--gold-dim), transparent)' }} />
+        {/* ── Сигнатурный золотой хайрлайн с ромбом ── */}
+        <div style={{ position: 'relative', height: 1, margin: '0 16px' }}>
+          <div
+            style={{
+              position: 'absolute',
+              inset: 0,
+              background: 'linear-gradient(90deg, transparent, var(--gold-dim) 30%, rgba(250,219,20,0.5) 50%, var(--gold-dim) 70%, transparent)',
+            }}
+          />
+          <span
+            aria-hidden
+            style={{
+              position: 'absolute',
+              left: '50%',
+              top: '50%',
+              width: 6,
+              height: 6,
+              transform: 'translate(-50%, -50%) rotate(45deg)',
+              background: 'var(--gold)',
+              boxShadow: '0 0 8px var(--gold-glow)',
+            }}
+          />
+        </div>
 
-        {/* Тикер победителей — в том же блоке */}
-        <div style={{ position: 'relative', overflow: 'hidden', padding: '8px 0' }}>
-          <div className="winners-scroll">
-            {[...GLOBAL_WINNERS, ...GLOBAL_WINNERS].map((w, i) => (
-              <span key={i} className="flex items-center shrink-0" style={{ gap: 6, paddingInline: 10 }}>
-                <span style={{ color: 'var(--gold)', fontSize: 9 }}>&#9733;</span>
-                <span style={{ color: 'var(--ink-1)', fontSize: 9.5, fontWeight: 600 }}>{w.user}</span>
-                <span style={{ color: 'var(--emerald)', fontSize: 9.5, fontWeight: 700 }}>{w.prize}</span>
-                <span style={{ color: 'var(--ink-3)', fontSize: 8.5 }}>{w.game}</span>
-                <span style={{ color: 'var(--ink-3)', fontSize: 8, opacity: 0.5 }}>·</span>
-              </span>
-            ))}
+        {/* ── Тикер победителей — аккуратная подвал-полоса ── */}
+        <div
+          style={{
+            position: 'relative',
+            display: 'flex',
+            alignItems: 'center',
+            gap: 10,
+            height: 34,
+            padding: '0 12px',
+            background: 'rgba(6,7,26,0.45)',
+          }}
+        >
+          <span
+            className="flex items-center shrink-0"
+            style={{ gap: 5, zIndex: 3 }}
+          >
+            <span
+              style={{
+                width: 5,
+                height: 5,
+                borderRadius: '50%',
+                background: 'var(--emerald)',
+                boxShadow: '0 0 6px var(--emerald-glow)',
+              }}
+            />
+            <span
+              style={{
+                fontSize: 8.5,
+                fontWeight: 800,
+                letterSpacing: '0.16em',
+                textTransform: 'uppercase',
+                color: 'var(--ink-2)',
+                fontFamily: 'var(--font-mono)',
+              }}
+            >
+              Recent wins
+            </span>
+          </span>
+
+          {/* Вертикальный разделитель */}
+          <span style={{ width: 1, height: 14, background: 'var(--line-strong)', flexShrink: 0, zIndex: 3 }} />
+
+          {/* Бегущая лента */}
+          <div style={{ position: 'relative', flex: 1, overflow: 'hidden', height: '100%' }}>
+            <div
+              className="winners-scroll"
+              style={{ position: 'absolute', top: 0, height: '100%' }}
+            >
+              {[...GLOBAL_WINNERS, ...GLOBAL_WINNERS].map((w, i) => (
+                <span key={i} className="flex items-center shrink-0" style={{ gap: 6, paddingInline: 12 }}>
+                  <span style={{ color: 'var(--ink-1)', fontSize: 10, fontWeight: 600 }}>{w.user}</span>
+                  <span style={{ color: 'var(--emerald-soft)', fontSize: 10, fontWeight: 700, fontFamily: 'var(--font-mono)' }}>
+                    {w.prize}
+                  </span>
+                  <span style={{ color: 'var(--ink-3)', fontSize: 9 }}>+</span>
+                </span>
+              ))}
+            </div>
+            {/* Краевые затухания */}
+            <div style={{ position: 'absolute', top: 0, bottom: 0, left: 0, width: 24, background: 'linear-gradient(90deg, rgba(8,11,30,0.95), transparent)', pointerEvents: 'none', zIndex: 2 }} />
+            <div style={{ position: 'absolute', top: 0, bottom: 0, right: 0, width: 24, background: 'linear-gradient(90deg, transparent, rgba(8,11,30,0.95))', pointerEvents: 'none', zIndex: 2 }} />
           </div>
-          {/* Краевые градиенты-затухания */}
-          <div style={{ position: 'absolute', top: 0, bottom: 0, left: 0, width: 28, background: 'linear-gradient(90deg, var(--bg-1), transparent)', pointerEvents: 'none' }} />
-          <div style={{ position: 'absolute', top: 0, bottom: 0, right: 0, width: 28, background: 'linear-gradient(90deg, transparent, var(--bg-1))', pointerEvents: 'none' }} />
         </div>
       </motion.div>
     </section>
-  );
-}
-
-function CoinMark() {
-  return (
-    <span
-      style={{
-        width: 16, height: 16, borderRadius: '50%',
-        display: 'flex', alignItems: 'center', justifyContent: 'center',
-        background: 'radial-gradient(circle at 35% 30%, var(--gold-bright), var(--gold) 55%, #B8860B 100%)',
-        boxShadow: '0 0 10px var(--gold-glow), inset 0 1px 1px rgba(255,255,255,0.5)',
-        flexShrink: 0,
-      }}
-    >
-      <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="rgba(60,40,0,0.85)" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M12 2 2 7l10 5 10-5-10-5Z" />
-      </svg>
-    </span>
   );
 }
