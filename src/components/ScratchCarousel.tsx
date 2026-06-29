@@ -99,10 +99,10 @@ function ScratchCard({ game }: { game: typeof SCRATCH_GAMES[0] }) {
       {/* Контент */}
       <div style={{ position: 'relative', zIndex: 10, display: 'flex', flexDirection: 'column', height: '100%', minHeight: 390, padding: '10px 12px 14px' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 'auto' }}>
-          <span style={{ fontSize: 8, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.12em', color: 'rgba(255,255,255,0.65)', fontFamily: 'var(--font-mono)' }}>
+          <span style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.12em', color: 'rgba(255,255,255,0.65)', fontFamily: 'var(--font-mono)' }}>
             Instant
           </span>
-          <span style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 7.5, fontWeight: 800, textTransform: 'uppercase', padding: '3px 7px', borderRadius: 6, background: `${accent}22`, color: accent, border: `1px solid ${accent}55`, boxShadow: `0 0 10px ${accent}55`, fontFamily: 'var(--font-mono)' }}>
+          <span style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 11, fontWeight: 800, textTransform: 'uppercase', padding: '3px 7px', borderRadius: 6, background: `${accent}22`, color: accent, border: `1px solid ${accent}55`, boxShadow: `0 0 10px ${accent}55`, fontFamily: 'var(--font-mono)' }}>
             Scratch
           </span>
         </div>
@@ -111,7 +111,7 @@ function ScratchCard({ game }: { game: typeof SCRATCH_GAMES[0] }) {
           <p style={{ fontSize: 15, fontWeight: 700, color: '#fff', textAlign: 'center', marginBottom: 2, letterSpacing: '-0.02em', fontFamily: "'Space Grotesk', sans-serif", textShadow: '0 2px 12px rgba(0,0,0,0.5)' }}>
             {game.name}
           </p>
-          <p style={{ fontSize: 7, fontWeight: 700, textTransform: 'uppercase', textAlign: 'center', color: 'rgba(255,255,255,0.45)', letterSpacing: '0.18em', marginBottom: 2, fontFamily: 'var(--font-mono)' }}>
+          <p style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', textAlign: 'center', color: 'rgba(255,255,255,0.45)', letterSpacing: '0.18em', marginBottom: 2, fontFamily: 'var(--font-mono)' }}>
             Jackpot
           </p>
           {/* Призовые — в стиле тиражных: золото, mono, glitch-вспышка при появлении */}

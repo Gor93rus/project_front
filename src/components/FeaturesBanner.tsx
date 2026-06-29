@@ -6,38 +6,38 @@ const ITEMS = [
   {
     title: 'Instant Payouts',
     desc: 'Winnings hit your wallet seconds after the draw — automatic, via smart contract.',
-    icon: <RocketIcon size={26} color="#FF6B6B" />,
-    accent: '#FF8E53',
+    icon: <RocketIcon size={26} color="var(--coral)" />,
+    accent: 'var(--coral-soft)',
   },
   {
     title: 'TON & USDT',
     desc: 'Deposit and cash out in TON or USDT. All major TON wallets supported.',
-    icon: <CoinIcon size={26} color="#FFD200" />,
-    accent: '#FFD200',
+    icon: <CoinIcon size={26} color="var(--gold)" />,
+    accent: 'var(--gold)',
   },
   {
     title: 'Provably Fair',
     desc: 'Every draw runs on-chain — results are verifiable by anyone.',
-    icon: <ShieldIcon size={26} color="#4ade80" />,
-    accent: '#4ade80',
+    icon: <ShieldIcon size={26} color="var(--emerald)" />,
+    accent: 'var(--emerald)',
   },
   {
     title: 'Massive Prizes',
     desc: 'Jackpots up to 250,000 TON across draws and instant games.',
-    icon: <TrophyIcon size={26} color="#FFB347" />,
-    accent: '#FFB347',
+    icon: <TrophyIcon size={26} color="var(--gold-soft)" />,
+    accent: 'var(--gold-soft)',
   },
   {
     title: 'Smart Contract',
     desc: 'Funds locked in a verified contract — only winners can claim them.',
-    icon: <ContractIcon size={26} color="#a78bfa" />,
-    accent: '#c4b5fd',
+    icon: <ContractIcon size={26} color="var(--secondary)" />,
+    accent: 'var(--secondary-soft)',
   },
   {
     title: 'Audited Security',
     desc: 'Passed a full security audit. Your funds and data stay protected.',
-    icon: <DiamondIcon size={26} color="#79e0ff" />,
-    accent: '#79e0ff',
+    icon: <DiamondIcon size={26} color="var(--cyan)" />,
+    accent: 'var(--cyan)',
   },
 ];
 
@@ -66,10 +66,10 @@ export function FeaturesBanner() {
             >
               {item.icon}
             </div>
-            <p className="text-[12px] font-extrabold leading-tight" style={{ color: item.accent }}>
+            <p className="text-2xs font-extrabold leading-tight" style={{ color: item.accent }}>
               {item.title}
             </p>
-            <p className="text-[10px] leading-snug" style={{ color: 'var(--ink-2)' }}>
+            <p className="text-3xs leading-snug" style={{ color: 'var(--ink-2)' }}>
               {item.desc}
             </p>
           </div>
@@ -78,3 +78,5 @@ export function FeaturesBanner() {
     </section>
   );
 }
+
+

@@ -115,8 +115,6 @@ export function Header() {
         background: scrolled
           ? 'linear-gradient(180deg, rgba(6,7,26,0.96) 0%, rgba(11,16,40,0.94) 100%)'
           : 'linear-gradient(180deg, rgba(6,7,26,0.98) 0%, rgba(11,16,40,0.96) 100%)',
-        backdropFilter: 'blur(18px)',
-        WebkitBackdropFilter: 'blur(18px)',
         borderBottom: scrolled ? '1px solid var(--primary-18)' : '1px solid var(--line)',
         transition: 'background 0.3s, border-color 0.3s',
       }}

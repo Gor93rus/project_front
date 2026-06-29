@@ -27,19 +27,14 @@ const GLOBAL_WINNERS = [
  */
 export function GlobalJackpotHero() {
   const [value, setValue] = useState(BASE_JACKPOT);
-  const raf = useRef<number>(0);
-  const last = useRef(Date.now());
+  const timer = useRef<ReturnType<typeof setInterval>>();
 
   useEffect(() => {
-    const tick = () => {
-      const now = Date.now();
-      const dt = now - last.current;
-      last.current = now;
-      setValue((v) => v + (dt / 1000) * 0.31); // ~0.31 TON/сек симулированный рост
-      raf.current = requestAnimationFrame(tick);
-    };
-    raf.current = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(raf.current);
+    const id = setInterval(() => {
+      setValue((v) => v + 0.31);
+    }, 1000);
+    timer.current = id;
+    return () => clearInterval(id);
   }, []);
 
   const formatted = value.toLocaleString('en-US', { maximumFractionDigits: 0 });
@@ -94,13 +89,9 @@ export function GlobalJackpotHero() {
         {/* ── Джекпот ── */}
         <div className="flex flex-col items-center" style={{ padding: '20px 16px 16px', position: 'relative' }}>
           <span
+            className="text-3xs"
             style={{
-              fontSize: 10,
               fontWeight: 800,
-              letterSpacing: '0.28em',
-              textTransform: 'uppercase',
-              fontFamily: 'var(--font-mono)',
-              color: 'var(--gold-soft)',
               marginBottom: 10,
             }}
           >
@@ -128,14 +119,9 @@ export function GlobalJackpotHero() {
           </div>
 
           <span
+            className="text-3xs"
             style={{
               marginTop: 9,
-              fontSize: 9.5,
-              fontWeight: 600,
-              letterSpacing: '0.1em',
-              textTransform: 'uppercase',
-              color: 'var(--ink-2)',
-              fontFamily: 'var(--font-mono)',
             }}
           >
             Combined pool · all draws &amp; instant games
@@ -207,7 +193,6 @@ export function GlobalJackpotHero() {
 
           {/* Вертикальный разделитель */}
           <span style={{ width: 1, height: 14, background: 'var(--line-strong)', flexShrink: 0, zIndex: 3 }} />
-
           {/* Бегущая лента */}
           <div style={{ position: 'relative', flex: 1, overflow: 'hidden', height: '100%' }}>
             <div
@@ -216,8 +201,8 @@ export function GlobalJackpotHero() {
             >
               {[...GLOBAL_WINNERS, ...GLOBAL_WINNERS].map((w, i) => (
                 <span key={i} className="flex items-center shrink-0" style={{ gap: 6, paddingInline: 12 }}>
-                  <span style={{ color: 'var(--ink-1)', fontSize: 10, fontWeight: 600 }}>{w.user}</span>
-                  <span style={{ color: 'var(--emerald-soft)', fontSize: 10, fontWeight: 700, fontFamily: 'var(--font-mono)' }}>
+                  <span style={{ color: 'var(--ink-1)',  fontWeight: 600 }}>{w.user}</span>
+                  <span style={{ color: 'var(--emerald-soft)',  fontWeight: 700, fontFamily: 'var(--font-mono)' }}>
                     {w.prize}
                   </span>
                   <span style={{ color: 'var(--ink-3)', fontSize: 9 }}>+</span>

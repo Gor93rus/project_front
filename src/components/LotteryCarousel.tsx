@@ -176,16 +176,16 @@ function LotteryCard({ lottery }: { lottery: Lottery }) {
       {/* Content */}
       <div style={{ position: 'relative', zIndex: 10, display: 'flex', flexDirection: 'column', height: '100%', minHeight: 390, padding: '10px 12px 14px' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 'auto' }}>
-          <span style={{ fontSize: 8, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.12em', color: 'rgba(255,255,255,0.65)', fontFamily: "var(--font-mono)" }}>
+          <span style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.12em', color: 'rgba(255,255,255,0.65)', fontFamily: "var(--font-mono)" }}>
             {lottery.drawLabel}
           </span>
           {isLive ? (
-            <span style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 7.5, fontWeight: 800, textTransform: 'uppercase', padding: '3px 7px', borderRadius: 6, background: 'var(--coral-18)', color: 'var(--coral)', border: '1px solid var(--coral-35)', boxShadow: '0 0 10px var(--coral-glow)', fontFamily: "var(--font-mono)" }}>
+            <span style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 11, fontWeight: 800, textTransform: 'uppercase', padding: '3px 7px', borderRadius: 6, background: 'var(--coral-18)', color: 'var(--coral)', border: '1px solid var(--coral-35)', boxShadow: '0 0 10px var(--coral-glow)', fontFamily: "var(--font-mono)" }}>
               <span style={{ width: 6, height: 6, borderRadius: '50%', background: 'var(--coral)', animation: 'livePulse 1s ease-in-out infinite' }} />
               LIVE
             </span>
           ) : (
-            <span style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 7.5, fontWeight: 800, textTransform: 'uppercase', padding: '3px 7px', borderRadius: 6, background: `${accent}1f`, color: accent, border: `1px solid ${accent}45`, fontFamily: "var(--font-mono)" }}>
+            <span style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 11, fontWeight: 800, textTransform: 'uppercase', padding: '3px 7px', borderRadius: 6, background: `${accent}1f`, color: accent, border: `1px solid ${accent}45`, fontFamily: "var(--font-mono)" }}>
               <span style={{ width: 6, height: 6, borderRadius: '50%', background: accent }} />
               Open
             </span>
@@ -195,7 +195,7 @@ function LotteryCard({ lottery }: { lottery: Lottery }) {
           <p style={{ fontSize: 15, fontWeight: 700, color: '#fff', textAlign: 'center', marginBottom: 2, letterSpacing: '-0.02em', fontFamily: "'Space Grotesk', sans-serif", textShadow: '0 2px 12px rgba(0,0,0,0.5)' }}>
             {lottery.name}
           </p>
-          <p style={{ fontSize: 7, fontWeight: 700, textTransform: 'uppercase', textAlign: 'center', color: 'rgba(255,255,255,0.45)', letterSpacing: '0.18em', marginBottom: 2, fontFamily: "var(--font-mono)" }}>
+          <p style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', textAlign: 'center', color: 'rgba(255,255,255,0.45)', letterSpacing: '0.18em', marginBottom: 2, fontFamily: "var(--font-mono)" }}>
             Jackpot
           </p>
           <GlitchJackpot target={lottery.jackpot} />
@@ -228,7 +228,7 @@ function HowItWorksModal({ onClose }: { onClose: () => void }) {
   return (
     <motion.div
       className="fixed inset-0 z-[100] flex items-center justify-center p-4"
-      style={{ background: 'rgba(2,4,10,0.78)', backdropFilter: 'blur(10px)', WebkitBackdropFilter: 'blur(10px)' }}
+      style={{ background: 'rgba(2,4,10,0.94)' }}
       onClick={onClose}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
@@ -255,7 +255,7 @@ function HowItWorksModal({ onClose }: { onClose: () => void }) {
 
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-2">
-            <span style={{ fontSize: 9, fontWeight: 800, letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--ton)', fontFamily: 'var(--font-mono)' }}>
+            <span style={{ fontSize: 11, fontWeight: 800, letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--ton)', fontFamily: 'var(--font-mono)' }}>
               How it works?
             </span>
           </div>
@@ -300,13 +300,12 @@ function HowItWorksButton({ onClick }: { onClick: () => void }) {
       style={{
         display: 'flex', alignItems: 'center', gap: 5,
         padding: '5px 11px', borderRadius: 999,
-        fontSize: 9, fontWeight: 800, letterSpacing: '0.14em', textTransform: 'uppercase',
+        fontSize: 11, fontWeight: 800, letterSpacing: '0.14em', textTransform: 'uppercase',
         fontFamily: 'var(--font-mono)',
         color: 'var(--ton)',
         background: hover ? 'var(--ton-12, rgba(0,152,234,0.14))' : 'rgba(255,255,255,0.03)',
         border: '1px solid var(--ton-35, rgba(0,152,234,0.4))',
-        backdropFilter: 'blur(8px)',
-        WebkitBackdropFilter: 'blur(8px)',
+
         boxShadow: hover
           ? '0 0 16px var(--ton-glow, rgba(0,152,234,0.45)), inset 0 1px 0 rgba(255,255,255,0.08)'
           : 'inset 0 1px 0 rgba(255,255,255,0.05)',
@@ -340,3 +339,4 @@ export function LotteryCarousel() {
     </section>
   );
 }
+
