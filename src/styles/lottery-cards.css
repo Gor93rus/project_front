@@ -173,7 +173,7 @@
 .ticker-track::before, .ticker-track::after { content: ''; position: absolute; top: 0; bottom: 0; width: 28px; z-index: 2; pointer-events: none; }
 .ticker-track::before { left: 0; background: linear-gradient(90deg, rgba(8,14,28,0.95) 0%, transparent 100%); }
 .ticker-track::after  { right: 0; background: linear-gradient(90deg, transparent 0%, rgba(8,14,28,0.95) 100%); }
-.ticker-scroll { animation: ticker 28s linear infinite; }
+.ticker-scroll { animation: ticker 42s linear infinite; }
 @keyframes ticker { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
 
 /* ─── NUMBER CELL ──────────────────────────────────────────────────────────── */
@@ -491,3 +491,11 @@
 
 /* ─── CONFETTI ─────────────────────────────────────────────────────────────── */
 @keyframes confettiFall { 0%{transform:translateY(0) rotate(0deg);opacity:0} 8%{opacity:1} 100%{transform:translateY(65px) rotate(420deg);opacity:0} }
+
+/* ─── GOLD PARTICLES (Global Jackpot Hero) ────────────────────────────────── */
+@keyframes particleRise {
+  0%   { transform: translateY(0) scale(0); opacity: 0; }
+  10%  { transform: translateY(0) scale(1); opacity: inherit; }
+  60%  { opacity: inherit; }
+  100% { transform: translateY(-120px) scale(0.3); opacity: 0; }
+}
