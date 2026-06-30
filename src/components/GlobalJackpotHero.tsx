@@ -95,74 +95,53 @@ function GoldParticles() {
   );
 }
 
-// ── Солнечные лучи (центр блока, шире, приглушённые) ────────────────────
-function SpinningRays() {
+// ── God-rays: настоящие лучи света из центра (яркое ядро + узкие чёткие спицы) ─
+// Конический градиент строим программно: 18 ярких тонких лучей с мягкими краями.
+const RAY_COUNT = 18;
+const RAY_GRADIENT = (() => {
+  const step = 360 / RAY_COUNT;
+  const stops: string[] = [];
+  for (let i = 0; i < RAY_COUNT; i++) {
+    const base = i * step;
+    // каждый луч: тёмный зазор → плавный вход → яркое ядро → плавный выход
+    stops.push(`transparent ${base.toFixed(2)}deg`);
+    stops.push(`rgba(255,240,150,0.04) ${(base + step * 0.30).toFixed(2)}deg`);
+    stops.push(`rgba(255,244,170,0.34) ${(base + step * 0.42).toFixed(2)}deg`);
+    stops.push(`rgba(255,240,150,0.04) ${(base + step * 0.54).toFixed(2)}deg`);
+    stops.push(`transparent ${(base + step * 0.84).toFixed(2)}deg`);
+  }
+  return `conic-gradient(from 0deg at 50% 50%, ${stops.join(', ')})`;
+})();
+
+function GodRays() {
+  // Радиальная маска гасит лучи к краям → свет «излучается» из центра,
+  // не пачкая заливку блока по периметру.
+  const maskStyle = {
+    WebkitMaskImage:
+      'radial-gradient(circle at 50% 50%, #000 0%, rgba(0,0,0,0.65) 30%, transparent 62%)',
+    maskImage:
+      'radial-gradient(circle at 50% 50%, #000 0%, rgba(0,0,0,0.65) 30%, transparent 62%)',
+  } as const;
+
   return (
     <div
       aria-hidden="true"
       className="absolute pointer-events-none"
       style={{
-        top: '50%',
+        top: '44%',
         left: '50%',
-        width: 420,
-        height: 420,
+        width: 600,
+        height: 600,
         transform: 'translate(-50%, -50%)',
         zIndex: 0,
+        mixBlendMode: 'screen',
+        ...maskStyle,
       }}
     >
       <motion.div
-        style={{
-          width: '100%',
-          height: '100%',
-          background: `
-            conic-gradient(
-              from 0deg at 50% 50%,
-              transparent 0deg,
-              rgba(250,219,20,0.05) 1deg, transparent 9deg,
-              transparent 18deg,
-              rgba(250,219,20,0.04) 19deg, transparent 27deg,
-              transparent 36deg,
-              rgba(250,219,20,0.06) 37deg, transparent 45deg,
-              transparent 54deg,
-              rgba(250,219,20,0.03) 55deg, transparent 63deg,
-              transparent 72deg,
-              rgba(250,219,20,0.05) 73deg, transparent 81deg,
-              transparent 90deg,
-              rgba(250,219,20,0.06) 91deg, transparent 99deg,
-              transparent 108deg,
-              rgba(250,219,20,0.04) 109deg, transparent 117deg,
-              transparent 126deg,
-              rgba(250,219,20,0.05) 127deg, transparent 135deg,
-              transparent 144deg,
-              rgba(250,219,20,0.03) 145deg, transparent 153deg,
-              transparent 162deg,
-              rgba(250,219,20,0.06) 163deg, transparent 171deg,
-              transparent 180deg,
-              rgba(250,219,20,0.05) 181deg, transparent 189deg,
-              transparent 198deg,
-              rgba(250,219,20,0.06) 199deg, transparent 207deg,
-              transparent 216deg,
-              rgba(250,219,20,0.03) 217deg, transparent 225deg,
-              transparent 234deg,
-              rgba(250,219,20,0.05) 235deg, transparent 243deg,
-              transparent 252deg,
-              rgba(250,219,20,0.04) 253deg, transparent 261deg,
-              transparent 270deg,
-              rgba(250,219,20,0.06) 271deg, transparent 279deg,
-              transparent 288deg,
-              rgba(250,219,20,0.04) 289deg, transparent 297deg,
-              transparent 306deg,
-              rgba(250,219,20,0.05) 307deg, transparent 315deg,
-              transparent 324deg,
-              rgba(250,219,20,0.05) 325deg, transparent 333deg,
-              transparent 342deg,
-              rgba(250,219,20,0.06) 343deg, transparent 351deg,
-              transparent 360deg
-            )
-          `,
-        }}
+        style={{ width: '100%', height: '100%', background: RAY_GRADIENT }}
         animate={{ rotate: 360 }}
-        transition={{ duration: 40, repeat: Infinity, ease: 'linear' }}
+        transition={{ duration: 70, repeat: Infinity, ease: 'linear' }}
       />
     </div>
   );
@@ -249,7 +228,12 @@ export function GlobalJackpotHero() {
           position: 'relative',
           borderRadius: 'var(--r-xl)',
           overflow: 'hidden',
-          background: 'var(--surface-gradient)',
+          // Насыщенная чистая заливка: глубокий navy + лёгкий фиолет сверху.
+          // Свет (god-rays + золото) вынесен в отдельные слои выше, чтобы не мутить базу.
+          background: `
+            radial-gradient(130% 80% at 50% -12%, rgba(124,58,237,0.22) 0%, rgba(124,58,237,0.06) 32%, transparent 60%),
+            linear-gradient(165deg, #19244f 0%, #0d1733 44%, #060c22 100%)
+          `,
           borderTop: '2px solid rgba(159,103,255,0.30)',
           borderLeft: '1px solid rgba(124,58,237,0.14)',
           borderRight: '1px solid rgba(0,0,0,0.55)',
@@ -264,22 +248,20 @@ export function GlobalJackpotHero() {
           `,
         }}
       >
-        <div style={{ position: 'absolute', inset: 0, zIndex: 1, pointerEvents: 'none' }}>
-          <SpinningRays />
+        <div style={{ position: 'absolute', inset: 0, zIndex: 0, pointerEvents: 'none' }}>
+          <GodRays />
         </div>
 
         <GoldParticles />
 
+        {/* Центральное золотое свечение — сконцентрировано за суммой, не размывает верх */}
         <div
           aria-hidden="true"
           style={{
             position: 'absolute',
-            top: -10,
-            left: '50%',
-            transform: 'translateX(-50%)',
-            width: '72%',
-            height: 140,
-            background: 'radial-gradient(ellipse at 50% 0%, var(--gold-dim) 0%, transparent 65%)',
+            inset: 0,
+            background:
+              'radial-gradient(ellipse 56% 44% at 50% 44%, rgba(250,219,20,0.18) 0%, rgba(250,219,20,0.05) 32%, transparent 62%)',
             pointerEvents: 'none',
             zIndex: 0,
           }}
@@ -288,23 +270,36 @@ export function GlobalJackpotHero() {
         <div className="flex flex-col items-center" style={{ padding: '40px 16px 18px', position: 'relative', zIndex: 3 }}>
           <motion.span
             style={{
+              position: 'relative',
+              display: 'inline-block',
               fontFamily: 'var(--font-display)',
               fontSize: 30,
               fontWeight: 900,
               lineHeight: 1,
-              letterSpacing: '-0.02em',
+              letterSpacing: '0.01em',
               marginBottom: 16,
-              padding: '0 4px',
+              padding: '0 6px',
               whiteSpace: 'nowrap',
-              background: 'linear-gradient(180deg, #C4B5FD 0%, var(--secondary) 40%, #5B21B6 100%)',
+              // Слой 1 — бегущая световая полоса; Слой 2 — металлический золотой отлив.
+              // Оба обрезаются по глифам, блик скользит только по буквам.
+              background: `
+                linear-gradient(105deg, transparent 42%, rgba(255,255,255,0.92) 50%, transparent 58%),
+                linear-gradient(180deg, #FFF8D6 0%, #FFE680 16%, #F7C13A 40%, #C8861C 66%, #8A5A12 100%)
+              `,
+              backgroundSize: '220% 100%, 100% 100%',
+              backgroundPosition: '220% 0, 0 0',
+              backgroundRepeat: 'no-repeat',
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent',
               backgroundClip: 'text',
+              animation: 'text-sheen 5s ease-in-out infinite',
+              animationDelay: '0.6s',
               filter: `
-                drop-shadow(0 4px 8px rgba(0,0,0,0.7))
-                drop-shadow(0 0 30px rgba(139,92,246,0.5))
-                drop-shadow(0 0 60px rgba(124,58,237,0.3))
-                drop-shadow(0 1px 2px rgba(255,255,255,0.1))
+                drop-shadow(0 2px 1px rgba(0,0,0,0.55))
+                drop-shadow(0 4px 10px rgba(0,0,0,0.7))
+                drop-shadow(0 0 24px rgba(250,219,20,0.45))
+                drop-shadow(0 0 50px rgba(217,119,6,0.28))
+                drop-shadow(0 1px 0 rgba(255,255,255,0.25))
               `,
             }}
             initial={{ opacity: 0, y: 6 }}
@@ -328,10 +323,19 @@ export function GlobalJackpotHero() {
                 letterSpacing: '-0.02em',
                 fontFamily: 'var(--font-mono)',
                 fontWeight: 800,
-                background: 'linear-gradient(180deg, #FFF7B0 0%, #FADB14 25%, #D97706 60%, #92400E 100%)',
+                // Бегущий блик по цифрам + металлическая золотая заливка (оба клипуются по глифам)
+                background: `
+                  linear-gradient(100deg, transparent 44%, rgba(255,255,255,0.95) 50%, transparent 56%),
+                  linear-gradient(180deg, #FFF7B0 0%, #FADB14 25%, #D97706 60%, #92400E 100%)
+                `,
+                backgroundSize: '220% 100%, 100% 100%',
+                backgroundPosition: '220% 0, 0 0',
+                backgroundRepeat: 'no-repeat',
                 WebkitBackgroundClip: 'text',
                 WebkitTextFillColor: 'transparent',
                 backgroundClip: 'text',
+                animation: 'text-sheen 4.5s ease-in-out infinite',
+                animationDelay: '1.4s',
                 filter: `
                   drop-shadow(0 2px 4px rgba(0,0,0,0.8))
                   drop-shadow(0 0 18px rgba(250,219,20,0.6))
