@@ -499,3 +499,68 @@
   60%  { opacity: inherit; }
   100% { transform: translateY(-120px) scale(0.3); opacity: 0; }
 }
+
+/* ─── FEATURE CARDS (FeaturesBanner) ──────────────────────────────────────── */
+.feature-card {
+  border-radius: var(--r-lg);
+  position: relative;
+  overflow: hidden;
+  cursor: default;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 12px;
+  scroll-snap-align: start;
+  /* 3D glass фаска — базовая */
+  border-top: 2px solid var(--bevel-light-top);
+  border-left: 1.5px solid var(--bevel-light-side);
+  border-right: 1.5px solid var(--bevel-dark-side);
+  border-bottom: 2.5px solid var(--bevel-dark-bottom);
+  box-shadow:
+    inset 0 1.5px 0 rgba(255,255,255,0.10),
+    inset 0 -3px 8px rgba(0,0,0,0.40),
+    0 0 0 1px rgba(255,255,255,0.03),
+    0 8px 24px rgba(0,0,0,0.55);
+  /* Акцентная заливка — переопределяется через --fc-accent в инлайне */
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.02) 100%),
+    linear-gradient(160deg, var(--fc-accent-bg, transparent) 0%, transparent 65%, rgba(0,0,0,0.15) 100%),
+    var(--bg-1);
+  transition: box-shadow 0.5s ease, border-color 0.5s ease;
+}
+
+/* Активная карточка — усиленная фаска + ambient glow */
+.feature-card--active {
+  border-top-color: rgba(255,255,255,0.16) !important;
+  border-left-color: rgba(255,255,255,0.10) !important;
+  border-right-color: rgba(0,0,0,0.70) !important;
+  border-bottom-color: rgba(0,0,0,0.90) !important;
+  box-shadow:
+    inset 0 2px 0 rgba(255,255,255,0.16),
+    inset 0 -4px 12px rgba(0,0,0,0.50),
+    0 0 0 1px rgba(255,255,255,0.05),
+    0 8px 24px rgba(0,0,0,0.55),
+    0 0 40px -12px var(--fc-glow, var(--primary-glow)) !important;
+}
+/* Иконка активной карточки — pulse glow */
+.feature-card--active .feature-card-icon {
+  animation: featureIconPulse 2s ease-in-out infinite;
+}
+@keyframes featureIconPulse {
+  0%, 100% { filter: drop-shadow(0 0 10px currentColor) brightness(1); }
+  50%      { filter: drop-shadow(0 0 20px currentColor) brightness(1.3); }
+}
+/* Геометрический паттерн — медленный drift */
+.feature-card-pattern {
+  animation: patternDrift 20s linear infinite;
+}
+@keyframes patternDrift {
+  0%   { background-position: 0 0, 0 0, 0 0, 0 0, 0 0, 0 0; }
+  100% { background-position: 3px 2px, -2px 4px, 5px -3px, -4px 1px, 2px -5px, -1px 3px; }
+}
+
+/* Tap feedback (mobile, replaces whileHover) */
+.feature-card-tap { transition: transform 0.2s ease, box-shadow 0.2s ease; }
+.feature-card-tap:active {
+  transform: scale(0.97);
+}

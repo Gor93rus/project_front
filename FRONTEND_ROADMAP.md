@@ -2,7 +2,7 @@
 
 > Telegram Mini App · TON Blockchain · 10 тиражных + 5 скретч-лотерей  
 > Фокус: визуал, эмоции игрока, гэмблинг UX  
-> Последнее обновление: 24.06.2026 (техдолг T1+T2 закрыт)
+> Последнее обновление: 05.07.2026 (FeaturesBanner рефакторинг)
 
 ---
 
@@ -161,7 +161,7 @@ _Порядок работы над каждой задачей._
 - [x] **Эталон объёма поверхностей (фаза A):** формула `.glass-panel` (Daily Rush) принята за единый «объём» проекта — токены `--surface-gradient`, `--bevel-light-top/-side`, `--bevel-dark-side/-bottom`, `--elev-1..3`; `.glass-card` приведён к ней (Главная получила ту же глубину)
 - [x] **Матовость добита:** `backdrop-filter` убран с `.tier-card` и `.modal-overlay` (оверлей компенсирован непрозрачностью 0.94). Остатков `backdrop-filter` в проекте больше нет
 - [x] **Мёртвые зависимости удалены:** Three.js, Chakra UI, Emotion, Radix
-- [ ] **Сырые `rgba()`:** ЧАСТИЧНО. `lottery-cards.css` и инлайн-стили (`LotteryPage`) всё ещё содержат сырые `rgba()` для 3D-светотени — намеренно (token-сведение этих стоп-цветов — отдельная задача)
+- [x] **Сырые `rgba()` в FeaturesBanner:** устранены 05.07.2026 — все `borderColor`/`boxShadow` → CSS-классы + opacity-токены (`--gold-18`, `--emerald-18`, `--cyan-18`), `bgPattern` HEX → `var(--*)`. Остатки в `LotteryPage` — отдельная задача
 - [x] **Второй blue `#0EA5E9` (техдолг T2, 24.06):** разделён по ролям. **Legacy-дубль → primary** (T2a): `.htp-btn` и `.ticket-num-badge` переведены на рампу `--primary-100..900` (видимое cyan→blue, проверено). **Категориальный cyan узаконен** (T2b): токен `--cyan-100/400/600/800`, на него переведены `.tier-cyan`, `.icon-cyan/-blue`, `.glitch-b/-scan`, `.glass-panel--neon` (визуал не изменился). Канон в `design-tokens.css` обновлён: cyan = категориальный акцент, не дубль primary
 - [x] **Типошкала: дно поднято (фаза C1-a):** `3xs` 7→11, `2xs` 8→12, `xs` 10→13, `sm` 12→14, `base` 14→15 — нечитаемых <11px размеров в шкале больше нет (монотонная, затронула обе страницы)
 - [x] **`text-[Npx]` на Главной убраны (фаза C1-b):** все арбитрарные размеры в `HeroCarousel`, `App.tsx`, `GamificationBanner`, `ScratchCarousel`, `LotteryCarousel`, `PageFooter`, `ExchangeRate` сведены к токенам шкалы (≤11px → `text-3xs`)
@@ -179,6 +179,21 @@ _Порядок работы над каждой задачей._
 - [x] Хук `useTonWallet.ts` — connected, walletAddress, connect, disconnect
 - [x] Авто-авторизация через `POST /api/auth/wallet` + сохранение JWT
 - [ ] Оплата билетов через TON — отложена до продакшена (не работает в dev)
+
+---
+
+
+## ✅ Выполнено — FeaturesBanner (05.07.2026)
+
+> Полный рефакторинг по Huashu Design Lifecycle Workflow.  
+> Три итерации: Brand Asset Protocol → Adaptive UX → Emotional Design.
+
+- [x] **Вариант 1 — Аудит токенов:** 0 сырых `rgba()`/HEX в компоненте. `cardBaseStyle` (15 строк инлайн) → `.feature-card` CSS-класс. 6 accent-модификаторов убраны, заменены на индивидуальную заливку через `--fc-accent-bg`. Добавлены токены `--gold-18`, `--emerald-18`, `--cyan-18` в `design-tokens.css`
+- [x] **Вариант 2 — Адаптивность:** хук `useAdaptiveLayout()` с 4 брейкпоинтами (≤360→1 карточка, ≤430→2, ≤640→3, >640→4). `activePageRef` исправляет stale closure в interval. Точки пагинации — кликабельны. `whileTap` вместо `whileHover` (Telegram Mini App)
+- [x] **Вариант 3 — Эмоциональный дизайн:** индивидуальная accent-заливка каждой карточки (coral/gold/emerald/purple/cyan). Усиленный 3D glass: фаска 2px/2.5px/1.5px, трёхслойный фон. `feature-card--active` — ambient glow через `--fc-glow`. `patternDrift` (20s) + `featureIconPulse` (2s). CSS-анимации на GPU, без Framer Motion для looping
+- [x] **5-Dimensional Critique** пройден: Clarity ✅, Emotion ✅, Consistency ✅ (100% Dark Vault), Performance ✅, Accessibility ✅
+
+**Изменённые файлы:** `design-tokens.css`, `lottery-cards.css`, `FeaturesBanner.tsx`
 
 ---
 
