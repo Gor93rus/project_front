@@ -2,7 +2,7 @@ import { useRef, useEffect, useState, useCallback, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import {
   RocketIcon, CoinIcon, DiamondIcon, TrophyIcon, ShieldIcon, ContractIcon,
-} from './AnimatedIcons';
+} from './FeatureIcons';
 import { stagger } from '../lib/animations';
 
 // ── Данные ──────────────────────────────────────────────────────────────────
@@ -113,16 +113,19 @@ function useAdaptiveLayout() {
 // ═══════════════════════════════════════════════════════════════════════════════
 // GEOMETRIC BACKGROUND
 // ═══════════════════════════════════════════════════════════════════════════════
-function GeoBackground({ pattern }: { pattern: string }) {
+// Единая нейтральная dot-сетка для всех карточек — тонкие светлые точки,
+// не тонирующиеся в акцент (акцент несёт только цветной фон-заливка).
+function GeoBackground() {
   return (
     <span
       aria-hidden="true"
       className="absolute inset-0 pointer-events-none feature-card-pattern"
       style={{
         borderRadius: 'var(--r-lg)',
-        backgroundImage: pattern,
-        backgroundSize: pattern.includes('circle') || pattern.includes('1px 1px at') ? undefined : '12px 12px',
-        opacity: 0.2,
+        backgroundImage:
+          'radial-gradient(rgba(255,255,255,0.55) 1px, transparent 1.4px)',
+        backgroundSize: '13px 13px',
+        opacity: 0.14,
         zIndex: 0,
       }}
     />
@@ -153,8 +156,8 @@ function FeatureCard({ item, index, width, isActive }: { item: FeatureItem; inde
       }}
       whileTap={{ scale: 0.97 }}
     >
-      {/* Геометрический фон */}
-      <GeoBackground pattern={item.bgPattern} />
+      {/* Единая нейтральная dot-сетка */}
+      <GeoBackground />
 
       {/* Иконка на стеклянной accent-плашке */}
       <div
