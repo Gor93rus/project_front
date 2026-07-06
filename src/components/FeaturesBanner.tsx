@@ -27,7 +27,7 @@ const ITEMS: FeatureItem[] = [
     accent: 'var(--coral)',
     accentSoft: 'var(--coral-soft)',
     bgPattern: `repeating-linear-gradient(35deg, var(--coral) 0px, var(--coral) 1px, transparent 1px, transparent 14px)`,
-    accentBg: 'rgba(255,77,79,0.10)',
+    accentBg: 'rgba(255,77,79,0.30)',
     glow: 'var(--coral-glow)',
   },
   {
@@ -37,7 +37,7 @@ const ITEMS: FeatureItem[] = [
     accent: 'var(--gold)',
     accentSoft: 'var(--gold-soft)',
     bgPattern: `radial-gradient(circle at 20% 30%, var(--gold) 1px, transparent 1px), radial-gradient(circle at 60% 60%, var(--gold) 1.5px, transparent 1.5px), radial-gradient(circle at 80% 20%, var(--gold) 1px, transparent 1px)`,
-    accentBg: 'rgba(250,219,20,0.08)',
+    accentBg: 'rgba(250,219,20,0.24)',
     glow: 'var(--gold-glow)',
   },
   {
@@ -47,7 +47,7 @@ const ITEMS: FeatureItem[] = [
     accent: 'var(--emerald)',
     accentSoft: 'var(--emerald-soft)',
     bgPattern: `linear-gradient(0deg, var(--emerald) 0.5px, transparent 0.5px), linear-gradient(90deg, var(--emerald) 0.5px, transparent 0.5px)`,
-    accentBg: 'rgba(82,196,26,0.08)',
+    accentBg: 'rgba(82,196,26,0.28)',
     glow: 'var(--emerald-glow)',
   },
   {
@@ -57,7 +57,7 @@ const ITEMS: FeatureItem[] = [
     accent: 'var(--gold-soft)',
     accentSoft: 'var(--gold-bright)',
     bgPattern: `radial-gradient(1px 1px at 15% 20%, var(--gold) 100%, transparent), radial-gradient(1px 1px at 40% 55%, var(--gold) 100%, transparent), radial-gradient(1.5px 1.5px at 70% 15%, var(--gold-soft) 100%, transparent), radial-gradient(1px 1px at 55% 80%, var(--gold) 100%, transparent), radial-gradient(1px 1px at 85% 40%, var(--gold-soft) 100%, transparent), radial-gradient(1.5px 1.5px at 25% 75%, var(--gold) 100%, transparent)`,
-    accentBg: 'rgba(250,219,20,0.06)',
+    accentBg: 'rgba(250,219,20,0.22)',
     glow: 'var(--gold-glow)',
   },
   {
@@ -67,7 +67,7 @@ const ITEMS: FeatureItem[] = [
     accent: 'var(--secondary)',
     accentSoft: 'var(--secondary-soft)',
     bgPattern: `linear-gradient(0deg, var(--secondary) 0.5px, transparent 0.5px)`,
-    accentBg: 'rgba(124,58,237,0.08)',
+    accentBg: 'rgba(124,58,237,0.28)',
     glow: 'var(--secondary-glow)',
   },
   {
@@ -77,7 +77,7 @@ const ITEMS: FeatureItem[] = [
     accent: 'rgb(var(--cyan-400))',
     accentSoft: 'rgb(var(--cyan-400))',
     bgPattern: `radial-gradient(circle at 70% 50%, transparent 55%, rgba(var(--cyan-400),0.10) 55%, rgba(var(--cyan-400),0.10) 56%, transparent 56%), radial-gradient(circle at 70% 50%, transparent 32%, rgba(var(--cyan-400),0.08) 32%, rgba(var(--cyan-400),0.08) 33%, transparent 33%)`,
-    accentBg: 'rgba(14,165,233,0.08)',
+    accentBg: 'rgba(14,165,233,0.28)',
     glow: 'rgba(var(--cyan-400),0.30)',
   },
 ];
@@ -122,7 +122,7 @@ function GeoBackground({ pattern }: { pattern: string }) {
         borderRadius: 'var(--r-lg)',
         backgroundImage: pattern,
         backgroundSize: pattern.includes('circle') || pattern.includes('1px 1px at') ? undefined : '12px 12px',
-        opacity: 0.12,
+        opacity: 0.2,
         zIndex: 0,
       }}
     />
@@ -139,8 +139,9 @@ function FeatureCard({ item, index, width, isActive }: { item: FeatureItem; inde
       style={{
         width,
         minWidth: width,
-        // Индивидуальная accent-заливка и glow через CSS custom properties
+        // Индивидуальная accent-заливка, solid-акцент и glow через CSS custom properties
         ['--fc-accent-bg' as string]: item.accentBg,
+        ['--fc-accent' as string]: item.accent,
         ['--fc-glow' as string]: item.glow,
       }}
       variants={{
@@ -155,15 +156,10 @@ function FeatureCard({ item, index, width, isActive }: { item: FeatureItem; inde
       {/* Геометрический фон */}
       <GeoBackground pattern={item.bgPattern} />
 
-      {/* Иконка с усиленным glow */}
+      {/* Иконка на стеклянной accent-плашке */}
       <div
         className="flex items-center justify-center shrink-0 relative feature-card-icon"
-        style={{
-          width: 36,
-          height: 36,
-          filter: `drop-shadow(0 0 10px ${item.accent}66)`,
-          zIndex: 2,
-        }}
+        style={{ color: item.accent, zIndex: 2 }}
       >
         {item.icon}
       </div>
@@ -209,6 +205,8 @@ function PaginationDots({ total, active, onClick }: { total: number; active: num
 // ═══════════════════════════════════════════════════════════════════════════════
 export function FeaturesBanner() {
   const scrollRef = useRef<HTMLDivElement>(null);
+  const sectionRef = useRef<HTMLElement>(null);
+  const [inView, setInView] = useState(true);
   const [activePage, setActivePage] = useState(0);
   const [isUserInteracting, setIsUserInteracting] = useState(false);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -279,13 +277,26 @@ export function FeaturesBanner() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [visibleCards]);
 
+  // Пауза анимаций/автопрокрутки, когда баннер вне вьюпорта (экономия CPU/батареи)
   useEffect(() => {
-    if (!isUserInteracting) startAutoScroll();
+    const el = sectionRef.current;
+    if (!el || typeof IntersectionObserver === 'undefined') return;
+    const observer = new IntersectionObserver(
+      ([entry]) => setInView(entry.isIntersecting),
+      { rootMargin: '80px' },
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (!isUserInteracting && inView) startAutoScroll();
+    else stopAutoScroll();
     return () => {
       stopAutoScroll();
       if (resumeTimerRef.current) clearTimeout(resumeTimerRef.current);
     };
-  }, [isUserInteracting, startAutoScroll, stopAutoScroll]);
+  }, [isUserInteracting, inView, startAutoScroll, stopAutoScroll]);
 
   const cards = useMemo(
     () => ITEMS.map((item, i) => (
@@ -295,7 +306,7 @@ export function FeaturesBanner() {
   );
 
   return (
-    <section className="px-4 pt-3">
+    <section ref={sectionRef} className={`px-4 pt-3${inView ? '' : ' features-paused'}`}>
       <div className="section-label" style={{ marginBottom: 12 }}>
         Why Trust Weekend Millions
       </div>

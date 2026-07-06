@@ -521,11 +521,12 @@
     inset 0 -3px 8px rgba(0,0,0,0.40),
     0 0 0 1px rgba(255,255,255,0.03),
     0 8px 24px rgba(0,0,0,0.55);
-  /* Акцентная заливка — переопределяется через --fc-accent в инлайне */
+  /* Яркая accent-заливка — свет исходит из угла с иконкой (верх-лево),
+     затем плотный navy-объём проекта. Управляется через --fc-accent-bg. */
   background:
-    linear-gradient(180deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.02) 100%),
-    linear-gradient(160deg, var(--fc-accent-bg, transparent) 0%, transparent 65%, rgba(0,0,0,0.15) 100%),
-    var(--bg-1);
+    radial-gradient(135% 90% at 20% -8%, var(--fc-accent-bg, transparent) 0%, transparent 58%),
+    linear-gradient(180deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.01) 100%),
+    var(--surface-gradient);
   transition: box-shadow 0.5s ease, border-color 0.5s ease;
 }
 
@@ -542,13 +543,34 @@
     0 8px 24px rgba(0,0,0,0.55),
     0 0 40px -12px var(--fc-glow, var(--primary-glow)) !important;
 }
-/* Иконка активной карточки — pulse glow */
+/* Стеклянная accent-плашка под иконкой — единый объём + светотень */
+.feature-card-icon {
+  width: 46px;
+  height: 46px;
+  border-radius: 13px;
+  background:
+    linear-gradient(158deg,
+      color-mix(in srgb, var(--fc-accent, var(--primary)) 26%, transparent) 0%,
+      color-mix(in srgb, var(--fc-accent, var(--primary)) 7%, transparent) 100%);
+  border: 1px solid color-mix(in srgb, var(--fc-accent, var(--primary)) 40%, transparent);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.22),
+    inset 0 -3px 8px rgba(0,0,0,0.35),
+    0 4px 14px -2px color-mix(in srgb, var(--fc-accent, var(--primary)) 45%, transparent);
+  transition: box-shadow 0.4s ease, transform 0.4s ease;
+}
+/* Иконка активной карточки — приподнятая плашка + pulse glow */
 .feature-card--active .feature-card-icon {
+  transform: translateY(-1px);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.30),
+    inset 0 -3px 8px rgba(0,0,0,0.35),
+    0 6px 20px -2px color-mix(in srgb, var(--fc-accent, var(--primary)) 65%, transparent);
   animation: featureIconPulse 2s ease-in-out infinite;
 }
 @keyframes featureIconPulse {
-  0%, 100% { filter: drop-shadow(0 0 10px currentColor) brightness(1); }
-  50%      { filter: drop-shadow(0 0 20px currentColor) brightness(1.3); }
+  0%, 100% { filter: drop-shadow(0 0 6px color-mix(in srgb, var(--fc-accent, var(--primary)) 55%, transparent)) brightness(1); }
+  50%      { filter: drop-shadow(0 0 14px color-mix(in srgb, var(--fc-accent, var(--primary)) 75%, transparent)) brightness(1.2); }
 }
 /* Геометрический паттерн — медленный drift */
 .feature-card-pattern {
@@ -563,4 +585,21 @@
 .feature-card-tap { transition: transform 0.2s ease, box-shadow 0.2s ease; }
 .feature-card-tap:active {
   transform: scale(0.97);
+}
+
+/* Пауза всех анимаций баннера, когда он вне вьюпорта (экономия CPU/батареи) */
+.features-paused,
+.features-paused *,
+.features-paused *::before,
+.features-paused *::after {
+  animation-play-state: paused !important;
+}
+
+/* Уважение к prefers-reduced-motion — полностью отключаем движение */
+@media (prefers-reduced-motion: reduce) {
+  .feature-card,
+  .feature-card *,
+  .feature-card-pattern {
+    animation: none !important;
+  }
 }
