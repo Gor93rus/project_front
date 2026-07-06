@@ -521,10 +521,11 @@
     inset 0 -3px 8px rgba(0,0,0,0.40),
     0 0 0 1px rgba(255,255,255,0.03),
     0 8px 24px rgba(0,0,0,0.55);
-  /* Яркая accent-заливка — широкий цветной разлив от верх-левого угла
-     почти на всю карточку, затем плотный navy-объём. Управляется --fc-accent-bg. */
+  /* Канон "Dark Vault": акцент = СВЕТ из верх-левого угла (от иконки), а не
+     плоская краска. Navy-стекло доминирует, цвет — компактный угловой glow,
+     как в num-cell.selected. Управляется через --fc-accent-bg. */
   background:
-    radial-gradient(150% 120% at 22% 0%, var(--fc-accent-bg, transparent) 0%, transparent 82%),
+    radial-gradient(75% 65% at 16% -6%, var(--fc-accent-bg, transparent) 0%, transparent 55%),
     linear-gradient(180deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.01) 100%),
     var(--surface-gradient);
   transition: box-shadow 0.5s ease, border-color 0.5s ease;
@@ -543,22 +544,57 @@
     0 8px 24px rgba(0,0,0,0.55),
     0 0 40px -12px var(--fc-glow, var(--primary-glow)) !important;
 }
-/* Иконка без подложки — только тонкий accent-glow */
+/* Одиночный световой sweep — ТОЛЬКО на активной карточке.
+   В любой момент времени анимируется лишь одна карточка → дёшево для мобилы.
+   Псевдоэлемент с узкой диагональной световой полосой проходит по карточке. */
+.feature-card--active::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: var(--r-lg);
+  pointer-events: none;
+  z-index: 1;
+  background: linear-gradient(
+    105deg,
+    transparent 38%,
+    color-mix(in srgb, var(--fc-accent, var(--primary)) 22%, transparent) 48%,
+    rgba(255,255,255,0.10) 50%,
+    transparent 62%
+  );
+  background-size: 220% 100%;
+  animation: featureCardShimmer 4.2s ease-in-out infinite;
+}
+@keyframes featureCardShimmer {
+  0%      { background-position: 140% 0; }
+  55%,100%{ background-position: -40% 0; }
+}
+
+/* Неоновый глиф без подложки — двухслойное свечение (ближний ореол + дальний halo) */
 .feature-card-icon {
-  filter: drop-shadow(0 0 6px color-mix(in srgb, var(--fc-accent, var(--primary)) 45%, transparent));
+  filter:
+    drop-shadow(0 0 3px color-mix(in srgb, var(--fc-accent, var(--primary)) 85%, transparent))
+    drop-shadow(0 0 9px color-mix(in srgb, var(--fc-accent, var(--primary)) 45%, transparent));
   transition: filter 0.4s ease, transform 0.4s ease;
 }
-/* Иконка активной карточки — усиленный pulse glow */
+/* Иконка активной карточки — усиленный неоновый pulse */
 .feature-card--active .feature-card-icon {
   transform: translateY(-1px);
   animation: featureIconPulse 2.4s ease-in-out infinite;
 }
 @keyframes featureIconPulse {
-  0%, 100% { filter: drop-shadow(0 0 6px color-mix(in srgb, var(--fc-accent, var(--primary)) 50%, transparent)); }
-  50%      { filter: drop-shadow(0 0 15px color-mix(in srgb, var(--fc-accent, var(--primary)) 80%, transparent)); }
+  0%, 100% {
+    filter:
+      drop-shadow(0 0 3px color-mix(in srgb, var(--fc-accent, var(--primary)) 90%, transparent))
+      drop-shadow(0 0 10px color-mix(in srgb, var(--fc-accent, var(--primary)) 50%, transparent));
+  }
+  50% {
+    filter:
+      drop-shadow(0 0 5px color-mix(in srgb, var(--fc-accent, var(--primary)) 100%, transparent))
+      drop-shadow(0 0 18px color-mix(in srgb, var(--fc-accent, var(--primary)) 75%, transparent));
+  }
 }
 
-/* Idle-анимации duotone-иконок (в духе 21st.dev) */
+/* Idle-анимации неоновых глифов */
 .feature-icon-shell { line-height: 0; }
 .feature-icon-float { animation: featureIconFloat 3.2s ease-in-out infinite; }
 .feature-icon-pulse { animation: featureIconBreath 3s ease-in-out infinite; }
@@ -584,6 +620,13 @@
 .feature-card-tap { transition: transform 0.2s ease, box-shadow 0.2s ease; }
 .feature-card-tap:active {
   transform: scale(0.97);
+}
+/* Иконка «отзывается» на нажатие — кратко подрастает и ярче вспыхивает неоном */
+.feature-card-tap:active .feature-card-icon {
+  transform: scale(1.1);
+  filter:
+    drop-shadow(0 0 5px color-mix(in srgb, var(--fc-accent, var(--primary)) 100%, transparent))
+    drop-shadow(0 0 16px color-mix(in srgb, var(--fc-accent, var(--primary)) 70%, transparent));
 }
 
 /* Пауза всех анимаций баннера, когда он вне вьюпорта (экономия CPU/батареи) */
