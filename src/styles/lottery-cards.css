@@ -521,11 +521,12 @@
     inset 0 -3px 8px rgba(0,0,0,0.40),
     0 0 0 1px rgba(255,255,255,0.03),
     0 8px 24px rgba(0,0,0,0.55);
-  /* Акцентная заливка — переопределяется через --fc-accent в инлайне */
+  /* Яркая accent-заливка — широкий цветной разлив от верх-левого угла
+     почти на всю карточку, затем плотный navy-объём. Управляется --fc-accent-bg. */
   background:
-    linear-gradient(180deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.02) 100%),
-    linear-gradient(160deg, var(--fc-accent-bg, transparent) 0%, transparent 65%, rgba(0,0,0,0.15) 100%),
-    var(--bg-1);
+    radial-gradient(150% 120% at 22% 0%, var(--fc-accent-bg, transparent) 0%, transparent 82%),
+    linear-gradient(180deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.01) 100%),
+    var(--surface-gradient);
   transition: box-shadow 0.5s ease, border-color 0.5s ease;
 }
 
@@ -542,13 +543,33 @@
     0 8px 24px rgba(0,0,0,0.55),
     0 0 40px -12px var(--fc-glow, var(--primary-glow)) !important;
 }
-/* Иконка активной карточки — pulse glow */
+/* Иконка без подложки — только тонкий accent-glow */
+.feature-card-icon {
+  filter: drop-shadow(0 0 6px color-mix(in srgb, var(--fc-accent, var(--primary)) 45%, transparent));
+  transition: filter 0.4s ease, transform 0.4s ease;
+}
+/* Иконка активной карточки — усиленный pulse glow */
 .feature-card--active .feature-card-icon {
-  animation: featureIconPulse 2s ease-in-out infinite;
+  transform: translateY(-1px);
+  animation: featureIconPulse 2.4s ease-in-out infinite;
 }
 @keyframes featureIconPulse {
-  0%, 100% { filter: drop-shadow(0 0 10px currentColor) brightness(1); }
-  50%      { filter: drop-shadow(0 0 20px currentColor) brightness(1.3); }
+  0%, 100% { filter: drop-shadow(0 0 6px color-mix(in srgb, var(--fc-accent, var(--primary)) 50%, transparent)); }
+  50%      { filter: drop-shadow(0 0 15px color-mix(in srgb, var(--fc-accent, var(--primary)) 80%, transparent)); }
+}
+
+/* Idle-анимации duotone-иконок (в духе 21st.dev) */
+.feature-icon-shell { line-height: 0; }
+.feature-icon-float { animation: featureIconFloat 3.2s ease-in-out infinite; }
+.feature-icon-pulse { animation: featureIconBreath 3s ease-in-out infinite; }
+.feature-icon-shimmer { animation: featureIconBreath 2.6s ease-in-out infinite; }
+@keyframes featureIconFloat {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-2px); }
+}
+@keyframes featureIconBreath {
+  0%, 100% { transform: scale(1); }
+  50%      { transform: scale(1.06); }
 }
 /* Геометрический паттерн — медленный drift */
 .feature-card-pattern {
@@ -563,4 +584,21 @@
 .feature-card-tap { transition: transform 0.2s ease, box-shadow 0.2s ease; }
 .feature-card-tap:active {
   transform: scale(0.97);
+}
+
+/* Пауза всех анимаций баннера, когда он вне вьюпорта (экономия CPU/батареи) */
+.features-paused,
+.features-paused *,
+.features-paused *::before,
+.features-paused *::after {
+  animation-play-state: paused !important;
+}
+
+/* Уважение к prefers-reduced-motion — полностью отключаем движение */
+@media (prefers-reduced-motion: reduce) {
+  .feature-card,
+  .feature-card *,
+  .feature-card-pattern {
+    animation: none !important;
+  }
 }
