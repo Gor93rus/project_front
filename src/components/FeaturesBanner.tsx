@@ -111,28 +111,6 @@ function useAdaptiveLayout() {
 }
 
 // ═══════════════════════════════════════════════════════════════════════════════
-// GEOMETRIC BACKGROUND
-// ═══════════════════════════════════════════════════════════════════════════════
-// Единая нейтральная dot-сетка для всех карточек — тонкие светлые точки,
-// не тонирующиеся в акцент (акцент несёт только цветной фон-заливка).
-function GeoBackground() {
-  return (
-    <span
-      aria-hidden="true"
-      className="absolute inset-0 pointer-events-none feature-card-pattern"
-      style={{
-        borderRadius: 'var(--r-lg)',
-        backgroundImage:
-          'radial-gradient(rgba(255,255,255,0.55) 1px, transparent 1.4px)',
-        backgroundSize: '13px 13px',
-        opacity: 0.14,
-        zIndex: 0,
-      }}
-    />
-  );
-}
-
-// ═══════════════════════════════════════════════════════════════════════════════
 // FEATURE CARD
 // ═══════════════════════════════════════════════════════════════════════════════
 function FeatureCard({ item, index, width, isActive }: { item: FeatureItem; index: number; width: number; isActive: boolean }) {
@@ -156,10 +134,7 @@ function FeatureCard({ item, index, width, isActive }: { item: FeatureItem; inde
       }}
       whileTap={{ scale: 0.97 }}
     >
-      {/* Единая нейтральная dot-сетка */}
-      <GeoBackground />
-
-      {/* Иконка на стеклянной accent-плашке */}
+      {/* Иконка — неоновый глиф */}
       <div
         className="flex items-center justify-center shrink-0 relative feature-card-icon"
         style={{ color: item.accent, zIndex: 2 }}
@@ -274,7 +249,7 @@ export function FeaturesBanner() {
     if (page !== activePage) setActivePage(page);
   }, [activePage, scrollStep]);
 
-  // Сброс activePage при изменении размера (меняется totalPages)
+  // Сбр��с activePage при изменении размера (меняется totalPages)
   useEffect(() => {
     setActivePage(0);
     // eslint-disable-next-line react-hooks/exhaustive-deps
