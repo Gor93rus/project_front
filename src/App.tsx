@@ -21,28 +21,61 @@ import { AnimatedSection } from './components/AnimatedSection';
 import { GlobalJackpotHero } from './components/GlobalJackpotHero';
 import { stagger, fadeUp, fadeUpCard } from './lib/animations';
 
+// Тонкий декоративный разделитель между крупными секциями
+function SectionDivider() {
+  return (
+    <div
+      aria-hidden="true"
+      style={{
+        height: 1,
+        marginLeft: 16,
+        marginRight: 16,
+        background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.06) 30%, rgba(255,255,255,0.06) 70%, transparent)',
+      }}
+    />
+  );
+}
+
 function HomePage() {
   return (
-    <div className="flex flex-col gap-3 pb-2">
+    <div className="flex flex-col pb-2">
+      {/* Hero → Features: минимальный зазор — они единый смысловой блок */}
       <AnimatedSection variants={fadeUp}>
         <GlobalJackpotHero />
       </AnimatedSection>
+
+      <div style={{ height: 8 }} />
 
       <AnimatedSection variants={fadeUpCard}>
         <FeaturesBanner />
       </AnimatedSection>
 
+      {/* Features → Lotteries: крупный разрыв + декоративный сепаратор */}
+      <div style={{ height: 12 }} />
+      <SectionDivider />
+      <div style={{ height: 12 }} />
+
       <AnimatedSection variants={stagger}>
         <LotteryCarousel />
       </AnimatedSection>
+
+      {/* Lotteries → Scratch: средний зазор */}
+      <div style={{ height: 16 }} />
 
       <AnimatedSection variants={stagger}>
         <ScratchCarousel />
       </AnimatedSection>
 
+      {/* Scratch → Gamification: крупный разрыв + декоративный сепаратор */}
+      <div style={{ height: 12 }} />
+      <SectionDivider />
+      <div style={{ height: 12 }} />
+
       <AnimatedSection variants={fadeUpCard}>
         <GamificationBanner />
       </AnimatedSection>
+
+      <div style={{ height: 12 }} />
 
       <AnimatedSection variants={fadeUp}>
         <PageFooter />

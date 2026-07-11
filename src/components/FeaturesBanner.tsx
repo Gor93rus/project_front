@@ -285,8 +285,42 @@ export function FeaturesBanner() {
 
   return (
     <section ref={sectionRef} className={`px-4 pt-3${inView ? '' : ' features-paused'}`}>
-      <div className="section-label" style={{ marginBottom: 12 }}>
-        Why Trust Weekend Millions
+      {/* Заголовок секции — крупнее и контрастнее, чтобы читался как навигационный якорь */}
+      <div
+        style={{
+          marginBottom: 12,
+          display: 'flex',
+          alignItems: 'center',
+          gap: 8,
+        }}
+      >
+        <span
+          style={{
+            flex: 1,
+            height: 1,
+            background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.08))',
+          }}
+        />
+        <span
+          style={{
+            fontSize: 11,
+            fontWeight: 700,
+            textTransform: 'uppercase',
+            letterSpacing: '0.12em',
+            color: 'var(--ink-2)',
+            fontFamily: "'JetBrains Mono', monospace",
+            whiteSpace: 'nowrap',
+          }}
+        >
+          Why Trust Weekend Millions
+        </span>
+        <span
+          style={{
+            flex: 1,
+            height: 1,
+            background: 'linear-gradient(90deg, rgba(255,255,255,0.08), transparent)',
+          }}
+        />
       </div>
 
       <div
