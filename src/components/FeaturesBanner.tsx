@@ -179,6 +179,122 @@ function PaginationDots({ total, active, onClick }: { total: number; active: num
 }
 
 // ═══════════════════════════════════════════════════════════════════════════════
+// DESKTOP BENTO GRID — скрыт на мобиле, виден на md+
+// ═══════════════════════════════════════════════════════════════════════════════
+function DesktopBentoGrid() {
+  const hero = ITEMS[0];
+  const rest = ITEMS.slice(1); // 5 карточек: 2 + 2 + 1
+
+  return (
+    <motion.div
+      className="features-bento"
+      variants={stagger}
+      initial="hidden"
+      animate="visible"
+    >
+      {/* Hero-карточка: Instant Payouts — полная ширина */}
+      <motion.div
+        className="feature-card feature-card--hero feature-card-tap"
+        style={{
+          ['--fc-accent-bg' as string]: hero.accentBg,
+          ['--fc-accent' as string]: hero.accent,
+          ['--fc-glow' as string]: hero.glow,
+        }}
+        variants={{
+          hidden: { opacity: 0, y: 24, scale: 0.97 },
+          visible: { opacity: 1, y: 0, scale: 1, transition: { type: 'spring', stiffness: 280, damping: 26 } },
+        }}
+        whileTap={{ scale: 0.98 }}
+      >
+        <div className="feature-card-hero-visual">
+          {/* Слот для изображения — заполнишь ассетом позже; иконка — placeholder внутри слота */}
+          <div className="feature-hero-img-slot" aria-hidden="true">
+            <div style={{ color: hero.accent, opacity: 0.7 }}>
+              {hero.icon}
+            </div>
+          </div>
+        </div>
+        <div className="feature-card-hero-body">
+          <span className="feature-hero-badge">
+            #1 Feature
+          </span>
+          <p className="text-sm font-extrabold leading-tight" style={{ color: hero.accentSoft }}>
+            {hero.title}
+          </p>
+          <p className="text-xs leading-relaxed" style={{ color: 'var(--ink-2)' }}>
+            {hero.desc}
+          </p>
+        </div>
+      </motion.div>
+
+      {/* Ряды 2 + 2 */}
+      {[rest.slice(0, 2), rest.slice(2, 4)].map((row, rowIdx) => (
+        <div key={rowIdx} className="features-bento-row">
+          {row.map((item, i) => (
+            <motion.div
+              key={i}
+              className="feature-card feature-card--mini feature-card-tap"
+              style={{
+                ['--fc-accent-bg' as string]: item.accentBg,
+                ['--fc-accent' as string]: item.accent,
+                ['--fc-glow' as string]: item.glow,
+              }}
+              variants={{
+                hidden: { opacity: 0, y: 20 },
+                visible: { opacity: 1, y: 0, transition: { type: 'spring', stiffness: 260, damping: 24, delay: (rowIdx * 2 + i) * 0.05 } },
+              }}
+              whileTap={{ scale: 0.97 }}
+            >
+              <div className="feature-card-icon flex items-center justify-center" style={{ color: item.accent }}>
+                {item.icon}
+              </div>
+              <p className="text-xs font-extrabold leading-tight" style={{ color: item.accentSoft }}>
+                {item.title}
+              </p>
+              <p className="text-2xs leading-snug" style={{ color: 'var(--ink-2)' }}>
+                {item.desc}
+              </p>
+            </motion.div>
+          ))}
+        </div>
+      ))}
+
+      {/* Последняя карточка — solo на всю ширину, горизонтальная */}
+      {(() => {
+        const solo = rest[4];
+        return (
+          <motion.div
+            className="feature-card feature-card--solo feature-card-tap"
+            style={{
+              ['--fc-accent-bg' as string]: solo.accentBg,
+              ['--fc-accent' as string]: solo.accent,
+              ['--fc-glow' as string]: solo.glow,
+            }}
+            variants={{
+              hidden: { opacity: 0, y: 16 },
+              visible: { opacity: 1, y: 0, transition: { type: 'spring', stiffness: 240, damping: 24, delay: 0.25 } },
+            }}
+            whileTap={{ scale: 0.98 }}
+          >
+            <div className="feature-card-icon flex items-center justify-center shrink-0" style={{ color: solo.accent }}>
+              {solo.icon}
+            </div>
+            <div className="flex flex-col gap-1">
+              <p className="text-xs font-extrabold leading-tight" style={{ color: solo.accentSoft }}>
+                {solo.title}
+              </p>
+              <p className="text-2xs leading-snug" style={{ color: 'var(--ink-2)' }}>
+                {solo.desc}
+              </p>
+            </div>
+          </motion.div>
+        );
+      })()}
+    </motion.div>
+  );
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
 // MAIN COMPONENT — Feature Carousel (adaptive + individual accent fill + glass-3d)
 // ═══════════════════════════════════════════════════════════════════════════════
 export function FeaturesBanner() {
@@ -323,32 +439,40 @@ export function FeaturesBanner() {
         />
       </div>
 
-      <div
-        ref={scrollRef}
-        onScroll={handleScroll}
-        onTouchStart={handleTouchStart}
-        onTouchEnd={handleTouchEnd}
-        className="overflow-x-auto scrollbar-none"
-        style={{
-          display: 'flex',
-          gap,
-          scrollSnapType: 'x mandatory',
-          WebkitOverflowScrolling: 'touch',
-          paddingTop: 6,
-          paddingBottom: 4,
-          marginTop: -6,
-          marginLeft: -4,
-          marginRight: -4,
-          paddingLeft: 4,
-          paddingRight: 4,
-        }}
-      >
-        <motion.div className="flex" style={{ gap }} variants={stagger} initial="hidden" animate="visible">
-          {cards}
-        </motion.div>
+      {/* Карусель — только мобиль (< 768px) */}
+      <div className="md:hidden">
+        <div
+          ref={scrollRef}
+          onScroll={handleScroll}
+          onTouchStart={handleTouchStart}
+          onTouchEnd={handleTouchEnd}
+          className="overflow-x-auto scrollbar-none"
+          style={{
+            display: 'flex',
+            gap,
+            scrollSnapType: 'x mandatory',
+            WebkitOverflowScrolling: 'touch',
+            paddingTop: 6,
+            paddingBottom: 4,
+            marginTop: -6,
+            marginLeft: -4,
+            marginRight: -4,
+            paddingLeft: 4,
+            paddingRight: 4,
+          }}
+        >
+          <motion.div className="flex" style={{ gap }} variants={stagger} initial="hidden" animate="visible">
+            {cards}
+          </motion.div>
+        </div>
+
+        <PaginationDots total={totalPages} active={activePage} onClick={scrollToPage} />
       </div>
 
-      <PaginationDots total={totalPages} active={activePage} onClick={scrollToPage} />
+      {/* Bento-сетка — только десктоп (≥ 768px) */}
+      <div className="hidden md:block">
+        <DesktopBentoGrid />
+      </div>
     </section>
   );
 }
