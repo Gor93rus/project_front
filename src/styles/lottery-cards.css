@@ -767,3 +767,144 @@
     animation: none !important;
   }
 }
+
+/* ─── FEATURE CARD — FULL-BLEED IMAGE (new style) ───────────────────────── */
+
+.feature-card-img {
+  position: relative;
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  cursor: pointer;
+  /* 3D glass border — top/left bright highlight, bottom/right dark shadow */
+  border: 1.5px solid transparent;
+  border-top-color: rgba(255,255,255,0.28);
+  border-left-color: rgba(255,255,255,0.16);
+  border-bottom-color: rgba(0,0,0,0.45);
+  border-right-color: rgba(0,0,0,0.30);
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,0.06) inset,
+    0 4px 24px rgba(0,0,0,0.55),
+    0 1px 0 rgba(255,255,255,0.10) inset;
+  transition: transform 0.22s cubic-bezier(0.25,0.46,0.45,0.94),
+              box-shadow 0.22s ease;
+}
+
+/* Active card in carousel — accent glow */
+.feature-card-img--active {
+  border-top-color: rgba(255,255,255,0.38);
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,0.08) inset,
+    0 6px 32px rgba(0,0,0,0.6),
+    0 0 20px var(--fc-glow, rgba(255,255,255,0.12)),
+    0 1px 0 rgba(255,255,255,0.14) inset;
+}
+
+/* Full-bleed background image fills entire card */
+.feature-card-img__bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  /* Very slight zoom on the image so it doesn't look cropped */
+  transform: scale(1.04);
+  transition: transform 0.4s ease;
+}
+
+.feature-card-img:hover .feature-card-img__bg,
+.feature-card-img--active .feature-card-img__bg {
+  transform: scale(1.08);
+}
+
+/* Glass bevel inner layer — 3D chamfer simulation */
+.feature-card-img__bevel {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  /* Top-left bright bevel edge */
+  background:
+    linear-gradient(135deg,
+      rgba(255,255,255,0.14) 0%,
+      rgba(255,255,255,0.04) 30%,
+      transparent 60%,
+      rgba(0,0,0,0.18) 100%
+    );
+  /* Subtle inner vignette to darken edges so title pops */
+  box-shadow: inset 0 0 40px rgba(0,0,0,0.35);
+  pointer-events: none;
+}
+
+/* Frosted glass title strip at the bottom */
+.feature-card-img__footer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 20px 10px 10px;
+  background: linear-gradient(
+    to top,
+    rgba(0,0,0,0.72) 0%,
+    rgba(0,0,0,0.44) 55%,
+    transparent 100%
+  );
+  backdrop-filter: blur(0px); /* avoid blur on image itself */
+  display: flex;
+  align-items: flex-end;
+  pointer-events: none;
+  border-radius: 0 0 var(--r-lg) var(--r-lg);
+  /* Bottom bevel highlight line */
+  border-top: 1px solid rgba(255,255,255,0.06);
+}
+
+.feature-card-img__footer span {
+  text-shadow: 0 1px 6px rgba(0,0,0,0.8),
+               0 0 12px var(--fc-accent, rgba(255,255,255,0.3));
+  letter-spacing: 0.04em;
+  font-size: 11px;
+}
+
+/* ── Desktop Bento mosaic layout ─────────────────────────────────────────── */
+
+.features-bento-img {
+  display: grid;
+  grid-template-columns: 1fr 1.15fr 1fr;
+  gap: 8px;
+  align-items: stretch;
+}
+
+.features-bento-img__col {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* Left and right columns: cards share equal height */
+.features-bento-img__col .feature-card-img {
+  flex: 1;
+  min-height: 140px;
+}
+
+/* Center column: single tall card fills full height */
+.features-bento-img__col--tall {
+  align-self: stretch;
+}
+
+.features-bento-img__col--tall .feature-card-img {
+  flex: 1;
+  height: 100%;
+  min-height: 300px;
+}
+
+/* Right column: 3 cards stacked */
+.features-bento-img__col:last-child .feature-card-img {
+  flex: 1;
+  min-height: 100px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .feature-card-img,
+  .feature-card-img__bg {
+    transition: none !important;
+    animation: none !important;
+  }
+}
