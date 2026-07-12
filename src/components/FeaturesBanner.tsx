@@ -5,11 +5,50 @@ import {
 } from './FeatureIcons';
 import { stagger } from '../lib/animations';
 
+// ── Спрайт-иконки (1536×1024, 3×2 grid, каждая ячейка 512×512) ─────────────
+const SPRITE = '/images/features-sprite.png';
+const SPRITE_COLS = 3;
+const SPRITE_ROWS = 2;
+const CELL = 512; // px
+
+/**
+ * Вырезает нужную ячейку из спрайта через CSS background-position.
+ * col/row — 0-based координата в сетке.
+ * size — итоговый размер иконки в пикселях.
+ */
+function SpriteIcon({ col, row, size = 72 }: { col: number; row: number; size?: number }) {
+  const scale = size / CELL;
+  const totalW = CELL * SPRITE_COLS * scale;
+  const totalH = CELL * SPRITE_ROWS * scale;
+  const posX = col * CELL * scale;
+  const posY = row * CELL * scale;
+
+  return (
+    <div
+      aria-hidden="true"
+      style={{
+        width: size,
+        height: size,
+        flexShrink: 0,
+        backgroundImage: `url(${SPRITE})`,
+        backgroundSize: `${totalW}px ${totalH}px`,
+        backgroundPosition: `-${posX}px -${posY}px`,
+        backgroundRepeat: 'no-repeat',
+        // Фон спрайта тёмный (#0d1117) — мягко смешиваем с фоном карточки
+        mixBlendMode: 'lighten',
+        imageRendering: 'crisp-edges',
+      }}
+    />
+  );
+}
+
 // ── Данные ──────────────────────────────────────────────────────────────────
 interface FeatureItem {
   title: string;
   desc: string;
   icon: React.ReactNode;
+  /** Иконка из спрайта: [col, row] */
+  sprite: [number, number];
   accent: string;
   accentSoft: string;
   bgPattern: string;
@@ -24,6 +63,7 @@ const ITEMS: FeatureItem[] = [
     title: 'Instant Payouts',
     desc: 'Winnings hit your wallet seconds after the draw — automatic, via smart contract.',
     icon: <RocketIcon size={36} color="var(--coral)" />,
+    sprite: [0, 0], // красный сундук с монетами
     accent: 'var(--coral)',
     accentSoft: 'var(--coral-soft)',
     bgPattern: `repeating-linear-gradient(35deg, var(--coral) 0px, var(--coral) 1px, transparent 1px, transparent 14px)`,
@@ -34,6 +74,7 @@ const ITEMS: FeatureItem[] = [
     title: 'TON & USDT',
     desc: 'Deposit and cash out in TON or USDT. All major TON wallets supported.',
     icon: <CoinIcon size={36} color="var(--gold)" />,
+    sprite: [1, 0], // TON+USDT монеты
     accent: 'var(--gold)',
     accentSoft: 'var(--gold-soft)',
     bgPattern: `radial-gradient(circle at 20% 30%, var(--gold) 1px, transparent 1px), radial-gradient(circle at 60% 60%, var(--gold) 1.5px, transparent 1.5px), radial-gradient(circle at 80% 20%, var(--gold) 1px, transparent 1px)`,
@@ -44,6 +85,7 @@ const ITEMS: FeatureItem[] = [
     title: 'Provably Fair',
     desc: 'Every draw runs on-chain — results are verifiable by anyone.',
     icon: <ShieldIcon size={36} color="var(--emerald)" />,
+    sprite: [1, 1], // фиолетовый смарт-контракт / on-chain
     accent: 'var(--emerald)',
     accentSoft: 'var(--emerald-soft)',
     bgPattern: `linear-gradient(0deg, var(--emerald) 0.5px, transparent 0.5px), linear-gradient(90deg, var(--emerald) 0.5px, transparent 0.5px)`,
@@ -54,6 +96,7 @@ const ITEMS: FeatureItem[] = [
     title: 'Massive Prizes',
     desc: 'Jackpots up to 250,000 TON across draws and instant games.',
     icon: <TrophyIcon size={36} color="var(--gold-soft)" />,
+    sprite: [0, 1], // золотые шары с короной
     accent: 'var(--gold-soft)',
     accentSoft: 'var(--gold-bright)',
     bgPattern: `radial-gradient(1px 1px at 15% 20%, var(--gold) 100%, transparent), radial-gradient(1px 1px at 40% 55%, var(--gold) 100%, transparent), radial-gradient(1.5px 1.5px at 70% 15%, var(--gold-soft) 100%, transparent), radial-gradient(1px 1px at 55% 80%, var(--gold) 100%, transparent), radial-gradient(1px 1px at 85% 40%, var(--gold-soft) 100%, transparent), radial-gradient(1.5px 1.5px at 25% 75%, var(--gold) 100%, transparent)`,
@@ -64,6 +107,7 @@ const ITEMS: FeatureItem[] = [
     title: 'Smart Contract',
     desc: 'Funds locked in a verified contract — only winners can claim them.',
     icon: <ContractIcon size={36} color="var(--secondary)" />,
+    sprite: [2, 1], // синий бриллиант со щитом
     accent: 'var(--secondary)',
     accentSoft: 'var(--secondary-soft)',
     bgPattern: `linear-gradient(0deg, var(--secondary) 0.5px, transparent 0.5px)`,
@@ -74,6 +118,7 @@ const ITEMS: FeatureItem[] = [
     title: 'Audited Security',
     desc: 'Passed a full security audit. Your funds and data stay protected.',
     icon: <DiamondIcon size={36} color="rgb(var(--cyan-400))" />,
+    sprite: [2, 0], // зелёный щит с блокчейном
     accent: 'rgb(var(--cyan-400))',
     accentSoft: 'rgb(var(--cyan-400))',
     bgPattern: `radial-gradient(circle at 70% 50%, transparent 55%, rgba(var(--cyan-400),0.10) 55%, rgba(var(--cyan-400),0.10) 56%, transparent 56%), radial-gradient(circle at 70% 50%, transparent 32%, rgba(var(--cyan-400),0.08) 32%, rgba(var(--cyan-400),0.08) 33%, transparent 33%)`,
@@ -120,7 +165,6 @@ function FeatureCard({ item, index, width, isActive }: { item: FeatureItem; inde
       style={{
         width,
         minWidth: width,
-        // Индивидуальная accent-заливка, solid-акцент и glow через CSS custom properties
         ['--fc-accent-bg' as string]: item.accentBg,
         ['--fc-accent' as string]: item.accent,
         ['--fc-glow' as string]: item.glow,
@@ -134,12 +178,9 @@ function FeatureCard({ item, index, width, isActive }: { item: FeatureItem; inde
       }}
       whileTap={{ scale: 0.97 }}
     >
-      {/* Иконка — неоновый глиф */}
-      <div
-        className="flex items-center justify-center shrink-0 relative feature-card-icon"
-        style={{ color: item.accent, zIndex: 2 }}
-      >
-        {item.icon}
+      {/* Спрайт-иконка */}
+      <div className="shrink-0 relative feature-card-icon" style={{ zIndex: 2 }}>
+        <SpriteIcon col={item.sprite[0]} row={item.sprite[1]} size={52} />
       </div>
 
       <p className="text-xs font-extrabold leading-tight relative" style={{ color: item.accentSoft, zIndex: 2 }}>
@@ -207,11 +248,8 @@ function DesktopBentoGrid() {
         whileTap={{ scale: 0.98 }}
       >
         <div className="feature-card-hero-visual">
-          {/* Слот для изображения — заполнишь ассетом позже; иконка — placeholder внутри слота */}
           <div className="feature-hero-img-slot" aria-hidden="true">
-            <div style={{ color: hero.accent, opacity: 0.7 }}>
-              {hero.icon}
-            </div>
+            <SpriteIcon col={hero.sprite[0]} row={hero.sprite[1]} size={68} />
           </div>
         </div>
         <div className="feature-card-hero-body">
@@ -245,8 +283,8 @@ function DesktopBentoGrid() {
               }}
               whileTap={{ scale: 0.97 }}
             >
-              <div className="feature-card-icon flex items-center justify-center" style={{ color: item.accent }}>
-                {item.icon}
+              <div className="feature-card-icon">
+                <SpriteIcon col={item.sprite[0]} row={item.sprite[1]} size={48} />
               </div>
               <p className="text-xs font-extrabold leading-tight" style={{ color: item.accentSoft }}>
                 {item.title}
@@ -276,8 +314,8 @@ function DesktopBentoGrid() {
             }}
             whileTap={{ scale: 0.98 }}
           >
-            <div className="feature-card-icon flex items-center justify-center shrink-0" style={{ color: solo.accent }}>
-              {solo.icon}
+            <div className="feature-card-icon shrink-0">
+              <SpriteIcon col={solo.sprite[0]} row={solo.sprite[1]} size={48} />
             </div>
             <div className="flex flex-col gap-1">
               <p className="text-xs font-extrabold leading-tight" style={{ color: solo.accentSoft }}>
