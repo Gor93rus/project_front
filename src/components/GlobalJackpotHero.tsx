@@ -267,7 +267,7 @@ export function GlobalJackpotHero() {
           }}
         />
 
-        <div className="flex flex-col items-center" style={{ padding: '40px 16px 18px', position: 'relative', zIndex: 3 }}>
+        <div className="flex flex-col items-center" style={{ padding: '52px 16px 22px', position: 'relative', zIndex: 3 }}>
           <motion.span
             style={{
               position: 'relative',
@@ -316,11 +316,11 @@ export function GlobalJackpotHero() {
             transition={{ duration: 0.6, ease: 'easeOut' }}
           >
             <span
-              className="font-tabular"
-              style={{
-                fontSize: 52,
-                lineHeight: 0.92,
-                letterSpacing: '-0.02em',
+            className="font-tabular"
+            style={{
+                fontSize: 64,
+                lineHeight: 0.90,
+                letterSpacing: '-0.03em',
                 fontFamily: 'var(--font-mono)',
                 fontWeight: 800,
                 // Бегущий блик по цифрам + металлическая золотая заливка (оба клипуются по глифам)
@@ -352,6 +352,7 @@ export function GlobalJackpotHero() {
                 fontFamily: 'var(--font-mono)',
                 color: 'var(--gold-soft)',
                 textShadow: '0 0 14px var(--gold-glow), 0 2px 4px rgba(0,0,0,0.5)',
+                marginBottom: 6,
               }}
             >
               TON

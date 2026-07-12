@@ -132,9 +132,34 @@ function ScratchCard({ game }: { game: typeof SCRATCH_GAMES[0] }) {
 export function ScratchCarousel() {
   return (
     <section className="px-4">
-      <div className="mb-3">
-        <h2 className="font-extrabold text-sm" style={{ color: 'var(--ink-0)' }}>Instant Games</h2>
-        <p className="text-3xs mt-0.5" style={{ color: 'var(--ink-3)' }}>5 games — instant results</p>
+      <div className="flex items-center justify-between mb-3">
+        <div className="flex items-center gap-2">
+          <h2 className="font-extrabold text-sm" style={{ color: 'var(--ink-0)' }}>Instant Games</h2>
+          <span style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: 4,
+            padding: '2px 8px',
+            borderRadius: 999,
+            fontSize: 10,
+            fontWeight: 700,
+            fontFamily: 'var(--font-mono)',
+            letterSpacing: '0.08em',
+            color: '#4ade80',
+            background: 'rgba(74,222,128,0.12)',
+            border: '1px solid rgba(74,222,128,0.35)',
+          }}>
+            <span style={{
+              width: 5,
+              height: 5,
+              borderRadius: '50%',
+              background: '#4ade80',
+              boxShadow: '0 0 6px #4ade80',
+              animation: 'livePulse 2s ease-in-out infinite',
+            }} />
+            {SCRATCH_GAMES.length} active
+          </span>
+        </div>
       </div>
 
       <ScrollCarousel accent="#4ade80" showProgress={false}>
