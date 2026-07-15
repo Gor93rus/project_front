@@ -775,92 +775,125 @@
   border-radius: var(--r-lg);
   overflow: hidden;
   cursor: pointer;
-  /* 3D glass border — top/left bright highlight, bottom/right dark shadow */
-  border: 1.5px solid transparent;
-  border-top-color: rgba(255,255,255,0.28);
-  border-left-color: rgba(255,255,255,0.16);
-  border-bottom-color: rgba(0,0,0,0.45);
-  border-right-color: rgba(0,0,0,0.30);
+  /*
+   * 3D glass bevel:
+   * - top+left: bright specular highlight (light hits top-left)
+   * - bottom+right: dark shadow edge (receding from light)
+   */
+  border-top: 1.5px solid rgba(255,255,255,0.30);
+  border-left: 1.5px solid rgba(255,255,255,0.16);
+  border-right: 1.5px solid rgba(0,0,0,0.50);
+  border-bottom: 1.5px solid rgba(0,0,0,0.60);
   box-shadow:
-    0 0 0 1px rgba(255,255,255,0.06) inset,
-    0 4px 24px rgba(0,0,0,0.55),
-    0 1px 0 rgba(255,255,255,0.10) inset;
-  transition: transform 0.22s cubic-bezier(0.25,0.46,0.45,0.94),
-              box-shadow 0.22s ease;
+    /* inner top highlight — glass surface catch */
+    inset 0 1px 0 rgba(255,255,255,0.12),
+    /* outer drop shadow */
+    0 6px 28px rgba(0,0,0,0.60),
+    0 2px 6px rgba(0,0,0,0.40);
+  transition: transform 0.25s cubic-bezier(0.25,0.46,0.45,0.94),
+              box-shadow 0.25s ease;
 }
 
-/* Active card in carousel — accent glow */
-.feature-card-img--active {
-  border-top-color: rgba(255,255,255,0.38);
+/* Active / hover card — adds accent glow ring */
+.feature-card-img--active,
+.feature-card-img:hover {
+  border-top-color: rgba(255,255,255,0.42);
   box-shadow:
-    0 0 0 1px rgba(255,255,255,0.08) inset,
-    0 6px 32px rgba(0,0,0,0.6),
-    0 0 20px var(--fc-glow, rgba(255,255,255,0.12)),
-    0 1px 0 rgba(255,255,255,0.14) inset;
+    inset 0 1px 0 rgba(255,255,255,0.16),
+    0 8px 36px rgba(0,0,0,0.65),
+    0 0 0 1.5px var(--fc-glow, rgba(255,255,255,0.08)),
+    0 0 24px var(--fc-glow, rgba(255,255,255,0.10));
 }
 
-/* Full-bleed background image fills entire card */
+/* Full-bleed background image */
 .feature-card-img__bg {
   position: absolute;
   inset: 0;
   background-size: cover;
   background-position: center center;
   background-repeat: no-repeat;
-  /* Very slight zoom on the image so it doesn't look cropped */
-  transform: scale(1.04);
-  transition: transform 0.4s ease;
+  transform: scale(1.03);
+  transition: transform 0.5s cubic-bezier(0.25,0.46,0.45,0.94);
 }
 
 .feature-card-img:hover .feature-card-img__bg,
 .feature-card-img--active .feature-card-img__bg {
-  transform: scale(1.08);
+  transform: scale(1.07);
 }
 
-/* Glass bevel inner layer — 3D chamfer simulation */
+/*
+ * Glass bevel inner overlay:
+ * A diagonal gradient that simulates the chamfered glass edge —
+ * bright top-left catch, subtle darkening bottom-right.
+ * Separate from the border so it covers the image.
+ */
 .feature-card-img__bevel {
   position: absolute;
   inset: 0;
   border-radius: inherit;
-  /* Top-left bright bevel edge */
-  background:
-    linear-gradient(135deg,
-      rgba(255,255,255,0.14) 0%,
-      rgba(255,255,255,0.04) 30%,
-      transparent 60%,
-      rgba(0,0,0,0.18) 100%
-    );
-  /* Subtle inner vignette to darken edges so title pops */
-  box-shadow: inset 0 0 40px rgba(0,0,0,0.35);
+  background: linear-gradient(
+    148deg,
+    rgba(255,255,255,0.10) 0%,
+    rgba(255,255,255,0.03) 25%,
+    transparent 55%,
+    rgba(0,0,0,0.14) 100%
+  );
+  /* Vignette — slightly darkens all four edges so text is always readable */
+  box-shadow:
+    inset 0 0 50px rgba(0,0,0,0.28),
+    inset 0 -30px 40px rgba(0,0,0,0.22);
   pointer-events: none;
 }
 
-/* Frosted glass title strip at the bottom */
+/*
+ * Footer text area:
+ * Deep gradient scrim so text is always legible over any image.
+ * No blur — keeps image crisp.
+ */
 .feature-card-img__footer {
   position: absolute;
   bottom: 0;
   left: 0;
   right: 0;
-  padding: 20px 10px 10px;
+  /* taller scrim — more room for title + subtitle */
+  padding: 28px 12px 12px;
   background: linear-gradient(
     to top,
-    rgba(0,0,0,0.72) 0%,
-    rgba(0,0,0,0.44) 55%,
+    rgba(4,6,20,0.88) 0%,
+    rgba(4,6,20,0.64) 45%,
+    rgba(4,6,20,0.20) 75%,
     transparent 100%
   );
-  backdrop-filter: blur(0px); /* avoid blur on image itself */
   display: flex;
-  align-items: flex-end;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 2px;
   pointer-events: none;
   border-radius: 0 0 var(--r-lg) var(--r-lg);
-  /* Bottom bevel highlight line */
-  border-top: 1px solid rgba(255,255,255,0.06);
 }
 
-.feature-card-img__footer span {
-  text-shadow: 0 1px 6px rgba(0,0,0,0.8),
-               0 0 12px var(--fc-accent, rgba(255,255,255,0.3));
-  letter-spacing: 0.04em;
-  font-size: 11px;
+/* Title — white, Space Grotesk bold, strong text-shadow for depth */
+.feature-card-img__title {
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: 0.01em;
+  color: #ffffff;
+  text-shadow:
+    0 1px 8px rgba(0,0,0,0.90),
+    0 0 16px var(--fc-glow, rgba(255,255,255,0.20));
+}
+
+/* Accent underline dot — the single accent colour per card */
+.feature-card-img__accent-bar {
+  width: 20px;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--fc-accent, rgba(255,255,255,0.5));
+  box-shadow: 0 0 6px var(--fc-glow, rgba(255,255,255,0.3));
+  margin-bottom: 3px;
+  flex-shrink: 0;
 }
 
 /* ── Desktop Bento mosaic layout ─────────────────────────────────────────── */

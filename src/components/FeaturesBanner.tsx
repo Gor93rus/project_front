@@ -6,9 +6,8 @@ import { stagger } from '../lib/animations';
 interface FeatureItem {
   title: string;
   image: string;
-  /** Accent colour for title + glow */
+  /** CSS colour for accent bar + glow ring */
   accent: string;
-  accentSoft: string;
   glow: string;
 }
 
@@ -17,42 +16,36 @@ const ITEMS: FeatureItem[] = [
     title: 'Instant Payouts',
     image: '/images/card-instant-payouts.png',
     accent: 'var(--coral)',
-    accentSoft: 'var(--coral-soft)',
     glow: 'var(--coral-glow)',
   },
   {
     title: 'TON & USDT',
     image: '/images/card-ton-usdt.png',
-    accent: 'var(--gold)',
-    accentSoft: 'var(--gold-soft)',
-    glow: 'var(--gold-glow)',
+    accent: 'var(--primary)',
+    glow: 'var(--primary-glow)',
   },
   {
     title: 'Provably Fair',
     image: '/images/card-provably-fair.png',
     accent: 'var(--secondary)',
-    accentSoft: 'var(--secondary-soft)',
     glow: 'var(--secondary-glow)',
   },
   {
     title: 'Massive Prizes',
     image: '/images/card-massive-prizes.png',
-    accent: 'var(--gold-soft)',
-    accentSoft: 'var(--gold-bright)',
+    accent: 'var(--gold)',
     glow: 'var(--gold-glow)',
   },
   {
     title: 'Smart Contract',
     image: '/images/card-smart-contract.png',
     accent: 'rgb(var(--cyan-400))',
-    accentSoft: 'rgb(var(--cyan-400))',
-    glow: 'rgba(var(--cyan-400),0.30)',
+    glow: 'rgba(var(--cyan-400),0.35)',
   },
   {
     title: 'Audited Security',
     image: '/images/card-audited-security.png',
     accent: 'var(--emerald)',
-    accentSoft: 'var(--emerald-soft)',
     glow: 'var(--emerald-glow)',
   },
 ];
@@ -89,8 +82,7 @@ function useAdaptiveLayout() {
 // FEATURE CARD — full-bleed image + glass bevel overlay
 // ═══════════════════════════════════════════════════════════════════════════════
 function FeatureCard({ item, index, width, isActive }: { item: FeatureItem; index: number; width: number; isActive: boolean }) {
-  // Card height: portrait 4:5 on mobile, square on wider
-  const height = Math.round(width * 1.18);
+  const height = Math.round(width * 1.22);
 
   return (
     <motion.div
@@ -111,24 +103,15 @@ function FeatureCard({ item, index, width, isActive }: { item: FeatureItem; inde
       }}
       whileTap={{ scale: 0.97 }}
     >
-      {/* Full-bleed background image */}
       <div
         className="feature-card-img__bg"
         style={{ backgroundImage: `url(${item.image})` }}
         aria-hidden="true"
       />
-
-      {/* Glass bevel border — top highlight + bottom shadow */}
       <div className="feature-card-img__bevel" aria-hidden="true" />
-
-      {/* Bottom title strip — frosted glass bar */}
       <div className="feature-card-img__footer">
-        <span
-          className="text-xs font-extrabold leading-tight tracking-wide"
-          style={{ color: item.accentSoft }}
-        >
-          {item.title}
-        </span>
+        <div className="feature-card-img__accent-bar" />
+        <span className="feature-card-img__title">{item.title}</span>
       </div>
     </motion.div>
   );
@@ -196,12 +179,8 @@ function BentoImgCard({
       />
       <div className="feature-card-img__bevel" aria-hidden="true" />
       <div className="feature-card-img__footer">
-        <span
-          className="text-xs font-extrabold leading-tight tracking-wide"
-          style={{ color: item.accentSoft }}
-        >
-          {item.title}
-        </span>
+        <div className="feature-card-img__accent-bar" />
+        <span className="feature-card-img__title">{item.title}</span>
       </div>
     </motion.div>
   );
