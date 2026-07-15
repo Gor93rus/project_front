@@ -1,84 +1,52 @@
 import { useRef, useEffect, useState, useCallback, useMemo } from 'react';
 import { motion } from 'framer-motion';
-import {
-  RocketIcon, CoinIcon, DiamondIcon, TrophyIcon, ShieldIcon, ContractIcon,
-} from './FeatureIcons';
 import { stagger } from '../lib/animations';
 
 // ── Данные ──────────────────────────────────────────────────────────────────
 interface FeatureItem {
   title: string;
-  desc: string;
-  icon: React.ReactNode;
+  image: string;
+  /** CSS colour for accent bar + glow ring */
   accent: string;
-  accentSoft: string;
-  bgPattern: string;
-  /** Фоновая accent-заливка: rgba(r,g,b, alpha) */
-  accentBg: string;
-  /** Glow-цвет для активной карточки */
   glow: string;
 }
 
 const ITEMS: FeatureItem[] = [
   {
     title: 'Instant Payouts',
-    desc: 'Winnings hit your wallet seconds after the draw — automatic, via smart contract.',
-    icon: <RocketIcon size={36} color="var(--coral)" />,
+    image: '/images/card-instant-payouts.png',
     accent: 'var(--coral)',
-    accentSoft: 'var(--coral-soft)',
-    bgPattern: `repeating-linear-gradient(35deg, var(--coral) 0px, var(--coral) 1px, transparent 1px, transparent 14px)`,
-    accentBg: 'rgba(255,77,79,0.30)',
     glow: 'var(--coral-glow)',
   },
   {
     title: 'TON & USDT',
-    desc: 'Deposit and cash out in TON or USDT. All major TON wallets supported.',
-    icon: <CoinIcon size={36} color="var(--gold)" />,
-    accent: 'var(--gold)',
-    accentSoft: 'var(--gold-soft)',
-    bgPattern: `radial-gradient(circle at 20% 30%, var(--gold) 1px, transparent 1px), radial-gradient(circle at 60% 60%, var(--gold) 1.5px, transparent 1.5px), radial-gradient(circle at 80% 20%, var(--gold) 1px, transparent 1px)`,
-    accentBg: 'rgba(250,219,20,0.24)',
-    glow: 'var(--gold-glow)',
+    image: '/images/card-ton-usdt.png',
+    accent: 'var(--primary)',
+    glow: 'var(--primary-glow)',
   },
   {
     title: 'Provably Fair',
-    desc: 'Every draw runs on-chain — results are verifiable by anyone.',
-    icon: <ShieldIcon size={36} color="var(--emerald)" />,
-    accent: 'var(--emerald)',
-    accentSoft: 'var(--emerald-soft)',
-    bgPattern: `linear-gradient(0deg, var(--emerald) 0.5px, transparent 0.5px), linear-gradient(90deg, var(--emerald) 0.5px, transparent 0.5px)`,
-    accentBg: 'rgba(82,196,26,0.28)',
-    glow: 'var(--emerald-glow)',
+    image: '/images/card-provably-fair.png',
+    accent: 'var(--secondary)',
+    glow: 'var(--secondary-glow)',
   },
   {
     title: 'Massive Prizes',
-    desc: 'Jackpots up to 250,000 TON across draws and instant games.',
-    icon: <TrophyIcon size={36} color="var(--gold-soft)" />,
-    accent: 'var(--gold-soft)',
-    accentSoft: 'var(--gold-bright)',
-    bgPattern: `radial-gradient(1px 1px at 15% 20%, var(--gold) 100%, transparent), radial-gradient(1px 1px at 40% 55%, var(--gold) 100%, transparent), radial-gradient(1.5px 1.5px at 70% 15%, var(--gold-soft) 100%, transparent), radial-gradient(1px 1px at 55% 80%, var(--gold) 100%, transparent), radial-gradient(1px 1px at 85% 40%, var(--gold-soft) 100%, transparent), radial-gradient(1.5px 1.5px at 25% 75%, var(--gold) 100%, transparent)`,
-    accentBg: 'rgba(250,219,20,0.22)',
+    image: '/images/card-massive-prizes.png',
+    accent: 'var(--gold)',
     glow: 'var(--gold-glow)',
   },
   {
     title: 'Smart Contract',
-    desc: 'Funds locked in a verified contract — only winners can claim them.',
-    icon: <ContractIcon size={36} color="var(--secondary)" />,
-    accent: 'var(--secondary)',
-    accentSoft: 'var(--secondary-soft)',
-    bgPattern: `linear-gradient(0deg, var(--secondary) 0.5px, transparent 0.5px)`,
-    accentBg: 'rgba(124,58,237,0.28)',
-    glow: 'var(--secondary-glow)',
+    image: '/images/card-smart-contract.png',
+    accent: 'rgb(var(--cyan-400))',
+    glow: 'rgba(var(--cyan-400),0.35)',
   },
   {
     title: 'Audited Security',
-    desc: 'Passed a full security audit. Your funds and data stay protected.',
-    icon: <DiamondIcon size={36} color="rgb(var(--cyan-400))" />,
-    accent: 'rgb(var(--cyan-400))',
-    accentSoft: 'rgb(var(--cyan-400))',
-    bgPattern: `radial-gradient(circle at 70% 50%, transparent 55%, rgba(var(--cyan-400),0.10) 55%, rgba(var(--cyan-400),0.10) 56%, transparent 56%), radial-gradient(circle at 70% 50%, transparent 32%, rgba(var(--cyan-400),0.08) 32%, rgba(var(--cyan-400),0.08) 33%, transparent 33%)`,
-    accentBg: 'rgba(14,165,233,0.28)',
-    glow: 'rgba(var(--cyan-400),0.30)',
+    image: '/images/card-audited-security.png',
+    accent: 'var(--emerald)',
+    glow: 'var(--emerald-glow)',
   },
 ];
 
@@ -111,22 +79,23 @@ function useAdaptiveLayout() {
 }
 
 // ═══════════════════════════════════════════════════════════════════════════════
-// FEATURE CARD
+// FEATURE CARD — full-bleed image + glass bevel overlay
 // ═══════════════════════════════════════════════════════════════════════════════
 function FeatureCard({ item, index, width, isActive }: { item: FeatureItem; index: number; width: number; isActive: boolean }) {
+  const height = Math.round(width * 1.22);
+
   return (
     <motion.div
-      className={`flex flex-col gap-1.5 p-3 shrink-0 feature-card feature-card-tap${isActive ? ' feature-card--active' : ''}`}
+      className={`shrink-0 feature-card-img${isActive ? ' feature-card-img--active' : ''}`}
       style={{
         width,
         minWidth: width,
-        // Индивидуальная accent-заливка, solid-акцент и glow через CSS custom properties
-        ['--fc-accent-bg' as string]: item.accentBg,
+        height,
         ['--fc-accent' as string]: item.accent,
         ['--fc-glow' as string]: item.glow,
       }}
       variants={{
-        hidden: { opacity: 0, y: 30, scale: 0.97 },
+        hidden: { opacity: 0, y: 30, scale: 0.95 },
         visible: {
           opacity: 1, y: 0, scale: 1,
           transition: { type: 'spring', stiffness: 300, damping: 28, mass: 0.8 },
@@ -134,20 +103,16 @@ function FeatureCard({ item, index, width, isActive }: { item: FeatureItem; inde
       }}
       whileTap={{ scale: 0.97 }}
     >
-      {/* Иконка — неоновый глиф */}
       <div
-        className="flex items-center justify-center shrink-0 relative feature-card-icon"
-        style={{ color: item.accent, zIndex: 2 }}
-      >
-        {item.icon}
+        className="feature-card-img__bg"
+        style={{ backgroundImage: `url(${item.image})` }}
+        aria-hidden="true"
+      />
+      <div className="feature-card-img__bevel" aria-hidden="true" />
+      <div className="feature-card-img__footer">
+        <div className="feature-card-img__accent-bar" />
+        <span className="feature-card-img__title">{item.title}</span>
       </div>
-
-      <p className="text-xs font-extrabold leading-tight relative" style={{ color: item.accentSoft, zIndex: 2 }}>
-        {item.title}
-      </p>
-      <p className="text-2xs leading-snug relative" style={{ color: 'var(--ink-2)', zIndex: 2 }}>
-        {item.desc}
-      </p>
     </motion.div>
   );
 }
@@ -179,117 +144,73 @@ function PaginationDots({ total, active, onClick }: { total: number; active: num
 }
 
 // ═══════════════════════════════════════════════════════════════════════════════
-// DESKTOP BENTO GRID — скрыт на мобиле, виден на md+
+// DESKTOP BENTO GRID — full-bleed image cards in a 3-column mosaic
 // ═══════════════════════════════════════════════════════════════════════════════
-function DesktopBentoGrid() {
-  const hero = ITEMS[0];
-  const rest = ITEMS.slice(1); // 5 карточек: 2 + 2 + 1
-
+function BentoImgCard({
+  item,
+  tall = false,
+  delay = 0,
+}: {
+  item: FeatureItem;
+  tall?: boolean;
+  delay?: number;
+}) {
   return (
     <motion.div
-      className="features-bento"
+      className={`feature-card-img feature-card-img--bento${tall ? ' feature-card-img--tall' : ''}`}
+      style={{
+        ['--fc-accent' as string]: item.accent,
+        ['--fc-glow' as string]: item.glow,
+      }}
+      variants={{
+        hidden: { opacity: 0, y: 20, scale: 0.96 },
+        visible: {
+          opacity: 1, y: 0, scale: 1,
+          transition: { type: 'spring', stiffness: 280, damping: 26, delay },
+        },
+      }}
+      whileHover={{ scale: 1.015 }}
+      whileTap={{ scale: 0.97 }}
+    >
+      <div
+        className="feature-card-img__bg"
+        style={{ backgroundImage: `url(${item.image})` }}
+        aria-hidden="true"
+      />
+      <div className="feature-card-img__bevel" aria-hidden="true" />
+      <div className="feature-card-img__footer">
+        <div className="feature-card-img__accent-bar" />
+        <span className="feature-card-img__title">{item.title}</span>
+      </div>
+    </motion.div>
+  );
+}
+
+function DesktopBentoGrid() {
+  return (
+    <motion.div
+      className="features-bento-img"
       variants={stagger}
       initial="hidden"
       animate="visible"
     >
-      {/* Hero-карточка: Instant Payouts — полная ширина */}
-      <motion.div
-        className="feature-card feature-card--hero feature-card-tap"
-        style={{
-          ['--fc-accent-bg' as string]: hero.accentBg,
-          ['--fc-accent' as string]: hero.accent,
-          ['--fc-glow' as string]: hero.glow,
-        }}
-        variants={{
-          hidden: { opacity: 0, y: 24, scale: 0.97 },
-          visible: { opacity: 1, y: 0, scale: 1, transition: { type: 'spring', stiffness: 280, damping: 26 } },
-        }}
-        whileTap={{ scale: 0.98 }}
-      >
-        <div className="feature-card-hero-visual">
-          {/* Слот для изображения — заполнишь ассетом позже; иконка — placeholder внутри слота */}
-          <div className="feature-hero-img-slot" aria-hidden="true">
-            <div style={{ color: hero.accent, opacity: 0.7 }}>
-              {hero.icon}
-            </div>
-          </div>
-        </div>
-        <div className="feature-card-hero-body">
-          <span className="feature-hero-badge">
-            #1 Feature
-          </span>
-          <p className="text-sm font-extrabold leading-tight" style={{ color: hero.accentSoft }}>
-            {hero.title}
-          </p>
-          <p className="text-xs leading-relaxed" style={{ color: 'var(--ink-2)' }}>
-            {hero.desc}
-          </p>
-        </div>
-      </motion.div>
+      {/* Left column: 2 equal cards stacked */}
+      <div className="features-bento-img__col">
+        <BentoImgCard item={ITEMS[0]} delay={0} />
+        <BentoImgCard item={ITEMS[1]} delay={0.05} />
+      </div>
 
-      {/* Ряды 2 + 2 */}
-      {[rest.slice(0, 2), rest.slice(2, 4)].map((row, rowIdx) => (
-        <div key={rowIdx} className="features-bento-row">
-          {row.map((item, i) => (
-            <motion.div
-              key={i}
-              className="feature-card feature-card--mini feature-card-tap"
-              style={{
-                ['--fc-accent-bg' as string]: item.accentBg,
-                ['--fc-accent' as string]: item.accent,
-                ['--fc-glow' as string]: item.glow,
-              }}
-              variants={{
-                hidden: { opacity: 0, y: 20 },
-                visible: { opacity: 1, y: 0, transition: { type: 'spring', stiffness: 260, damping: 24, delay: (rowIdx * 2 + i) * 0.05 } },
-              }}
-              whileTap={{ scale: 0.97 }}
-            >
-              <div className="feature-card-icon flex items-center justify-center" style={{ color: item.accent }}>
-                {item.icon}
-              </div>
-              <p className="text-xs font-extrabold leading-tight" style={{ color: item.accentSoft }}>
-                {item.title}
-              </p>
-              <p className="text-2xs leading-snug" style={{ color: 'var(--ink-2)' }}>
-                {item.desc}
-              </p>
-            </motion.div>
-          ))}
-        </div>
-      ))}
+      {/* Center column: 1 tall card */}
+      <div className="features-bento-img__col features-bento-img__col--tall">
+        <BentoImgCard item={ITEMS[2]} tall delay={0.1} />
+      </div>
 
-      {/* Последняя карточка — solo на всю ширину, горизонтальная */}
-      {(() => {
-        const solo = rest[4];
-        return (
-          <motion.div
-            className="feature-card feature-card--solo feature-card-tap"
-            style={{
-              ['--fc-accent-bg' as string]: solo.accentBg,
-              ['--fc-accent' as string]: solo.accent,
-              ['--fc-glow' as string]: solo.glow,
-            }}
-            variants={{
-              hidden: { opacity: 0, y: 16 },
-              visible: { opacity: 1, y: 0, transition: { type: 'spring', stiffness: 240, damping: 24, delay: 0.25 } },
-            }}
-            whileTap={{ scale: 0.98 }}
-          >
-            <div className="feature-card-icon flex items-center justify-center shrink-0" style={{ color: solo.accent }}>
-              {solo.icon}
-            </div>
-            <div className="flex flex-col gap-1">
-              <p className="text-xs font-extrabold leading-tight" style={{ color: solo.accentSoft }}>
-                {solo.title}
-              </p>
-              <p className="text-2xs leading-snug" style={{ color: 'var(--ink-2)' }}>
-                {solo.desc}
-              </p>
-            </div>
-          </motion.div>
-        );
-      })()}
+      {/* Right column: 3 equal cards stacked */}
+      <div className="features-bento-img__col">
+        <BentoImgCard item={ITEMS[3]} delay={0.08} />
+        <BentoImgCard item={ITEMS[4]} delay={0.13} />
+        <BentoImgCard item={ITEMS[5]} delay={0.18} />
+      </div>
     </motion.div>
   );
 }
