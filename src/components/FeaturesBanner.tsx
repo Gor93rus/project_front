@@ -148,16 +148,14 @@ function PaginationDots({ total, active, onClick }: { total: number; active: num
 // ═══════════════════════════════════════════════════════════════════════════════
 function BentoImgCard({
   item,
-  tall = false,
   delay = 0,
 }: {
   item: FeatureItem;
-  tall?: boolean;
   delay?: number;
 }) {
   return (
     <motion.div
-      className={`feature-card-img feature-card-img--bento${tall ? ' feature-card-img--tall' : ''}`}
+      className="feature-card-img feature-card-img--bento"
       style={{
         ['--fc-accent' as string]: item.accent,
         ['--fc-glow' as string]: item.glow,
@@ -194,23 +192,9 @@ function DesktopBentoGrid() {
       initial="hidden"
       animate="visible"
     >
-      {/* Left column: 2 equal cards stacked */}
-      <div className="features-bento-img__col">
-        <BentoImgCard item={ITEMS[0]} delay={0} />
-        <BentoImgCard item={ITEMS[1]} delay={0.05} />
-      </div>
-
-      {/* Center column: 1 tall card */}
-      <div className="features-bento-img__col features-bento-img__col--tall">
-        <BentoImgCard item={ITEMS[2]} tall delay={0.1} />
-      </div>
-
-      {/* Right column: 3 equal cards stacked */}
-      <div className="features-bento-img__col">
-        <BentoImgCard item={ITEMS[3]} delay={0.08} />
-        <BentoImgCard item={ITEMS[4]} delay={0.13} />
-        <BentoImgCard item={ITEMS[5]} delay={0.18} />
-      </div>
+      {ITEMS.map((item, i) => (
+        <BentoImgCard key={i} item={item} delay={i * 0.05} />
+      ))}
     </motion.div>
   );
 }
