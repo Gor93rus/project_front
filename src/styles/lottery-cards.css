@@ -654,7 +654,7 @@
   flex-direction: row;
   gap: 14px;
   align-items: flex-start;
-  /* Усиленный акцентный фон для главной карточки */
+  /* Усиленный акцентный фо�� для главной карточки */
   background:
     radial-gradient(60% 80% at 8% 12%, var(--fc-accent-bg, transparent) 0%, transparent 60%),
     radial-gradient(40% 50% at 85% 85%, var(--fc-accent-bg, transparent) 0%, transparent 55%),
@@ -785,9 +785,7 @@
   border-right: 1.5px solid rgba(0,0,0,0.50);
   border-bottom: 1.5px solid rgba(0,0,0,0.60);
   box-shadow:
-    /* inner top highlight — glass surface catch */
     inset 0 1px 0 rgba(255,255,255,0.12),
-    /* outer drop shadow */
     0 6px 28px rgba(0,0,0,0.60),
     0 2px 6px rgba(0,0,0,0.40);
   transition: transform 0.25s cubic-bezier(0.25,0.46,0.45,0.94),
@@ -805,43 +803,29 @@
     0 0 24px var(--fc-glow, rgba(255,255,255,0.10));
 }
 
-/* Full-bleed background image */
+/* Full-bleed background image — no mask, full brightness, centered */
 .feature-card-img__bg {
   position: absolute;
   inset: 0;
   background-size: cover;
   background-position: center center;
   background-repeat: no-repeat;
-  transform: scale(1.03);
-  transition: transform 0.5s cubic-bezier(0.25,0.46,0.45,0.94);
-  /* Soft top-edge fade so the image blends into the card background
-     instead of cutting off sharply at the border */
-  -webkit-mask-image: linear-gradient(
-    to bottom,
-    transparent 0%,
-    rgba(0,0,0,0.55) 10%,
-    rgba(0,0,0,0.85) 22%,
-    black 38%
-  );
-  mask-image: linear-gradient(
-    to bottom,
-    transparent 0%,
-    rgba(0,0,0,0.55) 10%,
-    rgba(0,0,0,0.85) 22%,
-    black 38%
-  );
+  /* Slightly warmer/brighter: use a subtle saturation boost via filter */
+  filter: saturate(1.18) brightness(1.08);
+  transform: scale(1.04);
+  transition: transform 0.5s cubic-bezier(0.25,0.46,0.45,0.94),
+              filter 0.5s ease;
 }
 
 .feature-card-img:hover .feature-card-img__bg,
 .feature-card-img--active .feature-card-img__bg {
-  transform: scale(1.07);
+  transform: scale(1.08);
+  filter: saturate(1.30) brightness(1.14);
 }
 
 /*
- * Glass bevel inner overlay:
- * A diagonal gradient that simulates the chamfered glass edge —
- * bright top-left catch, subtle darkening bottom-right.
- * Separate from the border so it covers the image.
+ * Glass bevel inner overlay — covers the image,
+ * provides subtle vignette so text is readable.
  */
 .feature-card-img__bevel {
   position: absolute;
@@ -849,84 +833,86 @@
   border-radius: inherit;
   background: linear-gradient(
     148deg,
-    rgba(255,255,255,0.10) 0%,
-    rgba(255,255,255,0.03) 25%,
-    transparent 55%,
-    rgba(0,0,0,0.14) 100%
+    rgba(255,255,255,0.08) 0%,
+    rgba(255,255,255,0.02) 30%,
+    transparent 60%,
+    rgba(0,0,0,0.10) 100%
   );
-  /* Vignette — slightly darkens all four edges so text is always readable */
+  /* Vignette — darkens edges slightly */
   box-shadow:
-    inset 0 0 50px rgba(0,0,0,0.28),
-    inset 0 -30px 40px rgba(0,0,0,0.22);
+    inset 0 0 40px rgba(0,0,0,0.20),
+    inset 0 -20px 36px rgba(0,0,0,0.18);
   pointer-events: none;
 }
 
 /*
- * Footer text area:
- * Deep gradient scrim so text is always legible over any image.
- * No blur — keeps image crisp.
+ * Overlay text area — sits directly on top of the image.
+ * Strong gradient scrim ensures legibility over any image.
  */
 .feature-card-img__footer {
   position: absolute;
   bottom: 0;
   left: 0;
   right: 0;
-  /* taller scrim — more room for title + subtitle */
-  padding: 28px 12px 12px;
+  padding: 40px 10px 10px;
   background: linear-gradient(
     to top,
-    rgba(4,6,20,0.88) 0%,
-    rgba(4,6,20,0.64) 45%,
-    rgba(4,6,20,0.20) 75%,
+    rgba(2,4,16,0.92) 0%,
+    rgba(2,4,16,0.72) 40%,
+    rgba(2,4,16,0.28) 68%,
     transparent 100%
   );
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  gap: 2px;
+  align-items: center;
+  gap: 3px;
   pointer-events: none;
   border-radius: 0 0 var(--r-lg) var(--r-lg);
+  text-align: center;
 }
 
-/* Title — white, Space Grotesk bold, strong text-shadow for depth */
+/* Title — white, centered, strong shadow */
 .feature-card-img__title {
   font-family: var(--font-display);
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 700;
   line-height: 1.2;
   letter-spacing: 0.01em;
   color: #ffffff;
+  text-align: center;
   text-shadow:
-    0 1px 8px rgba(0,0,0,0.90),
-    0 0 16px var(--fc-glow, rgba(255,255,255,0.20));
+    0 1px 6px rgba(0,0,0,0.95),
+    0 0 20px var(--fc-glow, rgba(255,255,255,0.25));
 }
 
-/* Accent underline dot — the single accent colour per card */
+/* Accent underline — centered */
 .feature-card-img__accent-bar {
-  width: 20px;
+  width: 18px;
   height: 2px;
   border-radius: 2px;
   background: var(--fc-accent, rgba(255,255,255,0.5));
-  box-shadow: 0 0 6px var(--fc-glow, rgba(255,255,255,0.3));
-  margin-bottom: 3px;
+  box-shadow: 0 0 8px var(--fc-glow, rgba(255,255,255,0.3));
+  margin-bottom: 4px;
   flex-shrink: 0;
 }
 
-/* ── Desktop — single horizontal row of 6 equal cards ───────────────────── */
+/* ── Desktop — single horizontal row of 6 compact cards ─────────────────── */
 
 .features-bento-img {
   display: grid;
   grid-template-columns: repeat(6, 1fr);
-  gap: 10px;
+  gap: 8px;
   align-items: stretch;
 }
 
-/* Each direct child is a card — no wrapper columns needed */
+/* Each direct child is a card — tighter aspect ratio for desktop */
 .features-bento-img .feature-card-img {
   width: 100%;
-  /* Aspect ratio ~1:1.3 keeps cards readable without being too tall */
-  aspect-ratio: 1 / 1.3;
+  /* ~1:1.5 — slimmer, less dominant on screen */
+  aspect-ratio: 1 / 1.5;
   min-height: 0;
+  max-height: 220px;
 }
 
 /* Hide old col wrappers if still rendered (graceful compat) */
