@@ -69,26 +69,31 @@ export function ScrollCarousel({ children, accent = '#3CB1FF', showProgress = tr
     }, 150);
   }, [activeIndex]);
 
-  // Автоскролл — плавный rAF-цикл, бесшовный loop через мгновенный сброс на полпути
+  // Автоскролл — плавный rAF-цикл, бесшовный infinite loop
   useEffect(() => {
     if (!autoScroll) return;
 
+    const el = ref.current;
+    if (!el) return;
+
+    // Отключаем scroll-snap на время автоскролла — иначе браузер
+    // перехватывает scrollLeft и снэппит карточку в произвольное место
+    const prevSnap = el.style.scrollSnapType;
+    el.style.scrollSnapType = 'none';
+
+    // Сбрасываем таймер, чтобы первый кадр не дал огромный dt
+    lastTimeRef.current = 0;
+
     const tick = (time: number) => {
-      const el = ref.current;
-      if (el && !autoScrollPaused.current) {
+      if (!autoScrollPaused.current) {
         const dt = lastTimeRef.current ? (time - lastTimeRef.current) / 1000 : 0;
         lastTimeRef.current = time;
-        const scrollWidth = el.scrollWidth;
-        const half = scrollWidth / 2;
+        const half = el.scrollWidth / 2;
         if (half > 0) {
           const next = el.scrollLeft + autoScrollSpeed * dt;
-          // Бесшовный loop: когда доходим до середины (второй набор карточек),
-          // мгновенно прыгаем обратно на то же визуальное место в первой половине
-          if (next >= half) {
-            el.scrollLeft = next - half;
-          } else {
-            el.scrollLeft = next;
-          }
+          // Когда доходим до второй копии — мгновенно возвращаемся на то же
+          // визуальное место в первой, пользователь не видит прыжка
+          el.scrollLeft = next >= half ? next - half : next;
         }
       } else {
         lastTimeRef.current = time;
@@ -97,9 +102,12 @@ export function ScrollCarousel({ children, accent = '#3CB1FF', showProgress = tr
     };
 
     rafRef.current = requestAnimationFrame(tick);
+
     return () => {
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
       if (autoScrollTimeout.current) clearTimeout(autoScrollTimeout.current);
+      // Восстанавливаем scroll-snap когда автоскролл выключен
+      if (el) el.style.scrollSnapType = prevSnap;
     };
   }, [autoScroll, autoScrollSpeed]);
 

@@ -73,12 +73,12 @@ function useMobileCardDimensions() {
     // gap between cards is 10px
     const gap = 10;
     let cardWidth: number;
-    if (width <= 360) cardWidth = Math.floor((width - 28 - gap) / 2.1);
-    else if (width <= 430) cardWidth = Math.floor((width - 28 - gap) / 2.15);
-    else if (width <= 640) cardWidth = Math.floor((width - 28 - gap) / 2.3);
-    else cardWidth = 155;
-    // Height: 16:9 ratio — clean widescreen, less tall
-    const cardHeight = Math.round(cardWidth * (9 / 16));
+    if (width <= 360) cardWidth = Math.floor((width - 28 - gap) / 1.9);
+    else if (width <= 430) cardWidth = Math.floor((width - 28 - gap) / 1.95);
+    else if (width <= 640) cardWidth = Math.floor((width - 28 - gap) / 2.1);
+    else cardWidth = 165;
+    // Height: ~16:8.5 — slightly taller than pure 16:9
+    const cardHeight = Math.round(cardWidth * (8.5 / 16));
     return { cardWidth, cardHeight };
   }, [width]);
 }
