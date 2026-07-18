@@ -846,30 +846,26 @@
 }
 
 /*
- * Overlay text area — sits directly on top of the image.
- * Strong gradient scrim ensures legibility over any image.
+ * Overlay text area — centered both axes over the image.
  */
 .feature-card-img__footer {
   position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  /* Compact scrim fits shorter landscape cards */
-  padding: 28px 8px 8px;
+  inset: 0;
+  padding: 8px;
   background: linear-gradient(
     to top,
-    rgba(2,4,16,0.94) 0%,
-    rgba(2,4,16,0.75) 38%,
-    rgba(2,4,16,0.24) 65%,
+    rgba(2,4,16,0.80) 0%,
+    rgba(2,4,16,0.45) 40%,
+    rgba(2,4,16,0.20) 70%,
     transparent 100%
   );
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
+  justify-content: center;
   align-items: center;
-  gap: 3px;
+  gap: 0;
   pointer-events: none;
-  border-radius: 0 0 var(--r-lg) var(--r-lg);
+  border-radius: var(--r-lg);
   text-align: center;
 }
 

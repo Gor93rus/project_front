@@ -107,9 +107,8 @@ function FeatureCard({ item, cardWidth, cardHeight, index }: { item: FeatureItem
         aria-hidden="true"
       />
       <div className="feature-card-img__bevel" aria-hidden="true" />
-      {/* Text overlay — centered, bottom half of card */}
+      {/* Text overlay — centered */}
       <div className="feature-card-img__footer">
-        <div className="feature-card-img__accent-bar" />
         <span className="feature-card-img__title">{item.title}</span>
       </div>
     </motion.div>
@@ -140,7 +139,6 @@ function BentoImgCard({ item, delay = 0 }: { item: FeatureItem; delay?: number }
       />
       <div className="feature-card-img__bevel" aria-hidden="true" />
       <div className="feature-card-img__footer">
-        <div className="feature-card-img__accent-bar" />
         <span className="feature-card-img__title">{item.title}</span>
       </div>
     </motion.div>
@@ -218,7 +216,7 @@ export function FeaturesBanner() {
 
       {/* Mobile carousel — ScrollCarousel gives the fade-edge effect */}
       <div className="md:hidden">
-        <ScrollCarousel accent="var(--primary)" showProgress={false}>
+        <ScrollCarousel accent="var(--primary)" showProgress={false} autoScroll autoScrollSpeed={38}>
           {mobileCards}
         </ScrollCarousel>
       </div>

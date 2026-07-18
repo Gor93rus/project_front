@@ -1,9 +1,11 @@
-import { useEffect, useRef, useState, type ReactNode } from 'react';
+import { useEffect, useRef, useState, useCallback, type ReactNode } from 'react';
 
 interface Props {
   children: ReactNode;
   accent?: string;
   showProgress?: boolean;
+  autoScroll?: boolean;
+  autoScrollSpeed?: number; // px per second
 }
 
 const opaque = '#000';
@@ -19,13 +21,17 @@ function maskFor(progress: number) {
   return `linear-gradient(90deg, ${transparent}, ${opaque} 20%, ${opaque} 80%, ${transparent})`;
 }
 
-export function ScrollCarousel({ children, accent = '#3CB1FF', showProgress = true }: Props) {
+export function ScrollCarousel({ children, accent = '#3CB1FF', showProgress = true, autoScroll = false, autoScrollSpeed = 40 }: Props) {
   const ref = useRef<HTMLDivElement>(null);
   const [progress, setProgress] = useState(0);
   const [activeIndex, setActiveIndex] = useState(0);
   const snapTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const autoScrollPaused = useRef(false);
+  const autoScrollTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const rafRef = useRef<number | null>(null);
+  const lastTimeRef = useRef<number>(0);
 
-  const update = () => {
+  const update = useCallback(() => {
     const el = ref.current;
     if (!el) return;
     const max = el.scrollWidth - el.clientWidth;
@@ -46,10 +52,10 @@ export function ScrollCarousel({ children, accent = '#3CB1FF', showProgress = tr
       }
     }
     setActiveIndex(closestIdx);
-  };
+  }, []);
 
   // Снэппинг при остановке скролла
-  const handleScrollEnd = () => {
+  const handleScrollEnd = useCallback(() => {
     if (snapTimeout.current) clearTimeout(snapTimeout.current);
     snapTimeout.current = setTimeout(() => {
       const el = ref.current;
@@ -61,14 +67,51 @@ export function ScrollCarousel({ children, accent = '#3CB1FF', showProgress = tr
         el.scrollTo({ left: scrollTo, behavior: 'smooth' });
       }
     }, 150);
-  };
+  }, [activeIndex]);
+
+  // Автоскролл — плавный rAF-цикл, пауза при ручном скролле
+  useEffect(() => {
+    if (!autoScroll) return;
+
+    const tick = (time: number) => {
+      const el = ref.current;
+      if (el && !autoScrollPaused.current) {
+        const dt = lastTimeRef.current ? (time - lastTimeRef.current) / 1000 : 0;
+        lastTimeRef.current = time;
+        const max = el.scrollWidth - el.clientWidth;
+        if (max > 0) {
+          const next = el.scrollLeft + autoScrollSpeed * dt;
+          if (next >= max) {
+            // Плавно возвращаемся на начало через небольшую паузу
+            autoScrollPaused.current = true;
+            el.scrollTo({ left: max, behavior: 'instant' as ScrollBehavior });
+            autoScrollTimeout.current = setTimeout(() => {
+              el.scrollTo({ left: 0, behavior: 'smooth' });
+              setTimeout(() => { autoScrollPaused.current = false; }, 800);
+            }, 600);
+          } else {
+            el.scrollLeft = next;
+          }
+        }
+      } else {
+        lastTimeRef.current = time;
+      }
+      rafRef.current = requestAnimationFrame(tick);
+    };
+
+    rafRef.current = requestAnimationFrame(tick);
+    return () => {
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
+      if (autoScrollTimeout.current) clearTimeout(autoScrollTimeout.current);
+    };
+  }, [autoScroll, autoScrollSpeed]);
 
   useEffect(() => {
     update();
     const ro = new ResizeObserver(update);
     if (ref.current) ro.observe(ref.current);
     return () => ro.disconnect();
-  }, []);
+  }, [update]);
 
   const radius = 14;
   const circumference = 2 * Math.PI * radius;
@@ -77,6 +120,14 @@ export function ScrollCarousel({ children, accent = '#3CB1FF', showProgress = tr
       <div className="relative pt-1 pb-1" style={{ overflowY: 'visible' }}>
       <div
         ref={ref}
+        onPointerDown={() => {
+          autoScrollPaused.current = true;
+          if (autoScrollTimeout.current) clearTimeout(autoScrollTimeout.current);
+        }}
+        onPointerUp={() => {
+          // Resume after a delay so user can finish scrolling naturally
+          autoScrollTimeout.current = setTimeout(() => { autoScrollPaused.current = false; }, 3000);
+        }}
         onScroll={() => { update(); handleScrollEnd(); }}
         className="flex gap-3 overflow-x-auto scrollbar-none scroll-mask"
         style={{
@@ -85,10 +136,9 @@ export function ScrollCarousel({ children, accent = '#3CB1FF', showProgress = tr
           ['--scroll-mask' as string]: maskFor(progress),
           paddingRight: 24,
           paddingLeft: 0,
-          // Вертикальные отступы дают тени карточек место для отрисовки:
-          // overflow-x:auto принудительно делает overflow-y:auto и иначе срезает нижнюю тень.
-          paddingTop: 8,
-          paddingBottom: 14,
+          // Extra vertical padding so hover scale/shadow is not clipped by overflow-x:auto
+          paddingTop: 10,
+          paddingBottom: 16,
           scrollSnapType: 'x mandatory',
         }}>
         {Array.isArray(children)
@@ -96,6 +146,7 @@ export function ScrollCarousel({ children, accent = '#3CB1FF', showProgress = tr
               <div
                 key={i}
                 className="snap-center shrink-0"
+                style={{ overflow: 'visible' }}
               >
                 {child}
               </div>
