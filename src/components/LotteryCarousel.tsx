@@ -114,6 +114,8 @@ function LotteryCard({ lottery }: { lottery: Lottery }) {
       style={{
         position: 'relative', borderRadius: 20, flexShrink: 0, cursor: 'pointer',
         width: 182, minHeight: 390,
+        // Clip children (image pulse stays inside card)
+        overflow: 'hidden',
         // Усиленная направленная фаска (glass-3d): светлый верх/лево, тёмный низ/право
         borderTop: '2px solid rgba(255,255,255,0.18)',
         borderLeft: '1.5px solid rgba(255,255,255,0.09)',
@@ -130,7 +132,7 @@ function LotteryCard({ lottery }: { lottery: Lottery }) {
       }}
     >
       {/* Background */}
-      <div style={{ position: 'absolute', inset: 0, borderRadius: 20, overflow: 'hidden' }}>
+      <div style={{ position: 'absolute', inset: 0 }}>
         <div style={{
           position: 'absolute', inset: 0,
           background: `radial-gradient(ellipse 80% 60% at 50% 30%, ${accent}55 0%, transparent 55%),
@@ -142,41 +144,55 @@ function LotteryCard({ lottery }: { lottery: Lottery }) {
 
       {/* Pulsing neon border */}
       <motion.div
-        style={{ position: 'absolute', inset: 0, borderRadius: 20, pointerEvents: 'none', zIndex: 10, border: '2px solid transparent' }}
+        style={{ position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 10, border: '2px solid transparent' }}
         animate={{ borderColor: [`${accent}20`, `${accent}80`, `${accent}20`], boxShadow: [`0 0 0px ${accent}00`, `0 0 12px ${accent}60`, `0 0 0px ${accent}00`] }}
         transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
       />
 
-      {/* Card image */}
+      {/* Card image — fills the upper portion of the card, blending into the background.
+          The scale animation is applied to the <img> itself, not the container,
+          so the container clips it correctly via the parent's overflow:hidden. */}
       {cardImage && (
-        <motion.div
-          style={{ position: 'absolute', top: '8%', left: 0, right: 0, display: 'flex', justifyContent: 'center', zIndex: 5 }}
-          animate={{ y: [0, -5, 0], scale: [1, 1.04, 1] }}
-          transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
+        <div
+          style={{
+            position: 'absolute', top: 0, left: 0, right: 0, height: '62%',
+            zIndex: 5,
+            // Dark solid bg to cover any checkerboard / transparent PNG edges
+            backgroundColor: '#06080f',
+          }}
         >
-          <img
+          <motion.img
             src={cardImage}
             alt={lottery.name}
+            animate={{ scale: [1, 1.04, 1] }}
+            transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut' }}
             style={{
-              width: 172, height: 175, objectFit: 'contain',
-              position: 'relative', zIndex: 1,
-              filter: `drop-shadow(0 8px 20px rgba(0,0,0,0.5)) drop-shadow(0 0 18px ${accent}40)`,
+              width: '100%', height: '115%', objectFit: 'contain', objectPosition: 'center top',
+              display: 'block',
+              transformOrigin: 'center top',
+              filter: `drop-shadow(0 12px 28px rgba(0,0,0,0.6)) drop-shadow(0 0 22px ${accent}50)`,
             }}
           />
-        </motion.div>
+          {/* Fade image into card background at the bottom */}
+          <div style={{
+            position: 'absolute', bottom: 0, left: 0, right: 0, height: '55%',
+            background: 'linear-gradient(to bottom, transparent 0%, var(--bg-0, #06080f) 100%)',
+            pointerEvents: 'none',
+          }} />
+        </div>
       )}
 
-      {/* Fade mask */}
-      <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '53%', zIndex: 6, pointerEvents: 'none', maskImage: 'linear-gradient(180deg, #000 0%, #000 65%, transparent 100%)', WebkitMaskImage: 'linear-gradient(180deg, #000 0%, #000 65%, transparent 100%)' }} />
+      {/* Fade mask — blends card image area into content below */}
+      <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '65%', zIndex: 6, pointerEvents: 'none', maskImage: 'linear-gradient(180deg, transparent 0%, transparent 50%, #000 100%)', WebkitMaskImage: 'linear-gradient(180deg, transparent 0%, transparent 50%, #000 100%)' }} />
       {/* Glass overlay */}
-      <div style={{ position: 'absolute', inset: 0, borderRadius: 20, pointerEvents: 'none', zIndex: 8, background: 'linear-gradient(165deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.01) 35%, transparent 60%)' }} />
+      <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 8, background: 'linear-gradient(165deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.01) 35%, transparent 60%)' }} />
       {/* Neon border top */}
-      <div style={{ position: 'absolute', inset: 0, borderRadius: 20, pointerEvents: 'none', zIndex: 9, padding: 1, background: `linear-gradient(180deg, ${accent}50 0%, ${accent}25 50%, transparent 100%)`, WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)', WebkitMaskComposite: 'xor', maskComposite: 'exclude' }} />
+      <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 9, padding: 1, background: `linear-gradient(180deg, ${accent}50 0%, ${accent}25 50%, transparent 100%)`, WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)', WebkitMaskComposite: 'xor', maskComposite: 'exclude' }} />
 
       {/* Content */}
       <div style={{ position: 'relative', zIndex: 10, display: 'flex', flexDirection: 'column', height: '100%', minHeight: 390, padding: '10px 12px 14px' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 'auto' }}>
-          <span style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.12em', color: 'rgba(255,255,255,0.65)', fontFamily: "var(--font-mono)" }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 'auto', gap: 4 }}>
+          <span style={{ fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'rgba(255,255,255,0.65)', fontFamily: "var(--font-mono)", whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', minWidth: 0 }}>
             {lottery.drawLabel}
           </span>
           {isLive ? (
@@ -192,7 +208,7 @@ function LotteryCard({ lottery }: { lottery: Lottery }) {
           )}
         </div>
         <div style={{ marginTop: 'auto' }}>
-          <p style={{ fontSize: 15, fontWeight: 700, color: '#fff', textAlign: 'center', marginBottom: 2, letterSpacing: '-0.02em', fontFamily: "'Space Grotesk', sans-serif", textShadow: '0 2px 12px rgba(0,0,0,0.5)' }}>
+          <p style={{ fontSize: 14, fontWeight: 700, color: '#fff', textAlign: 'center', marginBottom: 2, letterSpacing: '-0.01em', fontFamily: "'Space Grotesk', sans-serif", textShadow: '0 2px 12px rgba(0,0,0,0.5)', lineHeight: 1.2, wordBreak: 'break-word', whiteSpace: 'normal', padding: '0 2px' }}>
             {lottery.name}
           </p>
           <p style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', textAlign: 'center', color: 'rgba(255,255,255,0.45)', letterSpacing: '0.18em', marginBottom: 2, fontFamily: "var(--font-mono)" }}>
