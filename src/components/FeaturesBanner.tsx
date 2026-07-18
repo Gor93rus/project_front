@@ -94,8 +94,6 @@ function FeatureCard({ item, cardWidth, cardHeight, index }: { item: FeatureItem
         width: cardWidth,
         minWidth: cardWidth,
         height: cardHeight,
-        ['--fc-accent' as string]: item.accent,
-        ['--fc-glow' as string]: item.glow,
       }}
       initial={{ opacity: 0, y: 24, scale: 0.94 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -110,7 +108,6 @@ function FeatureCard({ item, cardWidth, cardHeight, index }: { item: FeatureItem
       <div className="feature-card-img__bevel" aria-hidden="true" />
       {/* Text — left aligned */}
       <div className="feature-card-img__footer">
-        <div className="feature-card-img__accent-bar" />
         <span className="feature-card-img__title">{item.title}</span>
       </div>
     </motion.div>
@@ -124,10 +121,6 @@ function BentoImgCard({ item, delay = 0 }: { item: FeatureItem; delay?: number }
   return (
     <motion.div
       className="feature-card-img feature-card-img--bento"
-      style={{
-        ['--fc-accent' as string]: item.accent,
-        ['--fc-glow' as string]: item.glow,
-      }}
       initial={{ opacity: 0, y: 20, scale: 0.96 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
       transition={{ type: 'spring', stiffness: 280, damping: 26, delay }}
@@ -141,7 +134,6 @@ function BentoImgCard({ item, delay = 0 }: { item: FeatureItem; delay?: number }
       />
       <div className="feature-card-img__bevel" aria-hidden="true" />
       <div className="feature-card-img__footer">
-        <div className="feature-card-img__accent-bar" />
         <span className="feature-card-img__title">{item.title}</span>
       </div>
     </motion.div>

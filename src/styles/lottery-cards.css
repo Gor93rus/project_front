@@ -775,38 +775,18 @@
   border-radius: var(--r-lg);
   overflow: hidden;
   cursor: pointer;
-  /*
-   * Solid dark base — no transparency, card always visible against any bg.
-   */
   background: #080c1a;
-  /*
-   * 3D glass bevel:
-   * - top+left: bright specular highlight (light hits top-left)
-   * - bottom+right: dark shadow edge (receding from light)
-   */
-  border-top: 1.5px solid rgba(255,255,255,0.32);
-  border-left: 1.5px solid rgba(255,255,255,0.18);
-  border-right: 1.5px solid rgba(0,0,0,0.55);
-  border-bottom: 1.5px solid rgba(0,0,0,0.65);
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,0.14),
-    0 4px 20px rgba(0,0,0,0.70),
-    0 2px 6px rgba(0,0,0,0.50),
-    0 0 30px rgba(var(--fc-glow-rgb, 60,177,255), 0.06);
-  transition: transform 0.25s cubic-bezier(0.25,0.46,0.45,0.94),
-              box-shadow 0.25s ease;
+  /* Single uniform border — quiet, not decorative */
+  border: 1px solid rgba(255,255,255,0.10);
+  box-shadow: 0 2px 12px rgba(0,0,0,0.55);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-/* Active / hover — NO scale on image, only accent glow ring */
+/* Active / hover — subtle white outline only, no glow */
 .feature-card-img--active,
 .feature-card-img:hover {
-  border-top-color: rgba(255,255,255,0.44);
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,0.18),
-    0 6px 28px rgba(0,0,0,0.75),
-    0 0 0 1.5px var(--fc-glow, rgba(255,255,255,0.08)),
-    0 0 28px var(--fc-glow, rgba(255,255,255,0.12)),
-    0 0 48px var(--fc-glow, rgba(255,255,255,0.06));
+  border-color: rgba(255,255,255,0.28);
+  box-shadow: 0 2px 16px rgba(0,0,0,0.60);
 }
 
 /*
@@ -831,27 +811,16 @@
   filter: saturate(1.35) brightness(1.18);
 }
 
-/*
- * Glass bevel — top-left light catch + subtle vignette on edges.
- * More ambient light than before.
- */
+/* Minimal vignette — just darkens bottom edge so text stays readable */
 .feature-card-img__bevel {
   position: absolute;
   inset: 0;
   border-radius: inherit;
-  background:
-    linear-gradient(
-      135deg,
-      rgba(255,255,255,0.10) 0%,
-      rgba(255,255,255,0.03) 25%,
-      transparent 55%,
-      rgba(0,0,0,0.08) 100%
-    );
-  /* Strong ambient glow from the accent color in bottom-right */
-  box-shadow:
-    inset 0 0 50px rgba(0,0,0,0.22),
-    inset 0 -24px 40px rgba(0,0,0,0.20),
-    inset 0 0 60px var(--fc-glow, rgba(255,255,255,0.04));
+  background: linear-gradient(
+    to bottom,
+    transparent 40%,
+    rgba(0,0,0,0.12) 100%
+  );
   pointer-events: none;
 }
 
@@ -883,7 +852,7 @@
   text-align: left;
 }
 
-/* Title — left-aligned, strong drop-shadow for readability */
+/* Title — left-aligned, clean shadow for readability only */
 .feature-card-img__title {
   font-family: var(--font-display);
   font-size: 11px;
@@ -892,20 +861,7 @@
   letter-spacing: 0.01em;
   color: #ffffff;
   text-align: left;
-  text-shadow:
-    0 1px 8px rgba(0,0,0,0.98),
-    0 2px 4px rgba(0,0,0,0.80),
-    0 0 18px var(--fc-glow, rgba(255,255,255,0.22));
-}
-
-/* Accent underline bar — left-aligned below title */
-.feature-card-img__accent-bar {
-  width: 16px;
-  height: 2px;
-  border-radius: 2px;
-  background: var(--fc-accent, rgba(255,255,255,0.5));
-  box-shadow: 0 0 8px var(--fc-glow, rgba(255,255,255,0.3));
-  flex-shrink: 0;
+  text-shadow: 0 1px 6px rgba(0,0,0,0.90);
 }
 
 /* ── Desktop — single horizontal row of 6 compact cards ─────────────────── */
