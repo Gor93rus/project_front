@@ -147,27 +147,38 @@ function LotteryCard({ lottery }: { lottery: Lottery }) {
         transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
       />
 
-      {/* Card image */}
+      {/* Card image — fills the upper portion of the card, blending into the background */}
       {cardImage && (
         <motion.div
-          style={{ position: 'absolute', top: '8%', left: 0, right: 0, display: 'flex', justifyContent: 'center', zIndex: 5 }}
-          animate={{ y: [0, -5, 0], scale: [1, 1.04, 1] }}
-          transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
+          style={{
+            position: 'absolute', top: 0, left: 0, right: 0, height: '62%',
+            zIndex: 5, overflow: 'hidden', borderRadius: '20px 20px 0 0',
+            // solid background prevents transparent PNG edges from showing checkerboard
+            backgroundColor: '#06080f',
+          }}
+          animate={{ scale: [1, 1.03, 1] }}
+          transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut' }}
         >
           <img
             src={cardImage}
             alt={lottery.name}
             style={{
-              width: 172, height: 175, objectFit: 'contain',
-              position: 'relative', zIndex: 1,
-              filter: `drop-shadow(0 8px 20px rgba(0,0,0,0.5)) drop-shadow(0 0 18px ${accent}40)`,
+              width: '100%', height: '115%', objectFit: 'cover', objectPosition: 'center top',
+              display: 'block',
+              filter: `drop-shadow(0 12px 28px rgba(0,0,0,0.6)) drop-shadow(0 0 22px ${accent}50)`,
             }}
           />
+          {/* Fade image into card background at the bottom */}
+          <div style={{
+            position: 'absolute', bottom: 0, left: 0, right: 0, height: '45%',
+            background: 'linear-gradient(to bottom, transparent 0%, var(--bg-0, #06080f) 100%)',
+            pointerEvents: 'none',
+          }} />
         </motion.div>
       )}
 
-      {/* Fade mask */}
-      <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '53%', zIndex: 6, pointerEvents: 'none', maskImage: 'linear-gradient(180deg, #000 0%, #000 65%, transparent 100%)', WebkitMaskImage: 'linear-gradient(180deg, #000 0%, #000 65%, transparent 100%)' }} />
+      {/* Fade mask — blends card image area into content below */}
+      <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '65%', zIndex: 6, pointerEvents: 'none', maskImage: 'linear-gradient(180deg, transparent 0%, transparent 50%, #000 100%)', WebkitMaskImage: 'linear-gradient(180deg, transparent 0%, transparent 50%, #000 100%)' }} />
       {/* Glass overlay */}
       <div style={{ position: 'absolute', inset: 0, borderRadius: 20, pointerEvents: 'none', zIndex: 8, background: 'linear-gradient(165deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.01) 35%, transparent 60%)' }} />
       {/* Neon border top */}

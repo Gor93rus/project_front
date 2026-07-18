@@ -58,8 +58,8 @@
           id: 'weekend-special', slug: 'weekend-special',
           shortName: 'BINGO', drawLabel: 'BIWEEKLY',
           gradient: ['#FF6B35', '#FF8C42'],
-          featured: true, icon: 'coin', pattern: 'rays', accentColor: '#FF8C42',
-          // cardImage: 'src/assets/cards/weekend-special.png', — добавить PNG при наличии
+          featured: true, icon: 'coin', pattern: 'rays',           accentColor: '#FF8C42',
+          cardImage: 'src/assets/cards/weekend-special.png',
         },
         'big-weekend': {
           id: 'big-weekend', slug: 'big-weekend',
