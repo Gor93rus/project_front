@@ -225,7 +225,7 @@ function LotteryCard({ lottery }: { lottery: Lottery }) {
           ) : (
             <SegmentedCountdown target={lottery.nextDraw} accent={accent} />
           )}
-          <PremiumButton label={`Buy · ${lottery.ticketPrice} ${lottery.currency}`} accent={lottery.accentColor} gradient={lottery.gradient} />
+          <PremiumButton label={`Play · ${lottery.ticketPrice} ${lottery.currency}`} accent={lottery.accentColor} gradient={lottery.gradient} />
         </div>
       </div>
     </motion.div>
