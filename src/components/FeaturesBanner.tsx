@@ -6,7 +6,9 @@ import { ScrollCarousel } from './ScrollCarousel';
 interface FeatureItem {
   title: string;
   image: string;
-  accent: string;
+  borderTop: string;
+  borderTopHover: string;
+  ring: string;
   glow: string;
 }
 
@@ -14,38 +16,50 @@ const ITEMS: FeatureItem[] = [
   {
     title: 'Instant Payouts',
     image: '/images/card-instant-payouts.png',
-    accent: 'var(--coral)',
-    glow: 'var(--coral-glow)',
+    borderTop: 'rgba(255,100,60,0.55)',
+    borderTopHover: 'rgba(255,100,60,0.85)',
+    ring: 'rgba(255,100,60,0.08)',
+    glow: 'rgba(255,100,60,0.12)',
   },
   {
     title: 'TON & USDT',
     image: '/images/card-ton-usdt.png',
-    accent: 'var(--primary)',
-    glow: 'var(--primary-glow)',
+    borderTop: 'rgba(10,124,255,0.55)',
+    borderTopHover: 'rgba(10,124,255,0.85)',
+    ring: 'rgba(10,124,255,0.08)',
+    glow: 'rgba(10,124,255,0.12)',
   },
   {
     title: 'Provably Fair',
     image: '/images/card-provably-fair.png',
-    accent: 'var(--secondary)',
-    glow: 'var(--secondary-glow)',
+    borderTop: 'rgba(40,200,100,0.55)',
+    borderTopHover: 'rgba(40,200,100,0.85)',
+    ring: 'rgba(40,200,100,0.08)',
+    glow: 'rgba(40,200,100,0.12)',
   },
   {
     title: 'Massive Prizes',
     image: '/images/card-massive-prizes.png',
-    accent: 'var(--gold)',
-    glow: 'var(--gold-glow)',
+    borderTop: 'rgba(250,200,20,0.55)',
+    borderTopHover: 'rgba(250,200,20,0.85)',
+    ring: 'rgba(250,200,20,0.08)',
+    glow: 'rgba(250,200,20,0.12)',
   },
   {
     title: 'Smart Contract',
     image: '/images/card-smart-contract.png',
-    accent: 'rgb(var(--cyan-400))',
-    glow: 'rgba(var(--cyan-400),0.35)',
+    borderTop: 'rgba(0,210,230,0.55)',
+    borderTopHover: 'rgba(0,210,230,0.85)',
+    ring: 'rgba(0,210,230,0.08)',
+    glow: 'rgba(0,210,230,0.12)',
   },
   {
     title: 'Audited Security',
     image: '/images/card-audited-security.png',
-    accent: 'var(--emerald)',
-    glow: 'var(--emerald-glow)',
+    borderTop: 'rgba(80,210,120,0.55)',
+    borderTopHover: 'rgba(80,210,120,0.85)',
+    ring: 'rgba(80,210,120,0.08)',
+    glow: 'rgba(80,210,120,0.12)',
   },
 ];
 
@@ -73,12 +87,12 @@ function useMobileCardDimensions() {
     // gap between cards is 10px
     const gap = 10;
     let cardWidth: number;
-    if (width <= 360) cardWidth = Math.floor((width - 28 - gap) / 1.9);
-    else if (width <= 430) cardWidth = Math.floor((width - 28 - gap) / 1.95);
-    else if (width <= 640) cardWidth = Math.floor((width - 28 - gap) / 2.1);
-    else cardWidth = 165;
-    // Height: ~16:8.5 — slightly taller than pure 16:9
-    const cardHeight = Math.round(cardWidth * (8.5 / 16));
+    if (width <= 360) cardWidth = Math.floor((width - 32 - gap) / 1.75);
+    else if (width <= 430) cardWidth = Math.floor((width - 32 - gap) / 1.8);
+    else if (width <= 640) cardWidth = Math.floor((width - 32 - gap) / 1.9);
+    else cardWidth = 200;
+    // Height: 16:10 — заметно выше, образ лучше читается
+    const cardHeight = Math.round(cardWidth * (10 / 16));
     return { cardWidth, cardHeight };
   }, [width]);
 }
@@ -94,6 +108,11 @@ function FeatureCard({ item, cardWidth, cardHeight, index }: { item: FeatureItem
         width: cardWidth,
         minWidth: cardWidth,
         height: cardHeight,
+        isolation: 'isolate',
+        ['--fc-border-top' as string]: item.borderTop,
+        ['--fc-border-top-hover' as string]: item.borderTopHover,
+        ['--fc-ring' as string]: item.ring,
+        ['--fc-glow' as string]: item.glow,
       }}
       initial={{ opacity: 0, y: 24, scale: 0.94 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -121,10 +140,16 @@ function BentoImgCard({ item, delay = 0 }: { item: FeatureItem; delay?: number }
   return (
     <motion.div
       className="feature-card-img feature-card-img--bento"
+      style={{
+        isolation: 'isolate',
+        ['--fc-border-top' as string]: item.borderTop,
+        ['--fc-border-top-hover' as string]: item.borderTopHover,
+        ['--fc-ring' as string]: item.ring,
+        ['--fc-glow' as string]: item.glow,
+      }}
       initial={{ opacity: 0, y: 20, scale: 0.96 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
       transition={{ type: 'spring', stiffness: 280, damping: 26, delay }}
-      whileHover={{ scale: 1.018 }}
       whileTap={{ scale: 0.97 }}
     >
       <div

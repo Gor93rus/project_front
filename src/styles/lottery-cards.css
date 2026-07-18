@@ -777,66 +777,66 @@
   cursor: pointer;
 
   /*
-   * isolation: isolate — создаёт новый stacking context.
-   * Блокирует mix-blend-mode aurora-blobs от проникновения внутрь карточки.
-   * Это единственно надёжный способ без backdrop-filter.
+   * isolation: isolate + will-change: transform гарантируют новый
+   * compositing layer — aurora mix-blend-mode не пробивает внутрь.
    */
   isolation: isolate;
+  will-change: transform;
 
-  /*
-   * Полностью непрозрачный тёмный фон.
-   * Виден только если изображение не загрузилось.
-   */
+  /* Полностью непрозрачный тёмный фон */
   background: #07091c;
 
   /*
-   * 3D glass bevel — асимметричный бортик:
-   * верх и лево светлее (свет сверху-слева), низ и право темнее (тень).
-   * Толщина 1.5px — хорошо читается на маленьких карточках.
+   * 3D glass bevel — асимметричный бортик в стиле карточек лотерей:
+   * верхний — цветной акцент (var(--fc-accent)), левый — светлый,
+   * правый и нижний — тёмные.
    */
-  border-top:    1.5px solid rgba(255,255,255,0.36);
-  border-left:   1.5px solid rgba(255,255,255,0.20);
+  border-top:    1.5px solid var(--fc-border-top, rgba(255,255,255,0.30));
+  border-left:   1.5px solid rgba(255,255,255,0.14);
   border-right:  1.5px solid rgba(0,0,0,0.50);
   border-bottom: 1.5px solid rgba(0,0,0,0.60);
 
   /*
-   * box-shadow:
-   * - inset верх: тонкий белый highlight сразу под верхним бортиком
-   * - inset низ: тёмная тень под нижним бортиком
-   * - outer: лёгкое поднятие над фоном
+   * box-shadow в стиле лотерейных карточек:
+   * - inset highlight сверху
+   * - outer ring тонкий 1px в цвет акцента
+   * - мягкое ambient glow в цвет акцента
+   * - подъём над фоном
    */
   box-shadow:
-    inset 0  1px 0   rgba(255,255,255,0.18),
-    inset 0 -1px 0   rgba(0,0,0,0.40),
-    0 4px 16px       rgba(0,0,0,0.65);
+    inset 0 1px 0 rgba(255,255,255,0.14),
+    0 0 0 1px var(--fc-ring, rgba(255,255,255,0.04)),
+    0 0 20px var(--fc-glow, rgba(255,255,255,0.06)),
+    0 4px 16px rgba(0,0,0,0.65);
 
-  transition: border-top-color 0.2s ease, border-left-color 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    border-top-color 0.25s ease,
+    box-shadow 0.25s ease;
 }
 
-/* Hover / active — верхний и левый бортик ярче, подъём усиливается */
+/* Hover / active — glow усиливается, без scale (scale ломает overflow+clip) */
 .feature-card-img--active,
 .feature-card-img:hover {
-  border-top-color:  rgba(255,255,255,0.55);
-  border-left-color: rgba(255,255,255,0.32);
+  border-top-color: var(--fc-border-top-hover, rgba(255,255,255,0.50));
   box-shadow:
-    inset 0  1px 0   rgba(255,255,255,0.26),
-    inset 0 -1px 0   rgba(0,0,0,0.40),
-    0 6px 22px       rgba(0,0,0,0.72);
+    inset 0 1px 0 rgba(255,255,255,0.20),
+    0 0 0 1px var(--fc-ring, rgba(255,255,255,0.08)),
+    0 0 28px var(--fc-glow, rgba(255,255,255,0.12)),
+    0 6px 22px rgba(0,0,0,0.70);
 }
 
 /*
  * Full-bleed background image.
- * background-position: center right — object lands on the RIGHT side.
- * NO transform scale to prevent any cropping on hover.
+ * background-size: 100% 100% — растягивает картинку точно в размер карточки,
+ * никаких обрезок ни сверху ни снизу.
  */
 .feature-card-img__bg {
   position: absolute;
   inset: 0;
-  background-size: cover;
-  background-position: center right;
+  background-size: 100% 100%;
+  background-position: center center;
   background-repeat: no-repeat;
   filter: saturate(1.20) brightness(1.10);
-  /* No scale — image stays flush, no cropping */
   transition: filter 0.45s ease;
 }
 
