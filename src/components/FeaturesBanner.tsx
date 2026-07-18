@@ -70,14 +70,15 @@ function useMobileCardDimensions() {
 
   return useMemo(() => {
     // Wide landscape cards — ~2 visible at a time on screen
-    // Width: slightly less than half screen so 2.3 are visible (inviting scroll)
+    // gap between cards is 10px
+    const gap = 10;
     let cardWidth: number;
-    if (width <= 360) cardWidth = Math.floor((width - 28) / 2.1);
-    else if (width <= 430) cardWidth = Math.floor((width - 28) / 2.15);
-    else if (width <= 640) cardWidth = Math.floor((width - 28) / 2.3);
-    else cardWidth = 155;
-    // Height: 16:11 landscape ratio — shorter than wide, 2 fit on screen
-    const cardHeight = Math.round(cardWidth * 0.72);
+    if (width <= 360) cardWidth = Math.floor((width - 28 - gap) / 1.9);
+    else if (width <= 430) cardWidth = Math.floor((width - 28 - gap) / 1.95);
+    else if (width <= 640) cardWidth = Math.floor((width - 28 - gap) / 2.1);
+    else cardWidth = 165;
+    // Height: ~16:8.5 — slightly taller than pure 16:9
+    const cardHeight = Math.round(cardWidth * (8.5 / 16));
     return { cardWidth, cardHeight };
   }, [width]);
 }
@@ -93,8 +94,6 @@ function FeatureCard({ item, cardWidth, cardHeight, index }: { item: FeatureItem
         width: cardWidth,
         minWidth: cardWidth,
         height: cardHeight,
-        ['--fc-accent' as string]: item.accent,
-        ['--fc-glow' as string]: item.glow,
       }}
       initial={{ opacity: 0, y: 24, scale: 0.94 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -107,7 +106,7 @@ function FeatureCard({ item, cardWidth, cardHeight, index }: { item: FeatureItem
         aria-hidden="true"
       />
       <div className="feature-card-img__bevel" aria-hidden="true" />
-      {/* Text overlay — centered */}
+      {/* Text — left aligned */}
       <div className="feature-card-img__footer">
         <span className="feature-card-img__title">{item.title}</span>
       </div>
@@ -122,10 +121,6 @@ function BentoImgCard({ item, delay = 0 }: { item: FeatureItem; delay?: number }
   return (
     <motion.div
       className="feature-card-img feature-card-img--bento"
-      style={{
-        ['--fc-accent' as string]: item.accent,
-        ['--fc-glow' as string]: item.glow,
-      }}
       initial={{ opacity: 0, y: 20, scale: 0.96 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
       transition={{ type: 'spring', stiffness: 280, damping: 26, delay }}
@@ -169,10 +164,16 @@ function DesktopBentoGrid() {
 export function FeaturesBanner() {
   const { cardWidth, cardHeight } = useMobileCardDimensions();
 
-  const mobileCards = useMemo(
-    () => ITEMS.map((item, i) => <FeatureCard key={i} item={item} cardWidth={cardWidth} cardHeight={cardHeight} index={i} />),
-    [cardWidth, cardHeight],
-  );
+  // Дублируем карточки для бесшовного бесконечного автоскролла
+  const mobileCards = useMemo(() => {
+    const single = ITEMS.map((item, i) => (
+      <FeatureCard key={i} item={item} cardWidth={cardWidth} cardHeight={cardHeight} index={i} />
+    ));
+    const clone = ITEMS.map((item, i) => (
+      <FeatureCard key={`clone-${i}`} item={item} cardWidth={cardWidth} cardHeight={cardHeight} index={i} />
+    ));
+    return [...single, ...clone];
+  }, [cardWidth, cardHeight]);
 
   return (
     <section className="px-4 pt-2">

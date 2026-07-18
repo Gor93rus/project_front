@@ -69,29 +69,31 @@ export function ScrollCarousel({ children, accent = '#3CB1FF', showProgress = tr
     }, 150);
   }, [activeIndex]);
 
-  // Автоскролл — плавный rAF-цикл, пауза при ручном скролле
+  // Автоскролл — плавный rAF-цикл, бесшовный infinite loop
   useEffect(() => {
     if (!autoScroll) return;
 
+    const el = ref.current;
+    if (!el) return;
+
+    // Отключаем scroll-snap на время автоскролла — иначе браузер
+    // перехватывает scrollLeft и снэппит карточку в произвольное место
+    const prevSnap = el.style.scrollSnapType;
+    el.style.scrollSnapType = 'none';
+
+    // Сбрасываем таймер, чтобы первый кадр не дал огромный dt
+    lastTimeRef.current = 0;
+
     const tick = (time: number) => {
-      const el = ref.current;
-      if (el && !autoScrollPaused.current) {
+      if (!autoScrollPaused.current) {
         const dt = lastTimeRef.current ? (time - lastTimeRef.current) / 1000 : 0;
         lastTimeRef.current = time;
-        const max = el.scrollWidth - el.clientWidth;
-        if (max > 0) {
+        const half = el.scrollWidth / 2;
+        if (half > 0) {
           const next = el.scrollLeft + autoScrollSpeed * dt;
-          if (next >= max) {
-            // Плавно возвращаемся на начало через небольшую паузу
-            autoScrollPaused.current = true;
-            el.scrollTo({ left: max, behavior: 'instant' as ScrollBehavior });
-            autoScrollTimeout.current = setTimeout(() => {
-              el.scrollTo({ left: 0, behavior: 'smooth' });
-              setTimeout(() => { autoScrollPaused.current = false; }, 800);
-            }, 600);
-          } else {
-            el.scrollLeft = next;
-          }
+          // Когда доходим до второй копии — мгновенно возвращаемся на то же
+          // визуальное место в первой, пользователь не видит прыжка
+          el.scrollLeft = next >= half ? next - half : next;
         }
       } else {
         lastTimeRef.current = time;
@@ -100,9 +102,12 @@ export function ScrollCarousel({ children, accent = '#3CB1FF', showProgress = tr
     };
 
     rafRef.current = requestAnimationFrame(tick);
+
     return () => {
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
       if (autoScrollTimeout.current) clearTimeout(autoScrollTimeout.current);
+      // Восстанавливаем scroll-snap когда автоскролл выключен
+      if (el) el.style.scrollSnapType = prevSnap;
     };
   }, [autoScroll, autoScrollSpeed]);
 
@@ -129,7 +134,7 @@ export function ScrollCarousel({ children, accent = '#3CB1FF', showProgress = tr
           autoScrollTimeout.current = setTimeout(() => { autoScrollPaused.current = false; }, 3000);
         }}
         onScroll={() => { update(); handleScrollEnd(); }}
-        className="flex gap-3 overflow-x-auto scrollbar-none scroll-mask"
+        className="flex gap-[10px] overflow-x-auto scrollbar-none scroll-mask"
         style={{
           WebkitOverflowScrolling: 'touch',
           touchAction: 'pan-x',
