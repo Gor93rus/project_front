@@ -74,7 +74,7 @@ export function ScrollCarousel({ children, accent = '#3CB1FF', showProgress = tr
   const circumference = 2 * Math.PI * radius;
 
   return (
-      <div className="relative pt-2 pb-4" style={{ overflowY: 'visible' }}>
+      <div className="relative pt-1 pb-1" style={{ overflowY: 'visible' }}>
       <div
         ref={ref}
         onScroll={() => { update(); handleScrollEnd(); }}
@@ -87,8 +87,8 @@ export function ScrollCarousel({ children, accent = '#3CB1FF', showProgress = tr
           paddingLeft: 0,
           // Вертикальные отступы дают тени карточек место для отрисовки:
           // overflow-x:auto принудительно делает overflow-y:auto и иначе срезает нижнюю тень.
-          paddingTop: 10,
-          paddingBottom: 30,
+          paddingTop: 8,
+          paddingBottom: 14,
           scrollSnapType: 'x mandatory',
         }}>
         {Array.isArray(children)

@@ -49,8 +49,8 @@ const ITEMS: FeatureItem[] = [
   },
 ];
 
-// ── Адаптивная ширина карточек (mobile) ─────────────────────────────────────
-function useMobileCardWidth() {
+// ── Адаптивный размер карточек (mobile): широкие прямоугольники ─────────────
+function useMobileCardDimensions() {
   const [width, setWidth] = useState(() =>
     typeof window !== 'undefined' ? window.innerWidth : 390,
   );
@@ -69,27 +69,30 @@ function useMobileCardWidth() {
   }, []);
 
   return useMemo(() => {
-    // Narrower cards — 2.5 visible at a time implies more browsing
-    if (width <= 360) return Math.floor((width - 32) / 2.2);
-    if (width <= 430) return Math.floor((width - 32) / 2.5);
-    if (width <= 640) return Math.floor((width - 32) / 2.8);
-    return 130;
+    // Wide landscape cards — ~2 visible at a time on screen
+    // Width: slightly less than half screen so 2.3 are visible (inviting scroll)
+    let cardWidth: number;
+    if (width <= 360) cardWidth = Math.floor((width - 28) / 2.1);
+    else if (width <= 430) cardWidth = Math.floor((width - 28) / 2.15);
+    else if (width <= 640) cardWidth = Math.floor((width - 28) / 2.3);
+    else cardWidth = 155;
+    // Height: 16:11 landscape ratio — shorter than wide, 2 fit on screen
+    const cardHeight = Math.round(cardWidth * 0.72);
+    return { cardWidth, cardHeight };
   }, [width]);
 }
 
 // ═══════════════════════════════════════════════════════════════════════════════
-// FEATURE CARD — full-bleed image, text overlay on top of image
+// FEATURE CARD — wide landscape, full-bleed image, text overlay
 // ═══════════════════════════════════════════════════════════════════════════════
-function FeatureCard({ item, cardWidth, index }: { item: FeatureItem; cardWidth: number; index: number }) {
-  const height = Math.round(cardWidth * 1.45);
-
+function FeatureCard({ item, cardWidth, cardHeight, index }: { item: FeatureItem; cardWidth: number; cardHeight: number; index: number }) {
   return (
     <motion.div
       className="feature-card-img shrink-0"
       style={{
         width: cardWidth,
         minWidth: cardWidth,
-        height,
+        height: cardHeight,
         ['--fc-accent' as string]: item.accent,
         ['--fc-glow' as string]: item.glow,
       }}
@@ -166,15 +169,15 @@ function DesktopBentoGrid() {
 // MAIN COMPONENT
 // ═══════════════════════════════════════════════════════════════════════════════
 export function FeaturesBanner() {
-  const cardWidth = useMobileCardWidth();
+  const { cardWidth, cardHeight } = useMobileCardDimensions();
 
   const mobileCards = useMemo(
-    () => ITEMS.map((item, i) => <FeatureCard key={i} item={item} cardWidth={cardWidth} index={i} />),
-    [cardWidth],
+    () => ITEMS.map((item, i) => <FeatureCard key={i} item={item} cardWidth={cardWidth} cardHeight={cardHeight} index={i} />),
+    [cardWidth, cardHeight],
   );
 
   return (
-    <section className="px-4 pt-3">
+    <section className="px-4 pt-2">
       {/* Section label */}
       <div
         style={{
