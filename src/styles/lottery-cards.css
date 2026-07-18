@@ -773,11 +773,7 @@
 .feature-card-img {
   position: relative;
   border-radius: var(--r-lg);
-  /*
-   * overflow: visible on top so image can bleed upward.
-   * Use clip-path to clip left/right/bottom while allowing top overflow.
-   */
-  overflow: visible;
+  overflow: hidden;
   cursor: pointer;
   /*
    * 3D glass bevel:
@@ -794,18 +790,6 @@
     0 2px 6px rgba(0,0,0,0.40);
   transition: transform 0.25s cubic-bezier(0.25,0.46,0.45,0.94),
               box-shadow 0.25s ease;
-  /* Dark background to fill the card body behind text */
-  background: rgba(8,10,24,0.88);
-}
-
-/* Clip children to card bounds on all sides EXCEPT top (for image overflow) */
-.feature-card-img::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border-radius: var(--r-lg);
-  overflow: hidden;
-  pointer-events: none;
 }
 
 /* Active / hover card — adds accent glow ring */
@@ -819,95 +803,84 @@
     0 0 24px var(--fc-glow, rgba(255,255,255,0.10));
 }
 
-/*
- * Image — right half of card.
- * Overflows the top edge by ~10px to create the "floating above" effect.
- * The card wrapper has overflow: hidden on sides/bottom but we use
- * clip-path on the bg wrapper to allow top overflow only.
- */
+/* Full-bleed background image — no mask, full brightness, centered */
 .feature-card-img__bg {
   position: absolute;
-  /* Right 55% of the card; bleed 10px upward beyond card top */
-  top: -10px;
-  right: 0;
-  bottom: 0;
-  left: 44%;
-  background-size: contain;
-  background-position: center bottom;
+  inset: 0;
+  background-size: cover;
+  background-position: center center;
   background-repeat: no-repeat;
-  filter: saturate(1.22) brightness(1.10) drop-shadow(0 -4px 12px rgba(0,0,0,0.55));
-  transform: scale(1.00);
-  /* Allow top overflow — clip only sides/bottom via parent */
-  transform-origin: bottom center;
+  /* Slightly warmer/brighter: use a subtle saturation boost via filter */
+  filter: saturate(1.18) brightness(1.08);
+  transform: scale(1.04);
   transition: transform 0.5s cubic-bezier(0.25,0.46,0.45,0.94),
               filter 0.5s ease;
-  z-index: 1;
 }
 
 .feature-card-img:hover .feature-card-img__bg,
 .feature-card-img--active .feature-card-img__bg {
-  transform: scale(1.04) translateY(-3px);
-  filter: saturate(1.35) brightness(1.18) drop-shadow(0 -6px 18px rgba(0,0,0,0.60));
+  transform: scale(1.08);
+  filter: saturate(1.30) brightness(1.14);
 }
 
 /*
- * Glass bevel inner overlay — covers the IMAGE HALF only,
- * provides subtle right-edge fade for visual depth.
+ * Glass bevel inner overlay — covers the image,
+ * provides subtle vignette so text is readable.
  */
 .feature-card-img__bevel {
   position: absolute;
-  /* Only covers the right (image) half */
-  top: 0; right: 0; bottom: 0;
-  left: 52%;
-  border-radius: 0 var(--r-lg) var(--r-lg) 0;
+  inset: 0;
+  border-radius: inherit;
   background: linear-gradient(
-    135deg,
-    rgba(255,255,255,0.06) 0%,
-    transparent 40%,
-    rgba(0,0,0,0.08) 100%
+    148deg,
+    rgba(255,255,255,0.08) 0%,
+    rgba(255,255,255,0.02) 30%,
+    transparent 60%,
+    rgba(0,0,0,0.10) 100%
   );
+  /* Vignette — darkens edges slightly */
+  box-shadow:
+    inset 0 0 40px rgba(0,0,0,0.20),
+    inset 0 -20px 36px rgba(0,0,0,0.18);
   pointer-events: none;
 }
 
 /*
- * Text column — left side, vertically centered, clean.
- * Sits ABOVE the image layer via z-index.
+ * Overlay text area — centered both axes over the image.
  */
 .feature-card-img__footer {
   position: absolute;
-  top: 0; left: 0; bottom: 0;
-  /* Text occupies ~52% left width, leaving room for image */
-  width: 52%;
-  padding: 0 10px 0 11px;
+  inset: 0;
+  padding: 8px;
+  background: linear-gradient(
+    to top,
+    rgba(2,4,16,0.80) 0%,
+    rgba(2,4,16,0.45) 40%,
+    rgba(2,4,16,0.20) 70%,
+    transparent 100%
+  );
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: flex-start;
+  align-items: center;
   gap: 0;
   pointer-events: none;
-  z-index: 2;
-  /* Subtle left-to-right fade so text doesn't bleed into image */
-  background: linear-gradient(
-    90deg,
-    rgba(2,4,16,0.0) 0%,
-    transparent 100%
-  );
+  border-radius: var(--r-lg);
+  text-align: center;
 }
 
-/* Title — left-aligned, strong shadow for readability */
+/* Title — white, centered, strong shadow */
 .feature-card-img__title {
   font-family: var(--font-display);
-  font-size: 11px;
-  font-weight: 800;
-  line-height: 1.25;
-  letter-spacing: 0.005em;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: 0.01em;
   color: #ffffff;
-  text-align: left;
-  text-wrap: balance;
+  text-align: center;
   text-shadow:
-    0 1px 8px rgba(0,0,0,0.98),
-    0 2px 4px rgba(0,0,0,0.80),
-    0 0 16px var(--fc-glow, rgba(255,255,255,0.20));
+    0 1px 6px rgba(0,0,0,0.95),
+    0 0 20px var(--fc-glow, rgba(255,255,255,0.25));
 }
 
 /* Accent underline — centered */
