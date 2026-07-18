@@ -6,60 +6,96 @@ import { ScrollCarousel } from './ScrollCarousel';
 interface FeatureItem {
   title: string;
   image: string;
+  // 4-sided bevel vars — верх акцентный, лево светлее акцента, право/низ тёмные
   borderTop: string;
-  borderTopHover: string;
+  borderLeft: string;
+  borderRight: string;
+  borderBottom: string;
+  borderTopH: string;
+  borderLeftH: string;
   ring: string;
   glow: string;
+  insetTop: string;
 }
 
 const ITEMS: FeatureItem[] = [
   {
     title: 'Instant Payouts',
     image: '/images/card-instant-payouts.png',
-    borderTop: 'rgba(255,100,60,0.55)',
-    borderTopHover: 'rgba(255,100,60,0.85)',
-    ring: 'rgba(255,100,60,0.08)',
-    glow: 'rgba(255,100,60,0.12)',
+    borderTop:    'rgba(255,100,60,0.55)',
+    borderLeft:   'rgba(255,100,60,0.28)',
+    borderRight:  'rgba(60,10,0,0.55)',
+    borderBottom: 'rgba(50,8,0,0.70)',
+    borderTopH:   'rgba(255,100,60,0.85)',
+    borderLeftH:  'rgba(255,100,60,0.45)',
+    ring:         'rgba(255,100,60,0.08)',
+    glow:         'rgba(255,100,60,0.12)',
+    insetTop:     'rgba(255,160,130,0.14)',
   },
   {
     title: 'TON & USDT',
     image: '/images/card-ton-usdt.png',
-    borderTop: 'rgba(10,124,255,0.55)',
-    borderTopHover: 'rgba(10,124,255,0.85)',
-    ring: 'rgba(10,124,255,0.08)',
-    glow: 'rgba(10,124,255,0.12)',
+    borderTop:    'rgba(10,124,255,0.55)',
+    borderLeft:   'rgba(10,124,255,0.28)',
+    borderRight:  'rgba(0,20,60,0.55)',
+    borderBottom: 'rgba(0,15,50,0.70)',
+    borderTopH:   'rgba(10,124,255,0.85)',
+    borderLeftH:  'rgba(10,124,255,0.45)',
+    ring:         'rgba(10,124,255,0.08)',
+    glow:         'rgba(10,124,255,0.12)',
+    insetTop:     'rgba(100,170,255,0.14)',
   },
   {
     title: 'Provably Fair',
     image: '/images/card-provably-fair.png',
-    borderTop: 'rgba(40,200,100,0.55)',
-    borderTopHover: 'rgba(40,200,100,0.85)',
-    ring: 'rgba(40,200,100,0.08)',
-    glow: 'rgba(40,200,100,0.12)',
+    borderTop:    'rgba(40,200,100,0.55)',
+    borderLeft:   'rgba(40,200,100,0.28)',
+    borderRight:  'rgba(0,40,20,0.55)',
+    borderBottom: 'rgba(0,30,15,0.70)',
+    borderTopH:   'rgba(40,200,100,0.85)',
+    borderLeftH:  'rgba(40,200,100,0.45)',
+    ring:         'rgba(40,200,100,0.08)',
+    glow:         'rgba(40,200,100,0.12)',
+    insetTop:     'rgba(120,230,160,0.14)',
   },
   {
     title: 'Massive Prizes',
     image: '/images/card-massive-prizes.png',
-    borderTop: 'rgba(250,200,20,0.55)',
-    borderTopHover: 'rgba(250,200,20,0.85)',
-    ring: 'rgba(250,200,20,0.08)',
-    glow: 'rgba(250,200,20,0.12)',
+    borderTop:    'rgba(250,190,20,0.55)',
+    borderLeft:   'rgba(250,190,20,0.28)',
+    borderRight:  'rgba(60,40,0,0.55)',
+    borderBottom: 'rgba(50,32,0,0.70)',
+    borderTopH:   'rgba(250,190,20,0.85)',
+    borderLeftH:  'rgba(250,190,20,0.45)',
+    ring:         'rgba(250,190,20,0.08)',
+    glow:         'rgba(250,190,20,0.12)',
+    insetTop:     'rgba(255,230,120,0.14)',
   },
   {
     title: 'Smart Contract',
     image: '/images/card-smart-contract.png',
-    borderTop: 'rgba(0,210,230,0.55)',
-    borderTopHover: 'rgba(0,210,230,0.85)',
-    ring: 'rgba(0,210,230,0.08)',
-    glow: 'rgba(0,210,230,0.12)',
+    borderTop:    'rgba(0,210,230,0.55)',
+    borderLeft:   'rgba(0,210,230,0.28)',
+    borderRight:  'rgba(0,40,50,0.55)',
+    borderBottom: 'rgba(0,30,40,0.70)',
+    borderTopH:   'rgba(0,210,230,0.85)',
+    borderLeftH:  'rgba(0,210,230,0.45)',
+    ring:         'rgba(0,210,230,0.08)',
+    glow:         'rgba(0,210,230,0.12)',
+    insetTop:     'rgba(100,240,250,0.14)',
   },
   {
     title: 'Audited Security',
     image: '/images/card-audited-security.png',
-    borderTop: 'rgba(80,210,120,0.55)',
-    borderTopHover: 'rgba(80,210,120,0.85)',
-    ring: 'rgba(80,210,120,0.08)',
-    glow: 'rgba(80,210,120,0.12)',
+    borderTop:    'rgba(80,210,120,0.55)',
+    borderLeft:   'rgba(80,210,120,0.28)',
+    borderRight:  'rgba(0,40,20,0.55)',
+    borderBottom: 'rgba(0,30,15,0.70)',
+    borderTopH:   'rgba(80,210,120,0.85)',
+    borderLeftH:  'rgba(80,210,120,0.45)',
+    ring:         'rgba(80,210,120,0.08)',
+    glow:         'rgba(80,210,120,0.12)',
+    insetTop:     'rgba(140,240,170,0.14)',
   },
 ];
 
@@ -86,13 +122,14 @@ function useMobileCardDimensions() {
     // Wide landscape cards — ~2 visible at a time on screen
     // gap between cards is 10px
     const gap = 10;
+    // ~2.1–2.15 карточки видны одновременно → приглашает скроллить
     let cardWidth: number;
-    if (width <= 360) cardWidth = Math.floor((width - 32 - gap) / 1.75);
-    else if (width <= 430) cardWidth = Math.floor((width - 32 - gap) / 1.8);
-    else if (width <= 640) cardWidth = Math.floor((width - 32 - gap) / 1.9);
-    else cardWidth = 200;
-    // Height: 16:10 — заметно выше, образ лучше читается
-    const cardHeight = Math.round(cardWidth * (10 / 16));
+    if (width <= 360) cardWidth = Math.floor((width - 32 - gap) / 2.05);
+    else if (width <= 430) cardWidth = Math.floor((width - 32 - gap) / 2.10);
+    else if (width <= 640) cardWidth = Math.floor((width - 32 - gap) / 2.15);
+    else cardWidth = 180;
+    // 16:9 — стандартный widescreen, изображения именно под этот ratio
+    const cardHeight = Math.round(cardWidth * (9 / 16));
     return { cardWidth, cardHeight };
   }, [width]);
 }
@@ -109,10 +146,15 @@ function FeatureCard({ item, cardWidth, cardHeight, index }: { item: FeatureItem
         minWidth: cardWidth,
         height: cardHeight,
         isolation: 'isolate',
-        ['--fc-border-top' as string]: item.borderTop,
-        ['--fc-border-top-hover' as string]: item.borderTopHover,
-        ['--fc-ring' as string]: item.ring,
-        ['--fc-glow' as string]: item.glow,
+        ['--fc-border-top' as string]:    item.borderTop,
+        ['--fc-border-left' as string]:   item.borderLeft,
+        ['--fc-border-right' as string]:  item.borderRight,
+        ['--fc-border-bottom' as string]: item.borderBottom,
+        ['--fc-border-top-h' as string]:  item.borderTopH,
+        ['--fc-border-left-h' as string]: item.borderLeftH,
+        ['--fc-ring' as string]:          item.ring,
+        ['--fc-glow' as string]:          item.glow,
+        ['--fc-inset-top' as string]:     item.insetTop,
       }}
       initial={{ opacity: 0, y: 24, scale: 0.94 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -142,10 +184,15 @@ function BentoImgCard({ item, delay = 0 }: { item: FeatureItem; delay?: number }
       className="feature-card-img feature-card-img--bento"
       style={{
         isolation: 'isolate',
-        ['--fc-border-top' as string]: item.borderTop,
-        ['--fc-border-top-hover' as string]: item.borderTopHover,
-        ['--fc-ring' as string]: item.ring,
-        ['--fc-glow' as string]: item.glow,
+        ['--fc-border-top' as string]:    item.borderTop,
+        ['--fc-border-left' as string]:   item.borderLeft,
+        ['--fc-border-right' as string]:  item.borderRight,
+        ['--fc-border-bottom' as string]: item.borderBottom,
+        ['--fc-border-top-h' as string]:  item.borderTopH,
+        ['--fc-border-left-h' as string]: item.borderLeftH,
+        ['--fc-ring' as string]:          item.ring,
+        ['--fc-glow' as string]:          item.glow,
+        ['--fc-inset-top' as string]:     item.insetTop,
       }}
       initial={{ opacity: 0, y: 20, scale: 0.96 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
