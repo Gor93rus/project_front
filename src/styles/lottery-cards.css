@@ -787,6 +787,7 @@
   background: #07091c;
 
   /*
+<<<<<<< Updated upstream
    * 3D glass bevel — 4-sided асимметричный бортик, точно как у лотерейных карточек:
    * верх — акцентный цвет, лево — светлее акцента, право и низ — тёмные.
    */
@@ -804,6 +805,25 @@
     0 0 0 1px   var(--fc-ring,        rgba(255,255,255,0.04)),
     0 0 20px    var(--fc-glow,        rgba(255,255,255,0.06)),
     0 4px 16px  rgba(0,0,0,0.65);
+=======
+   * 3D glass bevel — 1:1 структура hero-card (лотерейные карточки),
+   * но с нейтральным белым вместо янтарного --ga-*:
+   */
+  border-top:    1.5px solid rgba(255,255,255,0.32);
+  border-left:   1px solid rgba(255,255,255,0.16);
+  border-right:  1px solid rgba(0,0,0,0.55);
+  border-bottom: 1.5px solid rgba(0,0,0,0.80);
+
+  /*
+   * box-shadow — 1:1 структура hero-card:
+   * inset highlight сверху + внешний ободок + accent-свечение + elevation
+   */
+  box-shadow:
+    inset 0  1px 0   rgba(255,255,255,0.14),
+    0 0 0 1px rgba(255,255,255,0.06),
+    0 0 24px rgba(255,255,255,0.08),
+    0 8px 28px rgba(0,0,0,0.60);
+>>>>>>> Stashed changes
 
   transition:
     border-top-color   0.25s ease,
@@ -842,9 +862,8 @@
 
 /*
  * Glass bevel overlay — поверх изображения:
- * 1. Диагональный блик сверху-слева — как отражение в стекле
- * 2. Горизонтальный highlight вдоль верхнего края — тонкая полоска
- * 3. Виньетка снизу — текст читается
+ * 1. Диагональный блик сверху-слева — как отражение в стекле (как у glass-panel::before)
+ * 2. Виньетка снизу — текст читается
  */
 .feature-card-img__bevel {
   position: absolute;
@@ -853,30 +872,29 @@
   background:
     /* Диагональный specular — верхний-левый треугольник */
     linear-gradient(
-      142deg,
-      rgba(255,255,255,0.13) 0%,
-      rgba(255,255,255,0.05) 28%,
+      145deg,
+      rgba(255,255,255,0.035) 0%,
       transparent 50%
     ),
     /* Виньетка снизу — текст читается */
     linear-gradient(
       to bottom,
       transparent 40%,
-      rgba(0,0,0,0.18) 100%
+      rgba(0,0,0,0.20) 100%
     );
   pointer-events: none;
 }
 
 /*
  * Text column — LEFT side, vertically centered.
- * Uses a left-to-right gradient so text reads cleanly against the image.
+ * Градиент от плотного слева к прозрачному справа — как было изначально.
  */
 .feature-card-img__footer {
   position: absolute;
   top: 0;
   left: 0;
   bottom: 0;
-  /* Text occupies left 58% of the card — leaves room for right-side image */
+  /* Text occupies left 60% of the card — leaves room for right-side image */
   width: 60%;
   padding: 0 10px 0 10px;
   background: linear-gradient(
@@ -911,7 +929,10 @@
 
 .features-bento-img {
   display: grid;
-  grid-template-columns: repeat(6, 1fr);
+  /* auto-fit, чтобы сетка не ломалась при добавлении/удалении карточек.
+     minmax(120px, 1fr): каждая карточка минимум 120px, а при избытке места
+     колонки равномерно растягиваются. 6 карточек по-прежнему влезают в строку. */
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
   gap: 10px;
   align-items: stretch;
 }
