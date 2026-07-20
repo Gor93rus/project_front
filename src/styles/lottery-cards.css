@@ -1,19 +1,19 @@
-/* ═══════════════════════════════════════════════════════════════════════════
-   DARK VAULT — COMPONENT CLASSES
+﻿/* тХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХР
+   DARK VAULT тАФ COMPONENT CLASSES
    Lottery-specific UI components: glass panels, number grid, countdown,
    buttons, prize tiers, tickets, modals, and jackpot elements.
-   ═══════════════════════════════════════════════════════════════════════════ */
+   тХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХР */
 
-/* ─── MONO HELPER ──────────────────────────────────────────────────────────── */
+/* тФАтФАтФА MONO HELPER тФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФА */
 .mono { font-family: 'JetBrains Mono', monospace; }
 
-/* ─── AURORA SCENE (lottery page background) ─────────────────────────────── */
+/* тФАтФАтФА AURORA SCENE (lottery page background) тФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФА */
 .aurora-scene {
   position: fixed; inset: 0; z-index: 0; overflow: hidden; pointer-events: none;
   background: linear-gradient(175deg, #060B18 0%, #090F1E 50%, #060B18 100%);
 }
 
-/* ─── APP HEADER ───────────────────────────────────────────────────────────── */
+/* тФАтФАтФА APP HEADER тФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФА */
 .app-header {
   position: sticky; top: 0; z-index: 40;
   background: linear-gradient(180deg, rgba(6,11,24,0.98) 0%, rgba(8,14,28,0.95) 100%);
@@ -49,7 +49,7 @@
 }
 @keyframes livePulse { 0%,100%{opacity:1;box-shadow:0 0 7px rgba(255,77,79,0.95)} 50%{opacity:0.20;box-shadow:0 0 0 7px rgba(255,77,79,0)} }
 
-/* ─── GLASS PANEL ──────────────────────────────────────────────────────────── */
+/* тФАтФАтФА GLASS PANEL тФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФА */
 .glass-panel {
   background: linear-gradient(155deg, rgba(18,32,53,0.96) 0%, rgba(12,22,41,0.98) 50%, rgba(8,15,30,1) 100%);
   border-radius: 18px;
@@ -70,7 +70,7 @@
   box-shadow: inset 0 1px 0 rgba(var(--cyan-100),0.12), 0 0 0 1px rgba(var(--cyan-400),0.06), 0 0 20px rgba(var(--cyan-400),0.10), 0 8px 28px rgba(0,0,0,0.55);
 }
 
-/* ─── HERO CARD (jackpot display on lottery page) ─────────────────────────── */
+/* тФАтФАтФА HERO CARD (jackpot display on lottery page) тФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФА */
 .hero-card {
   position: relative; border-radius: 18px; overflow: hidden;
   background: linear-gradient(165deg, rgba(18,32,53,0.96) 0%, rgba(12,22,41,0.98) 60%, rgba(8,15,30,1) 100%);
@@ -85,7 +85,7 @@
   pointer-events: none;
 }
 
-/* ─── JACKPOT TEXT — metallic gold ─────────────────────────────────────────── */
+/* тФАтФАтФА JACKPOT TEXT тАФ metallic gold тФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФА */
 .jackpot-text {
   font-family: 'JetBrains Mono', monospace; font-weight: 800;
   background: linear-gradient(135deg, rgb(var(--ga-100)) 0%, rgb(var(--ga-400)) 30%, rgb(var(--ga-600)) 65%, rgb(var(--ga-800)) 100%);
@@ -98,7 +98,7 @@
   50%{ filter: drop-shadow(0 2px 18px rgba(var(--ga-100),0.90)) drop-shadow(0 0 50px rgba(var(--ga-400),0.55)) drop-shadow(0 4px 8px rgba(0,0,0,0.90)); }
 }
 
-/* ─── JACKPOT TEXT — crypto style (alternative) ─────────────────────────── */
+/* тФАтФАтФА JACKPOT TEXT тАФ crypto style (alternative) тФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФА */
 .jackpot-crypto {
   font-family: 'Space Grotesk', sans-serif; font-weight: 900;
   background: linear-gradient(135deg, rgb(var(--ga-100)) 0%, rgb(var(--ga-400)) 40%, rgb(var(--ga-500)) 80%, rgb(var(--ga-800)) 100%);
@@ -111,7 +111,7 @@
   50%{ filter: drop-shadow(0 6px 30px rgba(var(--ga-100),0.65)) drop-shadow(0 2px 8px rgba(0,0,0,0.80)); }
 }
 
-/* ─── GLITCH ───────────────────────────────────────────────────────────────── */
+/* тФАтФАтФА GLITCH тФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФА */
 .glitch-r, .glitch-b { position: absolute; top: 0; left: 0; width: 100%; height: 100%; -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; pointer-events: none; opacity: 0; }
 .glitch-r { background-image: linear-gradient(135deg, #FCA5A5 0%, #F43F5E 50%, #BE123C 100%); animation: glitchR 8s ease-in-out infinite; }
 .glitch-b { background-image: linear-gradient(135deg, #7DD3FC 0%, rgb(var(--cyan-400)) 50%, #0369A1 100%); animation: glitchB 8s ease-in-out infinite; }
@@ -120,7 +120,7 @@
 @keyframes glitchB { 0%,88%,100%{opacity:0;transform:none} 89%{opacity:0.70;transform:translate(-3px,0);clip-path:polygon(0 52%,100% 52%,100% 70%,0 70%)} 90%{opacity:0.75;transform:translate(3px,0);clip-path:polygon(0 16%,100% 16%,100% 32%,0 32%)} 91%{opacity:0.55;transform:translate(-4px,0);clip-path:polygon(0 78%,100% 78%,100% 94%,0 94%)} 92%{opacity:0} }
 @keyframes scanlineFlicker { 0%,87%,100%{opacity:0} 88%,90%{opacity:1} 89%{opacity:0.4} }
 
-/* ─── JACKPOT PROGRESS ─────────────────────────────────────────────────────── */
+/* тФАтФАтФА JACKPOT PROGRESS тФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФА */
 .jackpot-progress-wrap {
   margin-top: 10px;
   background: rgba(0,0,0,0.30);
@@ -143,7 +143,7 @@
 .jp-fill::after { content: ''; position: absolute; top: 0; right: 0; width: 8px; height: 100%; background: rgba(255,255,255,0.70); border-radius: 99px; box-shadow: 0 0 6px rgba(255,255,255,0.90); }
 .jp-milestone { position: absolute; top: 50%; transform: translateY(-50%); width: 2px; height: 140%; background: linear-gradient(180deg, transparent 0%, rgba(var(--ga-400),0.80) 50%, transparent 100%); border-radius: 2px; }
 
-/* ─── COUNTDOWN DIGIT ──────────────────────────────────────────────────────── */
+/* тФАтФАтФА COUNTDOWN DIGIT тФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФА */
 .cd-digit {
   width: 28px; height: 36px; border-radius: 7px;
   display: flex; align-items: center; justify-content: center;
@@ -163,7 +163,7 @@
 }
 @keyframes urgentBlink { 0%,100%{opacity:1} 50%{opacity:0.30} }
 
-/* ─── TICKER ───────────────────────────────────────────────────────────────── */
+/* тФАтФАтФА TICKER тФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФА */
 .ticker-track {
   overflow: hidden; border-radius: 9px;
   background: rgba(0,0,0,0.40);
@@ -176,7 +176,7 @@
 .ticker-scroll { animation: ticker 42s linear infinite; }
 @keyframes ticker { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
 
-/* ─── NUMBER CELL ──────────────────────────────────────────────────────────── */
+/* тФАтФАтФА NUMBER CELL тФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФА */
 .num-cell {
   aspect-ratio: 1; border-radius: 10px; cursor: pointer;
   display: flex; align-items: center; justify-content: center; position: relative;
@@ -219,7 +219,7 @@
 }
 .num-cell.hot-glow .freq-badge { opacity: 0.85; }
 
-/* ─── FIRE BUTTON ──────────────────────────────────────────────────────────── */
+/* тФАтФАтФА FIRE BUTTON тФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФА */
 .fire-btn {
   background: linear-gradient(180deg, rgba(var(--ga-100),0.22) 0%, rgba(var(--ga-400),0.65) 35%, rgba(var(--ga-600),0.80) 65%, rgba(var(--ga-800),0.88) 100%);
   border-top: 1.5px solid rgba(var(--ga-100),0.60);
@@ -270,14 +270,14 @@
 .htp-btn:hover { transform: translateY(-2px); box-shadow: inset 0 1px 0 rgba(var(--primary-100),0.40), 0 0 0 1px rgba(var(--primary-400),0.30), 0 6px 22px rgba(var(--primary-600),0.45), 0 2px 6px rgba(0,0,0,0.50); }
 .htp-btn:active { transform: translateY(1px) scale(0.97); }
 
-/* ─── PULSE GLOW (CTA button animation) ─────────────────────────────────── */
+/* тФАтФАтФА PULSE GLOW (CTA button animation) тФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФА */
 @keyframes pulseGlowSafe {
   0%, 100% { box-shadow: inset 0 1px 0 rgba(var(--ga-100),0.35), 0 0 0 1px rgba(var(--ga-400),0.25), 0 4px 14px rgba(var(--ga-600),0.40); }
   50%       { box-shadow: inset 0 1px 0 rgba(var(--ga-100),0.55), 0 0 0 2px rgba(var(--ga-400),0.55), 0 6px 24px rgba(var(--ga-600),0.65); }
 }
 .fire-btn.pulse-glow { animation: pulseGlowSafe 1.3s ease-in-out infinite; }
 
-/* ─── GLASS-3D — premium convex glass effect ────────────────────────────── */
+/* тФАтФАтФА GLASS-3D тАФ premium convex glass effect тФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФА */
 .glass-3d {
   border-top: 1.5px solid rgba(255,255,255,0.10) !important;
   border-left: 1px solid rgba(255,255,255,0.06) !important;
@@ -290,7 +290,7 @@
     0 8px 24px rgba(0,0,0,0.55) !important;
 }
 
-/* ─── HOT RING ─────────────────────────────────────────────────────────────── */
+/* тФАтФАтФА HOT RING тФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФА */
 .hot-ring {
   position: absolute; inset: -2px; border-radius: 12px;
   background: conic-gradient(from 0deg, rgba(var(--ga-100),0.75) 0%, rgba(255,77,79,0.92) 18%, rgba(255,77,79,0.65) 38%, rgba(var(--ga-400),0.52) 58%, rgba(var(--ga-100),0.75) 100%);
@@ -298,7 +298,7 @@
 }
 @keyframes hotSpin { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
 
-/* ─── PROGRESS BAR ─────────────────────────────────────────────────────────── */
+/* тФАтФАтФА PROGRESS BAR тФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФА */
 .progress-track {
   height: 5px; border-radius: 99px; overflow: hidden;
   background: rgba(0,0,0,0.55);
@@ -310,7 +310,7 @@
   transition: width 0.35s cubic-bezier(0.34,1.56,0.64,1);
 }
 
-/* ─── SECTION LABEL ────────────────────────────────────────────────────────── */
+/* тФАтФАтФА SECTION LABEL тФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФА */
 .section-label {
   font-size: 9.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em;
   color: var(--ink-3); font-family: 'JetBrains Mono', monospace;
@@ -321,7 +321,7 @@
   background: linear-gradient(90deg, transparent, rgba(255,255,255,0.06), rgba(255,255,255,0.04), transparent);
 }
 
-/* ─── COMBO CARD ───────────────────────────────────────────────────────────── */
+/* тФАтФАтФА COMBO CARD тФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФА */
 .combo-card {
   flex: 1; padding: 9px 6px; border-radius: 11px; cursor: pointer; text-align: center;
   background: rgba(255,255,255,0.03);
@@ -336,7 +336,7 @@
 }
 .combo-card:active { transform: translateY(1px) scale(0.97); }
 
-/* ─── TICKET ROW ───────────────────────────────────────────────────────────── */
+/* тФАтФАтФА TICKET ROW тФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФА */
 .ticket-row {
   display: flex; align-items: center; gap: 10px; padding: 10px 12px;
   border-radius: 14px; margin-bottom: 6px; position: relative; overflow: hidden;
@@ -381,7 +381,7 @@
   color: var(--ink-2);
 }
 
-/* ─── PRIZE TIER CARDS ─────────────────────────────────────────────────────── */
+/* тФАтФАтФА PRIZE TIER CARDS тФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФА */
 .tier-card {
   flex: 1; border-radius: 14px; padding: 12px 8px 10px; text-align: center;
   position: relative; overflow: hidden;
@@ -393,19 +393,19 @@
 .tier-card > * { position: relative; z-index: 1; }
 .tier-card:hover { transform: translateY(-4px); }
 
-/* Emerald — best match, 2/N */
+/* Emerald тАФ best match, 2/N */
 .tier-lime {
   background: linear-gradient(160deg, rgba(16,217,138,0.18) 0%, rgba(5,150,105,0.12) 35%, rgba(2,100,70,0.06) 65%, rgba(6,12,26,0.98) 100%);
   border-top-color: rgba(16,217,138,0.50);
   box-shadow: inset 0 1px 0 rgba(52,237,160,0.22), 0 0 0 1px rgba(16,217,138,0.08), 0 0 18px rgba(16,217,138,0.14), 0 6px 22px rgba(0,0,0,0.65);
 }
-/* Blue — mid match */
+/* Blue тАФ mid match */
 .tier-cyan {
   background: linear-gradient(160deg, rgba(var(--cyan-400),0.18) 0%, rgba(var(--cyan-600),0.12) 35%, rgba(var(--cyan-800),0.06) 65%, rgba(6,12,26,0.98) 100%);
   border-top-color: rgba(var(--cyan-400),0.50);
   box-shadow: inset 0 1px 0 rgba(var(--cyan-100),0.22), 0 0 0 1px rgba(var(--cyan-400),0.08), 0 0 18px rgba(var(--cyan-400),0.16), 0 6px 22px rgba(0,0,0,0.65);
 }
-/* Gold — jackpot */
+/* Gold тАФ jackpot */
 .tier-gold {
   background: linear-gradient(160deg, rgba(var(--ga-400),0.22) 0%, rgba(var(--ga-600),0.14) 35%, rgba(var(--ga-800),0.06) 65%, rgba(6,12,26,0.98) 100%);
   border-top-color: rgba(var(--ga-400),0.58);
@@ -417,7 +417,7 @@
   box-shadow: 0 0 0 1px rgba(255,255,255,0.04), 0 8px 24px rgba(0,0,0,0.55);
 }
 
-/* ─── STAT CARD ────────────────────────────────────────────────────────────── */
+/* тФАтФАтФА STAT CARD тФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФА */
 .stat-card {
   flex: 1; padding: 14px 8px; text-align: center; border-radius: 16px;
   background: rgba(255,255,255,0.03);
@@ -430,7 +430,7 @@
 .stat-card > * { position: relative; z-index: 1; }
 .stat-card:hover { transform: translateY(-3px); }
 
-/* ─── CART FAB ─────────────────────────────────────────────────────────────── */
+/* тФАтФАтФА CART FAB тФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФА */
 .cart-fab {
   width: 52px; height: 52px; border-radius: 16px;
   display: flex; align-items: center; justify-content: center; cursor: pointer;
@@ -445,7 +445,7 @@
 .cart-fab.bouncing { animation: cartBounce 0.55s cubic-bezier(0.34,1.56,0.64,1); }
 @keyframes cartBounce { 0%,100%{transform:scale(1)} 35%{transform:scale(1.35)} 65%{transform:scale(0.88)} }
 
-/* ─── MODAL ────────────────────────────────────────────────────────────────── */
+/* тФАтФАтФА MODAL тФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФА */
 .modal-overlay {
   position: fixed; inset: 0; z-index: 100; background: rgba(3,6,15,0.94);
   display: flex; align-items: flex-end; justify-content: center;
@@ -468,14 +468,14 @@
   box-shadow: inset 0 1px 0 rgba(255,255,255,0.04), 0 2px 8px rgba(0,0,0,0.35);
 }
 
-/* ─── ICON GLOW ────────────────────────────────────────────────────────────── */
+/* тФАтФАтФА ICON GLOW тФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФА */
 .icon-fire { filter: drop-shadow(0 0 4px rgba(255,77,79,0.95)) drop-shadow(0 0 12px rgba(229,49,51,0.55)); }
 .icon-gold  { filter: drop-shadow(0 0 4px rgba(var(--ga-400),0.95)) drop-shadow(0 0 12px rgba(var(--ga-600),0.55)); }
 .icon-cyan  { filter: drop-shadow(0 0 4px rgba(var(--cyan-400),0.95)) drop-shadow(0 0 12px rgba(var(--cyan-600),0.55)); }
 .icon-lime  { filter: drop-shadow(0 0 4px rgba(16,217,138,0.95)) drop-shadow(0 0 12px rgba(5,150,105,0.55)); }
 .icon-blue  { filter: drop-shadow(0 0 4px rgba(var(--cyan-100),0.95)) drop-shadow(0 0 12px rgba(var(--cyan-400),0.55)); }
 
-/* ─── AURORA BLOBS (lottery page scene) ─────────────────────────────────── */
+/* тФАтФАтФА AURORA BLOBS (lottery page scene) тФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФА */
 .aurora-b1 { animation: auroraBlob1 30s ease-in-out infinite alternate; }
 .aurora-b2 { animation: auroraBlob2 36s ease-in-out infinite alternate; }
 .aurora-b3 { animation: auroraBlob3 42s ease-in-out infinite alternate; }
@@ -489,10 +489,10 @@
 .float-y { animation: floatY 5s ease-in-out infinite; }
 @keyframes floatY { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
 
-/* ─── CONFETTI ─────────────────────────────────────────────────────────────── */
+/* тФАтФАтФА CONFETTI тФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФА */
 @keyframes confettiFall { 0%{transform:translateY(0) rotate(0deg);opacity:0} 8%{opacity:1} 100%{transform:translateY(65px) rotate(420deg);opacity:0} }
 
-/* ─── GOLD PARTICLES (Global Jackpot Hero) ────────────────────────────────── */
+/* тФАтФАтФА GOLD PARTICLES (Global Jackpot Hero) тФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФА */
 @keyframes particleRise {
   0%   { transform: translateY(0) scale(0); opacity: 0; }
   10%  { transform: translateY(0) scale(1); opacity: inherit; }
@@ -500,7 +500,7 @@
   100% { transform: translateY(-120px) scale(0.3); opacity: 0; }
 }
 
-/* ─── FEATURE CARDS (FeaturesBanner) ──────────────────────────────────────── */
+/* тФАтФАтФА FEATURE CARDS (FeaturesBanner) тФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФА */
 .feature-card {
   border-radius: var(--r-lg);
   position: relative;
@@ -511,7 +511,7 @@
   gap: 6px;
   padding: 12px;
   scroll-snap-align: start;
-  /* 3D glass фаска — базовая */
+  /* 3D glass ╤Д╨░╤Б╨║╨░ тАФ ╨▒╨░╨╖╨╛╨▓╨░╤П */
   border-top: 2px solid var(--bevel-light-top);
   border-left: 1.5px solid var(--bevel-light-side);
   border-right: 1.5px solid var(--bevel-dark-side);
@@ -521,9 +521,9 @@
     inset 0 -3px 8px rgba(0,0,0,0.40),
     0 0 0 1px rgba(255,255,255,0.03),
     0 8px 24px rgba(0,0,0,0.55);
-  /* Канон "Dark Vault": акцент = СВЕТ из верх-левого угла (от иконки), а не
-     плоская краска. Navy-стекло доминирует, цвет — компактный угловой glow,
-     как в num-cell.selected. Управляется через --fc-accent-bg. */
+  /* ╨Ъ╨░╨╜╨╛╨╜ "Dark Vault": ╨░╨║╤Ж╨╡╨╜╤В = ╨б╨Т╨Х╨в ╨╕╨╖ ╨▓╨╡╤А╤Е-╨╗╨╡╨▓╨╛╨│╨╛ ╤Г╨│╨╗╨░ (╨╛╤В ╨╕╨║╨╛╨╜╨║╨╕), ╨░ ╨╜╨╡
+     ╨┐╨╗╨╛╤Б╨║╨░╤П ╨║╤А╨░╤Б╨║╨░. Navy-╤Б╤В╨╡╨║╨╗╨╛ ╨┤╨╛╨╝╨╕╨╜╨╕╤А╤Г╨╡╤В, ╤Ж╨▓╨╡╤В тАФ ╨║╨╛╨╝╨┐╨░╨║╤В╨╜╤Л╨╣ ╤Г╨│╨╗╨╛╨▓╨╛╨╣ glow,
+     ╨║╨░╨║ ╨▓ num-cell.selected. ╨г╨┐╤А╨░╨▓╨╗╤П╨╡╤В╤Б╤П ╤З╨╡╤А╨╡╨╖ --fc-accent-bg. */
   background:
     radial-gradient(75% 65% at 16% -6%, var(--fc-accent-bg, transparent) 0%, transparent 55%),
     linear-gradient(180deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.01) 100%),
@@ -531,7 +531,7 @@
   transition: box-shadow 0.5s ease, border-color 0.5s ease;
 }
 
-/* Активная карточка — усиленная фаска + ambient glow */
+/* ╨Р╨║╤В╨╕╨▓╨╜╨░╤П ╨║╨░╤А╤В╨╛╤З╨║╨░ тАФ ╤Г╤Б╨╕╨╗╨╡╨╜╨╜╨░╤П ╤Д╨░╤Б╨║╨░ + ambient glow */
 .feature-card--active {
   border-top-color: rgba(255,255,255,0.16) !important;
   border-left-color: rgba(255,255,255,0.10) !important;
@@ -544,9 +544,9 @@
     0 8px 24px rgba(0,0,0,0.55),
     0 0 40px -12px var(--fc-glow, var(--primary-glow)) !important;
 }
-/* Одиночный световой sweep — ТОЛЬКО на активной карточке.
-   В любой момент времени анимируется лишь одна карточка → дёшево для мобилы.
-   Псевдоэлемент с узкой диагональной световой полосой проходит по карточке. */
+/* ╨Ю╨┤╨╕╨╜╨╛╤З╨╜╤Л╨╣ ╤Б╨▓╨╡╤В╨╛╨▓╨╛╨╣ sweep тАФ ╨в╨Ю╨Ы╨м╨Ъ╨Ю ╨╜╨░ ╨░╨║╤В╨╕╨▓╨╜╨╛╨╣ ╨║╨░╤А╤В╨╛╤З╨║╨╡.
+   ╨Т ╨╗╤О╨▒╨╛╨╣ ╨╝╨╛╨╝╨╡╨╜╤В ╨▓╤А╨╡╨╝╨╡╨╜╨╕ ╨░╨╜╨╕╨╝╨╕╤А╤Г╨╡╤В╤Б╤П ╨╗╨╕╤И╤М ╨╛╨┤╨╜╨░ ╨║╨░╤А╤В╨╛╤З╨║╨░ тЖТ ╨┤╤С╤И╨╡╨▓╨╛ ╨┤╨╗╤П ╨╝╨╛╨▒╨╕╨╗╤Л.
+   ╨Я╤Б╨╡╨▓╨┤╨╛╤Н╨╗╨╡╨╝╨╡╨╜╤В ╤Б ╤Г╨╖╨║╨╛╨╣ ╨┤╨╕╨░╨│╨╛╨╜╨░╨╗╤М╨╜╨╛╨╣ ╤Б╨▓╨╡╤В╨╛╨▓╨╛╨╣ ╨┐╨╛╨╗╨╛╤Б╨╛╨╣ ╨┐╤А╨╛╤Е╨╛╨┤╨╕╤В ╨┐╨╛ ╨║╨░╤А╤В╨╛╤З╨║╨╡. */
 .feature-card--active::after {
   content: '';
   position: absolute;
@@ -569,14 +569,14 @@
   55%,100%{ background-position: -40% 0; }
 }
 
-/* Неоновый глиф без подложки — двухслойное свечение (ближний ореол + дальний halo) */
+/* ╨Э╨╡╨╛╨╜╨╛╨▓╤Л╨╣ ╨│╨╗╨╕╤Д ╨▒╨╡╨╖ ╨┐╨╛╨┤╨╗╨╛╨╢╨║╨╕ тАФ ╨┤╨▓╤Г╤Е╤Б╨╗╨╛╨╣╨╜╨╛╨╡ ╤Б╨▓╨╡╤З╨╡╨╜╨╕╨╡ (╨▒╨╗╨╕╨╢╨╜╨╕╨╣ ╨╛╤А╨╡╨╛╨╗ + ╨┤╨░╨╗╤М╨╜╨╕╨╣ halo) */
 .feature-card-icon {
   filter:
     drop-shadow(0 0 3px color-mix(in srgb, var(--fc-accent, var(--primary)) 85%, transparent))
     drop-shadow(0 0 9px color-mix(in srgb, var(--fc-accent, var(--primary)) 45%, transparent));
   transition: filter 0.4s ease, transform 0.4s ease;
 }
-/* Иконка активной карточки — усиленный неоновый pulse */
+/* ╨Ш╨║╨╛╨╜╨║╨░ ╨░╨║╤В╨╕╨▓╨╜╨╛╨╣ ╨║╨░╤А╤В╨╛╤З╨║╨╕ тАФ ╤Г╤Б╨╕╨╗╨╡╨╜╨╜╤Л╨╣ ╨╜╨╡╨╛╨╜╨╛╨▓╤Л╨╣ pulse */
 .feature-card--active .feature-card-icon {
   transform: translateY(-1px);
   animation: featureIconPulse 2.4s ease-in-out infinite;
@@ -594,7 +594,7 @@
   }
 }
 
-/* Idle-анимации неоновых глифов */
+/* Idle-╨░╨╜╨╕╨╝╨░╤Ж╨╕╨╕ ╨╜╨╡╨╛╨╜╨╛╨▓╤Л╤Е ╨│╨╗╨╕╤Д╨╛╨▓ */
 .feature-icon-shell { line-height: 0; }
 .feature-icon-float { animation: featureIconFloat 3.2s ease-in-out infinite; }
 .feature-icon-pulse { animation: featureIconBreath 3s ease-in-out infinite; }
@@ -607,7 +607,7 @@
   0%, 100% { transform: scale(1); }
   50%      { transform: scale(1.06); }
 }
-/* Геометрический паттерн — медленный drift */
+/* ╨У╨╡╨╛╨╝╨╡╤В╤А╨╕╤З╨╡╤Б╨║╨╕╨╣ ╨┐╨░╤В╤В╨╡╤А╨╜ тАФ ╨╝╨╡╨┤╨╗╨╡╨╜╨╜╤Л╨╣ drift */
 .feature-card-pattern {
   animation: patternDrift 20s linear infinite;
 }
@@ -621,7 +621,7 @@
 .feature-card-tap:active {
   transform: scale(0.97);
 }
-/* Иконка «отзывается» на нажатие — кратко подрастает и ярче вспыхивает неоном */
+/* ╨Ш╨║╨╛╨╜╨║╨░ ┬л╨╛╤В╨╖╤Л╨▓╨░╨╡╤В╤Б╤П┬╗ ╨╜╨░ ╨╜╨░╨╢╨░╤В╨╕╨╡ тАФ ╨║╤А╨░╤В╨║╨╛ ╨┐╨╛╨┤╤А╨░╤Б╤В╨░╨╡╤В ╨╕ ╤П╤А╤З╨╡ ╨▓╤Б╨┐╤Л╤Е╨╕╨▓╨░╨╡╤В ╨╜╨╡╨╛╨╜╨╛╨╝ */
 .feature-card-tap:active .feature-card-icon {
   transform: scale(1.1);
   filter:
@@ -629,7 +629,7 @@
     drop-shadow(0 0 16px color-mix(in srgb, var(--fc-accent, var(--primary)) 70%, transparent));
 }
 
-/* Пауза всех анимаций баннера, когда он вне вьюпорта (экономия CPU/батареи) */
+/* ╨Я╨░╤Г╨╖╨░ ╨▓╤Б╨╡╤Е ╨░╨╜╨╕╨╝╨░╤Ж╨╕╨╣ ╨▒╨░╨╜╨╜╨╡╤А╨░, ╨║╨╛╨│╨┤╨░ ╨╛╨╜ ╨▓╨╜╨╡ ╨▓╤М╤О╨┐╨╛╤А╤В╨░ (╤Н╨║╨╛╨╜╨╛╨╝╨╕╤П CPU/╨▒╨░╤В╨░╤А╨╡╨╕) */
 .features-paused,
 .features-paused *,
 .features-paused *::before,
@@ -637,7 +637,7 @@
   animation-play-state: paused !important;
 }
 
-/* Уважение к prefers-reduced-motion — полностью отключаем движение */
+/* ╨г╨▓╨░╨╢╨╡╨╜╨╕╨╡ ╨║ prefers-reduced-motion тАФ ╨┐╨╛╨╗╨╜╨╛╤Б╤В╤М╤О ╨╛╤В╨║╨╗╤О╤З╨░╨╡╨╝ ╨┤╨▓╨╕╨╢╨╡╨╜╨╕╨╡ */
 @media (prefers-reduced-motion: reduce) {
   .feature-card,
   .feature-card *,
@@ -646,27 +646,27 @@
   }
 }
 
-/* ─── FEATURES BENTO GRID (Этап 2) ────────────────────────────────────────── */
+/* тФАтФАтФА FEATURES BENTO GRID (╨н╤В╨░╨┐ 2) тФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФА */
 
-/* Hero-карточка: Instant Payouts — полная ширина, высокая */
+/* Hero-╨║╨░╤А╤В╨╛╤З╨║╨░: Instant Payouts тАФ ╨┐╨╛╨╗╨╜╨░╤П ╤И╨╕╤А╨╕╨╜╨░, ╨▓╤Л╤Б╨╛╨║╨░╤П */
 .feature-card--hero {
   min-height: 128px;
   flex-direction: row;
   gap: 14px;
   align-items: flex-start;
-  /* Усиленный акцентный фо�� для главной карточки */
+  /* ╨г╤Б╨╕╨╗╨╡╨╜╨╜╤Л╨╣ ╨░╨║╤Ж╨╡╨╜╤В╨╜╤Л╨╣ ╤Д╨╛я┐╜я┐╜ ╨┤╨╗╤П ╨│╨╗╨░╨▓╨╜╨╛╨╣ ╨║╨░╤А╤В╨╛╤З╨║╨╕ */
   background:
     radial-gradient(60% 80% at 8% 12%, var(--fc-accent-bg, transparent) 0%, transparent 60%),
     radial-gradient(40% 50% at 85% 85%, var(--fc-accent-bg, transparent) 0%, transparent 55%),
     linear-gradient(160deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.01) 100%),
     var(--surface-gradient);
-  /* Яркая верхняя фаска — повышает «вес» карточки */
+  /* ╨п╤А╨║╨░╤П ╨▓╨╡╤А╤Е╨╜╤П╤П ╤Д╨░╤Б╨║╨░ тАФ ╨┐╨╛╨▓╤Л╤И╨░╨╡╤В ┬л╨▓╨╡╤Б┬╗ ╨║╨░╤А╤В╨╛╤З╨║╨╕ */
   border-top-color: rgba(255,255,255,0.18);
-  /* Всегда показываем shimmer (не нужна активная) */
+  /* ╨Т╤Б╨╡╨│╨┤╨░ ╨┐╨╛╨║╨░╨╖╤Л╨▓╨░╨╡╨╝ shimmer (╨╜╨╡ ╨╜╤Г╨╢╨╜╨░ ╨░╨║╤В╨╕╨▓╨╜╨░╤П) */
   border-top: 2px solid rgba(255,255,255,0.18);
 }
 
-/* Левая колонка Hero-карточки: иконка + слот для изображения */
+/* ╨Ы╨╡╨▓╨░╤П ╨║╨╛╨╗╨╛╨╜╨║╨░ Hero-╨║╨░╤А╤В╨╛╤З╨║╨╕: ╨╕╨║╨╛╨╜╨║╨░ + ╤Б╨╗╨╛╤В ╨┤╨╗╤П ╨╕╨╖╨╛╨▒╤А╨░╨╢╨╡╨╜╨╕╤П */
 .feature-card-hero-visual {
   flex-shrink: 0;
   display: flex;
@@ -676,7 +676,7 @@
   width: 72px;
 }
 
-/* Слот-плейсхолдер для изображения в hero-карточке */
+/* ╨б╨╗╨╛╤В-╨┐╨╗╨╡╨╣╤Б╤Е╨╛╨╗╨┤╨╡╤А ╨┤╨╗╤П ╨╕╨╖╨╛╨▒╤А╨░╨╢╨╡╨╜╨╕╤П ╨▓ hero-╨║╨░╤А╤В╨╛╤З╨║╨╡ */
 .feature-hero-img-slot {
   width: 72px;
   height: 72px;
@@ -687,7 +687,7 @@
   justify-content: center;
   background: rgba(255,255,255,0.04);
   border: 1px solid rgba(255,255,255,0.08);
-  /* placeholder chevron — исчезнет когда будет реальный img */
+  /* placeholder chevron тАФ ╨╕╤Б╤З╨╡╨╖╨╜╨╡╤В ╨║╨╛╨│╨┤╨░ ╨▒╤Г╨┤╨╡╤В ╤А╨╡╨░╨╗╤М╨╜╤Л╨╣ img */
   position: relative;
 }
 .feature-hero-img-slot img {
@@ -696,7 +696,7 @@
   object-fit: cover;
   display: block;
 }
-/* Placeholder overlay — показывается пока нет изображения */
+/* Placeholder overlay тАФ ╨┐╨╛╨║╨░╨╖╤Л╨▓╨░╨╡╤В╤Б╤П ╨┐╨╛╨║╨░ ╨╜╨╡╤В ╨╕╨╖╨╛╨▒╤А╨░╨╢╨╡╨╜╨╕╤П */
 .feature-hero-img-slot:not(:has(img))::after {
   content: '';
   position: absolute;
@@ -705,7 +705,7 @@
   border: 1.5px dashed rgba(255,255,255,0.12);
 }
 
-/* Правая колонка Hero: текст */
+/* ╨Я╤А╨░╨▓╨░╤П ╨║╨╛╨╗╨╛╨╜╨║╨░ Hero: ╤В╨╡╨║╤Б╤В */
 .feature-card-hero-body {
   flex: 1;
   display: flex;
@@ -714,7 +714,7 @@
   padding-top: 2px;
 }
 
-/* Hero badge — маленькая метка «#1 Feature» */
+/* Hero badge тАФ ╨╝╨░╨╗╨╡╨╜╤М╨║╨░╤П ╨╝╨╡╤В╨║╨░ ┬л#1 Feature┬╗ */
 .feature-hero-badge {
   display: inline-flex;
   align-items: center;
@@ -732,12 +732,12 @@
   width: fit-content;
 }
 
-/* Маленькие карточки в сетке 2×2+1 */
+/* ╨Ь╨░╨╗╨╡╨╜╤М╨║╨╕╨╡ ╨║╨░╤А╤В╨╛╤З╨║╨╕ ╨▓ ╤Б╨╡╤В╨║╨╡ 2├Ч2+1 */
 .feature-card--mini {
   min-height: 90px;
 }
 
-/* Последняя карточка (одна на строку) — чуть шире текстовая */
+/* ╨Я╨╛╤Б╨╗╨╡╨┤╨╜╤П╤П ╨║╨░╤А╤В╨╛╤З╨║╨░ (╨╛╨┤╨╜╨░ ╨╜╨░ ╤Б╤В╤А╨╛╨║╤Г) тАФ ╤З╤Г╤В╤М ╤И╨╕╤А╨╡ ╤В╨╡╨║╤Б╤В╨╛╨▓╨░╤П */
 .feature-card--solo {
   min-height: 76px;
   flex-direction: row;
@@ -748,7 +748,7 @@
   flex-shrink: 0;
 }
 
-/* Контейнер bento-сетки */
+/* ╨Ъ╨╛╨╜╤В╨╡╨╣╨╜╨╡╤А bento-╤Б╨╡╤В╨║╨╕ */
 .features-bento {
   display: flex;
   flex-direction: column;
@@ -768,7 +768,7 @@
   }
 }
 
-/* ─── FEATURE CARD — FULL-BLEED IMAGE (new style) ───────────────────────── */
+/* тФАтФАтФА FEATURE CARD тАФ FULL-BLEED IMAGE (new style) тФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФА */
 
 .feature-card-img {
   position: relative;
@@ -777,19 +777,18 @@
   cursor: pointer;
 
   /*
-   * isolation: isolate + will-change: transform гарантируют новый
-   * compositing layer — aurora mix-blend-mode не пробивает внутрь.
+   * isolation: isolate + will-change: transform ╨│╨░╤А╨░╨╜╤В╨╕╤А╤Г╤О╤В ╨╜╨╛╨▓╤Л╨╣
+   * compositing layer тАФ aurora mix-blend-mode ╨╜╨╡ ╨┐╤А╨╛╨▒╨╕╨▓╨░╨╡╤В ╨▓╨╜╤Г╤В╤А╤М.
    */
   isolation: isolate;
   will-change: transform;
 
-  /* Полностью непрозрачный тёмный фон */
+  /* ╨Я╨╛╨╗╨╜╨╛╤Б╤В╤М╤О ╨╜╨╡╨┐╤А╨╛╨╖╤А╨░╤З╨╜╤Л╨╣ ╤В╤С╨╝╨╜╤Л╨╣ ╤Д╨╛╨╜ */
   background: #07091c;
 
   /*
-<<<<<<< Updated upstream
-   * 3D glass bevel — 4-sided асимметричный бортик, точно как у лотерейных карточек:
-   * верх — акцентный цвет, лево — светлее акцента, право и низ — тёмные.
+   * 3D glass bevel тАФ 4-sided ╨░╤Б╨╕╨╝╨╝╨╡╤В╤А╨╕╤З╨╜╤Л╨╣ ╨▒╨╛╤А╤В╨╕╨║, ╤В╨╛╤З╨╜╨╛ ╨║╨░╨║ ╤Г ╨╗╨╛╤В╨╡╤А╨╡╨╣╨╜╤Л╤Е ╨║╨░╤А╤В╨╛╤З╨╡╨║:
+   * ╨▓╨╡╤А╤Е тАФ ╨░╨║╤Ж╨╡╨╜╤В╨╜╤Л╨╣ ╤Ж╨▓╨╡╤В, ╨╗╨╡╨▓╨╛ тАФ ╤Б╨▓╨╡╤В╨╗╨╡╨╡ ╨░╨║╤Ж╨╡╨╜╤В╨░, ╨┐╤А╨░╨▓╨╛ ╨╕ ╨╜╨╕╨╖ тАФ ╤В╤С╨╝╨╜╤Л╨╡.
    */
   border-top:    1.5px solid var(--fc-border-top,    rgba(255,255,255,0.30));
   border-left:   1.5px solid var(--fc-border-left,   rgba(255,255,255,0.14));
@@ -797,33 +796,14 @@
   border-bottom: 1.5px solid var(--fc-border-bottom, rgba(0,0,0,0.65));
 
   /*
-   * box-shadow: inset highlight + тонкий ring + ambient glow + подъём.
-   * Паттерн один в один с hero-card и glass-panel--neon.
+   * box-shadow: inset highlight + ╤В╨╛╨╜╨║╨╕╨╣ ring + ambient glow + ╨┐╨╛╨┤╤К╤С╨╝.
+   * ╨Я╨░╤В╤В╨╡╤А╨╜ ╨╛╨┤╨╕╨╜ ╨▓ ╨╛╨┤╨╕╨╜ ╤Б hero-card ╨╕ glass-panel--neon.
    */
   box-shadow:
     inset 0 1px 0 var(--fc-inset-top, rgba(255,255,255,0.12)),
     0 0 0 1px   var(--fc-ring,        rgba(255,255,255,0.04)),
     0 0 20px    var(--fc-glow,        rgba(255,255,255,0.06)),
     0 4px 16px  rgba(0,0,0,0.65);
-=======
-   * 3D glass bevel — 1:1 структура hero-card (лотерейные карточки),
-   * но с нейтральным белым вместо янтарного --ga-*:
-   */
-  border-top:    1.5px solid rgba(255,255,255,0.32);
-  border-left:   1px solid rgba(255,255,255,0.16);
-  border-right:  1px solid rgba(0,0,0,0.55);
-  border-bottom: 1.5px solid rgba(0,0,0,0.80);
-
-  /*
-   * box-shadow — 1:1 структура hero-card:
-   * inset highlight сверху + внешний ободок + accent-свечение + elevation
-   */
-  box-shadow:
-    inset 0  1px 0   rgba(255,255,255,0.14),
-    0 0 0 1px rgba(255,255,255,0.06),
-    0 0 24px rgba(255,255,255,0.08),
-    0 8px 28px rgba(0,0,0,0.60);
->>>>>>> Stashed changes
 
   transition:
     border-top-color   0.25s ease,
@@ -831,7 +811,7 @@
     box-shadow         0.25s ease;
 }
 
-/* Hover / active — все бордеры чуть ярче, glow усиливается */
+/* Hover / active тАФ ╨▓╤Б╨╡ ╨▒╨╛╤А╨┤╨╡╤А╤Л ╤З╤Г╤В╤М ╤П╤А╤З╨╡, glow ╤Г╤Б╨╕╨╗╨╕╨▓╨░╨╡╤В╤Б╤П */
 .feature-card-img--active,
 .feature-card-img:hover {
   border-top-color:   var(--fc-border-top-h,    rgba(255,255,255,0.50));
@@ -843,7 +823,7 @@
     0 6px 22px  rgba(0,0,0,0.70);
 }
 
-/* Full-bleed background image — cover сохраняет пропорции без искажений */
+/* Full-bleed background image тАФ cover ╤Б╨╛╤Е╤А╨░╨╜╤П╨╡╤В ╨┐╤А╨╛╨┐╨╛╤А╤Ж╨╕╨╕ ╨▒╨╡╨╖ ╨╕╤Б╨║╨░╨╢╨╡╨╜╨╕╨╣ */
 .feature-card-img__bg {
   position: absolute;
   inset: 0;
@@ -861,40 +841,42 @@
 }
 
 /*
- * Glass bevel overlay — поверх изображения:
- * 1. Диагональный блик сверху-слева — как отражение в стекле (как у glass-panel::before)
- * 2. Виньетка снизу — текст читается
+ * Glass bevel overlay тАФ ╨┐╨╛╨▓╨╡╤А╤Е ╨╕╨╖╨╛╨▒╤А╨░╨╢╨╡╨╜╨╕╤П:
+ * 1. ╨Ф╨╕╨░╨│╨╛╨╜╨░╨╗╤М╨╜╤Л╨╣ ╨▒╨╗╨╕╨║ ╤Б╨▓╨╡╤А╤Е╤Г-╤Б╨╗╨╡╨▓╨░ тАФ ╨║╨░╨║ ╨╛╤В╤А╨░╨╢╨╡╨╜╨╕╨╡ ╨▓ ╤Б╤В╨╡╨║╨╗╨╡
+ * 2. ╨У╨╛╤А╨╕╨╖╨╛╨╜╤В╨░╨╗╤М╨╜╤Л╨╣ highlight ╨▓╨┤╨╛╨╗╤М ╨▓╨╡╤А╤Е╨╜╨╡╨│╨╛ ╨║╤А╨░╤П тАФ ╤В╨╛╨╜╨║╨░╤П ╨┐╨╛╨╗╨╛╤Б╨║╨░
+ * 3. ╨Т╨╕╨╜╤М╨╡╤В╨║╨░ ╤Б╨╜╨╕╨╖╤Г тАФ ╤В╨╡╨║╤Б╤В ╤З╨╕╤В╨░╨╡╤В╤Б╤П
  */
 .feature-card-img__bevel {
   position: absolute;
   inset: 0;
   border-radius: inherit;
   background:
-    /* Диагональный specular — верхний-левый треугольник */
+    /* ╨Ф╨╕╨░╨│╨╛╨╜╨░╨╗╤М╨╜╤Л╨╣ specular тАФ ╨▓╨╡╤А╤Е╨╜╨╕╨╣-╨╗╨╡╨▓╤Л╨╣ ╤В╤А╨╡╤Г╨│╨╛╨╗╤М╨╜╨╕╨║ */
     linear-gradient(
-      145deg,
-      rgba(255,255,255,0.035) 0%,
+      142deg,
+      rgba(255,255,255,0.13) 0%,
+      rgba(255,255,255,0.05) 28%,
       transparent 50%
     ),
-    /* Виньетка снизу — текст читается */
+    /* ╨Т╨╕╨╜╤М╨╡╤В╨║╨░ ╤Б╨╜╨╕╨╖╤Г тАФ ╤В╨╡╨║╤Б╤В ╤З╨╕╤В╨░╨╡╤В╤Б╤П */
     linear-gradient(
       to bottom,
       transparent 40%,
-      rgba(0,0,0,0.20) 100%
+      rgba(0,0,0,0.18) 100%
     );
   pointer-events: none;
 }
 
 /*
- * Text column — LEFT side, vertically centered.
- * Градиент от плотного слева к прозрачному справа — как было изначально.
+ * Text column тАФ LEFT side, vertically centered.
+ * Uses a left-to-right gradient so text reads cleanly against the image.
  */
 .feature-card-img__footer {
   position: absolute;
   top: 0;
   left: 0;
   bottom: 0;
-  /* Text occupies left 60% of the card — leaves room for right-side image */
+  /* Text occupies left 58% of the card тАФ leaves room for right-side image */
   width: 60%;
   padding: 0 10px 0 10px;
   background: linear-gradient(
@@ -913,7 +895,7 @@
   text-align: left;
 }
 
-/* Title — left-aligned, clean shadow for readability only */
+/* Title тАФ left-aligned, clean shadow for readability only */
 .feature-card-img__title {
   font-family: var(--font-display);
   font-size: 11px;
@@ -925,19 +907,16 @@
   text-shadow: 0 1px 6px rgba(0,0,0,0.90);
 }
 
-/* ── Desktop — single horizontal row of 6 compact cards ─────────────────── */
+/* тФАтФА Desktop тАФ single horizontal row of 6 compact cards тФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФА */
 
 .features-bento-img {
   display: grid;
-  /* auto-fit, чтобы сетка не ломалась при добавлении/удалении карточек.
-     minmax(120px, 1fr): каждая карточка минимум 120px, а при избытке места
-     колонки равномерно растягиваются. 6 карточек по-прежнему влезают в строку. */
-  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  grid-template-columns: repeat(6, 1fr);
   gap: 10px;
   align-items: stretch;
 }
 
-/* Desktop — 16:9, высота определяется aspect-ratio без ограничений */
+/* Desktop тАФ 16:9, ╨▓╤Л╤Б╨╛╤В╨░ ╨╛╨┐╤А╨╡╨┤╨╡╨╗╤П╨╡╤В╤Б╤П aspect-ratio ╨▒╨╡╨╖ ╨╛╨│╤А╨░╨╜╨╕╤З╨╡╨╜╨╕╨╣ */
 .features-bento-img .feature-card-img {
   width: 100%;
   aspect-ratio: 16 / 9;

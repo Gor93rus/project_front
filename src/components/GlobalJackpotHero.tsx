@@ -1,11 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { motion } from 'framer-motion';
-
-// ── Реальные данные из БД (PostgreSQL) ────────────────────────────────────
-// SELECT COALESCE(SUM("currentJackpot"), 0) FROM "Lottery" WHERE active = true;
-// Результат: 67,500 TON (13 активных лотерей)
-const BASE_JACKPOT_FROM_DB = 67500;
-const LOTTERIES_COUNT = 13;
+import { useNow } from '../hooks/useNow';
+import { motion, useReducedMotion } from 'framer-motion';
+import { api } from '../lib/api';
 
 // Форматтер: точка как разделитель тысяч (de-DE локаль)
 function formatJackpot(value: number): string {
@@ -113,7 +109,7 @@ const RAY_GRADIENT = (() => {
   return `conic-gradient(from 0deg at 50% 50%, ${stops.join(', ')})`;
 })();
 
-function GodRays() {
+function GodRays({ reduceMotion }: { reduceMotion: boolean }) {
   // Радиальная маска гасит лучи к краям → свет «излучается» из центра,
   // не пачкая заливку блока по периметру.
   const maskStyle = {
@@ -140,7 +136,7 @@ function GodRays() {
     >
       <motion.div
         style={{ width: '100%', height: '100%', background: RAY_GRADIENT }}
-        animate={{ rotate: 360 }}
+        animate={reduceMotion ? undefined : { rotate: 360 }}
         transition={{ duration: 70, repeat: Infinity, ease: 'linear' }}
       />
     </div>
@@ -188,32 +184,65 @@ function WinnerRow({ entry, index }: { entry: WinnerEntry; index: number }) {
 // MAIN COMPONENT
 // ═══════════════════════════════════════════════════════════════════════════
 export function GlobalJackpotHero() {
-  const [value, setValue] = useState(BASE_JACKPOT_FROM_DB);
+  const now = useNow();
+  const reduceMotion = useReducedMotion() ?? false;
+  const startTimeRef = useRef(Date.now());
   const [milestoneFlash, setMilestoneFlash] = useState(false);
-  const prevMilestone = useRef(Math.floor(BASE_JACKPOT_FROM_DB / 10000));
+
+  // Живые данные из бэкенда — сумма jackpot всех активных лотерей
+  const [baseJackpot, setBaseJackpot] = useState<number | null>(null);
+  const [lotteriesCount, setLotteriesCount] = useState(0);
+  const prevMilestone = useRef(0);
 
   useEffect(() => {
-    const id = setInterval(() => {
-      setValue(v => {
-        const next = v + 0.31;
-        const currentMilestone = Math.floor(next / 10000);
-        if (currentMilestone > prevMilestone.current) {
-          prevMilestone.current = currentMilestone;
-          setMilestoneFlash(true);
-          setTimeout(() => setMilestoneFlash(false), 800);
+    let cancelled = false;
+    (async () => {
+      try {
+        const { lotteries } = await api.getLotteryList();
+        if (cancelled) return;
+        const total = lotteries.reduce((sum, l) => sum + parseFloat(l.jackpot || '0'), 0);
+        setBaseJackpot(total);
+        setLotteriesCount(lotteries.length);
+        prevMilestone.current = Math.floor(total / 10000);
+      } catch {
+        // Fallback: не ломаем страницу, если бэкенд не отвечает
+        if (!cancelled) {
+          setBaseJackpot(67500); // последнее известное значение
+          setLotteriesCount(13);
         }
-        return next;
-      });
-    }, 1000);
-    return () => clearInterval(id);
+      }
+    })();
+    return () => { cancelled = true; };
   }, []);
+
+  // Пока данные грузятся — показываем 0
+  const effectiveBase = baseJackpot ?? 0;
+
+  // Вычисляем джекпот из общего тикера вместо своего setInterval:
+  // BASE + (прошедшие секунды × 0.31 TON/сек)
+  const value = useMemo(() => {
+    return effectiveBase + ((now - startTimeRef.current) / 1000) * 0.31;
+  }, [now, effectiveBase]);
+
+  // Milestone flash — когда джекпот переваливает через 10k-отметку
+  useEffect(() => {
+    const currentMilestone = Math.floor(value / 10000);
+    if (currentMilestone > prevMilestone.current) {
+      prevMilestone.current = currentMilestone;
+      setMilestoneFlash(true);
+      const id = setTimeout(() => setMilestoneFlash(false), 800);
+      return () => clearTimeout(id);
+    }
+  }, [value]);
 
   const formatted = formatJackpot(value);
 
   const winnerRows = useMemo(
     () =>
       [...GLOBAL_WINNERS_DB, ...GLOBAL_WINNERS_DB].map((entry, i) => (
-        <WinnerRow key={i} entry={entry} index={i % GLOBAL_WINNERS_DB.length} />
+        <span key={i} aria-hidden={i >= GLOBAL_WINNERS_DB.length || undefined}>
+          <WinnerRow entry={entry} index={i % GLOBAL_WINNERS_DB.length} />
+        </span>
       )),
     [],
   );
@@ -249,7 +278,7 @@ export function GlobalJackpotHero() {
         }}
       >
         <div style={{ position: 'absolute', inset: 0, zIndex: 0, pointerEvents: 'none' }}>
-          <GodRays />
+          <GodRays reduceMotion={reduceMotion} />
         </div>
 
         <GoldParticles />
@@ -366,7 +395,7 @@ export function GlobalJackpotHero() {
             animate={{ opacity: 1 }}
             transition={{ delay: 0.25, duration: 0.4 }}
           >
-            Global Jackpot · {LOTTERIES_COUNT} lotteries combined
+            Global Jackpot · {lotteriesCount || '...'} lotteries combined
           </motion.span>
 
           {milestoneFlash && (
@@ -417,7 +446,7 @@ export function GlobalJackpotHero() {
                 background: 'var(--emerald)',
                 boxShadow: '0 0 8px var(--emerald-glow)',
               }}
-              animate={{ opacity: [1, 0.3, 1] }}
+              animate={reduceMotion ? undefined : { opacity: [1, 0.3, 1] }}
               transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
             />
             <span

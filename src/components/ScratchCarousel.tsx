@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion';
+import { motion, useReducedMotion } from 'framer-motion';
 import { SCRATCH_GAMES } from '../data/lotteries';
 import { ScrollCarousel } from './ScrollCarousel';
 import { PremiumButton } from './PremiumButton';
@@ -34,6 +34,7 @@ const GAME_ICONS: Record<string, React.ReactNode> = {
 };
 
 function ScratchCard({ game }: { game: typeof SCRATCH_GAMES[0] }) {
+  const reduceMotion = useReducedMotion() ?? false;
   const accent = game.gradient[0];
   const accent2 = game.gradient[1];
 
@@ -73,15 +74,15 @@ function ScratchCard({ game }: { game: typeof SCRATCH_GAMES[0] }) {
 
       {/* Пульсирующий неон-бордер */}
       <motion.div
-        style={{ position: 'absolute', inset: 0, borderRadius: 20, pointerEvents: 'none', zIndex: 10, border: '2px solid transparent' }}
-        animate={{ borderColor: [`${accent}20`, `${accent}80`, `${accent}20`], boxShadow: [`0 0 0px ${accent}00`, `0 0 12px ${accent}60`, `0 0 0px ${accent}00`] }}
+        style={{ position: 'absolute', inset: 0, borderRadius: 20, pointerEvents: 'none', zIndex: 10, border: `2px solid ${accent}50`, boxShadow: `0 0 12px ${accent}60`, opacity: 0 }}
+        animate={reduceMotion ? undefined : { opacity: [0, 1, 0] }}
         transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
       />
 
       {/* Hero-символ игры */}
       <motion.div
         style={{ position: 'absolute', top: '12%', left: 0, right: 0, display: 'flex', justifyContent: 'center', zIndex: 5, color: '#fff' }}
-        animate={{ y: [0, -5, 0], scale: [1, 1.05, 1] }}
+        animate={reduceMotion ? undefined : { y: [0, -5, 0], scale: [1, 1.05, 1] }}
         transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
       >
         <div style={{ filter: `drop-shadow(0 8px 20px rgba(0,0,0,0.5)) drop-shadow(0 0 16px ${accent}aa)` }}>

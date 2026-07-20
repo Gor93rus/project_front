@@ -1,12 +1,8 @@
 import {
-  createContext,
-  useContext,
-  useEffect,
   useMemo,
   useRef,
   useState,
   type CSSProperties,
-  type ReactNode,
 } from 'react';
 import { motion, useInView, useReducedMotion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
@@ -14,23 +10,7 @@ import { LOTTERIES, type Lottery } from '../data/lotteries';
 import { ScrollCarousel } from './ScrollCarousel';
 import { PremiumButton } from './PremiumButton';
 import { GlitchJackpot } from './GlitchJackpot';
-
-/* ── Shared ticker ──
-   Один setInterval на весь список карточек вместо N×2. Провайдер оборачивает
-   только ScrollCarousel (см. LotteryCarousel), поэтому его ежесекундные
-   ре-рендеры не задевают статичный хедер/кнопку "How it works?" — они лежат
-   вне поддерева NowProvider. */
-const NowContext = createContext<number>(Date.now());
-const useNow = () => useContext(NowContext);
-
-function NowProvider({ children }: { children: ReactNode }) {
-  const [now, setNow] = useState(() => Date.now());
-  useEffect(() => {
-    const id = setInterval(() => setNow(Date.now()), 1000);
-    return () => clearInterval(id);
-  }, []);
-  return <NowContext.Provider value={now}>{children}</NowContext.Provider>;
-}
+import { useNow, NowProvider } from '../hooks/useNow';
 
 /* ── Draw phase (status machine) ──
    Жизненный цикл тиража по бэкенду: создание → блокировка → исполнение → завершение.
@@ -124,7 +104,6 @@ function digitStyle(accent: string): CSSProperties {
   };
 }
 
-// Стабильный компонент вместо инлайновой функции ch(), пересоздававшейся на каждый рендер.
 function Digit({ value, style }: { value: string; style: CSSProperties }) {
   return (
     <span style={style}>
@@ -184,7 +163,6 @@ function SegmentedCountdown({ target, accent }: { target: string; accent: string
   );
 }
 
-/* ── Shared "glass 3D" card shell style ── */
 function useGlassCardStyle(accent: string): CSSProperties {
   return useMemo(() => ({
     borderTop: '2px solid rgba(255,255,255,0.18)',
@@ -212,8 +190,6 @@ function LotteryCard({ lottery }: { lottery: Lottery }) {
   const isLive = phase === 'live';
   const shellStyle = useGlassCardStyle(accent);
 
-  // Карточки, уехавшие за пределы карусели, не должны гонять бесконечные
-  // анимации впустую — на 10+ карточках это лишняя нагрузка на мобилке.
   const cardRef = useRef<HTMLDivElement>(null);
   const isInView = useInView(cardRef, { margin: '150px', amount: 0.1 });
   const animationsActive = isInView && !reduceMotion;
@@ -246,90 +222,43 @@ function LotteryCard({ lottery }: { lottery: Lottery }) {
       style={{
         position: 'relative', borderRadius: 20, flexShrink: 0, cursor: 'pointer',
         width: 182, minHeight: 390,
-<<<<<<< Updated upstream
         // Clip children (image pulse stays inside card)
         overflow: 'hidden',
-        // Усиленная направленная фаска (glass-3d): светлый верх/лево, тёмный низ/право
-        borderTop: '2px solid rgba(255,255,255,0.18)',
-        borderLeft: '1.5px solid rgba(255,255,255,0.09)',
-        borderRight: '1.5px solid rgba(0,0,0,0.6)',
-        borderBottom: '3px solid rgba(0,0,0,0.85)',
-        boxShadow: `
-          inset 0 2px 0 rgba(255,255,255,0.18),
-          inset 0 -4px 14px rgba(0,0,0,0.5),
-          0 2px 6px rgba(0,0,0,0.6),
-          0 22px 42px -12px rgba(0,0,0,0.9),
-          0 12px 30px -8px ${accent}66,
-          0 0 26px ${accent}24
-        `,
-      }}
-    >
-      {/* Background */}
-      <div style={{ position: 'absolute', inset: 0 }}>
-        <div style={{
-          position: 'absolute', inset: 0,
-          background: `radial-gradient(ellipse 80% 60% at 50% 30%, ${accent}55 0%, transparent 55%),
-            radial-gradient(ellipse 40% 30% at 70% 20%, ${accent}40 0%, transparent 48%),
-            repeating-linear-gradient(45deg, transparent 0px, ${accent}12 1px, transparent 4px),
-            linear-gradient(180deg, var(--bg-0) 0%, ${accent}25 30%, var(--bg-0) 70%, var(--bg-0) 100%)`,
-        }} />
-=======
         ...shellStyle,
       }}
     >
       {/* Background */}
-      <div style={{ position: 'absolute', inset: 0, borderRadius: 20, overflow: 'hidden' }}>
+      <div style={{ position: 'absolute', inset: 0 }}>
         <div style={backgroundStyle} />
->>>>>>> Stashed changes
       </div>
 
-      {/* Pulsing neon border — анимируем только opacity (GPU-friendly),
-          не borderColor/boxShadow, которые заставляют браузер репейнтить слой. */}
+      {/* Pulsing neon border */}
       <motion.div
-<<<<<<< Updated upstream
-        style={{ position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 10, border: '2px solid transparent' }}
-        animate={{ borderColor: [`${accent}20`, `${accent}80`, `${accent}20`], boxShadow: [`0 0 0px ${accent}00`, `0 0 12px ${accent}60`, `0 0 0px ${accent}00`] }}
-=======
         style={{
-          position: 'absolute', inset: 0, borderRadius: 20, pointerEvents: 'none', zIndex: 10,
+          position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 10,
           border: `2px solid ${accent}50`,
           boxShadow: `0 0 12px ${accent}60`,
           opacity: 0,
         }}
         animate={animationsActive ? { opacity: [0, 1, 0] } : undefined}
->>>>>>> Stashed changes
         transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
       />
 
-      {/* Card image — fills the upper portion of the card, blending into the background.
-          The scale animation is applied to the <img> itself, not the container,
-          so the container clips it correctly via the parent's overflow:hidden. */}
+      {/* Card image */}
       {cardImage && (
-<<<<<<< Updated upstream
         <div
           style={{
             position: 'absolute', top: 0, left: 0, right: 0, height: '62%',
             zIndex: 5,
-            // Dark solid bg to cover any checkerboard / transparent PNG edges
             backgroundColor: '#06080f',
           }}
-=======
-        <motion.div
-          style={{ position: 'absolute', top: '8%', left: 0, right: 0, display: 'flex', justifyContent: 'center', zIndex: 5 }}
-          animate={animationsActive ? { y: [0, -5, 0], scale: [1, 1.04, 1] } : undefined}
-          transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
->>>>>>> Stashed changes
         >
           <motion.img
             src={cardImage}
-<<<<<<< Updated upstream
-            alt={lottery.name}
-            animate={{ scale: [1, 1.04, 1] }}
-            transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut' }}
-=======
             alt=""
             loading="lazy"
->>>>>>> Stashed changes
+            animate={animationsActive ? { scale: [1, 1.04, 1] } : undefined}
+            transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut' }}
             style={{
               width: '100%', height: '115%', objectFit: 'contain', objectPosition: 'center top',
               display: 'block',
@@ -337,7 +266,6 @@ function LotteryCard({ lottery }: { lottery: Lottery }) {
               filter: `drop-shadow(0 12px 28px rgba(0,0,0,0.6)) drop-shadow(0 0 22px ${accent}50)`,
             }}
           />
-          {/* Fade image into card background at the bottom */}
           <div style={{
             position: 'absolute', bottom: 0, left: 0, right: 0, height: '55%',
             background: 'linear-gradient(to bottom, transparent 0%, var(--bg-0, #06080f) 100%)',
@@ -346,10 +274,9 @@ function LotteryCard({ lottery }: { lottery: Lottery }) {
         </div>
       )}
 
-      {/* Fade mask — blends card image area into content below */}
+      {/* Fade mask */}
       <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '65%', zIndex: 6, pointerEvents: 'none', maskImage: 'linear-gradient(180deg, transparent 0%, transparent 50%, #000 100%)', WebkitMaskImage: 'linear-gradient(180deg, transparent 0%, transparent 50%, #000 100%)' }} />
       {/* Glass overlay */}
-<<<<<<< Updated upstream
       <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 8, background: 'linear-gradient(165deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.01) 35%, transparent 60%)' }} />
       {/* Neon border top */}
       <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 9, padding: 1, background: `linear-gradient(180deg, ${accent}50 0%, ${accent}25 50%, transparent 100%)`, WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)', WebkitMaskComposite: 'xor', maskComposite: 'exclude' }} />
@@ -358,25 +285,6 @@ function LotteryCard({ lottery }: { lottery: Lottery }) {
       <div style={{ position: 'relative', zIndex: 10, display: 'flex', flexDirection: 'column', height: '100%', minHeight: 390, padding: '10px 12px 14px' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 'auto', gap: 4 }}>
           <span style={{ fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'rgba(255,255,255,0.65)', fontFamily: "var(--font-mono)", whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', minWidth: 0 }}>
-=======
-      <div style={{ position: 'absolute', inset: 0, borderRadius: 20, pointerEvents: 'none', zIndex: 8, background: 'linear-gradient(165deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.01) 35%, transparent 60%)' }} />
-      {/* Neon border top — стандартный mask рядом с -webkit-, иначе рамка не рисуется в Firefox */}
-      <div
-        style={{
-          position: 'absolute', inset: 0, borderRadius: 20, pointerEvents: 'none', zIndex: 9, padding: 1,
-          background: `linear-gradient(180deg, ${accent}50 0%, ${accent}25 50%, transparent 100%)`,
-          WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
-          WebkitMaskComposite: 'xor',
-          mask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
-          maskComposite: 'exclude',
-        }}
-      />
-
-      {/* Content */}
-      <div style={{ position: 'relative', zIndex: 10, display: 'flex', flexDirection: 'column', height: '100%', minHeight: 390, padding: '10px 12px 14px' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 'auto' }}>
-          <span style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.12em', color: 'rgba(255,255,255,0.65)', fontFamily: 'var(--font-mono)' }}>
->>>>>>> Stashed changes
             {lottery.drawLabel}
           </span>
           <span aria-live="polite">
@@ -414,18 +322,9 @@ function LotteryCard({ lottery }: { lottery: Lottery }) {
           ) : (
             <SegmentedCountdown target={lottery.nextDraw} accent={accent} />
           )}
-<<<<<<< Updated upstream
-          <PremiumButton label={`Play · ${lottery.ticketPrice} ${lottery.currency}`} accent={lottery.accentColor} gradient={lottery.gradient} />
-=======
-          {/* stopPropagation — иначе клик по Buy всплывает в карточку и вместо
-              потока покупки просто уводит на /lottery/:id, как обычный клик по карточке. */}
-          <div
-            onClick={(e) => e.stopPropagation()}
-            onKeyDown={(e) => e.stopPropagation()}
-          >
+          <div onClick={(e) => e.stopPropagation()} onKeyDown={(e) => e.stopPropagation()}>
             <PremiumButton label={`Buy · ${lottery.ticketPrice} ${lottery.currency}`} accent={lottery.accentColor} gradient={lottery.gradient} />
           </div>
->>>>>>> Stashed changes
         </div>
       </div>
     </motion.div>
@@ -450,32 +349,24 @@ function HowItWorksModal({ onClose }: { onClose: () => void }) {
   useEffect(() => {
     const previouslyFocused = document.activeElement as HTMLElement | null;
     const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = 'hidden'; // блокируем скролл фона под модалкой
+    document.body.style.overflow = 'hidden';
     closeBtnRef.current?.focus();
 
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        onClose();
-        return;
-      }
+      if (e.key === 'Escape') { onClose(); return; }
       if (e.key !== 'Tab' || !dialogRef.current) return;
       const focusables = Array.from(dialogRef.current.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR));
       if (focusables.length === 0) return;
       const first = focusables[0];
       const last = focusables[focusables.length - 1];
-      if (e.shiftKey && document.activeElement === first) {
-        e.preventDefault();
-        last.focus();
-      } else if (!e.shiftKey && document.activeElement === last) {
-        e.preventDefault();
-        first.focus();
-      }
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
     };
     window.addEventListener('keydown', onKey);
     return () => {
       window.removeEventListener('keydown', onKey);
       document.body.style.overflow = previousOverflow;
-      previouslyFocused?.focus(); // возвращаем фокус на кнопку-триггер
+      previouslyFocused?.focus();
     };
   }, [onClose]);
 
@@ -508,36 +399,19 @@ function HowItWorksModal({ onClose }: { onClose: () => void }) {
           boxShadow: 'inset 0 2px 0 rgba(255,255,255,0.14), 0 24px 60px -16px rgba(0,0,0,0.9), 0 0 40px -8px var(--ton-glow, rgba(0,152,234,0.35))',
         }}
       >
-        {/* верхняя неоновая линия */}
         <div style={{ position: 'absolute', top: 0, left: 18, right: 18, height: 1, background: 'linear-gradient(90deg, transparent, var(--ton), transparent)', opacity: 0.7 }} />
-
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-2">
-            <span style={{ fontSize: 11, fontWeight: 800, letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--ton)', fontFamily: 'var(--font-mono)' }}>
-              How it works?
-            </span>
+            <span style={{ fontSize: 11, fontWeight: 800, letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--ton)', fontFamily: 'var(--font-mono)' }}>How it works?</span>
           </div>
-          <button
-            ref={closeBtnRef}
-            onClick={onClose}
-            aria-label="Close"
-            className="flex items-center justify-center"
-            style={{ width: 28, height: 28, borderRadius: 999, background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', color: 'var(--ink-1)' }}>
+          <button ref={closeBtnRef} onClick={onClose} aria-label="Close" className="flex items-center justify-center" style={{ width: 28, height: 28, borderRadius: 999, background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', color: 'var(--ink-1)' }}>
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M18 6 6 18M6 6l12 12"/></svg>
           </button>
         </div>
-
         <div className="flex flex-col gap-3.5">
           {HOW_STEPS.map((s, i) => (
             <div key={s.title} className="flex items-start gap-3">
-              <span style={{
-                flexShrink: 0, width: 24, height: 24, borderRadius: 8,
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                fontSize: 11, fontWeight: 800, fontFamily: 'var(--font-mono)',
-                color: 'var(--ton)', background: 'rgba(0,152,234,0.12)',
-                border: '1px solid var(--ton-35, rgba(0,152,234,0.4))',
-                boxShadow: '0 0 10px rgba(0,152,234,0.25)',
-              }}>{i + 1}</span>
+              <span style={{ flexShrink: 0, width: 24, height: 24, borderRadius: 8, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 11, fontWeight: 800, fontFamily: 'var(--font-mono)', color: 'var(--ton)', background: 'rgba(0,152,234,0.12)', border: '1px solid var(--ton-35, rgba(0,152,234,0.4))', boxShadow: '0 0 10px rgba(0,152,234,0.25)' }}>{i + 1}</span>
               <div>
                 <p style={{ fontSize: 12, fontWeight: 700, color: 'var(--ink-0)', marginBottom: 2, fontFamily: "'Space Grotesk', sans-serif" }}>{s.title}</p>
                 <p style={{ fontSize: 11, lineHeight: 1.5, color: 'var(--ink-2)' }}>{s.text}</p>
@@ -566,7 +440,6 @@ function HowItWorksButton({ onClick }: { onClick: () => void }) {
         color: 'var(--ton)',
         background: hover ? 'var(--ton-12, rgba(0,152,234,0.14))' : 'rgba(255,255,255,0.03)',
         border: '1px solid var(--ton-35, rgba(0,152,234,0.4))',
-
         boxShadow: hover
           ? '0 0 16px var(--ton-glow, rgba(0,152,234,0.45)), inset 0 1px 0 rgba(255,255,255,0.08)'
           : 'inset 0 1px 0 rgba(255,255,255,0.05)',
@@ -599,13 +472,9 @@ export function LotteryCarousel() {
         <HowItWorksButton onClick={() => setShowHowItWorks(true)} />
       </div>
 
-      {/* NowProvider оборачивает только карусель — хедер и кнопка выше
-          не подписаны на тикер и не ре-рендерятся каждую секунду. */}
-      <NowProvider>
-        <ScrollCarousel accent="var(--ton)" showProgress={false}>
-          {LOTTERIES.map(l => <LotteryCard key={l.id} lottery={l} />)}
-        </ScrollCarousel>
-      </NowProvider>
+      <ScrollCarousel accent="var(--ton)" showProgress={false}>
+        {LOTTERIES.map(l => <LotteryCard key={l.id} lottery={l} />)}
+      </ScrollCarousel>
 
       {showHowItWorks && <HowItWorksModal onClose={() => setShowHowItWorks(false)} />}
     </section>

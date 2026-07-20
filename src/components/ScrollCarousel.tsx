@@ -133,6 +133,15 @@ export function ScrollCarousel({ children, accent = '#3CB1FF', showProgress = tr
           // Resume after a delay so user can finish scrolling naturally
           autoScrollTimeout.current = setTimeout(() => { autoScrollPaused.current = false; }, 3000);
         }}
+        onPointerCancel={() => {
+          autoScrollTimeout.current = setTimeout(() => { autoScrollPaused.current = false; }, 3000);
+        }}
+        onPointerLeave={() => {
+          // Если палец ушёл за пределы контейнера без pointerup — тоже возобновляем
+          if (autoScrollPaused.current) {
+            autoScrollTimeout.current = setTimeout(() => { autoScrollPaused.current = false; }, 3000);
+          }
+        }}
         onScroll={() => { update(); handleScrollEnd(); }}
         className="flex gap-[10px] overflow-x-auto scrollbar-none scroll-mask"
         style={{
@@ -147,15 +156,20 @@ export function ScrollCarousel({ children, accent = '#3CB1FF', showProgress = tr
           scrollSnapType: 'x mandatory',
         }}>
         {Array.isArray(children)
-          ? (children as React.ReactElement[]).map((child, i) => (
-              <div
-                key={i}
-                className="snap-center shrink-0"
-                style={{ overflow: 'visible' }}
-              >
-                {child}
-              </div>
-            ))
+          ? (children as React.ReactElement[]).map((child, i) => {
+              // Используем стабильный key из дочернего элемента (если есть),
+              // чтобы DOM-ноды обёрток не перепутывались при пересортировке.
+              const childKey = (child as any)?.key ?? i;
+              return (
+                <div
+                  key={childKey}
+                  className="snap-center shrink-0"
+                  style={{ overflow: 'visible' }}
+                >
+                  {child}
+                </div>
+              );
+            })
           : children}
       </div>
 

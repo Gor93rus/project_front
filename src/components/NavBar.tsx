@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
 import { hapticImpact } from '../lib/haptic';
+import { useScrolled } from '../hooks/useScrolled';
 
 export type NavTab = 'home' | 'live' | 'cart' | 'history' | 'profile';
 
@@ -55,13 +55,7 @@ const TABS: { id: NavTab; label: string; icon: React.ReactNode; live?: boolean }
 ];
 
 export function NavBar({ active, onTabChange }: Props) {
-  const [scrolled, setScrolled] = useState(false);
-
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 20);
-    window.addEventListener('scroll', onScroll, { passive: true });
-    return () => window.removeEventListener('scroll', onScroll);
-  }, []);
+  const scrolled = useScrolled(20);
 
   return (
     <nav className="fixed bottom-0 left-0 right-0 z-50 flex items-center justify-around py-2 px-1"

@@ -1,6 +1,7 @@
-import { motion } from 'framer-motion';
+import { motion, useReducedMotion } from 'framer-motion';
 
 export function PageFooter() {
+  const reduceMotion = useReducedMotion() ?? false;
   const links = [
     { label: 'Rules', href: '#' },
     { label: 'Privacy Policy', href: '#' },
@@ -27,8 +28,9 @@ export function PageFooter() {
             background: 'linear-gradient(135deg, #0098EA, var(--gold), #FF8E53)',
             WebkitBackgroundClip: 'text',
             WebkitTextFillColor: 'transparent',
+            backgroundSize: '200% 100%',
           }}
-          animate={{ backgroundPosition: ['0% 50%', '100% 50%', '0% 50%'] }}
+          animate={reduceMotion ? undefined : { backgroundPosition: ['0% 50%', '100% 50%', '0% 50%'] }}
           transition={{ duration: 4, repeat: Infinity, ease: 'linear' }}
         >
           Weekend Millions
