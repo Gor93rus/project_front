@@ -1,4 +1,5 @@
 import {
+  useEffect,
   useMemo,
   useRef,
   useState,
@@ -10,7 +11,7 @@ import { LOTTERIES, type Lottery } from '../data/lotteries';
 import { ScrollCarousel } from './ScrollCarousel';
 import { PremiumButton } from './PremiumButton';
 import { GlitchJackpot } from './GlitchJackpot';
-import { useNow, NowProvider } from '../hooks/useNow';
+import { useNow } from '../hooks/useNow';
 
 /* ── Draw phase (status machine) ──
    Жизненный цикл тиража по бэкенду: создание → блокировка → исполнение → завершение.
