@@ -104,12 +104,14 @@ export function Header() {
       style={{
         // Safe area — covers Dynamic Island / notch / camera cutouts
         paddingTop: 'var(--safe-area-top)',
-        // Same translucent navy + blur language as NavBar, mirrored top→bottom
+        // Transparent at rest — content shows through; blurred navy glass fades in on scroll
         background: scrolled
-          ? 'linear-gradient(180deg, rgba(6,7,26,0.96) 0%, rgba(11,16,40,0.94) 100%)'
-          : 'linear-gradient(180deg, rgba(6,7,26,0.98) 0%, rgba(11,16,40,0.96) 100%)',
-        borderBottom: scrolled ? '1px solid var(--primary-18)' : '1px solid var(--line)',
-        transition: 'background 0.3s, border-color 0.3s',
+          ? 'linear-gradient(180deg, rgba(6,7,26,0.92) 0%, rgba(11,16,40,0.88) 100%)'
+          : 'linear-gradient(180deg, rgba(6,7,26,0) 0%, rgba(11,16,40,0) 100%)',
+        backdropFilter: scrolled ? 'blur(18px) saturate(140%)' : 'blur(0px)',
+        WebkitBackdropFilter: scrolled ? 'blur(18px) saturate(140%)' : 'blur(0px)',
+        borderBottom: scrolled ? '1px solid var(--primary-18)' : '1px solid transparent',
+        transition: 'background 0.4s ease, backdrop-filter 0.4s ease, -webkit-backdrop-filter 0.4s ease, border-color 0.4s ease',
       }}
     >
       {/* Single row — brand · rate + wallet */}
