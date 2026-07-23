@@ -377,8 +377,8 @@ export function GlobalJackpotHero() {
           </motion.span>
 
           <motion.div
-            className="flex items-baseline"
-            style={{ gap: 8 }}
+            className="flex items-center justify-center"
+            style={{ gap: 8, width: '100%' }}
             animate={milestoneFlash ? { scale: [1, 1.06, 1] } : {}}
             transition={{ duration: 0.6, ease: 'easeOut' }}
           >

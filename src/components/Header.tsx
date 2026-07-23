@@ -108,8 +108,8 @@ export function Header() {
         background: scrolled
           ? 'linear-gradient(180deg, rgba(6,7,26,0.92) 0%, rgba(11,16,40,0.88) 100%)'
           : 'linear-gradient(180deg, rgba(6,7,26,0) 0%, rgba(11,16,40,0) 100%)',
-        backdropFilter: scrolled ? 'blur(18px) saturate(140%)' : 'blur(0px)',
-        WebkitBackdropFilter: scrolled ? 'blur(18px) saturate(140%)' : 'blur(0px)',
+        backdropFilter: scrolled ? 'blur(18px) saturate(140%)' : 'none',
+        WebkitBackdropFilter: scrolled ? 'blur(18px) saturate(140%)' : 'none',
         borderBottom: scrolled ? '1px solid var(--primary-18)' : '1px solid transparent',
         transition: 'background 0.4s ease, backdrop-filter 0.4s ease, -webkit-backdrop-filter 0.4s ease, border-color 0.4s ease',
       }}
