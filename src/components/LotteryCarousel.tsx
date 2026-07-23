@@ -166,17 +166,18 @@ function SegmentedCountdown({ target, accent }: { target: string; accent: string
 
 function useGlassCardStyle(accent: string): CSSProperties {
   return useMemo(() => ({
-    borderTop: '2px solid rgba(255,255,255,0.18)',
+    borderTop: '2px solid rgba(255,255,255,0.26)',
     borderLeft: '1.5px solid rgba(255,255,255,0.09)',
     borderRight: '1.5px solid rgba(0,0,0,0.6)',
     borderBottom: '3px solid rgba(0,0,0,0.85)',
     boxShadow: `
-      inset 0 2px 0 rgba(255,255,255,0.18),
+      inset 0 2px 0 rgba(255,255,255,0.26),
       inset 0 -4px 14px rgba(0,0,0,0.5),
+      0 0 0 1px ${accent}2e,
       0 2px 6px rgba(0,0,0,0.6),
       0 22px 42px -12px rgba(0,0,0,0.9),
-      0 12px 30px -8px ${accent}66,
-      0 0 26px ${accent}24
+      0 12px 30px -8px ${accent}7a,
+      0 0 34px ${accent}3d
     `,
   }), [accent]);
 }
@@ -237,8 +238,8 @@ function LotteryCard({ lottery }: { lottery: Lottery }) {
       <motion.div
         style={{
           position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 10,
-          border: `2px solid ${accent}50`,
-          boxShadow: `0 0 12px ${accent}60`,
+          border: `2px solid ${accent}68`,
+          boxShadow: `0 0 16px ${accent}78`,
           opacity: 0,
         }}
         animate={animationsActive ? { opacity: [0, 1, 0] } : undefined}
@@ -280,7 +281,7 @@ function LotteryCard({ lottery }: { lottery: Lottery }) {
       {/* Glass overlay */}
       <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 8, background: 'linear-gradient(165deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.01) 35%, transparent 60%)' }} />
       {/* Neon border top */}
-      <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 9, padding: 1, background: `linear-gradient(180deg, ${accent}50 0%, ${accent}25 50%, transparent 100%)`, WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)', WebkitMaskComposite: 'xor', maskComposite: 'exclude' }} />
+      <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 9, padding: 1, background: `linear-gradient(180deg, ${accent}68 0%, ${accent}38 50%, transparent 100%)`, WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)', WebkitMaskComposite: 'xor', maskComposite: 'exclude' }} />
 
       {/* Content */}
       <div style={{ position: 'relative', zIndex: 10, display: 'flex', flexDirection: 'column', height: '100%', minHeight: 390, padding: '10px 12px 14px' }}>

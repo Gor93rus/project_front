@@ -159,12 +159,12 @@ function WinnerRow({ entry, index }: { entry: WinnerEntry; index: number }) {
       }}
     >
       {avatarFromName(entry.user, index)}
-      <span style={{ color: 'var(--ink-1)', fontWeight: 600, fontSize: 10.5 }}>{entry.user}</span>
-      <span style={{ color: 'var(--ink-3)', fontSize: 9, fontFamily: 'var(--font-mono)' }}>won</span>
-      <span style={{ color: 'var(--emerald-soft)', fontWeight: 700, fontFamily: 'var(--font-mono)', fontSize: 10.5 }}>
+      <span style={{ color: 'var(--ink-1)', fontWeight: 600, fontSize: 10.5, whiteSpace: 'nowrap', flexShrink: 0 }}>{entry.user}</span>
+      <span style={{ color: 'var(--ink-3)', fontSize: 9, fontFamily: 'var(--font-mono)', whiteSpace: 'nowrap', flexShrink: 0 }}>won</span>
+      <span style={{ color: 'var(--emerald-soft)', fontWeight: 700, fontFamily: 'var(--font-mono)', fontSize: 10.5, whiteSpace: 'nowrap', flexShrink: 0 }}>
         {entry.prize}
       </span>
-      <span style={{ color: 'var(--ink-3)', fontSize: 9 }}>in</span>
+      <span style={{ color: 'var(--ink-3)', fontSize: 9, whiteSpace: 'nowrap', flexShrink: 0 }}>in</span>
       <span style={{
         color: 'var(--primary-soft)',
         fontSize: 9.5,
@@ -173,6 +173,8 @@ function WinnerRow({ entry, index }: { entry: WinnerEntry; index: number }) {
         padding: '2px 6px',
         borderRadius: 4,
         border: '1px solid var(--primary-18)',
+        whiteSpace: 'nowrap',
+        flexShrink: 0,
       }}>
         {entry.lottery}
       </span>
@@ -193,6 +195,13 @@ export function GlobalJackpotHero() {
   const [baseJackpot, setBaseJackpot] = useState<number | null>(null);
   const [lotteriesCount, setLotteriesCount] = useState(0);
   const prevMilestone = useRef(0);
+  const isLoading = baseJackpot === null;
+
+  // Плавный "reveal" суммы вместо мгновенного прыжка от 0 к загруженному значению:
+  // считаем от 0 до baseJackpot за ~900мс через rAF (ease-out), затем передаём
+  // эстафету обычному посекундному тикеру.
+  const [displayBase, setDisplayBase] = useState(0);
+  const revealDoneRef = useRef(false);
 
   useEffect(() => {
     let cancelled = false;
@@ -215,17 +224,46 @@ export function GlobalJackpotHero() {
     return () => { cancelled = true; };
   }, []);
 
-  // Пока данные грузятся — показываем 0
-  const effectiveBase = baseJackpot ?? 0;
+  useEffect(() => {
+    if (baseJackpot === null) return;
 
-  // Вычисляем джекпот из общего тикера вместо своего setInterval:
-  // BASE + (прошедшие секунды × 0.31 TON/сек)
+    if (reduceMotion) {
+      setDisplayBase(baseJackpot);
+      revealDoneRef.current = true;
+      startTimeRef.current = Date.now();
+      return;
+    }
+
+    let raf = 0;
+    const duration = 900;
+    const startTs = performance.now();
+    const tick = (ts: number) => {
+      const t = Math.min(1, (ts - startTs) / duration);
+      const eased = 1 - Math.pow(1 - t, 3);
+      setDisplayBase(baseJackpot * eased);
+      if (t < 1) {
+        raf = requestAnimationFrame(tick);
+      } else {
+        revealDoneRef.current = true;
+        startTimeRef.current = Date.now();
+      }
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [baseJackpot]);
+
+  // Вычисляем джекпот: пока идёт reveal-анимация — берём displayBase,
+  // после неё — обычный рост BASE + (прошедшие секунды × 0.31 TON/сек)
   const value = useMemo(() => {
-    return effectiveBase + ((now - startTimeRef.current) / 1000) * 0.31;
-  }, [now, effectiveBase]);
+    if (baseJackpot === null) return 0;
+    if (!revealDoneRef.current) return displayBase;
+    return baseJackpot + ((now - startTimeRef.current) / 1000) * 0.31;
+  }, [now, baseJackpot, displayBase]);
 
   // Milestone flash — когда джекпот переваливает через 10k-отметку
   useEffect(() => {
+    if (isLoading) return;
     const currentMilestone = Math.floor(value / 10000);
     if (currentMilestone > prevMilestone.current) {
       prevMilestone.current = currentMilestone;
@@ -233,7 +271,7 @@ export function GlobalJackpotHero() {
       const id = setTimeout(() => setMilestoneFlash(false), 800);
       return () => clearTimeout(id);
     }
-  }, [value]);
+  }, [value, isLoading]);
 
   const formatted = formatJackpot(value);
 
@@ -344,48 +382,98 @@ export function GlobalJackpotHero() {
             animate={milestoneFlash ? { scale: [1, 1.06, 1] } : {}}
             transition={{ duration: 0.6, ease: 'easeOut' }}
           >
-            <span
-            className="font-tabular"
-            style={{
-                fontSize: 64,
-                lineHeight: 0.90,
-                letterSpacing: '-0.03em',
-                fontFamily: 'var(--font-mono)',
-                fontWeight: 800,
-                // Бегущий блик по цифрам + металлическая золотая заливка (оба клипуются по глифам)
-                background: `
+            {isLoading ? (
+              <span
+                aria-hidden="true"
+                style={{
+                  display: 'inline-block',
+                  width: 210,
+                  height: 54,
+                  borderRadius: 12,
+                  background:
+                    'linear-gradient(90deg, rgba(250,219,20,0.06) 0%, rgba(250,219,20,0.22) 50%, rgba(250,219,20,0.06) 100%)',
+                  backgroundSize: '200% 100%',
+                  animation: reduceMotion ? undefined : 'skeletonShimmer 1.4s ease-in-out infinite',
+                }}
+              />
+            ) : (
+              <span
+                className="font-tabular"
+                style={{
+                  fontSize: 64,
+                  lineHeight: 0.90,
+                  letterSpacing: '-0.03em',
+                  fontFamily: 'var(--font-mono)',
+                  fontWeight: 800,
+                  // Бегущий блик по цифрам + металлическая золотая заливка (оба клипуются по глифам)
+                  background: `
                   linear-gradient(100deg, transparent 44%, rgba(255,255,255,0.95) 50%, transparent 56%),
                   linear-gradient(180deg, #FFF7B0 0%, #FADB14 25%, #D97706 60%, #92400E 100%)
                 `,
-                backgroundSize: '220% 100%, 100% 100%',
-                backgroundPosition: '220% 0, 0 0',
-                backgroundRepeat: 'no-repeat',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                backgroundClip: 'text',
-                animation: 'text-sheen 4.5s ease-in-out infinite',
-                animationDelay: '1.4s',
-                filter: `
+                  backgroundSize: '220% 100%, 100% 100%',
+                  backgroundPosition: '220% 0, 0 0',
+                  backgroundRepeat: 'no-repeat',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                  backgroundClip: 'text',
+                  animation: 'text-sheen 4.5s ease-in-out infinite',
+                  animationDelay: '1.4s',
+                  filter: `
                   drop-shadow(0 2px 4px rgba(0,0,0,0.8))
                   drop-shadow(0 0 18px rgba(250,219,20,0.6))
                   drop-shadow(0 0 40px rgba(250,219,20,0.3))
                 `,
-              }}
-            >
-              {formatted}
-            </span>
-            <span
-              style={{
-                fontSize: 15,
-                fontWeight: 800,
-                fontFamily: 'var(--font-mono)',
-                color: 'var(--gold-soft)',
-                textShadow: '0 0 14px var(--gold-glow), 0 2px 4px rgba(0,0,0,0.5)',
-                marginBottom: 6,
-              }}
-            >
-              TON
-            </span>
+                }}
+              >
+                {formatted}
+              </span>
+            )}
+            {!isLoading && (
+              <span
+                style={{
+                  fontSize: 15,
+                  fontWeight: 800,
+                  fontFamily: 'var(--font-mono)',
+                  color: 'var(--gold-soft)',
+                  textShadow: '0 0 14px var(--gold-glow), 0 2px 4px rgba(0,0,0,0.5)',
+                  marginBottom: 6,
+                }}
+              >
+                TON
+              </span>
+            )}
+            {!isLoading && (
+              <motion.span
+                aria-hidden="true"
+                className="flex items-center shrink-0"
+                style={{
+                  gap: 2,
+                  marginLeft: 2,
+                  marginBottom: 8,
+                  fontSize: 9,
+                  fontWeight: 800,
+                  letterSpacing: '0.03em',
+                  textTransform: 'uppercase',
+                  color: 'var(--emerald-soft)',
+                  background: 'var(--emerald-dim)',
+                  border: '1px solid var(--emerald-18)',
+                  borderRadius: 999,
+                  padding: '2px 6px 2px 5px',
+                }}
+                animate={reduceMotion ? undefined : { y: [0, -2, 0] }}
+                transition={{ duration: 1.6, repeat: Infinity, ease: 'easeInOut' }}
+              >
+                <span
+                  style={{
+                    display: 'inline-block',
+                    animation: reduceMotion ? undefined : 'livePulse 1.8s ease-in-out infinite',
+                  }}
+                >
+                  ▲
+                </span>
+                growing
+              </motion.span>
+            )}
           </motion.div>
 
           <motion.span
