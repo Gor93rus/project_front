@@ -15,7 +15,7 @@ const BEVEL = {
 
 export function GamificationBanner() {
   const nav = useNavigate();
-  const { connected } = useTonWallet();
+  const { connected, connect } = useTonWallet();
   const { progress, loading } = useUserProgress('demo');
 
   const xpPct = progress
@@ -48,7 +48,7 @@ export function GamificationBanner() {
           </span>
         </div>
         <button
-          onClick={() => nav('/profile')}
+          onClick={() => { if (!connected) { connect(); } else { nav('/profile'); } }}
           className="shrink-0 flex items-center gap-1 text-3xs font-extrabold"
           style={{ color: 'var(--ink-2)' }}
         >
@@ -58,7 +58,7 @@ export function GamificationBanner() {
       </div>
 
       <button
-        onClick={() => nav('/profile')}
+        onClick={() => { if (!connected) { connect(); } else { nav('/profile'); } }}
         className="relative w-full text-left overflow-hidden rounded-2xl p-3.5"
         style={{
           background:

@@ -103,7 +103,6 @@ function SegmentedCountdown({ target, accent }: { target: string; accent: string
 function LotteryCard({ lottery }: { lottery: Lottery }) {
   const nav = useNavigate();
   const accent = lottery.accentColor;
-  const cardImage = lottery.cardImage;
   const phase = useDrawPhase(lottery.nextDraw);
   const isLive = phase === 'live';
   const isUpcoming = phase === 'upcoming';
@@ -151,45 +150,10 @@ function LotteryCard({ lottery }: { lottery: Lottery }) {
         transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
       />
 
-      {/* Card image — fills the upper portion of the card, blending into the background.
-          The scale animation is applied to the <img> itself, not the container,
-          so the container clips it correctly via the parent's overflow:hidden. */}
-      {cardImage && (
-        <div
-          style={{
-            position: 'absolute', top: 0, left: 0, right: 0, height: '62%',
-            zIndex: 5,
-            // Dark solid bg to cover any checkerboard / transparent PNG edges
-            backgroundColor: '#06080f',
-          }}
-        >
-          <motion.img
-            src={cardImage}
-            alt={lottery.name}
-            animate={{ scale: [1, 1.04, 1] }}
-            transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut' }}
-            style={{
-              width: '100%', height: '115%', objectFit: 'contain', objectPosition: 'center top',
-              display: 'block',
-              transformOrigin: 'center top',
-              filter: `drop-shadow(0 12px 28px rgba(0,0,0,0.6)) drop-shadow(0 0 22px ${accent}50)`,
-            }}
-          />
-          {/* Fade image into card background at the bottom */}
-          <div style={{
-            position: 'absolute', bottom: 0, left: 0, right: 0, height: '55%',
-            background: 'linear-gradient(to bottom, transparent 0%, var(--bg-0, #06080f) 100%)',
-            pointerEvents: 'none',
-          }} />
-        </div>
-      )}
-
-      {/* Fade mask — blends card image area into content below */}
-      <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '65%', zIndex: 6, pointerEvents: 'none', maskImage: 'linear-gradient(180deg, transparent 0%, transparent 50%, #000 100%)', WebkitMaskImage: 'linear-gradient(180deg, transparent 0%, transparent 50%, #000 100%)' }} />
       {/* Glass overlay */}
-      <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 8, background: 'linear-gradient(165deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.01) 35%, transparent 60%)' }} />
+      <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 5, background: 'linear-gradient(165deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.01) 35%, transparent 60%)' }} />
       {/* Neon border top */}
-      <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 9, padding: 1, background: `linear-gradient(180deg, ${accent}50 0%, ${accent}25 50%, transparent 100%)`, WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)', WebkitMaskComposite: 'xor', maskComposite: 'exclude' }} />
+      <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 6, padding: 1, background: `linear-gradient(180deg, ${accent}50 0%, ${accent}25 50%, transparent 100%)`, WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)', WebkitMaskComposite: 'xor', maskComposite: 'exclude' }} />
 
       {/* Content */}
       <div style={{ position: 'relative', zIndex: 10, display: 'flex', flexDirection: 'column', height: '100%', minHeight: 390, padding: '10px 12px 14px' }}>
