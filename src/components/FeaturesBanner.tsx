@@ -1,12 +1,12 @@
-﻿import { useEffect, useState, useMemo } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { ScrollCarousel } from './ScrollCarousel';
 
-// тФАтФА ╨Ф╨░╨╜╨╜╤Л╨╡ тФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФА
+// ── Данные ──────────────────────────────────────────────────────────────────
 interface FeatureItem {
   title: string;
   image: string;
-  // 4-sided bevel vars тАФ ╨▓╨╡╤А╤Е ╨░╨║╤Ж╨╡╨╜╤В╨╜╤Л╨╣, ╨╗╨╡╨▓╨╛ ╤Б╨▓╨╡╤В╨╗╨╡╨╡ ╨░╨║╤Ж╨╡╨╜╤В╨░, ╨┐╤А╨░╨▓╨╛/╨╜╨╕╨╖ ╤В╤С╨╝╨╜╤Л╨╡
+  // 4-sided bevel vars — верх акцентный, лево светлее акцента, право/низ тёмные
   borderTop: string;
   borderLeft: string;
   borderRight: string;
@@ -99,7 +99,7 @@ const ITEMS: FeatureItem[] = [
   },
 ];
 
-// тФАтФА ╨Р╨┤╨░╨┐╤В╨╕╨▓╨╜╤Л╨╣ ╤А╨░╨╖╨╝╨╡╤А ╨║╨░╤А╤В╨╛╤З╨╡╨║ (mobile): ╤И╨╕╤А╨╛╨║╨╕╨╡ ╨┐╤А╤П╨╝╨╛╤Г╨│╨╛╨╗╤М╨╜╨╕╨║╨╕ тФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФАтФА
+// ── Адаптивный размер карточек (mobile): широкие прямоугольники ─────────────
 function useMobileCardDimensions() {
   const [width, setWidth] = useState(() =>
     typeof window !== 'undefined' ? window.innerWidth : 390,
@@ -119,24 +119,24 @@ function useMobileCardDimensions() {
   }, []);
 
   return useMemo(() => {
-    // Wide landscape cards тАФ ~2 visible at a time on screen
+    // Wide landscape cards — ~2 visible at a time on screen
     // gap between cards is 10px
     const gap = 10;
-    // ~2.1тАУ2.15 ╨║╨░╤А╤В╨╛╤З╨║╨╕ ╨▓╨╕╨┤╨╜╤Л ╨╛╨┤╨╜╨╛╨▓╤А╨╡╨╝╨╡╨╜╨╜╨╛ тЖТ ╨┐╤А╨╕╨│╨╗╨░╤И╨░╨╡╤В ╤Б╨║╤А╨╛╨╗╨╗╨╕╤В╤М
+    // ~2.1–2.15 карточки видны одновременно → приглашает скроллить
     let cardWidth: number;
     if (width <= 360) cardWidth = Math.floor((width - 32 - gap) / 2.05);
     else if (width <= 430) cardWidth = Math.floor((width - 32 - gap) / 2.10);
     else if (width <= 640) cardWidth = Math.floor((width - 32 - gap) / 2.15);
     else cardWidth = 180;
-    // 16:9 тАФ ╤Б╤В╨░╨╜╨┤╨░╤А╤В╨╜╤Л╨╣ widescreen, ╨╕╨╖╨╛╨▒╤А╨░╨╢╨╡╨╜╨╕╤П ╨╕╨╝╨╡╨╜╨╜╨╛ ╨┐╨╛╨┤ ╤Н╤В╨╛╤В ratio
+    // 16:9 — стандартный widescreen, изображения именно под этот ratio
     const cardHeight = Math.round(cardWidth * (9 / 16));
     return { cardWidth, cardHeight };
   }, [width]);
 }
 
-// тХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХР
-// FEATURE CARD тАФ wide landscape, full-bleed image, text overlay
-// тХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХР
+// ═══════════════════════════════════════════════════════════════════════════════
+// FEATURE CARD — wide landscape, full-bleed image, text overlay
+// ═══════════════════════════════════════════════════════════════════════════════
 function FeatureCard({ item, cardWidth, cardHeight, index }: { item: FeatureItem; cardWidth: number; cardHeight: number; index: number }) {
   return (
     <motion.div
@@ -167,7 +167,7 @@ function FeatureCard({ item, cardWidth, cardHeight, index }: { item: FeatureItem
         aria-hidden="true"
       />
       <div className="feature-card-img__bevel" aria-hidden="true" />
-      {/* Text тАФ left aligned */}
+      {/* Text — left aligned */}
       <div className="feature-card-img__footer">
         <span className="feature-card-img__title">{item.title}</span>
       </div>
@@ -175,9 +175,9 @@ function FeatureCard({ item, cardWidth, cardHeight, index }: { item: FeatureItem
   );
 }
 
-// тХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХР
-// DESKTOP BENTO GRID тАФ compact horizontal row of 6 cards
-// тХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХР
+// ═══════════════════════════════════════════════════════════════════════════════
+// DESKTOP BENTO GRID — compact horizontal row of 6 cards
+// ═══════════════════════════════════════════════════════════════════════════════
 function BentoImgCard({ item, delay = 0 }: { item: FeatureItem; delay?: number }) {
   return (
     <motion.div
@@ -230,13 +230,13 @@ function DesktopBentoGrid() {
   );
 }
 
-// тХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХР
+// ═══════════════════════════════════════════════════════════════════════════════
 // MAIN COMPONENT
-// тХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХРтХР
+// ═══════════════════════════════════════════════════════════════════════════════
 export function FeaturesBanner() {
   const { cardWidth, cardHeight } = useMobileCardDimensions();
 
-  // ╨Ф╤Г╨▒╨╗╨╕╤А╤Г╨╡╨╝ ╨║╨░╤А╤В╨╛╤З╨║╨╕ ╨┤╨╗╤П ╨▒╨╡╤Б╤И╨╛╨▓╨╜╨╛╨│╨╛ ╨▒╨╡╤Б╨║╨╛╨╜╨╡╤З╨╜╨╛╨│╨╛ ╨░╨▓╤В╨╛╤Б╨║╤А╨╛╨╗╨╗╨░
+  // Дублируем карточки для бесшовного бесконечного автоскролла
   const mobileCards = useMemo(() => {
     const single = ITEMS.map((item, i) => (
       <FeatureCard key={i} item={item} cardWidth={cardWidth} cardHeight={cardHeight} index={i} />
@@ -287,14 +287,14 @@ export function FeaturesBanner() {
         />
       </div>
 
-      {/* Mobile carousel тАФ ScrollCarousel gives the fade-edge effect */}
+      {/* Mobile carousel — ScrollCarousel gives the fade-edge effect */}
       <div className="md:hidden">
         <ScrollCarousel accent="var(--primary)" showProgress={false} autoScroll autoScrollSpeed={38}>
           {mobileCards}
         </ScrollCarousel>
       </div>
 
-      {/* Desktop тАФ same ScrollCarousel wrapper for consistent fade-edges */}
+      {/* Desktop — same ScrollCarousel wrapper for consistent fade-edges */}
       <div className="hidden md:block">
         <DesktopBentoGrid />
       </div>

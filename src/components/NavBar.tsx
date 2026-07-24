@@ -1,5 +1,5 @@
+import { useEffect, useState } from 'react';
 import { hapticImpact } from '../lib/haptic';
-import { useScrolled } from '../hooks/useScrolled';
 
 export type NavTab = 'home' | 'live' | 'cart' | 'history' | 'profile';
 
@@ -55,19 +55,22 @@ const TABS: { id: NavTab; label: string; icon: React.ReactNode; live?: boolean }
 ];
 
 export function NavBar({ active, onTabChange }: Props) {
-  const scrolled = useScrolled(20);
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 20);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
 
   return (
     <nav className="fixed bottom-0 left-0 right-0 z-50 flex items-center justify-around py-2 px-1"
       style={{
-        // Transparent at rest — content shows through; blurred navy glass fades in on scroll
         background: scrolled
-          ? 'linear-gradient(0deg, rgba(6,7,26,0.92) 0%, rgba(11,16,40,0.88) 100%)'
-          : 'linear-gradient(0deg, rgba(6,7,26,0) 0%, rgba(11,16,40,0) 100%)',
-        backdropFilter: scrolled ? 'blur(18px) saturate(140%)' : 'blur(0px)',
-        WebkitBackdropFilter: scrolled ? 'blur(18px) saturate(140%)' : 'blur(0px)',
-        borderTop: scrolled ? '1px solid var(--primary-18)' : '1px solid transparent',
-        transition: 'background 0.4s ease, backdrop-filter 0.4s ease, -webkit-backdrop-filter 0.4s ease, border-color 0.4s ease',
+          ? 'linear-gradient(0deg, rgba(6,7,26,0.96) 0%, rgba(11,16,40,0.94) 100%)'
+          : 'linear-gradient(0deg, rgba(6,7,26,0.98) 0%, rgba(11,16,40,0.96) 100%)',
+        borderTop: scrolled ? '1px solid var(--primary-18)' : '1px solid var(--line)',
+        transition: 'background 0.3s, border-color 0.3s',
         paddingBottom: 'calc(8px + var(--safe-area-bottom, env(safe-area-inset-bottom, 0px)))',
       }}>
       {TABS.map(tab => {
