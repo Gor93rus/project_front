@@ -1,6 +1,5 @@
 import { useEffect, useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
-import { ScrollCarousel } from './ScrollCarousel';
 
 // ── Данные ──────────────────────────────────────────────────────────────────
 interface FeatureItem {
@@ -235,17 +234,13 @@ function DesktopBentoGrid() {
 // ═══════════════════════════════════════════════════════════════════════════════
 export function FeaturesBanner() {
   const { cardWidth, cardHeight } = useMobileCardDimensions();
+  const [pair, setPair] = useState(0); // 0..2 (3 пары по 2 карточки)
 
-  // Дублируем карточки для бесшовного бесконечного автоскролла
-  const mobileCards = useMemo(() => {
-    const single = ITEMS.map((item, i) => (
-      <FeatureCard key={i} item={item} cardWidth={cardWidth} cardHeight={cardHeight} index={i} />
-    ));
-    const clone = ITEMS.map((item, i) => (
-      <FeatureCard key={`clone-${i}`} item={item} cardWidth={cardWidth} cardHeight={cardHeight} index={i} />
-    ));
-    return [...single, ...clone];
-  }, [cardWidth, cardHeight]);
+  // Авто-перелистывание пары каждые 5 секунд
+  useEffect(() => {
+    const id = setInterval(() => setPair(p => (p + 1) % 3), 5000);
+    return () => clearInterval(id);
+  }, []);
 
   return (
     <section className="px-4 pt-2">
@@ -287,11 +282,20 @@ export function FeaturesBanner() {
         />
       </div>
 
-      {/* Mobile carousel — ScrollCarousel gives the fade-edge effect */}
-      <div className="md:hidden">
-        <ScrollCarousel accent="var(--primary)" showProgress={false} autoScroll autoScrollSpeed={38}>
-          {mobileCards}
-        </ScrollCarousel>
+      {/* Mobile: 2 карточки в viewport, смена каждые 5 секунд */}
+      <div className="md:hidden" style={{ display: 'flex', gap: 10, justifyContent: 'center' }}>
+        {[0, 1].map(offset => {
+          const idx = (pair * 2 + offset) % ITEMS.length;
+          return (
+            <FeatureCard
+              key={idx}
+              item={ITEMS[idx]}
+              cardWidth={cardWidth}
+              cardHeight={cardHeight}
+              index={offset}
+            />
+          );
+        })}
       </div>
 
       {/* Desktop — same ScrollCarousel wrapper for consistent fade-edges */}

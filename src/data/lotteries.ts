@@ -132,8 +132,8 @@
         soldTickets: 5000,
       }));
       
-      /** @deprecated Используйте LotteryMeta вместо Lottery */
-      export type { LotteryMeta as Lottery };
+      /** @deprecated Временный тип на время миграции на LotteryItem из lib/api.ts */
+      export type Lottery = (typeof LOTTERIES)[number];
       
       // ──────────────────────────────────────────────
       // Deprecated: старые mock-типы (оставлены для обратной совместимости)

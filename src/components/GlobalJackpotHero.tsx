@@ -439,12 +439,12 @@ export function GlobalJackpotHero() {
           <div style={{ position: 'relative', flex: 1, overflow: 'hidden', height: '100%' }}>
             <div
               className="winners-scroll"
-              style={{ position: 'absolute', top: 0, height: '100%', display: 'flex', alignItems: 'center' }}
+              style={{ position: 'absolute', top: 0, height: '100%', display: 'flex', alignItems: 'center', paddingLeft: 20, paddingRight: 20 }}
             >
               {winnerRows}
             </div>
-            <div style={{ position: 'absolute', top: 0, bottom: 0, left: 0, width: 28, background: 'linear-gradient(90deg, rgba(8,11,30,0.95), transparent)', pointerEvents: 'none', zIndex: 2 }} />
-            <div style={{ position: 'absolute', top: 0, bottom: 0, right: 0, width: 28, background: 'linear-gradient(90deg, transparent, rgba(8,11,30,0.95))', pointerEvents: 'none', zIndex: 2 }} />
+            <div style={{ position: 'absolute', top: 0, bottom: 0, left: 0, width: 32, background: 'linear-gradient(90deg, rgba(8,11,30,0.95) 0%, transparent 100%)', pointerEvents: 'none', zIndex: 2 }} />
+            <div style={{ position: 'absolute', top: 0, bottom: 0, right: 0, width: 32, background: 'linear-gradient(90deg, transparent 0%, rgba(8,11,30,0.95) 100%)', pointerEvents: 'none', zIndex: 2 }} />
           </div>
         </div>
       </motion.div>

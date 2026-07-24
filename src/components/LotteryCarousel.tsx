@@ -6,22 +6,23 @@ import { ScrollCarousel } from './ScrollCarousel';
 import { PremiumButton } from './PremiumButton';
 import { GlitchJackpot } from './GlitchJackpot';
 
-/* ── Draw phase (status machine) ──
-   Жизненный цикл тиража по бэкенду: создание → блокировка → исполнение → завершение.
-   На фронте выводим фазу из таймера до тиража:
-   - SELLING: продажи идут, показываем таймер, LIVE НЕ горит.
-   - LIVE: продажи закрыты (окно блокировки) или идёт розыгрыш — горит LIVE.
-   Окно блокировки берём близким к бэкенду (DRAW_LOCK_BEFORE_MINUTES). */
-type DrawPhase = 'selling' | 'live';
-const LOCK_BEFORE_MS = 10 * 60 * 1000;   // продажи закрываются за 10 минут до тиража
+/* ── Draw phase (3-state machine) ──
+   Бэкенд: scheduled → locked → executed → completed.
+   Фронт: upcoming (>30min to lock) → selling (30min-10min) → live (locked/drawing). */
+type DrawPhase = 'upcoming' | 'selling' | 'live';
+const SELLING_START_MS = 30 * 60 * 1000;  // продажи открываются за 30 мин до розыгрыша
+const LOCK_BEFORE_MS = 10 * 60 * 1000;   // продажи закрываются за 10 минут до розыгрыша
 const DRAWING_WINDOW_MS = 3 * 60 * 1000; // ~3 минуты длится сам розыгрыш
 
 function useDrawPhase(targetIso: string): DrawPhase {
-  const [phase, setPhase] = useState<DrawPhase>('selling');
+  const [phase, setPhase] = useState<DrawPhase>('upcoming');
   useEffect(() => {
     const tick = () => {
       const diff = new Date(targetIso).getTime() - Date.now();
-      setPhase(diff <= LOCK_BEFORE_MS && diff > -DRAWING_WINDOW_MS ? 'live' : 'selling');
+      if (diff > SELLING_START_MS) setPhase('upcoming');
+      else if (diff > LOCK_BEFORE_MS) setPhase('selling');
+      else if (diff > -DRAWING_WINDOW_MS) setPhase('live');
+      else setPhase('upcoming'); // drawing complete, next draw upcoming
     };
     tick();
     const id = setInterval(tick, 1000);
@@ -105,6 +106,7 @@ function LotteryCard({ lottery }: { lottery: Lottery }) {
   const cardImage = lottery.cardImage;
   const phase = useDrawPhase(lottery.nextDraw);
   const isLive = phase === 'live';
+  const isUpcoming = phase === 'upcoming';
 
   return (
     <motion.div
@@ -200,10 +202,14 @@ function LotteryCard({ lottery }: { lottery: Lottery }) {
               <span style={{ width: 6, height: 6, borderRadius: '50%', background: 'var(--coral)', animation: 'livePulse 1s ease-in-out infinite' }} />
               LIVE
             </span>
+          ) : isUpcoming ? (
+            <span style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 11, fontWeight: 800, textTransform: 'uppercase', padding: '3px 7px', borderRadius: 6, background: 'rgba(255,255,255,0.04)', color: 'var(--ink-3)', border: '1px solid rgba(255,255,255,0.06)', fontFamily: "var(--font-mono)" }}>
+              Upcoming
+            </span>
           ) : (
             <span style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 11, fontWeight: 800, textTransform: 'uppercase', padding: '3px 7px', borderRadius: 6, background: `${accent}1f`, color: accent, border: `1px solid ${accent}45`, fontFamily: "var(--font-mono)" }}>
-              <span style={{ width: 6, height: 6, borderRadius: '50%', background: accent }} />
-              Open
+              <span style={{ width: 6, height: 6, borderRadius: '50%', background: accent, animation: 'livePulse 2s ease-in-out infinite' }} />
+              Selling
             </span>
           )}
         </div>

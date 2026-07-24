@@ -13,12 +13,12 @@ const transparent = '#0000';
 
 function maskFor(progress: number) {
   if (progress <= 0.001) {
-    return `linear-gradient(90deg, ${opaque}, ${opaque} 0%, ${opaque} 80%, ${transparent})`;
+    return `linear-gradient(90deg, ${opaque}, ${opaque} 0%, ${opaque} 90%, ${transparent})`;
   }
   if (progress >= 0.999) {
-    return `linear-gradient(90deg, ${transparent}, ${opaque} 20%, ${opaque} 100%, ${opaque})`;
+    return `linear-gradient(90deg, ${transparent}, ${opaque} 10%, ${opaque} 100%, ${opaque})`;
   }
-  return `linear-gradient(90deg, ${transparent}, ${opaque} 20%, ${opaque} 80%, ${transparent})`;
+  return `linear-gradient(90deg, ${transparent}, ${opaque} 10%, ${opaque} 90%, ${transparent})`;
 }
 
 export function ScrollCarousel({ children, accent = '#3CB1FF', showProgress = true, autoScroll = false, autoScrollSpeed = 40 }: Props) {

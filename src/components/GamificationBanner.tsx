@@ -110,16 +110,18 @@ export function GamificationBanner() {
                 background: 'rgba(0,0,0,0.55)',
                 backdropFilter: 'blur(6px)',
                 border: '1.5px solid rgba(255,255,255,0.14)',
+                boxShadow: '0 0 12px var(--gold-glow)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
+                animation: 'pulse-glow 3s ease-in-out infinite',
               }}>
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--ink-1)" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
                   <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
                   <path d="M7 11V7a5 5 0 0 1 10 0v4" />
                 </svg>
               </div>
-              <p className="text-3xs font-bold text-center" style={{ color: 'var(--ink-2)', textShadow: '0 1px 4px rgba(0,0,0,0.8)' }}>
+              <p className="text-3xs font-bold text-center" style={{ color: 'var(--gold-soft)', textShadow: '0 0 8px var(--gold-glow), 0 1px 4px rgba(0,0,0,0.8)', animation: 'livePulse 2.5s ease-in-out infinite' }}>
                 Connect wallet to unlock
               </p>
             </div>
