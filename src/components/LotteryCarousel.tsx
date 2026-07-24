@@ -310,7 +310,7 @@ function LotteryCard({ lottery }: { lottery: Lottery }) {
           </span>
         </div>
         <div style={{ marginTop: 'auto' }}>
-          <p style={{ fontSize: 14, fontWeight: 700, color: '#fff', textAlign: 'center', marginBottom: 2, letterSpacing: '-0.01em', fontFamily: "'Space Grotesk', sans-serif", textShadow: '0 2px 12px rgba(0,0,0,0.5)', lineHeight: 1.2, wordBreak: 'break-word', whiteSpace: 'normal', padding: '0 2px' }}>
+          <p style={{ fontSize: 14, fontWeight: 700, color: '#fff', textAlign: 'center', marginBottom: 2, letterSpacing: '-0.01em', fontFamily: 'var(--font-display)', textShadow: '0 2px 12px rgba(0,0,0,0.5)', lineHeight: 1.2, wordBreak: 'break-word', whiteSpace: 'normal', padding: '0 2px' }}>
             {lottery.name}
           </p>
           <p style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', textAlign: 'center', color: 'rgba(255,255,255,0.45)', letterSpacing: '0.18em', marginBottom: 2, fontFamily: 'var(--font-mono)' }}>

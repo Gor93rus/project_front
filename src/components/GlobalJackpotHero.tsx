@@ -137,7 +137,7 @@ function GodRays({ reduceMotion }: { reduceMotion: boolean }) {
       <motion.div
         style={{ width: '100%', height: '100%', background: RAY_GRADIENT }}
         animate={reduceMotion ? undefined : { rotate: 360 }}
-        transition={{ duration: 70, repeat: Infinity, ease: 'linear' }}
+        transition={{ duration: 30, repeat: Infinity, ease: 'linear' }}
       />
     </div>
   );
