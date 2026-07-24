@@ -1,6 +1,6 @@
+import { useEffect, useState } from 'react';
 import { useTonRate } from '../hooks/useTonRate';
 import { useTonWallet } from '../hooks/useTonWallet';
-import { useScrolled } from '../hooks/useScrolled';
 
 // ── TonRatePill — TON price + 24h change ──────────────────────────────────────
 function TonRatePill() {
@@ -96,7 +96,14 @@ function WalletButton() {
 
 // ── Header ────────────────────────────────────────────────────────────────────
 export function Header() {
-  const scrolled = useScrolled(8);
+  const [scrolled, setScrolled] = useState(false);
+
+  // Mirror NavBar's scroll listener: the app scrolls on window, not <main>.
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 8);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
 
   return (
     <header
@@ -104,14 +111,12 @@ export function Header() {
       style={{
         // Safe area — covers Dynamic Island / notch / camera cutouts
         paddingTop: 'var(--safe-area-top)',
-        // Transparent at rest — content shows through; blurred navy glass fades in on scroll
+        // Same translucent navy + blur language as NavBar, mirrored top→bottom
         background: scrolled
-          ? 'linear-gradient(180deg, rgba(6,7,26,0.92) 0%, rgba(11,16,40,0.88) 100%)'
-          : 'linear-gradient(180deg, rgba(6,7,26,0) 0%, rgba(11,16,40,0) 100%)',
-        backdropFilter: scrolled ? 'blur(18px) saturate(140%)' : 'none',
-        WebkitBackdropFilter: scrolled ? 'blur(18px) saturate(140%)' : 'none',
-        borderBottom: scrolled ? '1px solid var(--primary-18)' : '1px solid transparent',
-        transition: 'background 0.4s ease, backdrop-filter 0.4s ease, -webkit-backdrop-filter 0.4s ease, border-color 0.4s ease',
+          ? 'linear-gradient(180deg, rgba(6,7,26,0.96) 0%, rgba(11,16,40,0.94) 100%)'
+          : 'linear-gradient(180deg, rgba(6,7,26,0.98) 0%, rgba(11,16,40,0.96) 100%)',
+        borderBottom: scrolled ? '1px solid var(--primary-18)' : '1px solid var(--line)',
+        transition: 'background 0.3s, border-color 0.3s',
       }}
     >
       {/* Single row — brand · rate + wallet */}

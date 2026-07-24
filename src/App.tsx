@@ -20,7 +20,6 @@ import { AuroraBackground } from './components/AuroraBackground';
 import { AnimatedSection } from './components/AnimatedSection';
 import { GlobalJackpotHero } from './components/GlobalJackpotHero';
 import { stagger, fadeUp, fadeUpCard } from './lib/animations';
-import { NowProvider } from './hooks/useNow';
 
 // Тонкий декоративный разделитель между крупными секциями
 function SectionDivider() {
@@ -39,12 +38,11 @@ function SectionDivider() {
 
 function HomePage() {
   return (
-    <NowProvider>
-      <div className="flex flex-col pb-2">
-        {/* Hero → Features: минимальный зазор — они единый смысловой блок */}
-        <AnimatedSection variants={fadeUp}>
-          <GlobalJackpotHero />
-        </AnimatedSection>
+    <div className="flex flex-col pb-2">
+      {/* Hero → Features: минимальный зазор — они единый смысловой блок */}
+      <AnimatedSection variants={fadeUp}>
+        <GlobalJackpotHero />
+      </AnimatedSection>
 
       <div style={{ height: 8 }} />
 
@@ -79,11 +77,10 @@ function HomePage() {
 
       <div style={{ height: 12 }} />
 
-        <AnimatedSection variants={fadeUp}>
-          <PageFooter />
-        </AnimatedSection>
-      </div>
-    </NowProvider>
+      <AnimatedSection variants={fadeUp}>
+        <PageFooter />
+      </AnimatedSection>
+    </div>
   );
 }
 
@@ -103,23 +100,23 @@ function useTelegramBackButton() {
   const location = useLocation();
 
   useEffect(() => {
-    // Feature-detect: Telegram Mini App API доступен только внутри Telegram,
-    // и только если window.Telegram?.WebApp существует.
-    const tg = (window as any).Telegram;
-    if (!tg?.WebApp?.BackButton) return;
-
-    const WebApp = tg.WebApp;
-    if (location.pathname !== '/') {
-      WebApp.BackButton.show();
-      WebApp.BackButton.onClick(() => {
-        window.history.back();
-      });
-    } else {
-      WebApp.BackButton.hide();
+    try {
+      // eslint-disable-next-line @typescript-eslint/no-require-imports
+      const WebApp = require('@twa-dev/sdk').default;
+      if (location.pathname !== '/') {
+        WebApp.BackButton.show();
+        WebApp.BackButton.onClick(() => {
+          window.history.back();
+        });
+      } else {
+        WebApp.BackButton.hide();
+      }
+      return () => {
+        WebApp.BackButton.offClick();
+      };
+    } catch {
+      // no-op outside Telegram
     }
-    return () => {
-      WebApp.BackButton.offClick();
-    };
   }, [location.pathname]);
 }
 
