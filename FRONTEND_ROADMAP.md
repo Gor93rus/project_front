@@ -2,7 +2,7 @@
 
 > Telegram Mini App · TON Blockchain · 10 тиражных + 5 скретч-лотерей  
 > Фокус: визуал, эмоции игрока, гэмблинг UX  
-> Последнее обновление: 05.07.2026 (FeaturesBanner рефакторинг)
+> Последнее обновление: 24.07.2026 (главная страница: API-интеграция, фиксы багов, унификация компонентов)
 
 ---
 
@@ -183,17 +183,34 @@ _Порядок работы над каждой задачей._
 ---
 
 
-## ✅ Выполнено — FeaturesBanner (05.07.2026)
+## ✅ Выполнено — FeaturesBanner (05.07.2026) → Слайдер (24.07.2026)
 
-> Полный рефакторинг по Huashu Design Lifecycle Workflow.  
-> Три итерации: Brand Asset Protocol → Adaptive UX → Emotional Design.
+> Исходный рефакторинг по Huashu Design. Позднее заменён на слайдер.
 
-- [x] **Вариант 1 — Аудит токенов:** 0 сырых `rgba()`/HEX в компоненте. `cardBaseStyle` (15 строк инлайн) → `.feature-card` CSS-класс. 6 accent-модификаторов убраны, заменены на индивидуальную заливку через `--fc-accent-bg`. Добавлены токены `--gold-18`, `--emerald-18`, `--cyan-18` в `design-tokens.css`
-- [x] **Вариант 2 — Адаптивность:** хук `useAdaptiveLayout()` с 4 брейкпоинтами (≤360→1 карточка, ≤430→2, ≤640→3, >640→4). `activePageRef` исправляет stale closure в interval. Точки пагинации — кликабельны. `whileTap` вместо `whileHover` (Telegram Mini App)
-- [x] **Вариант 3 — Эмоциональный дизайн:** индивидуальная accent-заливка каждой карточки (coral/gold/emerald/purple/cyan). Усиленный 3D glass: фаска 2px/2.5px/1.5px, трёхслойный фон. `feature-card--active` — ambient glow через `--fc-glow`. `patternDrift` (20s) + `featureIconPulse` (2s). CSS-анимации на GPU, без Framer Motion для looping
-- [x] **5-Dimensional Critique** пройден: Clarity ✅, Emotion ✅, Consistency ✅ (100% Dark Vault), Performance ✅, Accessibility ✅
+- [x] Исходный рефакторинг: аудит токенов, адаптивность, эмоциональный дизайн
+- [x] **24.07:** заменён на слайдер по 2 карточки с авто-перелистыванием каждые 5 секунд. ScrollCarousel удалён из мобильной версии. Desktop BentoGrid сохранён.
 
-**Изменённые файлы:** `design-tokens.css`, `lottery-cards.css`, `FeaturesBanner.tsx`
+**Изменённые файлы:** `FeaturesBanner.tsx`
+
+---
+
+## ✅ Выполнено — Главная страница (21-24.07.2026)
+
+> Полный цикл доработок по Huashu Design Lifecycle.
+
+- [x] **Баги (21.07):** тип `Lottery` восстановлен (`(typeof LOTTERIES)[number]`), добавлен `useEffect` в LotteryCarousel
+- [x] **Тикер Recent wins (21.07):** увеличен внутренний паддинг + fade-маски с 28px на 32px
+- [x] **ScrollCarousel (21.07):** fade-маски расширены (края с 80% до 90%)
+- [x] **FeaturesBanner (24.07):** слайдер по 2 карточки с таймером 5с
+- [x] **LotteryCarousel (24.07):** 3 состояния — Upcoming / Selling / Live с соответствующими StatusPill
+- [x] **LotteryCarousel (24.07):** удалены картинки и чёрный прямоугольник — только фон с градиентами
+- [x] **GamificationBanner (24.07):** pulse-glow на замке + текст CTA. Кнопка без кошелька вызывает `connect()` вместо перехода на `/profile`
+- [x] **Изображения (24.07):** перенесены из `src/assets/cards/` в `public/cards/`. Пути исправлены на `/cards/*.png`
+- [x] **GlobalJackpotHero (24.07):** джекпот + счётчик лотерей подвязаны к `api.getLotteryList()`. Добавлен skeleton-shimmer при загрузке. Fallback: 67,500 TON при ошибке API
+- [x] **Фаски (24.07):** LotteryCard и ScratchCard визуально унифицированы
+- [x] **ScratchCarousel:** бейджи больше не обрезаются fade-масками
+
+**Изменённые файлы:** `lotteries.ts`, `LotteryCarousel.tsx`, `GlobalJackpotHero.tsx`, `FeaturesBanner.tsx`, `GamificationBanner.tsx`, `ScrollCarousel.tsx`, `index.css`, `public/cards/`
 
 ---
 
@@ -207,7 +224,8 @@ _Порядок работы над каждой задачей._
 - [ ] Адаптировать Dark Vault палитру под Weekend Special
 
 ### V10: Scratch-игры визуал
-- [ ] Адаптировать ScratchCarousel под Dark Vault + Luminous Gradient
+- [x] ScratchCarousel визуально приведён к Dark Vault (фаски унифицированы с LotteryCarousel)
+- [ ] Подключить `api.getScratchGames()` для живых данных
 - [ ] Проработать анимацию «стирания» скретч-слоя
 
 ---
@@ -239,7 +257,23 @@ _Порядок работы над каждой задачей._
 
 ---
 
-## 🛠️ Технический долг
+## 🛠️ Технический долг (актуализация 24.07.2026)
+
+### Закрыто за 21-24.07
+- [x] Тип `Lottery` рассинхронизирован с `LOTTERIES` → исправлен
+- [x] Изображения карточек ломались в production build → перенесены в `public/cards/`
+- [x] `useEffect` отсутствовал в LotteryCarousel → добавлен
+- [x] `NowProvider` импортировался но не использовался в LotteryCarousel → удалён
+- [x] GlobalJackpotHero: джекпот хардкожен → подвязан к API
+- [x] GamificationBanner: переход на `/profile` без кошелька → вызывает `connect()`
+
+### Накопленный (требует отдельного захода)
+- [ ] `useTonWallet.ts` + `api.ts` — конфликт `export const api` / `export namespace api` (TS2451)
+- [ ] `useTonWallet.ts` — отсутствует метод `api.walletAuth` в типе `api`
+- [ ] `api.getScratchGames()` — эндпоинт объявлен, но не используется
+- [ ] 4 TS-ошибки в файлах вне скоупа: DailyRushPage, LotteryPage, PremiumButton, useLotteryDrawData
+
+### Старый техдолг
 
 | # | Проблема | Статус |
 |---|----------|--------|
