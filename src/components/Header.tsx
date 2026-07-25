@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react';
 import { useTonRate } from '../hooks/useTonRate';
 import { useTonWallet } from '../hooks/useTonWallet';
+import { useScrolled } from '../hooks/useScrolled';
 
 // ── TonRatePill — TON price + 24h change ──────────────────────────────────────
 function TonRatePill() {
@@ -96,14 +96,7 @@ function WalletButton() {
 
 // ── Header ────────────────────────────────────────────────────────────────────
 export function Header() {
-  const [scrolled, setScrolled] = useState(false);
-
-  // Mirror NavBar's scroll listener: the app scrolls on window, not <main>.
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 8);
-    window.addEventListener('scroll', onScroll, { passive: true });
-    return () => window.removeEventListener('scroll', onScroll);
-  }, []);
+  const scrolled = useScrolled(8);
 
   return (
     <header

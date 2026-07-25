@@ -177,11 +177,13 @@ function FeatureCard({ item, cardWidth, cardHeight, index }: { item: FeatureItem
 // ═══════════════════════════════════════════════════════════════════════════════
 // DESKTOP BENTO GRID — compact horizontal row of 6 cards
 // ═══════════════════════════════════════════════════════════════════════════════
-function BentoImgCard({ item, delay = 0 }: { item: FeatureItem; delay?: number }) {
+function BentoImgCard({ item, delay = 0, cardWidth }: { item: FeatureItem; delay?: number; cardWidth: string }) {
   return (
     <motion.div
       className="feature-card-img feature-card-img--bento"
       style={{
+        width: cardWidth,
+        aspectRatio: '16 / 9',
         isolation: 'isolate',
         ['--fc-border-top' as string]:    item.borderTop,
         ['--fc-border-left' as string]:   item.borderLeft,
@@ -211,20 +213,31 @@ function BentoImgCard({ item, delay = 0 }: { item: FeatureItem; delay?: number }
   );
 }
 
-// Desktop: original grid layout with CSS mask for edge-fade effect
-function DesktopBentoGrid() {
+/**
+ * Desktop: 2 cards at a time, auto-advance synced with mobile.
+ * Cards use clamp() to scale with viewport: 240px → 420px.
+ */
+function DesktopBentoGrid({ pair }: { pair: number }) {
+  const cardWidth = 'clamp(240px, 38vw, 420px)';
+
   return (
     <div
       className="features-bento-img"
       style={{
+        display: 'flex',
+        gap: 16,
+        justifyContent: 'center',
         // Same fade-mask as ScrollCarousel: fade left + right edges
         WebkitMaskImage: 'linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent)',
         maskImage: 'linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent)',
       }}
     >
-      {ITEMS.map((item, i) => (
-        <BentoImgCard key={i} item={item} delay={i * 0.05} />
-      ))}
+      {[0, 1].map(offset => {
+        const idx = (pair * 2 + offset) % ITEMS.length;
+        return (
+          <BentoImgCard key={idx} item={ITEMS[idx]} delay={offset * 0.05} cardWidth={cardWidth} />
+        );
+      })}
     </div>
   );
 }
@@ -283,7 +296,7 @@ export function FeaturesBanner() {
       </div>
 
       {/* Mobile: 2 карточки в viewport, смена каждые 5 секунд */}
-      <div className="md:hidden" style={{ display: 'flex', gap: 10, justifyContent: 'center' }}>
+      <div className="flex md:hidden" style={{ gap: 10, justifyContent: 'center' }}>
         {[0, 1].map(offset => {
           const idx = (pair * 2 + offset) % ITEMS.length;
           return (
@@ -298,9 +311,9 @@ export function FeaturesBanner() {
         })}
       </div>
 
-      {/* Desktop — same ScrollCarousel wrapper for consistent fade-edges */}
+      {/* Desktop — 2 cards at a time, auto-advance synced with mobile */}
       <div className="hidden md:block">
-        <DesktopBentoGrid />
+        <DesktopBentoGrid pair={pair} />
       </div>
     </section>
   );
