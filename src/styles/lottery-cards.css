@@ -907,7 +907,7 @@
   text-shadow: 0 1px 6px rgba(0,0,0,0.90);
 }
 
-/* ── Desktop — single horizontal row of 6 compact cards ─────────────────── */
+/* ── Desktop — single horizontal row of 6 compact cards (legacy, kept for compat) ─────────────────── */
 
 .features-bento-img {
   display: grid;
@@ -930,6 +930,87 @@
 
 .features-bento-img__col--tall {
   display: contents;
+}
+
+/* ── MOBILE SCROLL CAROUSEL ────────────────────────────────────────────────── */
+
+.features-mobile-carousel {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/*
+ * Scroll track: горизонтальный scroll-snap.
+ * padding-right = card-width / 2 — чтобы последняя карточка была видна краем.
+ * Fade-маска по бокам как в LotteryCarousel.
+ */
+.features-mobile-carousel__track {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  overflow-x: scroll;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  /* Горизонтальные отступы — первая/последняя карточка не прижаты к краю */
+  padding: 2px 0 6px 0;
+  /* Edge fade */
+  -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 5%, #000 88%, transparent 100%);
+  mask-image: linear-gradient(90deg, transparent 0%, #000 5%, #000 88%, transparent 100%);
+}
+
+/* Карточка в мобильной карусели: ~2.15 видно одновременно */
+.feature-card-img--carousel-item {
+  /* Ширина: ~47% ширины контейнера → ~2 видны + край третьей */
+  flex: 0 0 calc(50% - 9px);
+  /* 16:9 как было */
+  aspect-ratio: 16 / 9;
+  scroll-snap-align: start;
+}
+
+/* ── DOT INDICATORS ─────────────────────────────────────────────────────────── */
+
+.features-carousel-dots {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+
+.features-carousel-dot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.18);
+  transition: width 0.25s ease, background 0.25s ease, border-radius 0.25s ease;
+}
+
+.features-carousel-dot--active {
+  width: 16px;
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.60);
+}
+
+/* ── DESKTOP GRID — 2 columns × 3 rows ──────────────────────────────────── */
+
+/*
+ * 2 карточки в ряд: каждая занимает ~половину ширины контейнера.
+ * aspect-ratio 16:9 — те же пропорции что и на мобилке, но карточки широкие.
+ * Edge-fade маска как у DesktopBentoGrid.
+ */
+.features-desktop-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 4%, #000 96%, transparent 100%);
+  mask-image: linear-gradient(90deg, transparent 0%, #000 4%, #000 96%, transparent 100%);
+}
+
+.features-desktop-grid .feature-card-img {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  min-height: 0;
 }
 
 @media (prefers-reduced-motion: reduce) {
