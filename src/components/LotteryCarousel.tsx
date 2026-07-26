@@ -284,22 +284,23 @@ function HowItWorksButton({ onClick }: { onClick: () => void }) {
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
       style={{
-        display: 'flex', alignItems: 'center', gap: 5,
-        padding: '5px 11px', borderRadius: 999,
-        fontSize: 11, fontWeight: 800, letterSpacing: '0.14em', textTransform: 'uppercase',
+        display: 'flex', alignItems: 'center', gap: 4,
+        padding: '4px 9px', borderRadius: 999,
+        fontSize: 10, fontWeight: 800, letterSpacing: '0.10em', textTransform: 'uppercase',
         fontFamily: 'var(--font-mono)',
         color: 'var(--ton)',
         background: hover ? 'var(--ton-12, rgba(0,152,234,0.14))' : 'rgba(255,255,255,0.03)',
         border: '1px solid var(--ton-35, rgba(0,152,234,0.4))',
-
         boxShadow: hover
           ? '0 0 16px var(--ton-glow, rgba(0,152,234,0.45)), inset 0 1px 0 rgba(255,255,255,0.08)'
           : 'inset 0 1px 0 rgba(255,255,255,0.05)',
         transition: 'background 0.2s ease, box-shadow 0.2s ease',
         cursor: 'pointer',
+        whiteSpace: 'nowrap',
+        flexShrink: 0,
       }}
     >
-      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>
+      <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>
       How it works?
     </button>
   );
@@ -309,22 +310,29 @@ export function LotteryCarousel() {
   const [showHowItWorks, setShowHowItWorks] = useState(false);
   return (
     <section className="px-4">
-      <div className="flex items-center justify-between mb-3">
-        <div className="flex items-center gap-2">
-          <h2 className="font-extrabold text-sm" style={{ color: 'var(--ink-0)' }}>Draw Lotteries</h2>
+      <div className="flex items-center justify-between mb-3" style={{ gap: 8 }}>
+        <div className="flex items-center" style={{ gap: 6, minWidth: 0, flexShrink: 0 }}>
+          <h2
+            className="font-extrabold"
+            style={{ color: 'var(--ink-0)', fontSize: 13, whiteSpace: 'nowrap', lineHeight: 1 }}
+          >
+            Draw Lotteries
+          </h2>
           <span style={{
             display: 'inline-flex',
             alignItems: 'center',
             gap: 4,
-            padding: '2px 8px',
+            padding: '2px 7px',
             borderRadius: 999,
             fontSize: 10,
             fontWeight: 700,
             fontFamily: 'var(--font-mono)',
-            letterSpacing: '0.08em',
+            letterSpacing: '0.06em',
             color: 'var(--ton)',
             background: 'var(--ton-12, rgba(0,152,234,0.12))',
             border: '1px solid var(--ton-35, rgba(0,152,234,0.35))',
+            whiteSpace: 'nowrap',
+            flexShrink: 0,
           }}>
             <span style={{
               width: 5,
