@@ -83,7 +83,7 @@ function HomePage() {
 
       {/* Features → Lotteries */}
       <div style={{ height: 20 }} />
-      <SectionLabel label="Lotteries" />
+      <SectionLabel label="Draw Lotteries" />
       <div style={{ height: 14 }} />
 
       <AnimatedSection variants={stagger}>

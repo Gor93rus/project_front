@@ -311,14 +311,7 @@ export function LotteryCarousel() {
   return (
     <section className="px-4">
       <div className="flex items-center justify-between mb-3" style={{ gap: 8 }}>
-        <div className="flex items-center" style={{ gap: 6, minWidth: 0, flexShrink: 0 }}>
-          <h2
-            className="font-extrabold"
-            style={{ color: 'var(--ink-0)', fontSize: 13, whiteSpace: 'nowrap', lineHeight: 1 }}
-          >
-            Draw Lotteries
-          </h2>
-          <span style={{
+        <span style={{
             display: 'inline-flex',
             alignItems: 'center',
             gap: 4,
@@ -344,7 +337,6 @@ export function LotteryCarousel() {
             }} />
             {LOTTERIES.length} active
           </span>
-        </div>
         <HowItWorksButton onClick={() => setShowHowItWorks(true)} />
       </div>
 
