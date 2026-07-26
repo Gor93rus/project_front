@@ -26,6 +26,19 @@ export interface AuthResponse {
   };
 }
 
+export interface WalletAuthResponse {
+  success: boolean;
+  isNewUser?: boolean;
+  token: string;
+  user: {
+    id: string;
+    tonWallet: string;
+    balance: number;
+    level: number;
+    referralCode: string;
+  };
+}
+
 export interface LotteryListResponse {
   success: true;
   lotteries: LotteryItem[];
@@ -228,6 +241,10 @@ export const api = {
   /** AUTH: Login via Telegram WebApp initData */
   loginTelegram: (initData: string) =>
     request<AuthResponse>('/auth/telegram', { method: 'POST', body: { initData } }),
+
+  /** AUTH: Wallet-based authentication (TON) */
+  walletAuth: (walletAddress: string) =>
+    request<WalletAuthResponse>('/auth/wallet', { method: 'POST', body: { walletAddress } }),
 
   /** LOTTERIES: Public list of all lotteries */
   getLotteryList: () =>

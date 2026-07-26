@@ -99,7 +99,7 @@ const ITEMS: FeatureItem[] = [
 ];
 
 // ═══════════════════════════════════════════════════════════════════════════════
-// FEATURE CARD — wide landscape, full-bleed image, text overlay
+// MOBILE FEATURE CARD — uses CSS class for 100%-width carousel slot (16:9)
 // ═══════════════════════════════════════════════════════════════════════════════
 function FeatureCard({ item, index }: { item: FeatureItem; index: number }) {
   return (
@@ -136,13 +136,51 @@ function FeatureCard({ item, index }: { item: FeatureItem; index: number }) {
 }
 
 // ═══════════════════════════════════════════════════════════════════════════════
-// MOBILE SCROLL CAROUSEL — scroll-snap, ~2.1 cards visible
+// DESKTOP BENTO CARD — uses clamp() width, aspect-ratio 16/9
+// ═══════════════════════════════════════════════════════════════════════════════
+function BentoImgCard({ item, delay = 0, cardWidth }: { item: FeatureItem; delay?: number; cardWidth: string }) {
+  return (
+    <motion.div
+      className="feature-card-img feature-card-img--bento"
+      style={{
+        width: cardWidth,
+        aspectRatio: '16 / 9',
+        isolation: 'isolate',
+        ['--fc-border-top' as string]:    item.borderTop,
+        ['--fc-border-left' as string]:   item.borderLeft,
+        ['--fc-border-right' as string]:  item.borderRight,
+        ['--fc-border-bottom' as string]: item.borderBottom,
+        ['--fc-border-top-h' as string]:  item.borderTopH,
+        ['--fc-border-left-h' as string]: item.borderLeftH,
+        ['--fc-ring' as string]:          item.ring,
+        ['--fc-glow' as string]:          item.glow,
+        ['--fc-inset-top' as string]:     item.insetTop,
+      }}
+      initial={{ opacity: 0, y: 16, scale: 0.96 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
+      transition={{ type: 'spring', stiffness: 300, damping: 28, mass: 0.8, delay }}
+      whileTap={{ scale: 0.97 }}
+    >
+      <div
+        className="feature-card-img__bg"
+        style={{ backgroundImage: `url(${item.image})` }}
+        aria-hidden="true"
+      />
+      <div className="feature-card-img__bevel" aria-hidden="true" />
+      <div className="feature-card-img__footer">
+        <span className="feature-card-img__title">{item.title}</span>
+      </div>
+    </motion.div>
+  );
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// MOBILE SCROLL CAROUSEL — scroll-snap, 1 card per snap (100% width, 16:9)
 // ═══════════════════════════════════════════════════════════════════════════════
 function MobileCarousel() {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [activeIndex, setActiveIndex] = useState(0);
 
-  // Синхронизируем активный индикатор с позицией скролла
   useEffect(() => {
     const el = scrollRef.current;
     if (!el) return;
@@ -159,7 +197,6 @@ function MobileCarousel() {
 
   return (
     <div className="features-mobile-carousel">
-      {/* Scroll track */}
       <div
         ref={scrollRef}
         className="features-mobile-carousel__track scrollbar-none"
@@ -184,15 +221,15 @@ function MobileCarousel() {
 
 // ═══════════════════════════════════════════════════════════════════════════════
 // DESKTOP — 2 cards visible, auto-cycling through all 6 every 4s
+// Cards scale with viewport via clamp(): 240px → 420px
 // ═══════════════════════════════════════════════════════════════════════════════
 function DesktopGrid() {
-  // Пара индексов: [left, right]. Каждые 4с сдвигается на 2 вперёд по кольцу.
   const [pairStart, setPairStart] = useState(0);
   const [visible, setVisible] = useState(true);
+  const cardWidth = 'clamp(240px, 38vw, 420px)';
 
   useEffect(() => {
     const timer = setInterval(() => {
-      // Fade out → сменить пару → fade in
       setVisible(false);
       setTimeout(() => {
         setPairStart(prev => (prev + 2) % ITEMS.length);
@@ -202,42 +239,25 @@ function DesktopGrid() {
     return () => clearInterval(timer);
   }, []);
 
-  const left  = ITEMS[pairStart % ITEMS.length];
-  const right = ITEMS[(pairStart + 1) % ITEMS.length];
-
   return (
     <div
-      className="features-desktop-pair"
-      style={{ opacity: visible ? 1 : 0, transition: 'opacity 0.35s ease' }}
+      className="features-bento-img"
+      style={{
+        display: 'flex',
+        gap: 16,
+        justifyContent: 'center',
+        opacity: visible ? 1 : 0,
+        transition: 'opacity 0.35s ease',
+        WebkitMaskImage: 'linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent)',
+        maskImage: 'linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent)',
+      }}
     >
-      {[left, right].map((item, i) => (
-        <div
-          key={`${pairStart}-${i}`}
-          className="feature-card-img"
-          style={{
-            isolation: 'isolate',
-            ['--fc-border-top' as string]:    item.borderTop,
-            ['--fc-border-left' as string]:   item.borderLeft,
-            ['--fc-border-right' as string]:  item.borderRight,
-            ['--fc-border-bottom' as string]: item.borderBottom,
-            ['--fc-border-top-h' as string]:  item.borderTopH,
-            ['--fc-border-left-h' as string]: item.borderLeftH,
-            ['--fc-ring' as string]:          item.ring,
-            ['--fc-glow' as string]:          item.glow,
-            ['--fc-inset-top' as string]:     item.insetTop,
-          }}
-        >
-          <div
-            className="feature-card-img__bg"
-            style={{ backgroundImage: `url(${item.image})` }}
-            aria-hidden="true"
-          />
-          <div className="feature-card-img__bevel" aria-hidden="true" />
-          <div className="feature-card-img__footer">
-            <span className="feature-card-img__title">{item.title}</span>
-          </div>
-        </div>
-      ))}
+      {[0, 1].map(offset => {
+        const idx = (pairStart + offset) % ITEMS.length;
+        return (
+          <BentoImgCard key={`${pairStart}-${offset}`} item={ITEMS[idx]} delay={offset * 0.05} cardWidth={cardWidth} />
+        );
+      })}
     </div>
   );
 }
@@ -248,7 +268,7 @@ function DesktopGrid() {
 export function FeaturesBanner() {
   return (
     <section className="px-4 pt-2">
-      {/* Mobile */}
+      {/* Mobile — scroll-snap carousel, 1 card = full width, 16:9 */}
       <div className="md:hidden">
         <MobileCarousel />
       </div>
