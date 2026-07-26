@@ -654,7 +654,7 @@
   flex-direction: row;
   gap: 14px;
   align-items: flex-start;
-  /* Усиленный акцентный фо���� для главной карточки */
+  /* Усиленный акцентный фо������ для главной карточки */
   background:
     radial-gradient(60% 80% at 8% 12%, var(--fc-accent-bg, transparent) 0%, transparent 60%),
     radial-gradient(40% 50% at 85% 85%, var(--fc-accent-bg, transparent) 0%, transparent 55%),
@@ -942,8 +942,7 @@
 
 /*
  * Scroll track: горизонтальный scroll-snap.
- * padding-right = card-width / 2 — чтобы последняя карточка была видна краем.
- * Fade-маска по бокам как в LotteryCarousel.
+ * Карточка занимает 100% ширины — edge-fade убран, карточка не обрезается.
  */
 .features-mobile-carousel__track {
   display: flex;
@@ -952,18 +951,14 @@
   overflow-x: scroll;
   scroll-snap-type: x mandatory;
   -webkit-overflow-scrolling: touch;
-  /* Горизонтальные отступы — первая/последняя карточка не прижаты к краю */
   padding: 2px 0 6px 0;
-  /* Edge fade */
-  -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 5%, #000 88%, transparent 100%);
-  mask-image: linear-gradient(90deg, transparent 0%, #000 5%, #000 88%, transparent 100%);
 }
 
-/* Карточка в мобильной карусели: ~2.15 видно одновременно */
+/* Карточка в мобильной карусели: 1 карточка = полная ширина контейнера */
 .feature-card-img--carousel-item {
-  /* Ширина: ~47% ширины контейнера → ~2 видны + край третьей */
-  flex: 0 0 calc(50% - 9px);
-  /* 16:9 как было */
+  /* Ширина: 100% контейнера — карточка совпадает с шириной GlobalJackpotHero */
+  flex: 0 0 100%;
+  /* 16:9 — высота адаптируется автоматически */
   aspect-ratio: 16 / 9;
   scroll-snap-align: start;
 }
