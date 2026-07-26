@@ -21,18 +21,49 @@ import { AnimatedSection } from './components/AnimatedSection';
 import { GlobalJackpotHero } from './components/GlobalJackpotHero';
 import { stagger, fadeUp, fadeUpCard } from './lib/animations';
 
-// Тонкий декоративный разделитель между крупными секциями
-function SectionDivider() {
+// Типографический разделитель — текст-метка по центру, линии с gold-акцентом
+function SectionLabel({ label }: { label: string }) {
   return (
     <div
       aria-hidden="true"
       style={{
-        height: 1,
+        display: 'flex',
+        alignItems: 'center',
+        gap: 10,
         marginLeft: 16,
         marginRight: 16,
-        background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.06) 30%, rgba(255,255,255,0.06) 70%, transparent)',
       }}
-    />
+    >
+      <span
+        style={{
+          flex: 1,
+          height: 1,
+          background: 'linear-gradient(90deg, transparent, rgba(250,219,20,0.20))',
+        }}
+      />
+      <span
+        style={{
+          fontSize: 9,
+          fontWeight: 700,
+          textTransform: 'uppercase',
+          letterSpacing: '0.20em',
+          color: 'var(--gold)',
+          fontFamily: "'JetBrains Mono', monospace",
+          whiteSpace: 'nowrap',
+          userSelect: 'none',
+          opacity: 0.65,
+        }}
+      >
+        {label}
+      </span>
+      <span
+        style={{
+          flex: 1,
+          height: 1,
+          background: 'linear-gradient(90deg, rgba(250,219,20,0.20), transparent)',
+        }}
+      />
+    </div>
   );
 }
 
@@ -50,26 +81,28 @@ function HomePage() {
         <FeaturesBanner />
       </AnimatedSection>
 
-      {/* Features → Lotteries: крупный разрыв + декоративный сепаратор */}
-      <div style={{ height: 12 }} />
-      <SectionDivider />
-      <div style={{ height: 12 }} />
+      {/* Features → Lotteries */}
+      <div style={{ height: 20 }} />
+      <SectionLabel label="Draw Lotteries" />
+      <div style={{ height: 14 }} />
 
       <AnimatedSection variants={stagger}>
         <LotteryCarousel />
       </AnimatedSection>
 
-      {/* Lotteries → Scratch: средний зазор */}
-      <div style={{ height: 16 }} />
+      {/* Lotteries → Scratch */}
+      <div style={{ height: 20 }} />
+      <SectionLabel label="Scratch Cards" />
+      <div style={{ height: 14 }} />
 
       <AnimatedSection variants={stagger}>
         <ScratchCarousel />
       </AnimatedSection>
 
-      {/* Scratch → Gamification: крупный разрыв + декоративный сепаратор */}
-      <div style={{ height: 12 }} />
-      <SectionDivider />
-      <div style={{ height: 12 }} />
+      {/* Scratch → Gamification */}
+      <div style={{ height: 20 }} />
+      <SectionLabel label="Rewards" />
+      <div style={{ height: 14 }} />
 
       <AnimatedSection variants={fadeUpCard}>
         <GamificationBanner />

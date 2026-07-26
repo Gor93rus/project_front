@@ -654,7 +654,7 @@
   flex-direction: row;
   gap: 14px;
   align-items: flex-start;
-  /* Усиленный акцентный фо�� для главной карточки */
+  /* Усиленный акцентный фо������ для главной карточки */
   background:
     radial-gradient(60% 80% at 8% 12%, var(--fc-accent-bg, transparent) 0%, transparent 60%),
     radial-gradient(40% 50% at 85% 85%, var(--fc-accent-bg, transparent) 0%, transparent 55%),
@@ -907,7 +907,7 @@
   text-shadow: 0 1px 6px rgba(0,0,0,0.90);
 }
 
-/* ── Desktop — single horizontal row of 6 compact cards ─────────────────── */
+/* ── Desktop — single horizontal row of 6 compact cards (legacy, kept for compat) ─────────────────── */
 
 .features-bento-img {
   display: grid;
@@ -930,6 +930,81 @@
 
 .features-bento-img__col--tall {
   display: contents;
+}
+
+/* ── MOBILE SCROLL CAROUSEL ────────────────────────────────────────────────── */
+
+.features-mobile-carousel {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/*
+ * Scroll track: горизонтальный scroll-snap.
+ * Карточка занимает 100% ширины — edge-fade убран, карточка не обрезается.
+ */
+.features-mobile-carousel__track {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  overflow-x: scroll;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  padding: 2px 0 6px 0;
+}
+
+/* Карточка в мобильной карусели: 1 карточка = полная ширина контейнера */
+.feature-card-img--carousel-item {
+  /* Ширина: 100% контейнера — карточка совпадает с шириной GlobalJackpotHero */
+  flex: 0 0 100%;
+  /* 16:9 — высота адаптируется автоматически */
+  aspect-ratio: 16 / 9;
+  scroll-snap-align: start;
+}
+
+/* ── DOT INDICATORS ─────────────────────────────────────────────────────────── */
+
+.features-carousel-dots {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+
+.features-carousel-dot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.18);
+  transition: width 0.25s ease, background 0.25s ease, border-radius 0.25s ease;
+}
+
+.features-carousel-dot--active {
+  width: 16px;
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.60);
+}
+
+/* ── DESKTOP PAIR — ровно 2 карточки рядом, фиксированная высота ───────── */
+
+/*
+ * Ровно 2 карточки, каждая ~50% ширины, высота фиксированная 220px —
+ * вписывается в ритм страницы без доминирования, как в референсе.
+ * Карточки меняются через JS fade каждые 4с.
+ */
+.features-desktop-pair {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.features-desktop-pair .feature-card-img {
+  width: 100%;
+  height: 220px;
+  aspect-ratio: unset;
+  min-height: 0;
 }
 
 @media (prefers-reduced-motion: reduce) {

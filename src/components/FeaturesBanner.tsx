@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 
 // ── Данные ──────────────────────────────────────────────────────────────────
@@ -98,52 +98,14 @@ const ITEMS: FeatureItem[] = [
   },
 ];
 
-// ── Адаптивный размер карточек (mobile): широкие прямоугольники ─────────────
-function useMobileCardDimensions() {
-  const [width, setWidth] = useState(() =>
-    typeof window !== 'undefined' ? window.innerWidth : 390,
-  );
-
-  useEffect(() => {
-    let rafId: number;
-    const onResize = () => {
-      cancelAnimationFrame(rafId);
-      rafId = requestAnimationFrame(() => setWidth(window.innerWidth));
-    };
-    window.addEventListener('resize', onResize, { passive: true });
-    return () => {
-      window.removeEventListener('resize', onResize);
-      cancelAnimationFrame(rafId);
-    };
-  }, []);
-
-  return useMemo(() => {
-    // Wide landscape cards — ~2 visible at a time on screen
-    // gap between cards is 10px
-    const gap = 10;
-    // ~2.1–2.15 карточки видны одновременно → приглашает скроллить
-    let cardWidth: number;
-    if (width <= 360) cardWidth = Math.floor((width - 32 - gap) / 2.05);
-    else if (width <= 430) cardWidth = Math.floor((width - 32 - gap) / 2.10);
-    else if (width <= 640) cardWidth = Math.floor((width - 32 - gap) / 2.15);
-    else cardWidth = 180;
-    // 16:9 — стандартный widescreen, изображения именно под этот ratio
-    const cardHeight = Math.round(cardWidth * (9 / 16));
-    return { cardWidth, cardHeight };
-  }, [width]);
-}
-
 // ═══════════════════════════════════════════════════════════════════════════════
-// FEATURE CARD — wide landscape, full-bleed image, text overlay
+// MOBILE FEATURE CARD — uses CSS class for 100%-width carousel slot (16:9)
 // ═══════════════════════════════════════════════════════════════════════════════
-function FeatureCard({ item, cardWidth, cardHeight, index }: { item: FeatureItem; cardWidth: number; cardHeight: number; index: number }) {
+function FeatureCard({ item, index }: { item: FeatureItem; index: number }) {
   return (
     <motion.div
-      className="feature-card-img shrink-0"
+      className="feature-card-img feature-card-img--carousel-item shrink-0"
       style={{
-        width: cardWidth,
-        minWidth: cardWidth,
-        height: cardHeight,
         isolation: 'isolate',
         ['--fc-border-top' as string]:    item.borderTop,
         ['--fc-border-left' as string]:   item.borderLeft,
@@ -155,9 +117,9 @@ function FeatureCard({ item, cardWidth, cardHeight, index }: { item: FeatureItem
         ['--fc-glow' as string]:          item.glow,
         ['--fc-inset-top' as string]:     item.insetTop,
       }}
-      initial={{ opacity: 0, y: 24, scale: 0.94 }}
+      initial={{ opacity: 0, y: 16, scale: 0.96 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
-      transition={{ type: 'spring', stiffness: 300, damping: 28, mass: 0.8, delay: index * 0.06 }}
+      transition={{ type: 'spring', stiffness: 300, damping: 28, mass: 0.8, delay: index * 0.05 }}
       whileTap={{ scale: 0.97 }}
     >
       <div
@@ -166,7 +128,6 @@ function FeatureCard({ item, cardWidth, cardHeight, index }: { item: FeatureItem
         aria-hidden="true"
       />
       <div className="feature-card-img__bevel" aria-hidden="true" />
-      {/* Text — left aligned */}
       <div className="feature-card-img__footer">
         <span className="feature-card-img__title">{item.title}</span>
       </div>
@@ -175,7 +136,7 @@ function FeatureCard({ item, cardWidth, cardHeight, index }: { item: FeatureItem
 }
 
 // ═══════════════════════════════════════════════════════════════════════════════
-// DESKTOP BENTO GRID — compact horizontal row of 6 cards
+// DESKTOP BENTO CARD — uses clamp() width, aspect-ratio 16/9
 // ═══════════════════════════════════════════════════════════════════════════════
 function BentoImgCard({ item, delay = 0, cardWidth }: { item: FeatureItem; delay?: number; cardWidth: string }) {
   return (
@@ -195,9 +156,9 @@ function BentoImgCard({ item, delay = 0, cardWidth }: { item: FeatureItem; delay
         ['--fc-glow' as string]:          item.glow,
         ['--fc-inset-top' as string]:     item.insetTop,
       }}
-      initial={{ opacity: 0, y: 20, scale: 0.96 }}
+      initial={{ opacity: 0, y: 16, scale: 0.96 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
-      transition={{ type: 'spring', stiffness: 280, damping: 26, delay }}
+      transition={{ type: 'spring', stiffness: 300, damping: 28, mass: 0.8, delay }}
       whileTap={{ scale: 0.97 }}
     >
       <div
@@ -213,12 +174,70 @@ function BentoImgCard({ item, delay = 0, cardWidth }: { item: FeatureItem; delay
   );
 }
 
-/**
- * Desktop: 2 cards at a time, auto-advance synced with mobile.
- * Cards use clamp() to scale with viewport: 240px → 420px.
- */
-function DesktopBentoGrid({ pair }: { pair: number }) {
+// ═══════════════════════════════════════════════════════════════════════════════
+// MOBILE SCROLL CAROUSEL — scroll-snap, 1 card per snap (100% width, 16:9)
+// ═══════════════════════════════════════════════════════════════════════════════
+function MobileCarousel() {
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+
+    const onScroll = () => {
+      const cardWidth = el.scrollWidth / ITEMS.length;
+      const index = Math.round(el.scrollLeft / cardWidth);
+      setActiveIndex(Math.min(Math.max(index, 0), ITEMS.length - 1));
+    };
+
+    el.addEventListener('scroll', onScroll, { passive: true });
+    return () => el.removeEventListener('scroll', onScroll);
+  }, []);
+
+  return (
+    <div className="features-mobile-carousel">
+      <div
+        ref={scrollRef}
+        className="features-mobile-carousel__track scrollbar-none"
+      >
+        {ITEMS.map((item, i) => (
+          <FeatureCard key={i} item={item} index={i} />
+        ))}
+      </div>
+
+      {/* Dot indicators */}
+      <div className="features-carousel-dots" aria-hidden="true">
+        {ITEMS.map((_, i) => (
+          <span
+            key={i}
+            className={`features-carousel-dot${i === activeIndex ? ' features-carousel-dot--active' : ''}`}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// DESKTOP — 2 cards visible, auto-cycling through all 6 every 4s
+// Cards scale with viewport via clamp(): 240px → 420px
+// ═══════════════════════════════════════════════════════════════════════════════
+function DesktopGrid() {
+  const [pairStart, setPairStart] = useState(0);
+  const [visible, setVisible] = useState(true);
   const cardWidth = 'clamp(240px, 38vw, 420px)';
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setVisible(false);
+      setTimeout(() => {
+        setPairStart(prev => (prev + 2) % ITEMS.length);
+        setVisible(true);
+      }, 350);
+    }, 4000);
+    return () => clearInterval(timer);
+  }, []);
 
   return (
     <div
@@ -227,15 +246,16 @@ function DesktopBentoGrid({ pair }: { pair: number }) {
         display: 'flex',
         gap: 16,
         justifyContent: 'center',
-        // Same fade-mask as ScrollCarousel: fade left + right edges
+        opacity: visible ? 1 : 0,
+        transition: 'opacity 0.35s ease',
         WebkitMaskImage: 'linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent)',
         maskImage: 'linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent)',
       }}
     >
       {[0, 1].map(offset => {
-        const idx = (pair * 2 + offset) % ITEMS.length;
+        const idx = (pairStart + offset) % ITEMS.length;
         return (
-          <BentoImgCard key={idx} item={ITEMS[idx]} delay={offset * 0.05} cardWidth={cardWidth} />
+          <BentoImgCard key={`${pairStart}-${offset}`} item={ITEMS[idx]} delay={offset * 0.05} cardWidth={cardWidth} />
         );
       })}
     </div>
@@ -246,74 +266,16 @@ function DesktopBentoGrid({ pair }: { pair: number }) {
 // MAIN COMPONENT
 // ═══════════════════════════════════════════════════════════════════════════════
 export function FeaturesBanner() {
-  const { cardWidth, cardHeight } = useMobileCardDimensions();
-  const [pair, setPair] = useState(0); // 0..2 (3 пары по 2 карточки)
-
-  // Авто-перелистывание пары каждые 5 секунд
-  useEffect(() => {
-    const id = setInterval(() => setPair(p => (p + 1) % 3), 5000);
-    return () => clearInterval(id);
-  }, []);
-
   return (
     <section className="px-4 pt-2">
-      {/* Section label */}
-      <div
-        style={{
-          marginBottom: 12,
-          display: 'flex',
-          alignItems: 'center',
-          gap: 8,
-        }}
-      >
-        <span
-          style={{
-            flex: 1,
-            height: 1,
-            background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.08))',
-          }}
-        />
-        <span
-          style={{
-            fontSize: 11,
-            fontWeight: 700,
-            textTransform: 'uppercase',
-            letterSpacing: '0.12em',
-            color: 'var(--ink-2)',
-            fontFamily: "'JetBrains Mono', monospace",
-            whiteSpace: 'nowrap',
-          }}
-        >
-          Why Trust Weekend Millions
-        </span>
-        <span
-          style={{
-            flex: 1,
-            height: 1,
-            background: 'linear-gradient(90deg, rgba(255,255,255,0.08), transparent)',
-          }}
-        />
+      {/* Mobile — scroll-snap carousel, 1 card = full width, 16:9 */}
+      <div className="md:hidden">
+        <MobileCarousel />
       </div>
 
-      {/* Mobile: 2 карточки в viewport, смена каждые 5 секунд */}
-      <div className="flex md:hidden" style={{ gap: 10, justifyContent: 'center' }}>
-        {[0, 1].map(offset => {
-          const idx = (pair * 2 + offset) % ITEMS.length;
-          return (
-            <FeatureCard
-              key={idx}
-              item={ITEMS[idx]}
-              cardWidth={cardWidth}
-              cardHeight={cardHeight}
-              index={offset}
-            />
-          );
-        })}
-      </div>
-
-      {/* Desktop — 2 cards at a time, auto-advance synced with mobile */}
+      {/* Desktop — 2 cards auto-cycling */}
       <div className="hidden md:block">
-        <DesktopBentoGrid pair={pair} />
+        <DesktopGrid />
       </div>
     </section>
   );

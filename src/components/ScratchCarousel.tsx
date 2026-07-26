@@ -133,9 +133,7 @@ export function ScratchCarousel() {
   return (
     <section className="px-4">
       <div className="flex items-center justify-between mb-3">
-        <div className="flex items-center gap-2">
-          <h2 className="font-extrabold text-sm" style={{ color: 'var(--ink-0)' }}>Instant Games</h2>
-          <span style={{
+        <span style={{
             display: 'inline-flex',
             alignItems: 'center',
             gap: 4,
@@ -159,7 +157,6 @@ export function ScratchCarousel() {
             }} />
             {SCRATCH_GAMES.length} active
           </span>
-        </div>
       </div>
 
       <ScrollCarousel accent="#4ade80" showProgress={false}>
