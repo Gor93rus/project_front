@@ -654,7 +654,7 @@
   flex-direction: row;
   gap: 14px;
   align-items: flex-start;
-  /* Усиленный акцентный фо�� для главной карточки */
+  /* Усиленный акцентный фо���� для главной карточки */
   background:
     radial-gradient(60% 80% at 8% 12%, var(--fc-accent-bg, transparent) 0%, transparent 60%),
     radial-gradient(40% 50% at 85% 85%, var(--fc-accent-bg, transparent) 0%, transparent 55%),
@@ -992,24 +992,23 @@
   background: rgba(255, 255, 255, 0.60);
 }
 
-/* ── DESKTOP GRID — 2 columns × 3 rows ──────────────────────────────────── */
+/* ── DESKTOP PAIR — ровно 2 карточки рядом, фиксированная высота ───────── */
 
 /*
- * 2 карточки в ряд: каждая занимает ~половину ширины контейнера.
- * aspect-ratio 16:9 — те же пропорции что и на мобилке, но карточки широкие.
- * Edge-fade маска как у DesktopBentoGrid.
+ * Ровно 2 карточки, каждая ~50% ширины, высота фиксированная 220px —
+ * вписывается в ритм страницы без доминирования, как в референсе.
+ * Карточки меняются через JS fade каждые 4с.
  */
-.features-desktop-grid {
+.features-desktop-pair {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: 1fr 1fr;
   gap: 10px;
-  -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 4%, #000 96%, transparent 100%);
-  mask-image: linear-gradient(90deg, transparent 0%, #000 4%, #000 96%, transparent 100%);
 }
 
-.features-desktop-grid .feature-card-img {
+.features-desktop-pair .feature-card-img {
   width: 100%;
-  aspect-ratio: 16 / 9;
+  height: 220px;
+  aspect-ratio: unset;
   min-height: 0;
 }
 

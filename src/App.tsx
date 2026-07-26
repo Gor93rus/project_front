@@ -21,7 +21,7 @@ import { AnimatedSection } from './components/AnimatedSection';
 import { GlobalJackpotHero } from './components/GlobalJackpotHero';
 import { stagger, fadeUp, fadeUpCard } from './lib/animations';
 
-// Типографический разделитель — текст-метка по центру, линии по обе стороны
+// Типографический разделитель — текст-метка по центру, линии с gold-акцентом
 function SectionLabel({ label }: { label: string }) {
   return (
     <div
@@ -29,7 +29,7 @@ function SectionLabel({ label }: { label: string }) {
       style={{
         display: 'flex',
         alignItems: 'center',
-        gap: 12,
+        gap: 10,
         marginLeft: 16,
         marginRight: 16,
       }}
@@ -38,7 +38,7 @@ function SectionLabel({ label }: { label: string }) {
         style={{
           flex: 1,
           height: 1,
-          background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.08))',
+          background: 'linear-gradient(90deg, transparent, rgba(250,219,20,0.20))',
         }}
       />
       <span
@@ -46,11 +46,12 @@ function SectionLabel({ label }: { label: string }) {
           fontSize: 9,
           fontWeight: 700,
           textTransform: 'uppercase',
-          letterSpacing: '0.18em',
-          color: 'var(--ink-3)',
+          letterSpacing: '0.20em',
+          color: 'var(--gold)',
           fontFamily: "'JetBrains Mono', monospace",
           whiteSpace: 'nowrap',
           userSelect: 'none',
+          opacity: 0.65,
         }}
       >
         {label}
@@ -59,7 +60,7 @@ function SectionLabel({ label }: { label: string }) {
         style={{
           flex: 1,
           height: 1,
-          background: 'linear-gradient(90deg, rgba(255,255,255,0.08), transparent)',
+          background: 'linear-gradient(90deg, rgba(250,219,20,0.20), transparent)',
         }}
       />
     </div>

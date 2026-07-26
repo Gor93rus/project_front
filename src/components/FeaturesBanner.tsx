@@ -183,47 +183,60 @@ function MobileCarousel() {
 }
 
 // ═══════════════════════════════════════════════════════════════════════════════
-// DESKTOP GRID — 2 cards per row so each card is wide and legible
+// DESKTOP — 2 cards visible, auto-cycling through all 6 every 4s
 // ═══════════════════════════════════════════════════════════════════════════════
-function BentoImgCard({ item, delay = 0 }: { item: FeatureItem; delay?: number }) {
-  return (
-    <motion.div
-      className="feature-card-img"
-      style={{
-        isolation: 'isolate',
-        ['--fc-border-top' as string]:    item.borderTop,
-        ['--fc-border-left' as string]:   item.borderLeft,
-        ['--fc-border-right' as string]:  item.borderRight,
-        ['--fc-border-bottom' as string]: item.borderBottom,
-        ['--fc-border-top-h' as string]:  item.borderTopH,
-        ['--fc-border-left-h' as string]: item.borderLeftH,
-        ['--fc-ring' as string]:          item.ring,
-        ['--fc-glow' as string]:          item.glow,
-        ['--fc-inset-top' as string]:     item.insetTop,
-      }}
-      initial={{ opacity: 0, y: 20, scale: 0.96 }}
-      animate={{ opacity: 1, y: 0, scale: 1 }}
-      transition={{ type: 'spring', stiffness: 280, damping: 26, delay }}
-      whileTap={{ scale: 0.97 }}
-    >
-      <div
-        className="feature-card-img__bg"
-        style={{ backgroundImage: `url(${item.image})` }}
-        aria-hidden="true"
-      />
-      <div className="feature-card-img__bevel" aria-hidden="true" />
-      <div className="feature-card-img__footer">
-        <span className="feature-card-img__title">{item.title}</span>
-      </div>
-    </motion.div>
-  );
-}
-
 function DesktopGrid() {
+  // Пара индексов: [left, right]. Каждые 4с сдвигается на 2 вперёд по кольцу.
+  const [pairStart, setPairStart] = useState(0);
+  const [visible, setVisible] = useState(true);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      // Fade out → сменить пару → fade in
+      setVisible(false);
+      setTimeout(() => {
+        setPairStart(prev => (prev + 2) % ITEMS.length);
+        setVisible(true);
+      }, 350);
+    }, 4000);
+    return () => clearInterval(timer);
+  }, []);
+
+  const left  = ITEMS[pairStart % ITEMS.length];
+  const right = ITEMS[(pairStart + 1) % ITEMS.length];
+
   return (
-    <div className="features-desktop-grid">
-      {ITEMS.map((item, i) => (
-        <BentoImgCard key={i} item={item} delay={i * 0.05} />
+    <div
+      className="features-desktop-pair"
+      style={{ opacity: visible ? 1 : 0, transition: 'opacity 0.35s ease' }}
+    >
+      {[left, right].map((item, i) => (
+        <div
+          key={`${pairStart}-${i}`}
+          className="feature-card-img"
+          style={{
+            isolation: 'isolate',
+            ['--fc-border-top' as string]:    item.borderTop,
+            ['--fc-border-left' as string]:   item.borderLeft,
+            ['--fc-border-right' as string]:  item.borderRight,
+            ['--fc-border-bottom' as string]: item.borderBottom,
+            ['--fc-border-top-h' as string]:  item.borderTopH,
+            ['--fc-border-left-h' as string]: item.borderLeftH,
+            ['--fc-ring' as string]:          item.ring,
+            ['--fc-glow' as string]:          item.glow,
+            ['--fc-inset-top' as string]:     item.insetTop,
+          }}
+        >
+          <div
+            className="feature-card-img__bg"
+            style={{ backgroundImage: `url(${item.image})` }}
+            aria-hidden="true"
+          />
+          <div className="feature-card-img__bevel" aria-hidden="true" />
+          <div className="feature-card-img__footer">
+            <span className="feature-card-img__title">{item.title}</span>
+          </div>
+        </div>
       ))}
     </div>
   );
@@ -240,7 +253,7 @@ export function FeaturesBanner() {
         <MobileCarousel />
       </div>
 
-      {/* Desktop */}
+      {/* Desktop — 2 cards auto-cycling */}
       <div className="hidden md:block">
         <DesktopGrid />
       </div>
