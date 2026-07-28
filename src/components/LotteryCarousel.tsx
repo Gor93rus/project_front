@@ -115,7 +115,7 @@ function LotteryCard({ lottery }: { lottery: Lottery }) {
       style={{
         position: 'relative', borderRadius: 20, flexShrink: 0, cursor: 'pointer',
         width: 182, minHeight: 390,
-        // Clip children (image pulse stays inside card)
+        // Clip children (neon border stays inside card)
         overflow: 'hidden',
         // Усиленная направленная фаска (glass-3d): светлый верх/лево, тёмный низ/право
         borderTop: '2px solid rgba(255,255,255,0.18)',
@@ -132,12 +132,12 @@ function LotteryCard({ lottery }: { lottery: Lottery }) {
         `,
       }}
     >
-      {/* Background */}
-      <div style={{ position: 'absolute', inset: 0 }}>
+      {/* Фон — radial-свечение + слои (без размытых blob'ов) */}
+      <div style={{ position: 'absolute', inset: 0, borderRadius: 20, overflow: 'hidden' }}>
         <div style={{
           position: 'absolute', inset: 0,
-          background: `radial-gradient(ellipse 80% 60% at 50% 30%, ${accent}55 0%, transparent 55%),
-            radial-gradient(ellipse 40% 30% at 70% 20%, ${accent}40 0%, transparent 48%),
+          background: `radial-gradient(ellipse 80% 60% at 50% 28%, ${accent}55 0%, transparent 55%),
+            radial-gradient(ellipse 40% 30% at 70% 18%, ${accent}40 0%, transparent 48%),
             repeating-linear-gradient(45deg, transparent 0px, ${accent}12 1px, transparent 4px),
             linear-gradient(180deg, var(--bg-0) 0%, ${accent}25 30%, var(--bg-0) 70%, var(--bg-0) 100%)`,
         }} />

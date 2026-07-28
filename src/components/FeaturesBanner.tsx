@@ -1,5 +1,5 @@
 import { useRef, useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 
 // ── Данные ──────────────────────────────────────────────────────────────────
 interface FeatureItem {
@@ -20,7 +20,7 @@ interface FeatureItem {
 const ITEMS: FeatureItem[] = [
   {
     title: 'Instant Payouts',
-    image: '/images/card-instant-payouts.png',
+    image: '/images/card-instant-payouts.svg',
     borderTop:    'rgba(255,100,60,0.55)',
     borderLeft:   'rgba(255,100,60,0.28)',
     borderRight:  'rgba(60,10,0,0.55)',
@@ -33,7 +33,7 @@ const ITEMS: FeatureItem[] = [
   },
   {
     title: 'TON & USDT',
-    image: '/images/card-ton-usdt.png',
+    image: '/images/card-ton-usdt.svg',
     borderTop:    'rgba(10,124,255,0.55)',
     borderLeft:   'rgba(10,124,255,0.28)',
     borderRight:  'rgba(0,20,60,0.55)',
@@ -46,7 +46,7 @@ const ITEMS: FeatureItem[] = [
   },
   {
     title: 'Provably Fair',
-    image: '/images/card-provably-fair.png',
+    image: '/images/card-provably-fair.svg',
     borderTop:    'rgba(40,200,100,0.55)',
     borderLeft:   'rgba(40,200,100,0.28)',
     borderRight:  'rgba(0,40,20,0.55)',
@@ -59,7 +59,7 @@ const ITEMS: FeatureItem[] = [
   },
   {
     title: 'Massive Prizes',
-    image: '/images/card-massive-prizes.png',
+    image: '/images/card-massive-prizes.svg',
     borderTop:    'rgba(250,190,20,0.55)',
     borderLeft:   'rgba(250,190,20,0.28)',
     borderRight:  'rgba(60,40,0,0.55)',
@@ -72,7 +72,7 @@ const ITEMS: FeatureItem[] = [
   },
   {
     title: 'Smart Contract',
-    image: '/images/card-smart-contract.png',
+    image: '/images/card-smart-contract.svg',
     borderTop:    'rgba(0,210,230,0.55)',
     borderLeft:   'rgba(0,210,230,0.28)',
     borderRight:  'rgba(0,40,50,0.55)',
@@ -85,7 +85,7 @@ const ITEMS: FeatureItem[] = [
   },
   {
     title: 'Audited Security',
-    image: '/images/card-audited-security.png',
+    image: '/images/card-audited-security.svg',
     borderTop:    'rgba(80,210,120,0.55)',
     borderLeft:   'rgba(80,210,120,0.28)',
     borderRight:  'rgba(0,40,20,0.55)',
@@ -127,24 +127,22 @@ function FeatureCard({ item, index }: { item: FeatureItem; index: number }) {
         style={{ backgroundImage: `url(${item.image})` }}
         aria-hidden="true"
       />
+      <div className="feature-card-img__tint" aria-hidden="true" />
       <div className="feature-card-img__bevel" aria-hidden="true" />
-      <div className="feature-card-img__footer">
-        <span className="feature-card-img__title">{item.title}</span>
-      </div>
     </motion.div>
   );
 }
 
 // ═══════════════════════════════════════════════════════════════════════════════
-// DESKTOP BENTO CARD — uses clamp() width, aspect-ratio 16/9
+// DESKTOP CARD — static container, images crossfade inside via AnimatePresence
 // ═══════════════════════════════════════════════════════════════════════════════
-function BentoImgCard({ item, delay = 0, cardWidth }: { item: FeatureItem; delay?: number; cardWidth: string }) {
+function DesktopCard({ item }: { item: FeatureItem }) {
   return (
     <motion.div
       className="feature-card-img feature-card-img--bento"
       style={{
-        width: cardWidth,
-        aspectRatio: '16 / 9',
+        width: '100%',
+        aspectRatio: '20 / 9',
         isolation: 'isolate',
         ['--fc-border-top' as string]:    item.borderTop,
         ['--fc-border-left' as string]:   item.borderLeft,
@@ -156,20 +154,27 @@ function BentoImgCard({ item, delay = 0, cardWidth }: { item: FeatureItem; delay
         ['--fc-glow' as string]:          item.glow,
         ['--fc-inset-top' as string]:     item.insetTop,
       }}
-      initial={{ opacity: 0, y: 16, scale: 0.96 }}
-      animate={{ opacity: 1, y: 0, scale: 1 }}
-      transition={{ type: 'spring', stiffness: 300, damping: 28, mass: 0.8, delay }}
       whileTap={{ scale: 0.97 }}
     >
-      <div
-        className="feature-card-img__bg"
-        style={{ backgroundImage: `url(${item.image})` }}
-        aria-hidden="true"
-      />
-      <div className="feature-card-img__bevel" aria-hidden="true" />
-      <div className="feature-card-img__footer">
-        <span className="feature-card-img__title">{item.title}</span>
-      </div>
+      {/* Keyed content — AnimatePresence crossfades when item.title changes */}
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={item.title}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.4, ease: 'easeInOut' }}
+          style={{ position: 'absolute', inset: 0 }}
+        >
+          <div
+            className="feature-card-img__bg"
+            style={{ backgroundImage: `url(${item.image})` }}
+            aria-hidden="true"
+          />
+          <div className="feature-card-img__tint" aria-hidden="true" />
+          <div className="feature-card-img__bevel" aria-hidden="true" />
+        </motion.div>
+      </AnimatePresence>
     </motion.div>
   );
 }
@@ -220,44 +225,33 @@ function MobileCarousel() {
 }
 
 // ═══════════════════════════════════════════════════════════════════════════════
-// DESKTOP — 2 cards visible, auto-cycling through all 6 every 4s
-// Cards scale with viewport via clamp(): 240px → 420px
+// DESKTOP — 3 static cards, images crossfade every 4s
+// Cards fill the full row to match GlobalJackpotHero edges (shared px-4 wrapper)
 // ═══════════════════════════════════════════════════════════════════════════════
 function DesktopGrid() {
-  const [pairStart, setPairStart] = useState(0);
-  const [visible, setVisible] = useState(true);
-  const cardWidth = 'clamp(240px, 38vw, 420px)';
+  const [slide, setSlide] = useState(0); // 0 or 1
 
   useEffect(() => {
     const timer = setInterval(() => {
-      setVisible(false);
-      setTimeout(() => {
-        setPairStart(prev => (prev + 2) % ITEMS.length);
-        setVisible(true);
-      }, 350);
+      setSlide(prev => (prev + 1) % 2);
     }, 4000);
     return () => clearInterval(timer);
   }, []);
 
+  const indices = [0, 1, 2].map(offset => (slide * 3 + offset) % ITEMS.length);
+
   return (
     <div
-      className="features-bento-img"
       style={{
-        display: 'flex',
-        gap: 16,
-        justifyContent: 'center',
-        opacity: visible ? 1 : 0,
-        transition: 'opacity 0.35s ease',
-        WebkitMaskImage: 'linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent)',
-        maskImage: 'linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent)',
+        display: 'grid',
+        gridTemplateColumns: 'repeat(3, 1fr)',
+        gap: 10,
+        width: '100%',
       }}
     >
-      {[0, 1].map(offset => {
-        const idx = (pairStart + offset) % ITEMS.length;
-        return (
-          <BentoImgCard key={`${pairStart}-${offset}`} item={ITEMS[idx]} delay={offset * 0.05} cardWidth={cardWidth} />
-        );
-      })}
+      {indices.map((idx, i) => (
+        <DesktopCard key={i} item={ITEMS[idx]} />
+      ))}
     </div>
   );
 }
@@ -273,7 +267,7 @@ export function FeaturesBanner() {
         <MobileCarousel />
       </div>
 
-      {/* Desktop — 2 cards auto-cycling */}
+      {/* Desktop — 3 cards, images crossfade in place */}
       <div className="hidden md:block">
         <DesktopGrid />
       </div>

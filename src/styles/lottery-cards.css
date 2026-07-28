@@ -830,14 +830,25 @@
   background-size: cover;
   background-position: center center;
   background-repeat: no-repeat;
-  filter: saturate(1.20) brightness(1.10);
-  transition: filter 0.45s ease;
+  image-rendering: auto;               /* ← bilinear resample, no jaggies */
 }
 
-/* Hover: only brightness/saturation boost, no scale = no clipping */
-.feature-card-img:hover .feature-card-img__bg,
-.feature-card-img--active .feature-card-img__bg {
-  filter: saturate(1.35) brightness(1.18);
+/*
+ * Tint overlay — replaces CSS filter (which forces software rendering and jaggies).
+ * Boosts saturation + brightness via mix-blend-mode on a semi-transparent layer.
+ */
+.feature-card-img__tint {
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.08);
+  mix-blend-mode: overlay;
+  pointer-events: none;
+  transition: opacity 0.45s ease;
+}
+
+.feature-card-img:hover .feature-card-img__tint,
+.feature-card-img--active .feature-card-img__tint {
+  opacity: 0.55;
 }
 
 /*

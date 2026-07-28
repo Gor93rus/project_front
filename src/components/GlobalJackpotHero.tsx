@@ -114,13 +114,12 @@ const RAY_GRADIENT = (() => {
 })();
 
 function GodRays() {
-  // Радиальная маска гасит лучи к краям → свет «излучается» из центра,
-  // не пачкая заливку блока по периметру.
+  // Радиальная маска: на мобилке 62%, на десктопе 92% — лучи доходят до краёв контейнера.
   const maskStyle = {
     WebkitMaskImage:
-      'radial-gradient(circle at 50% 50%, #000 0%, rgba(0,0,0,0.65) 30%, transparent 62%)',
+      'radial-gradient(circle at 50% 50%, #000 0%, rgba(0,0,0,0.65) 30%, transparent 92%)',
     maskImage:
-      'radial-gradient(circle at 50% 50%, #000 0%, rgba(0,0,0,0.65) 30%, transparent 62%)',
+      'radial-gradient(circle at 50% 50%, #000 0%, rgba(0,0,0,0.65) 30%, transparent 92%)',
   } as const;
 
   return (
@@ -130,8 +129,8 @@ function GodRays() {
       style={{
         top: '44%',
         left: '50%',
-        width: 600,
-        height: 600,
+        width: 'clamp(360px, 100vw, 1800px)',
+        height: 'clamp(360px, 100vw, 1800px)',
         transform: 'translate(-50%, -50%)',
         zIndex: 0,
         mixBlendMode: 'screen',

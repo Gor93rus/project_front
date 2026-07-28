@@ -32,7 +32,7 @@ e08053a — fix: remove card images, unify bevels, gamification connect flow
 | ScratchCarousel | Fade-маски расширены (80%→90%), бейджи не обрезаются |
 | GamificationBanner | Pulse-glow на замке. Без кошелька — `connect()`, с кошельком — `/profile` |
 | Header/NavBar | Всегда непрозрачный фон с блюром. **Исправлено 25.07:** scroll-логика вынесена в общий хук `useScrolled(threshold)`, дублирование устранено, пороги унифицированы |
-| Изображения | Перенесены из `src/assets/cards/` в `public/cards/`. Пути исправлены на `/cards/*.png` |
+| Изображения | Файлы в `public/images/`. Пути в коде `/images/card-*.png` — консистентны, Vite+Vercel собирают корректно |
 
 ## Актуальный техдолг
 - [x] ~~`useTonWallet.ts` + `api.ts` — конфликт `export const api` / `export namespace api`~~ ✅ **Исправлено 25.07:** `walletAuth` перенесён в `api.ts` как обычный метод, `declare module` + `as any` удалены
