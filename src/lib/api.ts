@@ -189,6 +189,89 @@ export interface BuyTicketResponse {
 }
 
 // ──────────────────────────────────────────────
+// GAMIFICATION: types (mirror lottery-backend src/api/gamification/*)
+// ──────────────────────────────────────────────
+
+export interface LevelInfoResponse {
+  success: true;
+  level: {
+    level: number;
+    xpRequired: number;
+    xpProgress: { current: number; required: number; percentage: number };
+    rewards: { tickets?: number; withdrawalFeeDiscount?: number } | null;
+    nextLevelRewards: { tickets?: number; withdrawalFeeDiscount?: number } | null;
+  };
+  milestones: Array<{ level: number; tickets?: number; withdrawalFeeDiscount?: number }>;
+}
+
+export interface Achievement {
+  id: string;
+  name: string;
+  description: string;
+  icon: string;
+  target: number;
+  type: string;
+  xpReward: number;
+  coinReward: number;
+  category: string;
+}
+
+export interface AchievementsResponse {
+  success: true;
+  achievements: Achievement[];
+}
+
+export interface MyAchievement extends Achievement {
+  progress: number;
+  unlocked: boolean;
+  claimed: boolean;
+  unlockedAt?: string | null;
+}
+
+export interface MyAchievementsResponse {
+  success: true;
+  achievements: MyAchievement[];
+}
+
+export interface StreakResponse {
+  success: true;
+  streak: {
+    currentStreak: number;
+    longestStreak: number;
+    totalCheckIns: number;
+    lastCheckIn?: string | null;
+    nextMilestone?: { day: number; xp?: number; tickets?: number; badge?: string; vipTier?: string } | null;
+  };
+  alreadyCheckedInToday?: boolean;
+}
+
+export interface UserReward {
+  id: string;
+  type: 'xp' | 'ticket';
+  value: number;
+  source: string;
+  claimed?: boolean;
+  createdAt?: string;
+}
+
+export interface UnclaimedRewardsResponse {
+  success: true;
+  rewards: UserReward[];
+}
+
+export interface ClaimRewardResponse {
+  success: true;
+  reward: UserReward;
+}
+
+export interface ClaimAllRewardsResponse {
+  success: true;
+  claimed: number;
+  totalXp?: number;
+  totalTickets?: number;
+}
+
+// ──────────────────────────────────────────────
 // Auth token management
 // ──────────────────────────────────────────────
 
@@ -288,4 +371,36 @@ export const api = {
       body: payload,
       idempotencyKey,
     }),
+
+  /** GAMIFICATION: current level, XP progress, next-level rewards */
+  getLevel: () =>
+    request<LevelInfoResponse>('/gamification/level'),
+
+  /** GAMIFICATION: all defined achievements (catalog) */
+  getAchievements: () =>
+    request<AchievementsResponse>('/gamification/achievements'),
+
+  /** GAMIFICATION: user's achievement progress/unlocked/claimed state */
+  getMyAchievements: () =>
+    request<MyAchievementsResponse>('/gamification/achievements/mine'),
+
+  /** GAMIFICATION: daily check-in streak info */
+  getStreak: () =>
+    request<StreakResponse>('/gamification/checkin'),
+
+  /** GAMIFICATION: perform today's check-in */
+  checkIn: () =>
+    request<StreakResponse>('/gamification/checkin', { method: 'POST' }),
+
+  /** GAMIFICATION: unclaimed rewards (xp/ticket) */
+  getUnclaimedRewards: () =>
+    request<UnclaimedRewardsResponse>('/gamification/rewards'),
+
+  /** GAMIFICATION: claim a single reward */
+  claimReward: (id: string) =>
+    request<ClaimRewardResponse>(`/gamification/rewards/${id}/claim`, { method: 'POST' }),
+
+  /** GAMIFICATION: claim every unclaimed reward at once */
+  claimAllRewards: () =>
+    request<ClaimAllRewardsResponse>('/gamification/rewards/claim-all', { method: 'POST' }),
 };

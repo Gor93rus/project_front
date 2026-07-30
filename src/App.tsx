@@ -7,6 +7,7 @@ import { FeaturesBanner } from './components/FeaturesBanner';
 import { LotteryCarousel } from './components/LotteryCarousel';
 import { ScratchCarousel } from './components/ScratchCarousel';
 import { GamificationBanner } from './components/GamificationBanner';
+import { RewardsUnlockBanner } from './components/RewardsUnlockBanner';
 import { ProfilePage } from './components/ProfilePage';
 import { LotteryPage } from './components/LotteryPage';
 import { DailyRushPage } from './components/DailyRushPage';
@@ -21,48 +22,64 @@ import { AnimatedSection } from './components/AnimatedSection';
 import { GlobalJackpotHero } from './components/GlobalJackpotHero';
 import { stagger, fadeUp, fadeUpCard } from './lib/animations';
 
-// Типографический разделитель — текст-метка по центру, линии с gold-акцентом
-function SectionLabel({ label }: { label: string }) {
+// "Glass rivet" разделитель секций — dot-grid полоса + светящийся glass-хаб с иконкой
+type RivetIcon = 'dice' | 'scratch' | 'trophy';
+
+function RivetGlyph({ icon }: { icon: RivetIcon }) {
+  if (icon === 'dice') {
+    return (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+        <rect x="3" y="3" width="18" height="18" rx="4" />
+        <circle cx="8" cy="8" r="1.2" fill="currentColor" stroke="none" />
+        <circle cx="16" cy="8" r="1.2" fill="currentColor" stroke="none" />
+        <circle cx="12" cy="12" r="1.2" fill="currentColor" stroke="none" />
+        <circle cx="8" cy="16" r="1.2" fill="currentColor" stroke="none" />
+        <circle cx="16" cy="16" r="1.2" fill="currentColor" stroke="none" />
+      </svg>
+    );
+  }
+  if (icon === 'scratch') {
+    return (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+        <rect x="3" y="5" width="18" height="14" rx="2.5" />
+        <path d="M6 12h5M6 15.5h3" />
+        <path d="M14 9.5l3 3-3 3-1.5-1.5" />
+      </svg>
+    );
+  }
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M8 4h8v4a4 4 0 0 1-8 0V4Z" />
+      <path d="M8 5H5a2 2 0 0 0 2 4M16 5h3a2 2 0 0 1-2 4" />
+      <path d="M12 13v3M9 20h6M10 16.5h4v2a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1v-2Z" />
+    </svg>
+  );
+}
+
+const RIVET_THEME: Record<RivetIcon, { glow: string; icon: string; dot: string }> = {
+  dice:     { glow: 'rgba(10,124,255,0.30)',  icon: 'var(--primary)',   dot: 'rgba(10,124,255,0.20)' },
+  scratch:  { glow: 'rgba(124,58,237,0.32)',  icon: 'var(--secondary)', dot: 'rgba(124,58,237,0.20)' },
+  trophy:   { glow: 'rgba(250,219,20,0.32)',  icon: 'var(--gold)',      dot: 'rgba(250,219,20,0.20)' },
+};
+
+function GlassRivet({ label, icon }: { label: string; icon: RivetIcon }) {
+  const theme = RIVET_THEME[icon];
   return (
     <div
+      className="glass-rivet"
       aria-hidden="true"
       style={{
-        display: 'flex',
-        alignItems: 'center',
-        gap: 10,
-        marginLeft: 16,
-        marginRight: 16,
+        ['--rivet-glow' as string]: theme.glow,
+        ['--rivet-icon' as string]: theme.icon,
+        ['--rivet-dot' as string]: theme.dot,
       }}
     >
-      <span
-        style={{
-          flex: 1,
-          height: 1,
-          background: 'linear-gradient(90deg, transparent, rgba(250,219,20,0.20))',
-        }}
-      />
-      <span
-        style={{
-          fontSize: 9,
-          fontWeight: 700,
-          textTransform: 'uppercase',
-          letterSpacing: '0.20em',
-          color: 'var(--gold)',
-          fontFamily: "'JetBrains Mono', monospace",
-          whiteSpace: 'nowrap',
-          userSelect: 'none',
-          opacity: 0.65,
-        }}
-      >
-        {label}
+      <span className="glass-rivet__line" />
+      <span className="glass-rivet__hub">
+        <RivetGlyph icon={icon} />
+        <span className="glass-rivet__hub-label">{label}</span>
       </span>
-      <span
-        style={{
-          flex: 1,
-          height: 1,
-          background: 'linear-gradient(90deg, rgba(250,219,20,0.20), transparent)',
-        }}
-      />
+      <span className="glass-rivet__line" />
     </div>
   );
 }
@@ -83,7 +100,7 @@ function HomePage() {
 
       {/* Features → Lotteries */}
       <div style={{ height: 20 }} />
-      <SectionLabel label="Draw Lotteries" />
+      <GlassRivet label="Draw Lotteries" icon="dice" />
       <div style={{ height: 14 }} />
 
       <AnimatedSection variants={stagger}>
@@ -92,7 +109,7 @@ function HomePage() {
 
       {/* Lotteries → Scratch */}
       <div style={{ height: 20 }} />
-      <SectionLabel label="Scratch Cards" />
+      <GlassRivet label="Scratch Cards" icon="scratch" />
       <div style={{ height: 14 }} />
 
       <AnimatedSection variants={stagger}>
@@ -101,11 +118,14 @@ function HomePage() {
 
       {/* Scratch → Gamification */}
       <div style={{ height: 20 }} />
-      <SectionLabel label="Rewards" />
+      <GlassRivet label="Rewards" icon="trophy" />
       <div style={{ height: 14 }} />
 
       <AnimatedSection variants={fadeUpCard}>
-        <GamificationBanner />
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-0 rewards-section-grid">
+          <GamificationBanner />
+          <RewardsUnlockBanner />
+        </div>
       </AnimatedSection>
 
       <div style={{ height: 12 }} />
@@ -182,7 +202,13 @@ function AppLayout() {
   return (
     <div className="relative min-h-screen" style={{ background: 'var(--bg-0)' }}>
       {!isLotteryPage && <AuroraBackground />}
-      <div className="relative z-10 flex flex-col min-h-screen">
+      {!isLotteryPage && (
+        <>
+          <div className="app-shell-decor app-shell-decor--left" aria-hidden="true" />
+          <div className="app-shell-decor app-shell-decor--right" aria-hidden="true" />
+        </>
+      )}
+      <div className={`relative z-10 flex flex-col min-h-screen${isLotteryPage ? '' : ' app-shell-capsule'}`}>
         {!isLotteryPage && <Header />}
         <main className="flex-1 overflow-y-auto pt-2" style={{ paddingBottom: isLotteryPage ? 0 : 72 }}>
           <Routes>

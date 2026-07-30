@@ -163,3 +163,295 @@
 .hero-particles::after { animation:twinkle 3s ease-in-out infinite; animation-delay:1s; }
 .scroll-mask { -webkit-mask-image:var(--scroll-mask,linear-gradient(90deg,#000,#000 0%,#000 80%,transparent)); mask-image:var(--scroll-mask,linear-gradient(90deg,#000,#000 0%,#000 80%,transparent)); transition:-webkit-mask-image 0.4s ease,mask-image 0.4s ease; }
 .nav-pill-bg { position:absolute; inset:0; background:linear-gradient(180deg,var(--gold-soft),var(--gold)); border-radius:14px; box-shadow:0 8px 18px -8px var(--gold-glow),inset 0 1px 0 rgba(255,255,255,0.40); z-index:-1; }
+
+/* ══════════════════════════════════════════════════
+   APP CAPSULE SHELL (desktop) — centers the mobile-first
+   layout and fills dead side space with decorative panels
+   ══════════════════════════════════════════════════ */
+.app-shell-capsule {
+  position: relative;
+  width: 100%;
+  max-width: 100%;
+}
+@media (min-width: 768px) {
+  .app-shell-capsule {
+    max-width: 680px;
+    margin: 0 auto;
+    box-shadow:
+      0 0 0 1px rgba(255,255,255,0.06),
+      -40px 0 80px -40px rgba(0,0,0,0.65),
+      40px 0 80px -40px rgba(0,0,0,0.65);
+    background: linear-gradient(180deg, rgba(17,27,58,0.35) 0%, rgba(6,7,26,0.15) 100%);
+    min-height: 100vh;
+  }
+}
+.app-shell-decor {
+  display: none;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  width: calc((100% - 680px) / 2);
+  min-width: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+@media (min-width: 768px) {
+  .app-shell-decor { display: block; }
+}
+.app-shell-decor--left { left: 0; }
+.app-shell-decor--right { right: 0; }
+.app-shell-decor::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(rgba(10,124,255,0.16) 1px, transparent 1px);
+  background-size: 22px 22px;
+  -webkit-mask-image: radial-gradient(70% 60% at 50% 40%, #000 0%, transparent 75%);
+  mask-image: radial-gradient(70% 60% at 50% 40%, #000 0%, transparent 75%);
+}
+.app-shell-decor--left::after {
+  content: '';
+  position: absolute;
+  top: 12%;
+  right: -30%;
+  width: 70%;
+  height: 40%;
+  background: radial-gradient(circle, var(--primary-glow) 0%, transparent 70%);
+  filter: blur(50px);
+}
+.app-shell-decor--right::after {
+  content: '';
+  position: absolute;
+  bottom: 15%;
+  left: -30%;
+  width: 70%;
+  height: 40%;
+  background: radial-gradient(circle, var(--secondary-glow) 0%, transparent 70%);
+  filter: blur(50px);
+}
+
+/* Constrain fixed NavBar to the app-capsule width on desktop */
+@media (min-width: 768px) {
+  nav.fixed.bottom-0.left-0.right-0 {
+    left: 50%;
+    right: auto;
+    width: 680px;
+    max-width: 680px;
+    transform: translateX(-50%);
+  }
+}
+
+/* ══════════════════════════════════════════════════
+   GLASS RIVET — section divider: dot-grid strip +
+   glowing glass-bevel icon hub, replaces flat SectionLabel
+   ══════════════════════════════════════════════════ */
+.glass-rivet {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 16px;
+  height: 34px;
+}
+.glass-rivet__line {
+  flex: 1;
+  height: 8px;
+  position: relative;
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 18%, #000 82%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 18%, #000 82%, transparent);
+}
+.glass-rivet__line::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(var(--rivet-dot, rgba(255,255,255,0.16)) 1px, transparent 1px);
+  background-size: 7px 7px;
+  background-position: center;
+}
+.glass-rivet__line::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, var(--rivet-glow, rgba(250,219,20,0.10)) 50%, transparent);
+  mix-blend-mode: screen;
+}
+.glass-rivet__hub {
+  position: relative;
+  flex: none;
+  height: 34px;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 0 14px 0 10px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02) 40%, rgba(0,0,0,0.30));
+  border-top: 1.5px solid rgba(255,255,255,0.32);
+  border-left: 1.5px solid rgba(255,255,255,0.16);
+  border-right: 1.5px solid rgba(0,0,0,0.55);
+  border-bottom: 1.5px solid rgba(0,0,0,0.70);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.14),
+    0 0 0 1px rgba(255,255,255,0.05),
+    0 0 16px var(--rivet-glow, rgba(250,219,20,0.28)),
+    0 3px 10px rgba(0,0,0,0.60);
+  color: var(--rivet-icon, var(--gold));
+}
+.glass-rivet__hub svg {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  filter: drop-shadow(0 0 4px var(--rivet-glow, rgba(250,219,20,0.55)));
+}
+.glass-rivet__hub-label {
+  flex: none;
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--rivet-icon, var(--gold));
+  font-family: 'JetBrains Mono', monospace;
+  white-space: nowrap;
+  user-select: none;
+}
+
+/* ══════════════════════════════════════════════════
+   REWARDS UNLOCK — CSS-only animated 3D reward objects
+   ══════════════════════════════════════════════════ */
+.rewards-unlock-card__aurora {
+  background:
+    radial-gradient(60% 70% at 18% 0%, rgba(250,219,20,0.12), transparent 62%),
+    radial-gradient(55% 65% at 100% 28%, rgba(124,58,237,0.18), transparent 68%),
+    radial-gradient(70% 80% at 45% 115%, rgba(10,124,255,0.10), transparent 70%);
+  animation: reward-aurora-drift 8s ease-in-out infinite alternate;
+}
+@keyframes reward-aurora-drift {
+  from { opacity: 0.68; transform: translate3d(-4px,-2px,0) scale(1); }
+  to { opacity: 1; transform: translate3d(5px,3px,0) scale(1.04); }
+}
+.rewards-unlock-item::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  background: radial-gradient(65% 120% at 0% 50%, color-mix(in srgb, var(--reward-accent) 28%, transparent), transparent 70%);
+  opacity: 0.65;
+  pointer-events: none;
+}
+.reward-3d {
+  position: relative;
+  width: 48px;
+  height: 48px;
+  flex: 0 0 48px;
+  perspective: 260px;
+  transform-style: preserve-3d;
+}
+.reward-3d__shadow {
+  position: absolute;
+  left: 9px;
+  right: 9px;
+  bottom: 2px;
+  height: 8px;
+  border-radius: 999px;
+  background: radial-gradient(ellipse, rgba(0,0,0,0.55), transparent 72%);
+  filter: blur(2px);
+  animation: reward-shadow 3.4s ease-in-out infinite;
+}
+.reward-3d__object {
+  position: absolute;
+  inset: 7px;
+  transform-style: preserve-3d;
+  animation: reward-3d-spin 4.2s cubic-bezier(.45,.05,.55,.95) infinite;
+}
+.reward-3d__face {
+  position: absolute;
+  inset: 0;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-weight: 900;
+  font-size: 9px;
+  letter-spacing: -0.04em;
+  backface-visibility: hidden;
+  border: 1px solid rgba(255,255,255,0.22);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.35),
+    inset 0 -9px 16px rgba(0,0,0,0.30),
+    0 12px 22px -12px var(--reward-accent, var(--gold));
+}
+.reward-3d__face--front {
+  color: var(--bg-0);
+  transform: translateZ(5px);
+}
+.reward-3d__face--back {
+  transform: rotateY(180deg) translateZ(5px);
+}
+.reward-3d__object::before,
+.reward-3d__object::after {
+  content: '';
+  position: absolute;
+  inset: 3px -5px;
+  border-radius: 10px;
+  background: rgba(0,0,0,0.32);
+  transform: rotateY(90deg);
+  transform-style: preserve-3d;
+}
+.reward-3d--ticket .reward-3d__face--front {
+  background: linear-gradient(135deg, var(--gold-bright), var(--gold) 48%, #B88705);
+}
+.reward-3d--ticket .reward-3d__face--back {
+  background: linear-gradient(135deg, var(--primary-bright), var(--primary));
+}
+.reward-3d--streak .reward-3d__face {
+  border-radius: 50% 50% 45% 45%;
+}
+.reward-3d--streak .reward-3d__face--front {
+  color: #fff9c4;
+  background: radial-gradient(circle at 35% 22%, #fff566, var(--coral-soft) 42%, var(--coral) 68%, #7f1d1d);
+}
+.reward-3d--streak .reward-3d__face--back {
+  background: linear-gradient(135deg, #ffd166, #ef4444);
+}
+.reward-3d--badge .reward-3d__face {
+  clip-path: polygon(50% 0%, 62% 28%, 92% 32%, 70% 52%, 76% 84%, 50% 67%, 24% 84%, 30% 52%, 8% 32%, 38% 28%);
+  border-radius: 8px;
+}
+.reward-3d--badge .reward-3d__face--front {
+  color: #fff;
+  background: linear-gradient(135deg, var(--secondary-soft), var(--secondary) 52%, #3b0764);
+}
+.reward-3d--badge .reward-3d__face--back {
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+}
+.reward-3d--locked {
+  filter: saturate(0.45) brightness(0.70);
+}
+.reward-3d__spark {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 0 8px var(--reward-accent, var(--gold));
+  animation: sparkle 1.8s ease-in-out infinite;
+}
+.reward-3d__spark--a { top: 4px; right: 7px; }
+.reward-3d__spark--b { left: 4px; bottom: 11px; animation-delay: .7s; }
+.rewards-lock-chip {
+  color: var(--ink-2);
+  background: rgba(0,0,0,0.35);
+  border: 1px solid rgba(255,255,255,0.10);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.08);
+}
+@keyframes reward-3d-spin {
+  0%, 100% { transform: translateY(0) rotateX(-10deg) rotateY(-18deg); }
+  42% { transform: translateY(-4px) rotateX(9deg) rotateY(205deg); }
+  64% { transform: translateY(-2px) rotateX(-8deg) rotateY(300deg); }
+}
+@keyframes reward-shadow {
+  0%, 100% { opacity: .52; transform: scaleX(.9); }
+  50% { opacity: .26; transform: scaleX(.72); }
+}

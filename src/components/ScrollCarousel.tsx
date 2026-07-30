@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, useCallback, type ReactNode } from 'react';
+import { useEffect, useRef, useState, useCallback, type ReactNode, type CSSProperties } from 'react';
 
 interface Props {
   children: ReactNode;
@@ -6,6 +6,7 @@ interface Props {
   showProgress?: boolean;
   autoScroll?: boolean;
   autoScrollSpeed?: number; // px per second
+  arrows?: boolean;
 }
 
 const opaque = '#000';
@@ -21,7 +22,7 @@ function maskFor(progress: number) {
   return `linear-gradient(90deg, ${transparent}, ${opaque} 10%, ${opaque} 90%, ${transparent})`;
 }
 
-export function ScrollCarousel({ children, accent = '#3CB1FF', showProgress = true, autoScroll = false, autoScrollSpeed = 40 }: Props) {
+export function ScrollCarousel({ children, accent = '#3CB1FF', showProgress = true, autoScroll = false, autoScrollSpeed = 40, arrows = false }: Props) {
   const ref = useRef<HTMLDivElement>(null);
   const [progress, setProgress] = useState(0);
   const [activeIndex, setActiveIndex] = useState(0);
@@ -121,8 +122,75 @@ export function ScrollCarousel({ children, accent = '#3CB1FF', showProgress = tr
   const radius = 14;
   const circumference = 2 * Math.PI * radius;
 
+  const scrollByPage = (dir: 1 | -1) => {
+    const el = ref.current;
+    if (!el) return;
+    el.scrollBy({ left: dir * el.clientWidth * 0.8, behavior: 'smooth' });
+  };
+
+  const arrowBaseStyle: CSSProperties = {
+    position: 'absolute',
+    top: '50%',
+    transform: 'translateY(-50%)',
+    zIndex: 20,
+    width: 36,
+    height: 36,
+    borderRadius: '50%',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    background: 'linear-gradient(180deg, rgba(255,255,255,0.10), rgba(255,255,255,0.02) 40%, rgba(0,0,0,0.35))',
+    borderTop: '1.5px solid rgba(255,255,255,0.30)',
+    borderLeft: '1.5px solid rgba(255,255,255,0.14)',
+    borderRight: '1.5px solid rgba(0,0,0,0.55)',
+    borderBottom: '1.5px solid rgba(0,0,0,0.70)',
+    boxShadow: `inset 0 1px 0 rgba(255,255,255,0.14), 0 0 14px color-mix(in srgb, ${accent} 55%, transparent), 0 3px 10px rgba(0,0,0,0.5)`,
+    cursor: 'pointer',
+  };
+
+  const canScrollLeft = progress > 0.02;
+  const canScrollRight = progress < 0.98;
+
   return (
       <div className="relative pt-1 pb-1" style={{ overflowY: 'visible' }}>
+      {arrows && (
+        <button
+          type="button"
+          aria-label="Scroll left"
+          onClick={() => scrollByPage(-1)}
+          className="hidden md:flex"
+          style={{
+            ...arrowBaseStyle,
+            left: -6,
+            opacity: canScrollLeft ? 1 : 0.25,
+            pointerEvents: canScrollLeft ? 'auto' : 'none',
+            transition: 'opacity 0.2s',
+          }}
+        >
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke={accent} strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M15 5l-7 7 7 7" />
+          </svg>
+        </button>
+      )}
+      {arrows && (
+        <button
+          type="button"
+          aria-label="Scroll right"
+          onClick={() => scrollByPage(1)}
+          className="hidden md:flex"
+          style={{
+            ...arrowBaseStyle,
+            right: -6,
+            opacity: canScrollRight ? 1 : 0.25,
+            pointerEvents: canScrollRight ? 'auto' : 'none',
+            transition: 'opacity 0.2s',
+          }}
+        >
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke={accent} strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M9 5l7 7-7 7" />
+          </svg>
+        </button>
+      )}
       <div
         ref={ref}
         onPointerDown={() => {

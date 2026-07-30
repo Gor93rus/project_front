@@ -33,7 +33,7 @@ const ITEMS: FeatureItem[] = [
   },
   {
     title: 'TON & USDT',
-    image: '/images/card-ton-usdt.svg',
+    image: '/images/card-ton-usdt.png',
     borderTop:    'rgba(10,124,255,0.55)',
     borderLeft:   'rgba(10,124,255,0.28)',
     borderRight:  'rgba(0,20,60,0.55)',
@@ -46,7 +46,7 @@ const ITEMS: FeatureItem[] = [
   },
   {
     title: 'Provably Fair',
-    image: '/images/card-provably-fair.svg',
+    image: '/images/card-provably-fair.png',
     borderTop:    'rgba(40,200,100,0.55)',
     borderLeft:   'rgba(40,200,100,0.28)',
     borderRight:  'rgba(0,40,20,0.55)',
@@ -59,7 +59,7 @@ const ITEMS: FeatureItem[] = [
   },
   {
     title: 'Massive Prizes',
-    image: '/images/card-massive-prizes.svg',
+    image: '/images/card-massive-prizes.png',
     borderTop:    'rgba(250,190,20,0.55)',
     borderLeft:   'rgba(250,190,20,0.28)',
     borderRight:  'rgba(60,40,0,0.55)',
@@ -72,7 +72,7 @@ const ITEMS: FeatureItem[] = [
   },
   {
     title: 'Smart Contract',
-    image: '/images/card-smart-contract.svg',
+    image: '/images/card-smart-contract.png',
     borderTop:    'rgba(0,210,230,0.55)',
     borderLeft:   'rgba(0,210,230,0.28)',
     borderRight:  'rgba(0,40,50,0.55)',
@@ -85,7 +85,7 @@ const ITEMS: FeatureItem[] = [
   },
   {
     title: 'Audited Security',
-    image: '/images/card-audited-security.svg',
+    image: '/images/card-audited-security.png',
     borderTop:    'rgba(80,210,120,0.55)',
     borderLeft:   'rgba(80,210,120,0.28)',
     borderRight:  'rgba(0,40,20,0.55)',

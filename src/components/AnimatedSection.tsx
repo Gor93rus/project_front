@@ -18,7 +18,13 @@ export function AnimatedSection({
   variants = fadeUp,
   transition,
   once = true,
-  margin = '-40px',
+  // Extend the intersection root well past the bottom of the viewport so
+  // sections reveal reliably even when the page never receives a real
+  // scroll gesture (devtools viewport resize, fast navigation, prerender,
+  // etc.) — without this, whileInView could leave content stuck at
+  // opacity:0 ("hidden") whenever the element never crosses into view via
+  // an actual scroll event.
+  margin = '0px 0px 1200px 0px',
   className,
   style,
 }: Props) {

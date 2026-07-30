@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { FlameIcon, GiftIcon, GemIcon } from './AnimatedIcons';
-import { useUserProgress } from '../hooks/useUserProgress';
+import { useGamification } from '../hooks/useGamification';
 import { useTonWallet } from '../hooks/useTonWallet';
 
 /* glass-3d directional bevel (светлый верх/лево, тёмный низ/право) */
@@ -16,11 +16,11 @@ const BEVEL = {
 export function GamificationBanner() {
   const nav = useNavigate();
   const { connected, connect } = useTonWallet();
-  const { progress, loading } = useUserProgress('demo');
+  const { level, streak, achievements, loading } = useGamification();
 
-  const xpPct = progress
-    ? Math.min(100, Math.round((progress.xp / progress.xp_for_next) * 100))
-    : 0;
+  const xpPct = level ? Math.min(100, Math.round(level.xpProgress.percentage)) : 0;
+  const badgesCount = achievements.filter(a => a.unlocked).length;
+  const bonusCount = level?.rewards?.tickets ?? 0;
 
   return (
     <section className="px-4">
@@ -138,15 +138,15 @@ export function GamificationBanner() {
                   boxShadow: '0 4px 12px var(--gold-glow), inset 0 1px 0 rgba(255,255,255,0.4)',
                 }}
               >
-                {loading ? '·' : progress?.level ?? 1}
+                {loading ? '·' : level?.level ?? 1}
               </div>
               <div className="flex-1 min-w-0">
                 <div className="flex items-baseline justify-between mb-1">
                   <p className="text-3xs font-extrabold leading-none truncate" style={{ color: 'var(--ink-0)' }}>
-                    {progress?.level_name ?? 'Newcomer'}
+                    Level {level?.level ?? 1}
                   </p>
                   <p className="text-3xs font-semibold whitespace-nowrap ml-2" style={{ color: 'var(--ink-2)' }}>
-                    {progress ? `${progress.xp.toLocaleString()} / ${progress.xp_for_next.toLocaleString()} XP` : '— XP'}
+                    {level ? `${level.xpProgress.current.toLocaleString()} / ${level.xpProgress.required.toLocaleString()} XP` : '— XP'}
                   </p>
                 </div>
                 <div className="h-1.5 rounded-full overflow-hidden" style={{ background: 'rgba(255,255,255,0.08)' }}>
@@ -168,7 +168,7 @@ export function GamificationBanner() {
                 style={{ background: 'rgba(255,107,107,0.14)', border: '1px solid rgba(255,107,107,0.3)' }}>
                 <FlameIcon size={18} color="#FF6B6B" />
                 <div className="min-w-0">
-                  <p className="text-2xs font-black leading-none" style={{ color: '#FF8E53' }}>{progress?.streak_days ?? 0}</p>
+                  <p className="text-2xs font-black leading-none" style={{ color: '#FF8E53' }}>{streak?.currentStreak ?? 0}</p>
                   <p className="text-3xs font-bold uppercase leading-none mt-0.5" style={{ color: 'var(--ink-2)' }}>Streak</p>
                 </div>
               </div>
@@ -176,7 +176,7 @@ export function GamificationBanner() {
                 style={{ background: 'rgba(255,210,0,0.14)', border: '1px solid rgba(255,210,0,0.3)' }}>
                 <GiftIcon size={18} color="#FFD200" />
                 <div className="min-w-0">
-                  <p className="text-2xs font-black leading-none" style={{ color: '#FFD200' }}>{progress?.bonus_count ?? 0}</p>
+                  <p className="text-2xs font-black leading-none" style={{ color: '#FFD200' }}>{bonusCount}</p>
                   <p className="text-3xs font-bold uppercase leading-none mt-0.5" style={{ color: 'var(--ink-2)' }}>Bonuses</p>
                 </div>
               </div>
@@ -184,7 +184,7 @@ export function GamificationBanner() {
                 style={{ background: 'rgba(167,139,250,0.14)', border: '1px solid rgba(167,139,250,0.3)' }}>
                 <GemIcon size={18} color="#a78bfa" />
                 <div className="min-w-0">
-                  <p className="text-2xs font-black leading-none" style={{ color: '#c4b5fd' }}>{progress?.badges_count ?? 0}</p>
+                  <p className="text-2xs font-black leading-none" style={{ color: '#c4b5fd' }}>{badgesCount}</p>
                   <p className="text-3xs font-bold uppercase leading-none mt-0.5" style={{ color: 'var(--ink-2)' }}>Badges</p>
                 </div>
               </div>

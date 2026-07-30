@@ -96,18 +96,31 @@ function GoldParticles() {
 }
 
 // ── God-rays: настоящие лучи света из центра (яркое ядро + узкие чёткие спицы) ─
-// Конический градиент строим программно: 18 ярких тонких лучей с мягкими краями.
+// Конический градиент строим программно: 18 лучей, цвет чередуется gold → primary → secondary
+// для более богатого, многоцветного эффекта (вместо монохромного золота).
 const RAY_COUNT = 18;
+const RAY_CORE_COLORS = [
+  'rgba(255,244,170,0.34)',   // gold
+  'rgba(120,180,255,0.26)',   // primary blue
+  'rgba(200,160,255,0.24)',   // secondary purple
+];
+const RAY_SOFT_COLORS = [
+  'rgba(255,240,150,0.05)',
+  'rgba(120,180,255,0.04)',
+  'rgba(190,150,255,0.04)',
+];
 const RAY_GRADIENT = (() => {
   const step = 360 / RAY_COUNT;
   const stops: string[] = [];
   for (let i = 0; i < RAY_COUNT; i++) {
     const base = i * step;
-    // каждый луч: тёмный зазор → плавный вход → яркое ядро → плавный выход
+    const core = RAY_CORE_COLORS[i % RAY_CORE_COLORS.length];
+    const soft = RAY_SOFT_COLORS[i % RAY_SOFT_COLORS.length];
+    // каждый луч: тёмный зазор → плавный вход → яркое цветное ядро → плавный выход
     stops.push(`transparent ${base.toFixed(2)}deg`);
-    stops.push(`rgba(255,240,150,0.04) ${(base + step * 0.30).toFixed(2)}deg`);
-    stops.push(`rgba(255,244,170,0.34) ${(base + step * 0.42).toFixed(2)}deg`);
-    stops.push(`rgba(255,240,150,0.04) ${(base + step * 0.54).toFixed(2)}deg`);
+    stops.push(`${soft} ${(base + step * 0.30).toFixed(2)}deg`);
+    stops.push(`${core} ${(base + step * 0.42).toFixed(2)}deg`);
+    stops.push(`${soft} ${(base + step * 0.54).toFixed(2)}deg`);
     stops.push(`transparent ${(base + step * 0.84).toFixed(2)}deg`);
   }
   return `conic-gradient(from 0deg at 50% 50%, ${stops.join(', ')})`;
@@ -233,17 +246,17 @@ export function GlobalJackpotHero() {
             radial-gradient(130% 80% at 50% -12%, rgba(124,58,237,0.22) 0%, rgba(124,58,237,0.06) 32%, transparent 60%),
             linear-gradient(165deg, #19244f 0%, #0d1733 44%, #060c22 100%)
           `,
-          borderTop: '2px solid rgba(159,103,255,0.30)',
-          borderLeft: '1px solid rgba(124,58,237,0.14)',
-          borderRight: '1px solid rgba(0,0,0,0.55)',
-          borderBottom: '2.5px solid rgba(0,0,0,0.80)',
+          borderTop: '2px solid rgba(255,255,255,0.22)',
+          borderLeft: '1.5px solid rgba(255,255,255,0.11)',
+          borderRight: '1.5px solid rgba(0,0,0,0.60)',
+          borderBottom: '3px solid rgba(0,0,0,0.85)',
           boxShadow: `
-            inset 0 2px 0 rgba(159,103,255,0.18),
-            inset 0 -4px 12px rgba(0,0,0,0.35),
-            inset 0 0 30px rgba(124,58,237,0.03),
-            0 0 0 1px rgba(124,58,237,0.04),
-            0 0 50px -12px var(--secondary-glow),
-            0 20px 50px rgba(0,0,0,0.55)
+            inset 0 2px 0 rgba(255,255,255,0.22),
+            inset 0 -4px 14px rgba(0,0,0,0.45),
+            0 2px 6px rgba(0,0,0,0.6),
+            0 22px 54px -12px rgba(0,0,0,0.9),
+            0 0 64px -10px var(--secondary-glow),
+            0 0 30px rgba(124,58,237,0.20)
           `,
         }}
       >

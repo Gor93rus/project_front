@@ -162,18 +162,18 @@ function LotteryCard({ lottery }: { lottery: Lottery }) {
             {lottery.drawLabel}
           </span>
           {isLive ? (
-            <span style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 11, fontWeight: 800, textTransform: 'uppercase', padding: '3px 7px', borderRadius: 6, background: 'var(--coral-18)', color: 'var(--coral)', border: '1px solid var(--coral-35)', boxShadow: '0 0 10px var(--coral-glow)', fontFamily: "var(--font-mono)" }}>
-              <span style={{ width: 6, height: 6, borderRadius: '50%', background: 'var(--coral)', animation: 'livePulse 1s ease-in-out infinite' }} />
-              LIVE
+            <span style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 11, fontWeight: 800, textTransform: 'uppercase', padding: '3px 7px', borderRadius: 6, background: `${accent}1f`, color: accent, border: `1px solid ${accent}45`, boxShadow: `0 0 10px ${accent}55`, fontFamily: "var(--font-mono)" }}>
+              <span style={{ width: 6, height: 6, borderRadius: '50%', background: accent, animation: 'livePulse 1s ease-in-out infinite' }} />
+              Live Draw
             </span>
           ) : isUpcoming ? (
-            <span style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 11, fontWeight: 800, textTransform: 'uppercase', padding: '3px 7px', borderRadius: 6, background: 'rgba(255,255,255,0.04)', color: 'var(--ink-3)', border: '1px solid rgba(255,255,255,0.06)', fontFamily: "var(--font-mono)" }}>
-              Upcoming
+            <span style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 11, fontWeight: 800, textTransform: 'uppercase', padding: '3px 7px', borderRadius: 6, background: `${accent}1f`, color: accent, border: `1px solid ${accent}45`, fontFamily: "var(--font-mono)" }}>
+              Soon
             </span>
           ) : (
             <span style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 11, fontWeight: 800, textTransform: 'uppercase', padding: '3px 7px', borderRadius: 6, background: `${accent}1f`, color: accent, border: `1px solid ${accent}45`, fontFamily: "var(--font-mono)" }}>
               <span style={{ width: 6, height: 6, borderRadius: '50%', background: accent, animation: 'livePulse 2s ease-in-out infinite' }} />
-              Selling
+              Open
             </span>
           )}
         </div>
@@ -187,8 +187,8 @@ function LotteryCard({ lottery }: { lottery: Lottery }) {
           <GlitchJackpot target={lottery.jackpot} />
           {isLive ? (
             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 6, height: 28, marginBottom: 9 }}>
-              <span style={{ width: 6, height: 6, borderRadius: '50%', background: 'var(--coral)', animation: 'livePulse 1s ease-in-out infinite' }} />
-              <span style={{ fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.16em', color: 'var(--coral)', fontFamily: 'var(--font-mono)', textShadow: '0 0 10px var(--coral-glow)' }}>
+              <span style={{ width: 6, height: 6, borderRadius: '50%', background: accent, animation: 'livePulse 1s ease-in-out infinite' }} />
+              <span style={{ fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.16em', color: accent, fontFamily: 'var(--font-mono)', textShadow: `0 0 10px ${accent}55` }}>
                 Drawing now
               </span>
             </div>
@@ -321,9 +321,9 @@ export function LotteryCarousel() {
             fontWeight: 700,
             fontFamily: 'var(--font-mono)',
             letterSpacing: '0.06em',
-            color: 'var(--ton)',
-            background: 'var(--ton-12, rgba(0,152,234,0.12))',
-            border: '1px solid var(--ton-35, rgba(0,152,234,0.35))',
+            color: '#4ade80',
+            background: 'rgba(74,222,128,0.12)',
+            border: '1px solid rgba(74,222,128,0.35)',
             whiteSpace: 'nowrap',
             flexShrink: 0,
           }}>
@@ -331,8 +331,8 @@ export function LotteryCarousel() {
               width: 5,
               height: 5,
               borderRadius: '50%',
-              background: 'var(--ton)',
-              boxShadow: '0 0 6px var(--ton)',
+              background: '#4ade80',
+              boxShadow: '0 0 6px #4ade80',
               animation: 'livePulse 2s ease-in-out infinite',
             }} />
             {LOTTERIES.length} active
@@ -340,7 +340,7 @@ export function LotteryCarousel() {
         <HowItWorksButton onClick={() => setShowHowItWorks(true)} />
       </div>
 
-      <ScrollCarousel accent="var(--ton)" showProgress={false}>
+      <ScrollCarousel accent="var(--ton)" showProgress={false} arrows>
         {LOTTERIES.map(l => <LotteryCard key={l.id} lottery={l} />)}
       </ScrollCarousel>
 
