@@ -56,10 +56,10 @@ function RivetGlyph({ icon }: { icon: RivetIcon }) {
   );
 }
 
-const RIVET_THEME: Record<RivetIcon, { glow: string; icon: string; dot: string }> = {
-  dice:     { glow: 'rgba(10,124,255,0.30)',  icon: 'var(--primary)',   dot: 'rgba(10,124,255,0.20)' },
-  scratch:  { glow: 'rgba(124,58,237,0.32)',  icon: 'var(--secondary)', dot: 'rgba(124,58,237,0.20)' },
-  trophy:   { glow: 'rgba(250,219,20,0.32)',  icon: 'var(--gold)',      dot: 'rgba(250,219,20,0.20)' },
+const RIVET_THEME: Record<RivetIcon, { glow: string; icon: string; dot: string; beamColor: string; delay: string; duration: string }> = {
+  dice:    { glow: 'rgba(10,124,255,0.30)',  icon: 'var(--primary)',   dot: 'rgba(10,124,255,0.20)',  beamColor: 'rgba(10,124,255,0.70)',  delay: '0s',    duration: '3.4s' },
+  scratch: { glow: 'rgba(124,58,237,0.32)',  icon: 'var(--secondary)', dot: 'rgba(124,58,237,0.20)', beamColor: 'rgba(124,58,237,0.70)', delay: '1.1s',  duration: '3.8s' },
+  trophy:  { glow: 'rgba(250,219,20,0.32)',  icon: 'var(--gold)',      dot: 'rgba(250,219,20,0.20)', beamColor: 'rgba(250,219,20,0.80)',  delay: '0.55s', duration: '3.2s' },
 };
 
 function GlassRivet({ label, icon }: { label: string; icon: RivetIcon }) {
@@ -72,6 +72,9 @@ function GlassRivet({ label, icon }: { label: string; icon: RivetIcon }) {
         ['--rivet-glow' as string]: theme.glow,
         ['--rivet-icon' as string]: theme.icon,
         ['--rivet-dot' as string]: theme.dot,
+        ['--rivet-beam' as string]: theme.beamColor,
+        ['--rivet-delay' as string]: theme.delay,
+        ['--rivet-duration' as string]: theme.duration,
       }}
     >
       <span className="glass-rivet__line" />
