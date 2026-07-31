@@ -26,7 +26,6 @@ export function ScrollCarousel({ children, accent = '#3CB1FF', showProgress = tr
   const ref = useRef<HTMLDivElement>(null);
   const [progress, setProgress] = useState(0);
   const [activeIndex, setActiveIndex] = useState(0);
-  const snapTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
   const autoScrollPaused = useRef(false);
   const autoScrollTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
   const rafRef = useRef<number | null>(null);
@@ -54,22 +53,6 @@ export function ScrollCarousel({ children, accent = '#3CB1FF', showProgress = tr
     }
     setActiveIndex(closestIdx);
   }, []);
-
-  // Снэппинг при остановке скролла (drag/свайп). Безопасно вызывать и после
-  // programmatic scrollTo от стрелок — просто досчитает до той же карточки.
-  const handleScrollEnd = useCallback(() => {
-    if (snapTimeout.current) clearTimeout(snapTimeout.current);
-    snapTimeout.current = setTimeout(() => {
-      const el = ref.current;
-      if (!el) return;
-      const cards = el.children;
-      const target = cards[activeIndex] as HTMLElement;
-      if (target) {
-        const scrollTo = target.offsetLeft - (el.clientWidth - target.offsetWidth) / 2;
-        el.scrollTo({ left: scrollTo, behavior: 'smooth' });
-      }
-    }, 150);
-  }, [activeIndex]);
 
   // Автоскролл — плавный rAF-цикл, бесшовный infinite loop
   useEffect(() => {
@@ -208,7 +191,7 @@ export function ScrollCarousel({ children, accent = '#3CB1FF', showProgress = tr
         onPointerUp={() => {
           autoScrollTimeout.current = setTimeout(() => { autoScrollPaused.current = false; }, 3000);
         }}
-        onScroll={() => { update(); handleScrollEnd(); }}
+        onScroll={update}
         className="flex gap-[10px] overflow-x-auto scrollbar-none scroll-mask"
         style={{
           WebkitOverflowScrolling: 'touch',
