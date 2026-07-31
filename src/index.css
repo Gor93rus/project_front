@@ -492,3 +492,36 @@
   0%, 100% { opacity: .52; transform: scaleX(.9); }
   50% { opacity: .26; transform: scaleX(.72); }
 }
+
+/* ══════════════════════════════════════════════════
+   REWARD CHEST — floating animation
+   ══════════════════════════════════════════════════ */
+@keyframes chest-float {
+  0%,  100% { transform: translateY(0px) rotate(-1.5deg); }
+  50%        { transform: translateY(-7px) rotate(1deg); }
+}
+
+/* ══════════════════════════════════════════════════
+   REWARDS BANNER SLOT — responsive height
+   ══════════════════════════════════════════════════ */
+.rewards-banner-slot {
+  --rewards-banner-h: 160px;
+}
+@media (min-width: 768px) {
+  .rewards-banner-slot {
+    --rewards-banner-h: 200px;
+  }
+}
+
+/* ══════════════════════════════════════════════════
+   SCROLL CAROUSEL — smooth arrow transition
+   Добавляем CSS scroll-behavior на сам контейнер
+   для более плавного feel на стрелках (сверх JS smooth)
+   ══════════════════════════════════════════════════ */
+.scroll-carousel-track {
+  scroll-behavior: auto; /* управляем через JS scrollTo({behavior:'smooth'}) */
+}
+/* Плавный ease для прогресс-кольца */
+.scroll-carousel-progress {
+  transition: stroke-dashoffset 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}

@@ -100,10 +100,9 @@ export function ScrollCarousel({ children, accent = '#3CB1FF', showProgress = tr
   const radius = 14;
   const circumference = 2 * Math.PI * radius;
 
-  // Переход по стрелке = переход к соседней карточке по индексу, отданный
-  // нативному scrollTo({behavior:'smooth'}). Никакой ручной rAF-анимации —
-  // браузер сам плавно анимирует scrollLeft в связке с CSS scroll-snap,
-  // так что снэппинг и анимация не конфликтуют (одна система вместо двух).
+  // easeInOutCubic — плавнее чем браузерный linear ease в scrollTo smooth
+  const arrowAnimRef = useRef<number | null>(null);
+
   const scrollByPage = (dir: 1 | -1) => {
     const el = ref.current;
     if (!el) return;
@@ -115,8 +114,40 @@ export function ScrollCarousel({ children, accent = '#3CB1FF', showProgress = tr
     const target = cards[targetIdx] as HTMLElement;
     if (!target) return;
 
-    const scrollTo = target.offsetLeft - (el.clientWidth - target.offsetWidth) / 2;
-    el.scrollTo({ left: scrollTo, behavior: 'smooth' });
+    const targetLeft = target.offsetLeft - (el.clientWidth - target.offsetWidth) / 2;
+    const startLeft = el.scrollLeft;
+    const delta = targetLeft - startLeft;
+
+    // Если дистанция ничтожна — не анимируем
+    if (Math.abs(delta) < 1) return;
+
+    // Снимаем snap на время анимации чтобы браузер не перехватывал
+    const prevSnap = el.style.scrollSnapType;
+    el.style.scrollSnapType = 'none';
+
+    if (arrowAnimRef.current) cancelAnimationFrame(arrowAnimRef.current);
+
+    const DURATION = 480; // ms — достаточно для premium feel
+    let startTime: number | null = null;
+
+    const easeInOutCubic = (t: number) =>
+      t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+
+    const step = (now: number) => {
+      if (startTime === null) startTime = now;
+      const elapsed = now - startTime;
+      const t = Math.min(1, elapsed / DURATION);
+      el.scrollLeft = startLeft + delta * easeInOutCubic(t);
+      update();
+      if (t < 1) {
+        arrowAnimRef.current = requestAnimationFrame(step);
+      } else {
+        el.style.scrollSnapType = prevSnap;
+        arrowAnimRef.current = null;
+      }
+    };
+
+    arrowAnimRef.current = requestAnimationFrame(step);
   };
 
   const arrowBaseStyle: CSSProperties = {

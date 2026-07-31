@@ -7,7 +7,7 @@ import { FeaturesBanner } from './components/FeaturesBanner';
 import { LotteryCarousel } from './components/LotteryCarousel';
 import { ScratchCarousel } from './components/ScratchCarousel';
 import { GamificationBanner } from './components/GamificationBanner';
-import { RewardsUnlockBanner } from './components/RewardsUnlockBanner';
+// RewardsUnlockBanner removed — replaced by RewardsBannerSlot below
 import { ProfilePage } from './components/ProfilePage';
 import { LotteryPage } from './components/LotteryPage';
 import { DailyRushPage } from './components/DailyRushPage';
@@ -87,6 +87,69 @@ function GlassRivet({ label, icon }: { label: string; icon: RivetIcon }) {
   );
 }
 
+/**
+ * RewardsBannerSlot — адаптивный пустой баннер под изображения о наградах.
+ * Полная ширина (с паддингами) на мобилке и десктопе.
+ * Высота: 160px mobile / 200px desktop — то же что и GamificationBanner.
+ */
+function RewardsBannerSlot() {
+  return (
+    <div className="px-4">
+      <div
+        className="rewards-banner-slot relative w-full overflow-hidden rounded-2xl"
+        style={{
+          height: 'var(--rewards-banner-h, 160px)',
+          background:
+            'linear-gradient(155deg, rgba(250,185,11,0.07) 0%, rgba(124,58,237,0.07) 55%, rgba(10,124,255,0.05) 100%)',
+          borderTop: '2px solid rgba(255,255,255,0.10)',
+          borderLeft: '1.5px solid rgba(255,255,255,0.07)',
+          borderRight: '1.5px solid rgba(0,0,0,0.45)',
+          borderBottom: '3px solid rgba(0,0,0,0.72)',
+          boxShadow:
+            'inset 0 2px 0 rgba(255,255,255,0.07), inset 0 -4px 14px rgba(0,0,0,0.35), 0 12px 32px -16px rgba(0,0,0,0.7)',
+        }}
+      >
+        {/* Внутренний dot-grid паттерн как намёк на контент */}
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            backgroundImage: 'radial-gradient(rgba(255,255,255,0.045) 1px, transparent 1px)',
+            backgroundSize: '20px 20px',
+            WebkitMaskImage: 'radial-gradient(ellipse 80% 80% at 50% 50%, #000 40%, transparent 100%)',
+            maskImage: 'radial-gradient(ellipse 80% 80% at 50% 50%, #000 40%, transparent 100%)',
+          }}
+        />
+        {/* Placeholder подсказка — убери когда добавишь изображения */}
+        <div
+          className="absolute inset-0 flex flex-col items-center justify-center gap-1.5 pointer-events-none"
+          style={{ opacity: 0.28 }}
+        >
+          <div
+            style={{
+              width: 36,
+              height: 36,
+              border: '2px dashed rgba(255,255,255,0.35)',
+              borderRadius: 10,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.6)" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+              <rect x="3" y="3" width="18" height="18" rx="3" />
+              <path d="M3 9l4-4 4 4 4-5 4 5" />
+              <circle cx="8.5" cy="7" r="1.5" fill="rgba(255,255,255,0.6)" stroke="none" />
+            </svg>
+          </div>
+          <p className="text-3xs font-bold uppercase tracking-widest" style={{ color: 'rgba(255,255,255,0.5)' }}>
+            Rewards showcase
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function HomePage() {
   return (
     <div className="flex flex-col pb-2">
@@ -125,10 +188,14 @@ function HomePage() {
       <div style={{ height: 14 }} />
 
       <AnimatedSection variants={fadeUpCard}>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-0 rewards-section-grid">
-          <GamificationBanner />
-          <RewardsUnlockBanner />
-        </div>
+        {/* Rewards showcase banner — пустой слот для изображений о наградах */}
+        <RewardsBannerSlot />
+      </AnimatedSection>
+
+      <div style={{ height: 10 }} />
+
+      <AnimatedSection variants={fadeUpCard}>
+        <GamificationBanner />
       </AnimatedSection>
 
       <div style={{ height: 12 }} />

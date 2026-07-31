@@ -24,39 +24,6 @@ export function GamificationBanner() {
 
   return (
     <section className="px-4">
-      {/* Section header — вне кнопки, как в LotteryCarousel / ScratchCarousel */}
-      <div className="flex items-center justify-between mb-3">
-        <div className="flex items-center gap-2">
-          <h2 className="font-extrabold text-sm" style={{ color: 'var(--ink-0)' }}>
-            Play &amp; Earn
-          </h2>
-          <span style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: 4,
-            padding: '2px 8px',
-            borderRadius: 999,
-            fontSize: 10,
-            fontWeight: 700,
-            fontFamily: 'var(--font-mono)',
-            letterSpacing: '0.08em',
-            color: 'var(--gold)',
-            background: 'rgba(240,185,11,0.12)',
-            border: '1px solid rgba(240,185,11,0.32)',
-          }}>
-            Rewards
-          </span>
-        </div>
-        <button
-          onClick={() => { if (!connected) { connect(); } else { nav('/profile'); } }}
-          className="shrink-0 flex items-center gap-1 text-3xs font-extrabold"
-          style={{ color: 'var(--ink-2)' }}
-        >
-          {connected ? 'My Profile' : 'Start'}
-          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round"><path d="M9 6l6 6-6 6" /></svg>
-        </button>
-      </div>
-
       <button
         onClick={() => { if (!connected) { connect(); } else { nav('/profile'); } }}
         className="relative w-full text-left overflow-hidden rounded-2xl p-3.5"
@@ -67,10 +34,10 @@ export function GamificationBanner() {
         }}
       >
         {!connected ? (
-          /* Teaser — призрак stats + лок-иконка поверх */
-          <div className="relative">
+          /* Locked state — сундук + призрак stats под блюром */
+          <div className="relative" style={{ minHeight: 92 }}>
             {/* Призрак level bar */}
-            <div className="flex items-center gap-2.5 mb-2.5" style={{ filter: 'blur(3px)', opacity: 0.22, pointerEvents: 'none', userSelect: 'none' }}>
+            <div className="flex items-center gap-2.5 mb-2.5" style={{ filter: 'blur(4px)', opacity: 0.18, pointerEvents: 'none', userSelect: 'none' }}>
               <div className="w-9 h-9 rounded-lg shrink-0" style={{ background: 'linear-gradient(135deg, var(--gold), var(--gold-soft))' }} />
               <div className="flex-1 min-w-0">
                 <div className="flex items-baseline justify-between mb-1">
@@ -82,9 +49,8 @@ export function GamificationBanner() {
                 </div>
               </div>
             </div>
-
             {/* Призрак stats row */}
-            <div className="flex items-center gap-1.5" style={{ filter: 'blur(3px)', opacity: 0.22, pointerEvents: 'none', userSelect: 'none' }}>
+            <div className="flex items-center gap-1.5" style={{ filter: 'blur(4px)', opacity: 0.18, pointerEvents: 'none', userSelect: 'none' }}>
               {[
                 { bg: 'rgba(255,107,107,0.14)', border: 'rgba(255,107,107,0.3)', val: '7', label: 'Streak' },
                 { bg: 'rgba(255,210,0,0.14)',   border: 'rgba(255,210,0,0.3)',   val: '3', label: 'Bonuses' },
@@ -101,29 +67,51 @@ export function GamificationBanner() {
               ))}
             </div>
 
-            {/* Лок-иконка по центру */}
-            <div className="absolute inset-0 flex flex-col items-center justify-center gap-1.5">
-              <div style={{
-                width: 32,
-                height: 32,
-                borderRadius: '50%',
-                background: 'rgba(0,0,0,0.55)',
-                backdropFilter: 'blur(6px)',
-                border: '1.5px solid rgba(255,255,255,0.14)',
-                boxShadow: '0 0 12px var(--gold-glow)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                animation: 'pulse-glow 3s ease-in-out infinite',
-              }}>
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--ink-1)" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
-                  <path d="M7 11V7a5 5 0 0 1 10 0v4" />
-                </svg>
+            {/* Оверлей: сундук + CTA */}
+            <div className="absolute inset-0 flex items-center justify-between gap-3 px-1">
+              {/* Сундук PNG — смещён вниз чтобы "вываливался" из карточки */}
+              <div
+                className="shrink-0 relative"
+                style={{ width: 88, height: 88, marginBottom: -12, marginLeft: -4 }}
+              >
+                <img
+                  src="/images/reward-chest.png"
+                  alt="Reward chest"
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    objectFit: 'contain',
+                    filter: 'drop-shadow(0 0 14px rgba(250,185,11,0.55)) drop-shadow(0 4px 8px rgba(0,0,0,0.7))',
+                    animation: 'chest-float 3.6s ease-in-out infinite',
+                  }}
+                />
               </div>
-              <p className="text-3xs font-bold text-center" style={{ color: 'var(--gold-soft)', textShadow: '0 0 8px var(--gold-glow), 0 1px 4px rgba(0,0,0,0.8)', animation: 'livePulse 2.5s ease-in-out infinite' }}>
-                Connect wallet to unlock
-              </p>
+
+              {/* Текст + кнопка */}
+              <div className="flex-1 flex flex-col items-end gap-2 text-right">
+                <p
+                  className="text-xs font-black leading-tight"
+                  style={{ color: 'var(--ink-0)' }}
+                >
+                  Your rewards<br />are waiting
+                </p>
+                <p
+                  className="text-3xs font-semibold"
+                  style={{ color: 'var(--ink-2)', maxWidth: 140 }}
+                >
+                  Connect wallet to unlock XP, streaks and achievements
+                </p>
+                <span
+                  className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl text-3xs font-black uppercase tracking-[0.07em]"
+                  style={{
+                    color: 'var(--bg-0)',
+                    background: 'linear-gradient(180deg, var(--gold-soft), var(--gold))',
+                    boxShadow: '0 6px 16px -8px var(--gold-glow), inset 0 1px 0 rgba(255,255,255,0.4)',
+                  }}
+                >
+                  Connect wallet
+                </span>
+              </div>
             </div>
           </div>
         ) : (
