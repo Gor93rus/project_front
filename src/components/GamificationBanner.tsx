@@ -34,85 +34,56 @@ export function GamificationBanner() {
         }}
       >
         {!connected ? (
-          /* Locked state — сундук + призрак stats под блюром */
-          <div className="relative" style={{ minHeight: 92 }}>
-            {/* Призрак level bar */}
-            <div className="flex items-center gap-2.5 mb-2.5" style={{ filter: 'blur(4px)', opacity: 0.18, pointerEvents: 'none', userSelect: 'none' }}>
-              <div className="w-9 h-9 rounded-lg shrink-0" style={{ background: 'linear-gradient(135deg, var(--gold), var(--gold-soft))' }} />
-              <div className="flex-1 min-w-0">
-                <div className="flex items-baseline justify-between mb-1">
-                  <div className="h-2.5 w-20 rounded" style={{ background: 'var(--ink-2)' }} />
-                  <div className="h-2 w-14 rounded ml-2" style={{ background: 'var(--ink-3)' }} />
-                </div>
-                <div className="h-1.5 rounded-full overflow-hidden" style={{ background: 'rgba(255,255,255,0.08)' }}>
-                  <div className="h-full rounded-full" style={{ width: '42%', background: 'linear-gradient(90deg, var(--primary), var(--primary-soft))' }} />
-                </div>
-              </div>
-            </div>
-            {/* Призрак stats row */}
-            <div className="flex items-center gap-1.5" style={{ filter: 'blur(4px)', opacity: 0.18, pointerEvents: 'none', userSelect: 'none' }}>
-              {[
-                { bg: 'rgba(255,107,107,0.14)', border: 'rgba(255,107,107,0.3)', val: '7', label: 'Streak' },
-                { bg: 'rgba(255,210,0,0.14)',   border: 'rgba(255,210,0,0.3)',   val: '3', label: 'Bonuses' },
-                { bg: 'rgba(167,139,250,0.14)', border: 'rgba(167,139,250,0.3)', val: '2', label: 'Badges' },
-              ].map(({ bg, border, val, label }) => (
-                <div key={label} className="flex-1 flex items-center gap-1.5 px-2 py-1.5 rounded-lg"
-                  style={{ background: bg, border: `1px solid ${border}` }}>
-                  <div className="w-4.5 h-4.5 rounded" style={{ background: 'rgba(255,255,255,0.15)' }} />
-                  <div className="min-w-0">
-                    <p className="text-2xs font-black leading-none" style={{ color: 'var(--ink-1)' }}>{val}</p>
-                    <p className="text-3xs font-bold uppercase leading-none mt-0.5" style={{ color: 'var(--ink-3)' }}>{label}</p>
+          /* Locked state — замок по центру + пульсирующий CTA */
+          <div className="relative flex flex-col items-center justify-center gap-2 py-2" style={{ minHeight: 92 }}>
+            {/* Призрак контента под блюром */}
+            <div className="absolute inset-0 pointer-events-none" style={{ filter: 'blur(5px)', opacity: 0.14, userSelect: 'none' }}>
+              <div className="flex items-center gap-2.5 mb-2.5 px-1">
+                <div className="w-9 h-9 rounded-lg shrink-0" style={{ background: 'linear-gradient(135deg, var(--gold), var(--gold-soft))' }} />
+                <div className="flex-1">
+                  <div className="h-2.5 w-24 rounded mb-1.5" style={{ background: 'var(--ink-2)' }} />
+                  <div className="h-1.5 rounded-full" style={{ background: 'rgba(255,255,255,0.08)' }}>
+                    <div className="h-full rounded-full" style={{ width: '42%', background: 'linear-gradient(90deg, var(--primary), var(--primary-soft))' }} />
                   </div>
                 </div>
-              ))}
-            </div>
-
-            {/* Оверлей: сундук + CTA */}
-            <div className="absolute inset-0 flex items-center justify-between gap-3 px-1">
-              {/* Сундук PNG — смещён вниз чтобы "вываливался" из карточки */}
-              <div
-                className="shrink-0 relative"
-                style={{ width: 88, height: 88, marginBottom: -12, marginLeft: -4 }}
-              >
-                <img
-                  src="/images/reward-chest.png"
-                  alt="Reward chest"
-                  style={{
-                    width: '100%',
-                    height: '100%',
-                    objectFit: 'contain',
-                    filter: 'drop-shadow(0 0 14px rgba(250,185,11,0.55)) drop-shadow(0 4px 8px rgba(0,0,0,0.7))',
-                    animation: 'chest-float 3.6s ease-in-out infinite',
-                  }}
-                />
               </div>
-
-              {/* Текст + кнопка */}
-              <div className="flex-1 flex flex-col items-end gap-2 text-right">
-                <p
-                  className="text-xs font-black leading-tight"
-                  style={{ color: 'var(--ink-0)' }}
-                >
-                  Your rewards<br />are waiting
-                </p>
-                <p
-                  className="text-3xs font-semibold"
-                  style={{ color: 'var(--ink-2)', maxWidth: 140 }}
-                >
-                  Connect wallet to unlock XP, streaks and achievements
-                </p>
-                <span
-                  className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl text-3xs font-black uppercase tracking-[0.07em]"
-                  style={{
-                    color: 'var(--bg-0)',
-                    background: 'linear-gradient(180deg, var(--gold-soft), var(--gold))',
-                    boxShadow: '0 6px 16px -8px var(--gold-glow), inset 0 1px 0 rgba(255,255,255,0.4)',
-                  }}
-                >
-                  Connect wallet
-                </span>
+              <div className="flex gap-1.5 px-1">
+                {['Streak','Bonuses','Badges'].map(l => (
+                  <div key={l} className="flex-1 h-8 rounded-lg" style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.08)' }} />
+                ))}
               </div>
             </div>
+
+            {/* Замок PNG */}
+            <img
+              src="/images/reward-lock.png"
+              alt="Locked"
+              style={{
+                width: 52,
+                height: 52,
+                objectFit: 'contain',
+                filter: 'drop-shadow(0 0 12px rgba(250,185,11,0.60)) drop-shadow(0 3px 6px rgba(0,0,0,0.65))',
+                animation: 'chest-float 3.8s ease-in-out infinite',
+                position: 'relative',
+                zIndex: 1,
+              }}
+            />
+
+            {/* Пульсирующий текст */}
+            <p
+              style={{
+                position: 'relative',
+                zIndex: 1,
+                fontSize: 11,
+                fontWeight: 700,
+                letterSpacing: '0.04em',
+                color: 'var(--gold-soft)',
+                textShadow: '0 0 8px var(--gold-glow), 0 1px 4px rgba(0,0,0,0.8)',
+                animation: 'livePulse 2.5s ease-in-out infinite',
+              }}
+            >
+              Connect wallet to unlock
+            </p>
           </div>
         ) : (
           <>

@@ -505,11 +505,11 @@
    REWARDS BANNER SLOT — responsive height
    ══════════════════════════════════════════════════ */
 .rewards-banner-slot {
-  --rewards-banner-h: 160px;
+  --rewards-banner-h: 120px; /* было 160px → -25% */
 }
 @media (min-width: 768px) {
   .rewards-banner-slot {
-    --rewards-banner-h: 200px;
+    --rewards-banner-h: 150px; /* было 200px → -25% */
   }
 }
 
