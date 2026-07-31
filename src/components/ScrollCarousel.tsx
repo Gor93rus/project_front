@@ -31,6 +31,7 @@ export function ScrollCarousel({ children, accent = '#3CB1FF', showProgress = tr
   const autoScrollTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
   const rafRef = useRef<number | null>(null);
   const lastTimeRef = useRef<number>(0);
+  const scrollingByArrow = useRef(false); // ★ флаг: true = скролл от стрелки, блокируем handleScrollEnd
 
   const update = useCallback(() => {
     const el = ref.current;
@@ -55,8 +56,9 @@ export function ScrollCarousel({ children, accent = '#3CB1FF', showProgress = tr
     setActiveIndex(closestIdx);
   }, []);
 
-  // Снэппинг при остановке скролла
+  // Снэппинг при остановке скролла — НЕ срабатывает если скролл от стрелок
   const handleScrollEnd = useCallback(() => {
+    if (scrollingByArrow.current) return; // ★ блокируем рекурсию
     if (snapTimeout.current) clearTimeout(snapTimeout.current);
     snapTimeout.current = setTimeout(() => {
       const el = ref.current;
@@ -77,12 +79,9 @@ export function ScrollCarousel({ children, accent = '#3CB1FF', showProgress = tr
     const el = ref.current;
     if (!el) return;
 
-    // Отключаем scroll-snap на время автоскролла — иначе браузер
-    // перехватывает scrollLeft и снэппит карточку в произвольное место
     const prevSnap = el.style.scrollSnapType;
     el.style.scrollSnapType = 'none';
 
-    // Сбрасываем таймер, чтобы первый кадр не дал огромный dt
     lastTimeRef.current = 0;
 
     const tick = (time: number) => {
@@ -92,8 +91,6 @@ export function ScrollCarousel({ children, accent = '#3CB1FF', showProgress = tr
         const half = el.scrollWidth / 2;
         if (half > 0) {
           const next = el.scrollLeft + autoScrollSpeed * dt;
-          // Когда доходим до второй копии — мгновенно возвращаемся на то же
-          // визуальное место в первой, пользователь не видит прыжка
           el.scrollLeft = next >= half ? next - half : next;
         }
       } else {
@@ -107,7 +104,6 @@ export function ScrollCarousel({ children, accent = '#3CB1FF', showProgress = tr
     return () => {
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
       if (autoScrollTimeout.current) clearTimeout(autoScrollTimeout.current);
-      // Восстанавливаем scroll-snap когда автоскролл выключен
       if (el) el.style.scrollSnapType = prevSnap;
     };
   }, [autoScroll, autoScrollSpeed]);
@@ -122,10 +118,52 @@ export function ScrollCarousel({ children, accent = '#3CB1FF', showProgress = tr
   const radius = 14;
   const circumference = 2 * Math.PI * radius;
 
+  const animationRef = useRef<number | null>(null);
+
+  // Останавливает текущую анимацию если она ещё идёт
+  const cancelScrollAnimation = useCallback(() => {
+    if (animationRef.current) {
+      cancelAnimationFrame(animationRef.current);
+      animationRef.current = null;
+    }
+  }, []);
+
+  // Ease-out cubic: быстрое начало, мягкое замедление в конце
+  const easeOutCubic = (t: number) => 1 - Math.pow(1 - t, 3);
+
   const scrollByPage = (dir: 1 | -1) => {
     const el = ref.current;
     if (!el) return;
-    el.scrollBy({ left: dir * el.clientWidth * 0.8, behavior: 'smooth' });
+
+    cancelScrollAnimation(); // прерываем предыдущую анимацию
+    scrollingByArrow.current = true;
+
+    const startX = el.scrollLeft;
+    const targetX = startX + dir * el.clientWidth * 0.8;
+    const duration = 420; // ms — премиально-плавный скролл
+
+    let startTime: number | null = null;
+
+    const animate = (timestamp: number) => {
+      if (!startTime) startTime = timestamp;
+      const elapsed = timestamp - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      const eased = easeOutCubic(progress);
+
+      el.scrollLeft = startX + (targetX - startX) * eased;
+
+      if (progress < 1) {
+        animationRef.current = requestAnimationFrame(animate);
+      } else {
+        animationRef.current = null;
+        // Сбрасываем флаг после завершения анимации
+        setTimeout(() => {
+          scrollingByArrow.current = false;
+        }, 100); // небольшая задержка для scroll-end-эффекта
+      }
+    };
+
+    animationRef.current = requestAnimationFrame(animate);
   };
 
   const arrowBaseStyle: CSSProperties = {
@@ -198,7 +236,6 @@ export function ScrollCarousel({ children, accent = '#3CB1FF', showProgress = tr
           if (autoScrollTimeout.current) clearTimeout(autoScrollTimeout.current);
         }}
         onPointerUp={() => {
-          // Resume after a delay so user can finish scrolling naturally
           autoScrollTimeout.current = setTimeout(() => { autoScrollPaused.current = false; }, 3000);
         }}
         onScroll={() => { update(); handleScrollEnd(); }}
@@ -209,7 +246,6 @@ export function ScrollCarousel({ children, accent = '#3CB1FF', showProgress = tr
           ['--scroll-mask' as string]: maskFor(progress),
           paddingRight: 24,
           paddingLeft: 0,
-          // Extra vertical padding so hover scale/shadow is not clipped by overflow-x:auto
           paddingTop: 10,
           paddingBottom: 16,
           scrollSnapType: 'x mandatory',
