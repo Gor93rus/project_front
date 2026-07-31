@@ -159,7 +159,7 @@ export function ScratchCarousel() {
           </span>
       </div>
 
-      <ScrollCarousel accent="#4ade80" showProgress={false}>
+      <ScrollCarousel accent="#4ade80" showProgress={false} arrows>
         {SCRATCH_GAMES.map(g => <ScratchCard key={g.id} game={g} />)}
       </ScrollCarousel>
     </section>

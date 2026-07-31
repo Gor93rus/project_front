@@ -31,7 +31,6 @@ export function ScrollCarousel({ children, accent = '#3CB1FF', showProgress = tr
   const autoScrollTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
   const rafRef = useRef<number | null>(null);
   const lastTimeRef = useRef<number>(0);
-  const scrollingByArrow = useRef(false); // ★ флаг: true = скролл от стрелки, блокируем handleScrollEnd
 
   const update = useCallback(() => {
     const el = ref.current;
@@ -56,9 +55,9 @@ export function ScrollCarousel({ children, accent = '#3CB1FF', showProgress = tr
     setActiveIndex(closestIdx);
   }, []);
 
-  // Снэппинг при остановке скролла — НЕ срабатывает если скролл от стрелок
+  // Снэппинг при остановке скролла (drag/свайп). Безопасно вызывать и после
+  // programmatic scrollTo от стрелок — просто досчитает до той же карточки.
   const handleScrollEnd = useCallback(() => {
-    if (scrollingByArrow.current) return; // ★ блокируем рекурсию
     if (snapTimeout.current) clearTimeout(snapTimeout.current);
     snapTimeout.current = setTimeout(() => {
       const el = ref.current;
@@ -118,52 +117,23 @@ export function ScrollCarousel({ children, accent = '#3CB1FF', showProgress = tr
   const radius = 14;
   const circumference = 2 * Math.PI * radius;
 
-  const animationRef = useRef<number | null>(null);
-
-  // Останавливает текущую анимацию если она ещё идёт
-  const cancelScrollAnimation = useCallback(() => {
-    if (animationRef.current) {
-      cancelAnimationFrame(animationRef.current);
-      animationRef.current = null;
-    }
-  }, []);
-
-  // Ease-out cubic: быстрое начало, мягкое замедление в конце
-  const easeOutCubic = (t: number) => 1 - Math.pow(1 - t, 3);
-
+  // Переход по стрелке = переход к соседней карточке по индексу, отданный
+  // нативному scrollTo({behavior:'smooth'}). Никакой ручной rAF-анимации —
+  // браузер сам плавно анимирует scrollLeft в связке с CSS scroll-snap,
+  // так что снэппинг и анимация не конфликтуют (одна система вместо двух).
   const scrollByPage = (dir: 1 | -1) => {
     const el = ref.current;
     if (!el) return;
 
-    cancelScrollAnimation(); // прерываем предыдущую анимацию
-    scrollingByArrow.current = true;
+    const cards = el.children;
+    if (cards.length === 0) return;
 
-    const startX = el.scrollLeft;
-    const targetX = startX + dir * el.clientWidth * 0.8;
-    const duration = 420; // ms — премиально-плавный скролл
+    const targetIdx = Math.max(0, Math.min(cards.length - 1, activeIndex + dir));
+    const target = cards[targetIdx] as HTMLElement;
+    if (!target) return;
 
-    let startTime: number | null = null;
-
-    const animate = (timestamp: number) => {
-      if (!startTime) startTime = timestamp;
-      const elapsed = timestamp - startTime;
-      const progress = Math.min(elapsed / duration, 1);
-      const eased = easeOutCubic(progress);
-
-      el.scrollLeft = startX + (targetX - startX) * eased;
-
-      if (progress < 1) {
-        animationRef.current = requestAnimationFrame(animate);
-      } else {
-        animationRef.current = null;
-        // Сбрасываем флаг после завершения анимации
-        setTimeout(() => {
-          scrollingByArrow.current = false;
-        }, 100); // небольшая задержка для scroll-end-эффекта
-      }
-    };
-
-    animationRef.current = requestAnimationFrame(animate);
+    const scrollTo = target.offsetLeft - (el.clientWidth - target.offsetWidth) / 2;
+    el.scrollTo({ left: scrollTo, behavior: 'smooth' });
   };
 
   const arrowBaseStyle: CSSProperties = {
