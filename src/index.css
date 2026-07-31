@@ -262,6 +262,7 @@
   -webkit-mask-image: linear-gradient(90deg, transparent, #000 18%, #000 82%, transparent);
   mask-image: linear-gradient(90deg, transparent, #000 18%, #000 82%, transparent);
 }
+/* dot grid base */
 .glass-rivet__line::before {
   content: '';
   position: absolute;
@@ -270,12 +271,48 @@
   background-size: 7px 7px;
   background-position: center;
 }
+/* beam sweep — яркий луч, стартует от hub и уходит к краям */
 .glass-rivet__line::after {
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(90deg, transparent, var(--rivet-glow, rgba(250,219,20,0.10)) 50%, transparent);
+  /* луч: узкая яркая полоска у правого края (т.е. у hub-а) с затуханием влево */
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--rivet-beam, rgba(250,219,20,0.22)) 52%,
+    rgba(255,255,255,0.60) 68%,
+    var(--rivet-beam, rgba(250,219,20,0.24)) 80%,
+    transparent 100%
+  );
   mix-blend-mode: screen;
+  animation: rivet-beam-left var(--rivet-duration, 3.6s) ease-in-out infinite;
+  animation-delay: var(--rivet-delay, 0s);
+}
+/* правая линия — луч уходит вправо */
+.glass-rivet__line:last-child::after {
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--rivet-beam, rgba(250,219,20,0.24)) 20%,
+    rgba(255,255,255,0.60) 32%,
+    var(--rivet-beam, rgba(250,219,20,0.22)) 48%,
+    transparent 100%
+  );
+  animation-name: rivet-beam-right;
+}
+
+@keyframes rivet-beam-left {
+  0%   { transform: translateX(0%);    opacity: 0; }
+  8%   { opacity: 1; }
+  80%  { opacity: 0.7; }
+  100% { transform: translateX(-108%); opacity: 0; }
+}
+@keyframes rivet-beam-right {
+  0%   { transform: translateX(0%);   opacity: 0; }
+  8%   { opacity: 1; }
+  80%  { opacity: 0.7; }
+  100% { transform: translateX(108%); opacity: 0; }
 }
 .glass-rivet__hub {
   position: relative;
@@ -454,4 +491,37 @@
 @keyframes reward-shadow {
   0%, 100% { opacity: .52; transform: scaleX(.9); }
   50% { opacity: .26; transform: scaleX(.72); }
+}
+
+/* ══════════════════════════════════════════════════
+   REWARD CHEST — floating animation
+   ══════════════════════════════════════════════════ */
+@keyframes chest-float {
+  0%,  100% { transform: translateY(0px) rotate(-1.5deg); }
+  50%        { transform: translateY(-7px) rotate(1deg); }
+}
+
+/* ══════════════════════════════════════════════════
+   REWARDS BANNER SLOT — responsive height
+   ══════════════════════════════════════════════════ */
+.rewards-banner-slot {
+  --rewards-banner-h: 120px; /* было 160px → -25% */
+}
+@media (min-width: 768px) {
+  .rewards-banner-slot {
+    --rewards-banner-h: 150px; /* было 200px → -25% */
+  }
+}
+
+/* ══════════════════════════════════════════════════
+   SCROLL CAROUSEL — smooth arrow transition
+   Добавляем CSS scroll-behavior на сам контейнер
+   для более плавного feel на стрелках (сверх JS smooth)
+   ══════════════════════════════════════════════════ */
+.scroll-carousel-track {
+  scroll-behavior: auto; /* управляем через JS scrollTo({behavior:'smooth'}) */
+}
+/* Плавный ease для прогресс-кольца */
+.scroll-carousel-progress {
+  transition: stroke-dashoffset 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
