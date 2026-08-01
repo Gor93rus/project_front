@@ -285,6 +285,7 @@ export function GlobalJackpotHero() {
         />
 
         <div className="flex flex-col items-center" style={{ padding: 'clamp(36px,5vw,64px) clamp(16px,6vw,64px) 22px', position: 'relative', zIndex: 3 }}>
+          {/* Шаг 1: заголовок */}
           <motion.span
             style={{
               position: 'relative',
@@ -297,8 +298,6 @@ export function GlobalJackpotHero() {
               marginBottom: 16,
               padding: '0 6px',
               whiteSpace: 'nowrap',
-              // Слой 1 — бегущая световая полоса; Слой 2 — металлический золотой отлив.
-              // Оба обрезаются по глифам, блик скользит только по буквам.
               background: `
                 linear-gradient(105deg, transparent 42%, rgba(255,255,255,0.92) 50%, transparent 58%),
                 linear-gradient(180deg, #FFF8D6 0%, #FFE680 16%, #F7C13A 40%, #C8861C 66%, #8A5A12 100%)
@@ -319,18 +318,28 @@ export function GlobalJackpotHero() {
                 drop-shadow(0 1px 0 rgba(255,255,255,0.25))
               `,
             }}
-            initial={{ opacity: 0, y: 6 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1, duration: 0.5 }}
+            initial={{ opacity: 0, y: 10, filter: 'blur(4px)' }}
+            animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+            transition={{ delay: 0.05, duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
           >
             WEEKEND MILLIONS
           </motion.span>
 
+          {/* Шаг 2: сумма — главный герой, входит с масштабом */}
           <motion.div
             className="flex items-baseline"
             style={{ gap: 8 }}
-            animate={milestoneFlash ? { scale: [1, 1.06, 1] } : {}}
-            transition={{ duration: 0.6, ease: 'easeOut' }}
+            initial={{ opacity: 0, y: 16, scale: 0.92 }}
+            animate={
+              milestoneFlash
+                ? { scale: [1, 1.06, 1], opacity: 1, y: 0 }
+                : { opacity: 1, y: 0, scale: 1 }
+            }
+            transition={
+              milestoneFlash
+                ? { duration: 0.6, ease: 'easeOut' }
+                : { delay: 0.2, duration: 0.6, ease: [0.22, 1, 0.36, 1] }
+            }
           >
             <span
             className="font-tabular"
@@ -340,7 +349,6 @@ export function GlobalJackpotHero() {
                 letterSpacing: '-0.03em',
                 fontFamily: 'var(--font-mono)',
                 fontWeight: 800,
-                // Бегущий блик по цифрам + металлическая золотая заливка (оба клипуются по глифам)
                 background: `
                   linear-gradient(100deg, transparent 44%, rgba(255,255,255,0.95) 50%, transparent 56%),
                   linear-gradient(180deg, #FFF7B0 0%, #FADB14 25%, #D97706 60%, #92400E 100%)
@@ -376,12 +384,13 @@ export function GlobalJackpotHero() {
             </span>
           </motion.div>
 
+          {/* Шаг 3: подпись — последней, тихое появление */}
           <motion.span
             className="mono text-3xs"
             style={{ marginTop: 12, color: 'var(--gold)', fontWeight: 500, textShadow: '0 0 8px var(--gold-glow)' }}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.25, duration: 0.4 }}
+            initial={{ opacity: 0, y: 6 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.38, duration: 0.45, ease: 'easeOut' }}
           >
             Global Jackpot · {LOTTERIES_COUNT} lotteries combined
           </motion.span>
@@ -410,8 +419,11 @@ export function GlobalJackpotHero() {
 
         </div>
 
-        {/* ТИКЕР */}
-        <div
+        {/* ТИКЕР — шаг 4: последним, clip overflow чтобы не дёргалось при slideUp */}
+        <motion.div
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.52, duration: 0.4, ease: 'easeOut' }}
           style={{
             position: 'relative',
             display: 'flex',
@@ -463,7 +475,7 @@ export function GlobalJackpotHero() {
             <div style={{ position: 'absolute', top: 0, bottom: 0, left: 0, width: 32, background: 'linear-gradient(90deg, rgba(8,11,30,0.95) 0%, transparent 100%)', pointerEvents: 'none', zIndex: 2 }} />
             <div style={{ position: 'absolute', top: 0, bottom: 0, right: 0, width: 32, background: 'linear-gradient(90deg, transparent 0%, rgba(8,11,30,0.95) 100%)', pointerEvents: 'none', zIndex: 2 }} />
           </div>
-        </div>
+        </motion.div>
       </motion.div>
     </section>
   );
