@@ -7,6 +7,7 @@ interface Props {
   children: ReactNode;
   variants?: Variants;
   transition?: Transition;
+  delay?: number;
   once?: boolean;
   margin?: string;
   className?: string;
@@ -17,6 +18,7 @@ export function AnimatedSection({
   children,
   variants = fadeUp,
   transition,
+  delay,
   once = true,
   // Extend the intersection root well past the bottom of the viewport so
   // sections reveal reliably even when the page never receives a real
@@ -28,13 +30,17 @@ export function AnimatedSection({
   className,
   style,
 }: Props) {
+  const resolvedTransition: Transition | undefined =
+    delay !== undefined
+      ? { delay, ...(transition ?? {}) }
+      : transition;
   return (
     <motion.div
       initial="hidden"
       whileInView="visible"
       viewport={{ once, margin }}
       variants={variants}
-      transition={transition}
+      transition={resolvedTransition}
       className={className}
       style={style}
     >

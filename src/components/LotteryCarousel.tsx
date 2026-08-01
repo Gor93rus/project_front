@@ -100,7 +100,7 @@ function SegmentedCountdown({ target, accent }: { target: string; accent: string
 }
 
 /* ── Lottery Card ── */
-function LotteryCard({ lottery }: { lottery: Lottery }) {
+function LotteryCard({ lottery, index = 0 }: { lottery: Lottery; index?: number }) {
   const nav = useNavigate();
   const accent = lottery.accentColor;
   const phase = useDrawPhase(lottery.nextDraw);
@@ -110,8 +110,15 @@ function LotteryCard({ lottery }: { lottery: Lottery }) {
   return (
     <motion.div
       onClick={() => nav(`/lottery/${lottery.id}`)}
+      initial={{ opacity: 0, y: 24, scale: 0.96 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
+      transition={{
+        delay: index * 0.07,
+        duration: 0.45,
+        ease: [0.22, 1, 0.36, 1],
+      }}
       whileHover={{ y: -6 }}
-      transition={{ type: 'spring', stiffness: 300, damping: 18 }}
+      whileTap={{ scale: 0.96, y: 0 }}
       style={{
         position: 'relative', borderRadius: 20, flexShrink: 0, cursor: 'pointer',
         width: 182, minHeight: 390,
@@ -341,7 +348,7 @@ export function LotteryCarousel() {
       </div>
 
       <ScrollCarousel accent="var(--ton)" showProgress={false} arrows>
-        {LOTTERIES.map(l => <LotteryCard key={l.id} lottery={l} />)}
+        {LOTTERIES.map((l, i) => <LotteryCard key={l.id} lottery={l} index={i} />)}
       </ScrollCarousel>
 
       {showHowItWorks && <HowItWorksModal onClose={() => setShowHowItWorks(false)} />}

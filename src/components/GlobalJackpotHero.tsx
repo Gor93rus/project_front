@@ -205,10 +205,14 @@ export function GlobalJackpotHero() {
   const prevMilestone = useRef(Math.floor(BASE_JACKPOT_FROM_DB / 10000));
 
   useEffect(() => {
-    const id = setInterval(() => {
+    // Реалистичная модель роста пула: каждые ~3с добавляем небольшую случайную сумму.
+    // Базовый тик: 0.08–0.22 TON каждые 3с = ~2–5 TON/мин = ~3000–7000 TON/сутки.
+    // Визуально создаёт ощущение активного пула без нереалистичных скачков.
+    const tick = () => {
       setValue(v => {
-        const next = v + 0.31;
-        const currentMilestone = Math.floor(next / 10000);
+        const increment = 0.08 + Math.random() * 0.14;
+        const next = v + increment;
+        const currentMilestone = Math.floor(next / 1000);
         if (currentMilestone > prevMilestone.current) {
           prevMilestone.current = currentMilestone;
           setMilestoneFlash(true);
@@ -216,7 +220,8 @@ export function GlobalJackpotHero() {
         }
         return next;
       });
-    }, 1000);
+    };
+    const id = setInterval(tick, 3000);
     return () => clearInterval(id);
   }, []);
 
