@@ -286,72 +286,56 @@ export function GlobalJackpotHero() {
 
         <div className="flex flex-col items-center" style={{ padding: 'clamp(28px,5vw,56px) clamp(16px,6vw,64px) 22px', position: 'relative', zIndex: 3 }}>
 
-          {/* ── ШАГ 1: НАЗВАНИЕ ПРОДУКТА ─────────────────────────────────────
-              Визуальный характер: холодный серебристо-белый, чёткий, брендовый.
-              Намеренно контрастирует с тёплым золотом цифр — они разные иерархии.
+          {/* ── ШАГ 1: НАЗВАНИЕ БРЕНДА ───────────────────────────────────────
+              WEEKEND MILLIONS — единый блок, единый размер, единый вес.
+              Оба слова идут через пробел в одну строку.
+              Стиль: хромированный серебристо-белый металл с бликом,
+              намеренно холодный — чтобы не конкурировать с тёплым золотом цифр.
           ─────────────────────────────────────────────────────────────────── */}
           <motion.div
-            style={{ marginBottom: 14, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4 }}
+            style={{ marginBottom: 12, display: 'flex', alignItems: 'center' }}
             initial={{ opacity: 0, y: 10, filter: 'blur(6px)' }}
             animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
             transition={{ delay: 0.05, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
           >
-            {/* Верхняя строка: слово WEEKEND — тонкое, широкий трекинг */}
             <span
               style={{
                 display: 'block',
-                fontFamily: "'Space Grotesk', sans-serif",
-                fontSize: 'clamp(11px, 2.4vw, 15px)',
-                fontWeight: 500,
-                letterSpacing: '0.45em',
-                textTransform: 'uppercase',
-                color: 'rgba(180,200,255,0.65)',
-                textShadow: '0 0 20px rgba(120,160,255,0.3)',
+                fontFamily: 'var(--font-display)',
+                fontSize: 'clamp(28px, 8.5vw, 52px)',
+                fontWeight: 900,
+                letterSpacing: '0.06em',
                 lineHeight: 1,
-              }}
-            >
-              WEEKEND
-            </span>
-            {/* Нижняя строка: MILLIONS — жирный, крупный, серебристый металл */}
-            <span
-              style={{
-                display: 'block',
-                fontFamily: "'Space Grotesk', sans-serif",
-                fontSize: 'clamp(32px, 7.5vw, 58px)',
-                fontWeight: 800,
-                letterSpacing: '-0.02em',
-                lineHeight: 0.92,
+                whiteSpace: 'nowrap',
                 background: `
-                  linear-gradient(160deg, transparent 38%, rgba(255,255,255,0.9) 50%, transparent 62%),
-                  linear-gradient(180deg, #FFFFFF 0%, #D8E4FF 28%, #A8BFFF 55%, #7090E8 100%)
+                  linear-gradient(110deg, transparent 36%, rgba(255,255,255,0.95) 50%, transparent 64%),
+                  linear-gradient(180deg, #FFFFFF 0%, #E8EEFF 20%, #B8CCFF 48%, #7899E8 78%, #4A6EC8 100%)
                 `,
-                backgroundSize: '240% 100%, 100% 100%',
-                backgroundPosition: '240% 0, 0 0',
+                backgroundSize: '260% 100%, 100% 100%',
+                backgroundPosition: '260% 0, 0 0',
                 backgroundRepeat: 'no-repeat',
                 WebkitBackgroundClip: 'text',
                 WebkitTextFillColor: 'transparent',
                 backgroundClip: 'text',
-                animation: 'text-sheen 7s ease-in-out infinite',
-                animationDelay: '1s',
+                animation: 'text-sheen 6s ease-in-out infinite',
+                animationDelay: '0.8s',
                 filter: `
-                  drop-shadow(0 1px 0 rgba(255,255,255,0.15))
-                  drop-shadow(0 4px 16px rgba(100,140,255,0.35))
-                  drop-shadow(0 0 40px rgba(80,120,255,0.2))
+                  drop-shadow(0 1px 0 rgba(255,255,255,0.2))
+                  drop-shadow(0 2px 12px rgba(120,160,255,0.4))
+                  drop-shadow(0 0 36px rgba(100,140,255,0.2))
                 `,
               }}
             >
-              MILLIONS
+              WEEKEND MILLIONS
             </span>
           </motion.div>
 
-          {/* ── ШАГ 2: СУММА ДЖЕКПОТА + МОНЕТА TON ──────────────────────────
+          {/* ── ШАГ 2: СУММА ДЖЕКПОТА ────────────────────────────────────────
               Главный герой экрана. Входит с лёгким scale-up.
-              Монета TON заменяет текстовый лейбл — mix-blend-mode:screen
-              убирает чёрный фон PNG.
           ─────────────────────────────────────────────────────────────────── */}
           <motion.div
-            className="flex items-center"
-            style={{ gap: 10 }}
+            className="flex items-baseline"
+            style={{ gap: 8 }}
             initial={{ opacity: 0, y: 16, scale: 0.92 }}
             animate={
               milestoneFlash
@@ -367,8 +351,8 @@ export function GlobalJackpotHero() {
             <span
               className="font-tabular"
               style={{
-                fontSize: 'clamp(44px, 9vw, 76px)',
-                lineHeight: 1,
+                fontSize: 'clamp(48px, 9vw, 80px)',
+                lineHeight: 0.9,
                 letterSpacing: '-0.03em',
                 fontFamily: 'var(--font-mono)',
                 fontWeight: 800,
@@ -393,25 +377,19 @@ export function GlobalJackpotHero() {
             >
               {formatted}
             </span>
-
-            {/* Монета TON — вращается медленно, mix-blend-mode:screen убирает чёрный фон */}
-            <motion.img
-              src="/ton-coin.png"
-              alt="TON"
-              width={72}
-              height={72}
+            <span
               style={{
-                width: 'clamp(56px, 14vw, 72px)',
-                height: 'clamp(56px, 14vw, 72px)',
-                objectFit: 'contain',
-                mixBlendMode: 'screen',
-                filter: 'drop-shadow(0 0 18px rgba(250,200,0,0.8)) drop-shadow(0 0 40px rgba(250,190,0,0.4)) brightness(1.25) saturate(1.1)',
-                flexShrink: 0,
-                alignSelf: 'center',
+                fontSize: 'clamp(13px, 2.8vw, 17px)',
+                fontWeight: 800,
+                fontFamily: 'var(--font-mono)',
+                letterSpacing: '0.04em',
+                color: 'var(--gold-soft)',
+                textShadow: '0 0 14px var(--gold-glow), 0 2px 4px rgba(0,0,0,0.5)',
+                marginBottom: 4,
               }}
-              animate={{ rotateY: [0, 360] }}
-              transition={{ duration: 5, repeat: Infinity, ease: 'linear', repeatDelay: 4 }}
-            />
+            >
+              TON
+            </span>
           </motion.div>
 
           {/* ── ШАГ 3: ПОДПИСЬ ───────────────────────────────────────────────
