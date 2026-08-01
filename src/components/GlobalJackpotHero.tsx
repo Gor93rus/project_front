@@ -279,13 +279,13 @@ export function GlobalJackpotHero() {
           }}
         />
 
-        <div className="flex flex-col items-center" style={{ padding: '52px 16px 22px', position: 'relative', zIndex: 3 }}>
+        <div className="flex flex-col items-center" style={{ padding: 'clamp(36px,5vw,64px) clamp(16px,6vw,64px) 22px', position: 'relative', zIndex: 3 }}>
           <motion.span
             style={{
               position: 'relative',
               display: 'inline-block',
               fontFamily: 'var(--font-display)',
-              fontSize: 30,
+              fontSize: 'clamp(22px, 3.5vw, 36px)',
               fontWeight: 900,
               lineHeight: 1,
               letterSpacing: '0.01em',
@@ -330,7 +330,7 @@ export function GlobalJackpotHero() {
             <span
             className="font-tabular"
             style={{
-                fontSize: 64,
+                fontSize: 'clamp(48px, 9vw, 80px)',
                 lineHeight: 0.90,
                 letterSpacing: '-0.03em',
                 fontFamily: 'var(--font-mono)',
