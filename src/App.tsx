@@ -154,13 +154,13 @@ function HomePage() {
   return (
     <div className="flex flex-col pb-2">
       {/* Hero → Features: минимальный зазор — они единый смысловой блок */}
-      <AnimatedSection variants={fadeUp}>
+      <AnimatedSection variants={fadeUp} delay={0.05}>
         <GlobalJackpotHero />
       </AnimatedSection>
 
       <div style={{ height: 8 }} />
 
-      <AnimatedSection variants={fadeUpCard}>
+      <AnimatedSection variants={fadeUpCard} delay={0.18}>
         <FeaturesBanner />
       </AnimatedSection>
 

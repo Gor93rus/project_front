@@ -205,10 +205,14 @@ export function GlobalJackpotHero() {
   const prevMilestone = useRef(Math.floor(BASE_JACKPOT_FROM_DB / 10000));
 
   useEffect(() => {
-    const id = setInterval(() => {
+    // Реалистичная модель роста пула: каждые ~3с добавляем небольшую случайную сумму.
+    // Базовый тик: 0.08–0.22 TON каждые 3с = ~2–5 TON/мин = ~3000–7000 TON/сутки.
+    // Визуально создаёт ощущение активного пула без нереалистичных скачков.
+    const tick = () => {
       setValue(v => {
-        const next = v + 0.31;
-        const currentMilestone = Math.floor(next / 10000);
+        const increment = 0.08 + Math.random() * 0.14;
+        const next = v + increment;
+        const currentMilestone = Math.floor(next / 1000);
         if (currentMilestone > prevMilestone.current) {
           prevMilestone.current = currentMilestone;
           setMilestoneFlash(true);
@@ -216,7 +220,8 @@ export function GlobalJackpotHero() {
         }
         return next;
       });
-    }, 1000);
+    };
+    const id = setInterval(tick, 3000);
     return () => clearInterval(id);
   }, []);
 
@@ -279,63 +284,78 @@ export function GlobalJackpotHero() {
           }}
         />
 
-        <div className="flex flex-col items-center" style={{ padding: '52px 16px 22px', position: 'relative', zIndex: 3 }}>
-          <motion.span
-            style={{
-              position: 'relative',
-              display: 'inline-block',
-              fontFamily: 'var(--font-display)',
-              fontSize: 30,
-              fontWeight: 900,
-              lineHeight: 1,
-              letterSpacing: '0.01em',
-              marginBottom: 16,
-              padding: '0 6px',
-              whiteSpace: 'nowrap',
-              // Слой 1 — бегущая световая полоса; Слой 2 — металлический золотой отлив.
-              // Оба обрезаются по глифам, блик скользит только по буквам.
-              background: `
-                linear-gradient(105deg, transparent 42%, rgba(255,255,255,0.92) 50%, transparent 58%),
-                linear-gradient(180deg, #FFF8D6 0%, #FFE680 16%, #F7C13A 40%, #C8861C 66%, #8A5A12 100%)
-              `,
-              backgroundSize: '220% 100%, 100% 100%',
-              backgroundPosition: '220% 0, 0 0',
-              backgroundRepeat: 'no-repeat',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              backgroundClip: 'text',
-              animation: 'text-sheen 5s ease-in-out infinite',
-              animationDelay: '0.6s',
-              filter: `
-                drop-shadow(0 2px 1px rgba(0,0,0,0.55))
-                drop-shadow(0 4px 10px rgba(0,0,0,0.7))
-                drop-shadow(0 0 24px rgba(250,219,20,0.45))
-                drop-shadow(0 0 50px rgba(217,119,6,0.28))
-                drop-shadow(0 1px 0 rgba(255,255,255,0.25))
-              `,
-            }}
-            initial={{ opacity: 0, y: 6 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1, duration: 0.5 }}
-          >
-            WEEKEND MILLIONS
-          </motion.span>
+        <div className="flex flex-col items-center" style={{ padding: 'clamp(28px,5vw,56px) clamp(16px,6vw,64px) 22px', position: 'relative', zIndex: 3 }}>
 
+          {/* ── ШАГ 1: НАЗВАНИЕ БРЕНДА ───────────────────────────────────────
+              WEEKEND MILLIONS — единый блок, единый размер, единый вес.
+              Оба слова идут через пробел в одну строку.
+              Стиль: хромированный серебристо-белый металл с бликом,
+              намеренно холодный — чтобы не конкурировать с тёплым золотом цифр.
+          ─────────────────────────────────────────────────────────────────── */}
+          <motion.div
+            style={{ marginBottom: 12, display: 'flex', alignItems: 'center' }}
+            initial={{ opacity: 0, y: 10, filter: 'blur(6px)' }}
+            animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+            transition={{ delay: 0.05, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+          >
+            <span
+              style={{
+                display: 'block',
+                fontFamily: 'var(--font-display)',
+                fontSize: 'clamp(28px, 8.5vw, 52px)',
+                fontWeight: 900,
+                letterSpacing: '0.06em',
+                lineHeight: 1,
+                whiteSpace: 'nowrap',
+                background: `
+                  linear-gradient(110deg, transparent 36%, rgba(255,255,255,0.95) 50%, transparent 64%),
+                  linear-gradient(180deg, #FFFFFF 0%, #E8EEFF 20%, #B8CCFF 48%, #7899E8 78%, #4A6EC8 100%)
+                `,
+                backgroundSize: '260% 100%, 100% 100%',
+                backgroundPosition: '260% 0, 0 0',
+                backgroundRepeat: 'no-repeat',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                backgroundClip: 'text',
+                animation: 'text-sheen 6s ease-in-out infinite',
+                animationDelay: '0.8s',
+                filter: `
+                  drop-shadow(0 1px 0 rgba(255,255,255,0.2))
+                  drop-shadow(0 2px 12px rgba(120,160,255,0.4))
+                  drop-shadow(0 0 36px rgba(100,140,255,0.2))
+                `,
+              }}
+            >
+              WEEKEND MILLIONS
+            </span>
+          </motion.div>
+
+          {/* ── ШАГ 2: СУММА ДЖЕКПОТА ────────────────────────────────────────
+              Главный герой экрана. Входит с лёгким scale-up.
+          ─────────────────────────────────────────────────────────────────── */}
           <motion.div
             className="flex items-baseline"
             style={{ gap: 8 }}
-            animate={milestoneFlash ? { scale: [1, 1.06, 1] } : {}}
-            transition={{ duration: 0.6, ease: 'easeOut' }}
+            initial={{ opacity: 0, y: 16, scale: 0.92 }}
+            animate={
+              milestoneFlash
+                ? { scale: [1, 1.05, 1], opacity: 1, y: 0 }
+                : { opacity: 1, y: 0, scale: 1 }
+            }
+            transition={
+              milestoneFlash
+                ? { duration: 0.6, ease: 'easeOut' }
+                : { delay: 0.22, duration: 0.6, ease: [0.22, 1, 0.36, 1] }
+            }
           >
             <span
-            className="font-tabular"
-            style={{
-                fontSize: 64,
-                lineHeight: 0.90,
+              className="font-tabular"
+              style={{
+                fontSize: 'clamp(48px, 9vw, 80px)',
+                lineHeight: 0.9,
                 letterSpacing: '-0.03em',
                 fontFamily: 'var(--font-mono)',
                 fontWeight: 800,
-                // Бегущий блик по цифрам + металлическая золотая заливка (оба клипуются по глифам)
                 background: `
                   linear-gradient(100deg, transparent 44%, rgba(255,255,255,0.95) 50%, transparent 56%),
                   linear-gradient(180deg, #FFF7B0 0%, #FADB14 25%, #D97706 60%, #92400E 100%)
@@ -359,26 +379,38 @@ export function GlobalJackpotHero() {
             </span>
             <span
               style={{
-                fontSize: 15,
+                fontSize: 'clamp(13px, 2.8vw, 17px)',
                 fontWeight: 800,
                 fontFamily: 'var(--font-mono)',
+                letterSpacing: '0.04em',
                 color: 'var(--gold-soft)',
                 textShadow: '0 0 14px var(--gold-glow), 0 2px 4px rgba(0,0,0,0.5)',
-                marginBottom: 6,
+                marginBottom: 4,
               }}
             >
               TON
             </span>
           </motion.div>
 
+          {/* ── ШАГ 3: ПОДПИСЬ ───────────────────────────────────────────────
+              Сокращено: только «Global Jackpot»
+          ─────────────────────────────────────────────────────────────────── */}
           <motion.span
-            className="mono text-3xs"
-            style={{ marginTop: 12, color: 'var(--gold)', fontWeight: 500, textShadow: '0 0 8px var(--gold-glow)' }}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.25, duration: 0.4 }}
+            style={{
+              marginTop: 10,
+              fontSize: 10,
+              letterSpacing: '0.22em',
+              textTransform: 'uppercase',
+              fontFamily: 'var(--font-mono)',
+              fontWeight: 500,
+              color: 'rgba(250,219,20,0.55)',
+              textShadow: '0 0 12px rgba(250,219,20,0.2)',
+            }}
+            initial={{ opacity: 0, y: 6 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.38, duration: 0.45, ease: 'easeOut' }}
           >
-            Global Jackpot · {LOTTERIES_COUNT} lotteries combined
+            Global Jackpot
           </motion.span>
 
           {milestoneFlash && (
@@ -405,8 +437,11 @@ export function GlobalJackpotHero() {
 
         </div>
 
-        {/* ТИКЕР */}
-        <div
+        {/* ТИКЕР — шаг 4: последним, clip overflow чтобы не дёргалось при slideUp */}
+        <motion.div
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.52, duration: 0.4, ease: 'easeOut' }}
           style={{
             position: 'relative',
             display: 'flex',
@@ -458,7 +493,7 @@ export function GlobalJackpotHero() {
             <div style={{ position: 'absolute', top: 0, bottom: 0, left: 0, width: 32, background: 'linear-gradient(90deg, rgba(8,11,30,0.95) 0%, transparent 100%)', pointerEvents: 'none', zIndex: 2 }} />
             <div style={{ position: 'absolute', top: 0, bottom: 0, right: 0, width: 32, background: 'linear-gradient(90deg, transparent 0%, rgba(8,11,30,0.95) 100%)', pointerEvents: 'none', zIndex: 2 }} />
           </div>
-        </div>
+        </motion.div>
       </motion.div>
     </section>
   );

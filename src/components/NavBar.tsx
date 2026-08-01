@@ -61,9 +61,13 @@ export function NavBar({ active, onTabChange }: Props) {
     <nav className="fixed bottom-0 left-0 right-0 z-50 flex items-center justify-around py-2 px-1"
       style={{
         background: scrolled
-          ? 'linear-gradient(0deg, rgba(6,7,26,0.96) 0%, rgba(11,16,40,0.94) 100%)'
-          : 'linear-gradient(0deg, rgba(6,7,26,0.98) 0%, rgba(11,16,40,0.96) 100%)',
-        borderTop: scrolled ? '1px solid var(--primary-18)' : '1px solid var(--line)',
+          ? 'linear-gradient(0deg, rgba(6,7,26,0.82) 0%, rgba(11,16,40,0.78) 100%)'
+          : 'linear-gradient(0deg, rgba(6,7,26,0.88) 0%, rgba(11,16,40,0.84) 100%)',
+        backdropFilter: 'blur(20px) saturate(180%)',
+        WebkitBackdropFilter: 'blur(20px) saturate(180%)',
+        borderTop: scrolled
+          ? '1px solid rgba(10,124,255,0.22)'
+          : '1px solid rgba(255,255,255,0.07)',
         transition: 'background 0.3s, border-color 0.3s',
         paddingBottom: 'calc(8px + var(--safe-area-bottom, env(safe-area-inset-bottom, 0px)))',
       }}>
