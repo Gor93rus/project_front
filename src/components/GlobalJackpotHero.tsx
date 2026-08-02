@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
+import { ChevronDown } from 'lucide-react';
 
 // ── Реальные данные из БД (PostgreSQL) ────────────────────────────────────
 // SELECT COALESCE(SUM("currentJackpot"), 0) FROM "Lottery" WHERE active = true;
@@ -412,6 +413,53 @@ export function GlobalJackpotHero() {
           >
             Global Jackpot
           </motion.span>
+
+          {/* CTA — мягкий призыв к действию, скроллит к лотереям */}
+          <motion.button
+            type="button"
+            onClick={() => {
+              document.getElementById('lotteries-section')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }}
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.48, duration: 0.4, ease: 'easeOut' }}
+            whileHover={{ scale: 1.03 }}
+            whileTap={{ scale: 0.97 }}
+            style={{
+              marginTop: 16,
+              display: 'flex',
+              alignItems: 'center',
+              gap: 7,
+              padding: '9px 20px',
+              borderRadius: 'var(--r-pill)',
+              border: '1px solid rgba(250,219,20,0.35)',
+              background: 'linear-gradient(180deg, rgba(250,219,20,0.12) 0%, rgba(250,219,20,0.04) 100%)',
+              boxShadow: '0 0 20px rgba(250,219,20,0.15), inset 0 1px 0 rgba(255,255,255,0.08)',
+              cursor: 'pointer',
+              WebkitTapHighlightColor: 'transparent',
+            }}
+          >
+            <span
+              style={{
+                fontSize: 12,
+                fontWeight: 700,
+                letterSpacing: '0.14em',
+                textTransform: 'uppercase',
+                fontFamily: 'var(--font-mono)',
+                color: 'var(--gold-soft)',
+                textShadow: '0 0 10px rgba(250,219,20,0.3)',
+              }}
+            >
+              Tap to play
+            </span>
+            <motion.span
+              animate={{ y: [0, 3, 0] }}
+              transition={{ duration: 1.6, repeat: Infinity, ease: 'easeInOut' }}
+              style={{ display: 'flex', alignItems: 'center' }}
+            >
+              <ChevronDown size={14} color="var(--gold-soft)" strokeWidth={2.5} />
+            </motion.span>
+          </motion.button>
 
           {milestoneFlash && (
             <motion.div
