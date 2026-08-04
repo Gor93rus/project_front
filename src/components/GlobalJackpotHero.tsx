@@ -1,444 +1,200 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 
-// ── Реальные данные из БД (PostgreSQL) ────────────────────────────────────
-// SELECT COALESCE(SUM("currentJackpot"), 0) FROM "Lottery" WHERE active = true;
-// Результат: 67,500 TON (13 активных лотерей)
-const BASE_JACKPOT_FROM_DB = 67500;
+const BASE_JACKPOT = 67500;
 
-// Форматтер: точка как разделитель тысяч (de-DE локаль)
-function formatJackpot(value: number): string {
-  return value.toLocaleString('de-DE', { maximumFractionDigits: 0 });
+function formatJackpot(v: number) {
+  return v.toLocaleString('de-DE', { maximumFractionDigits: 0 });
 }
 
-// ── Победители с информацией о лотереях ────────────────────────────────────
-interface WinnerEntry {
-  user: string;
-  prize: string;
-  lottery: string;
-  slug: string;
-}
-
-const GLOBAL_WINNERS_DB: WinnerEntry[] = [
-  { user: 'Alex K.', prize: '1.200 TON', lottery: 'Weekend Special', slug: 'weekend-special' },
-  { user: 'Maria S.', prize: '340 TON', lottery: 'Daily Rush', slug: 'daily-rush-4x20' },
-  { user: 'D***ov', prize: '88 TON', lottery: 'Flash Pro', slug: 'flash-pro' },
-  { user: 'Tony W.', prize: '2.500 TON', lottery: 'Big Weekend', slug: 'big-weekend' },
-  { user: 'N***a', prize: '120 TON', lottery: 'Daily Thunder', slug: 'daily-thunder-5x36' },
-  { user: 'Jake M.', prize: '670 TON', lottery: 'Daily Strike', slug: 'daily-strike-6x45' },
-  { user: 'Elena R.', prize: '1.800 TON', lottery: 'Supernova', slug: 'supernova' },
-  { user: 'S***v', prize: '55 TON', lottery: 'Bounty 2x2', slug: 'bounty-2x2' },
+interface WinnerEntry { user: string; prize: string; lottery: string }
+const WINNERS: WinnerEntry[] = [
+  { user: 'Alex K.',   prize: '1.200 TON', lottery: 'Weekend Special' },
+  { user: 'Maria S.',  prize: '340 TON',   lottery: 'Daily Rush' },
+  { user: 'D***ov',    prize: '88 TON',    lottery: 'Flash Pro' },
+  { user: 'Tony W.',   prize: '2.500 TON', lottery: 'Big Weekend' },
+  { user: 'N***a',     prize: '120 TON',   lottery: 'Daily Thunder' },
+  { user: 'Jake M.',   prize: '670 TON',   lottery: 'Daily Strike' },
+  { user: 'Elena R.',  prize: '1.800 TON', lottery: 'Supernova' },
+  { user: 'S***v',     prize: '55 TON',    lottery: 'Bounty 2x2' },
 ];
 
-const AVATAR_COLORS = ['#FADB14', '#FF6B35', '#0A7CFF', '#7C3AED', '#52C41A', '#FF4D4F', '#0EA5E9', '#F97316'];
-
-// ── Аватар из имени ─────────────────────────────────────────────────────────
-function avatarFromName(name: string, index: number) {
-  const letter = name.charAt(0).toUpperCase();
-  const bg = AVATAR_COLORS[index % AVATAR_COLORS.length];
-  return (
-    <span
-      aria-hidden="true"
-      style={{
-        width: 20,
-        height: 20,
-        borderRadius: '50%',
-        background: `linear-gradient(135deg, ${bg}, ${bg}cc)`,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        fontSize: 9,
-        fontWeight: 800,
-        color: '#0B1028',
-        fontFamily: 'var(--font-mono)',
-        flexShrink: 0,
-        boxShadow: `0 0 8px ${bg}66, inset 0 1px 0 rgba(255,255,255,0.3)`,
-      }}
-    >
-      {letter}
-    </span>
-  );
-}
-
-// GodRays и GoldParticles удалены — создавали ~12 бесконечных анимаций.
-
-// ── Winner Row (с лотереей) ─────────────────────────────────────────────────
-function WinnerRow({ entry, index }: { entry: WinnerEntry; index: number }) {
-  return (
-    <span
-      className="flex items-center shrink-0"
-      style={{
-        gap: 8,
-        paddingInline: 14,
-        paddingBlock: 5,
-        borderRadius: 'var(--r-pill)',
-        background: 'rgba(255,255,255,0.03)',
-        borderTop: '1px solid rgba(255,255,255,0.06)',
-        borderBottom: '1px solid rgba(0,0,0,0.3)',
-      }}
-    >
-      {avatarFromName(entry.user, index)}
-      <span style={{ color: 'var(--ink-1)', fontWeight: 600, fontSize: 10.5 }}>{entry.user}</span>
-      <span style={{ color: 'var(--ink-3)', fontSize: 9, fontFamily: 'var(--font-mono)' }}>won</span>
-      <span style={{ color: 'var(--emerald-soft)', fontWeight: 700, fontFamily: 'var(--font-mono)', fontSize: 10.5 }}>
-        {entry.prize}
-      </span>
-      <span style={{ color: 'var(--ink-3)', fontSize: 9 }}>in</span>
-      <span style={{
-        color: 'var(--primary-soft)',
-        fontSize: 9.5,
-        fontWeight: 600,
-        background: 'var(--primary-dim)',
-        padding: '2px 6px',
-        borderRadius: 4,
-        border: '1px solid var(--primary-18)',
-      }}>
-        {entry.lottery}
-      </span>
-    </span>
-  );
-}
-
-// ═══════════════════════════════════════════════════════════════════════════
-// MAIN COMPONENT
-// ═══════════════════════════════════════════════════════════════════════════
 export function GlobalJackpotHero() {
-  const [value, setValue] = useState(BASE_JACKPOT_FROM_DB);
-  const [milestoneFlash, setMilestoneFlash] = useState(false);
-  const prevMilestone = useRef(Math.floor(BASE_JACKPOT_FROM_DB / 10000));
+  const [value, setValue] = useState(BASE_JACKPOT);
+  const [flash, setFlash] = useState(false);
+  const prevM = useRef(Math.floor(BASE_JACKPOT / 1000));
 
   useEffect(() => {
-    // Реалистичная модель роста пула: каждые ~3с добавляем небольшую случайную сумму.
-    // Базовый тик: 0.08–0.22 TON каждые 3с = ~2–5 TON/мин = ~3000–7000 TON/сутки.
-    // Визуально создаёт ощущение активного пула без нереалистичных скачков.
-    const tick = () => {
+    const id = setInterval(() => {
       setValue(v => {
-        const increment = 0.08 + Math.random() * 0.14;
-        const next = v + increment;
-        const currentMilestone = Math.floor(next / 1000);
-        if (currentMilestone > prevMilestone.current) {
-          prevMilestone.current = currentMilestone;
-          setMilestoneFlash(true);
-          setTimeout(() => setMilestoneFlash(false), 800);
-        }
+        const next = v + 0.08 + Math.random() * 0.14;
+        const m = Math.floor(next / 1000);
+        if (m > prevM.current) { prevM.current = m; setFlash(true); setTimeout(() => setFlash(false), 600); }
         return next;
       });
-    };
-    const id = setInterval(tick, 3000);
+    }, 3000);
     return () => clearInterval(id);
   }, []);
 
-  const formatted = formatJackpot(value);
-
-  const winnerRows = useMemo(
-    () =>
-      [...GLOBAL_WINNERS_DB, ...GLOBAL_WINNERS_DB].map((entry, i) => (
-        <WinnerRow key={i} entry={entry} index={i % GLOBAL_WINNERS_DB.length} />
-      )),
-    [],
-  );
+  const tickerItems = useMemo(() => [...WINNERS, ...WINNERS].map((w, i) => (
+    <span key={i} className="flex items-center shrink-0" style={{ gap: 6, paddingInline: 12 }}>
+      <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#4ade80', flexShrink: 0 }} />
+      <span style={{ color: 'rgba(255,255,255,0.7)', fontSize: 11, fontWeight: 600 }}>{w.user}</span>
+      <span style={{ color: 'rgba(255,255,255,0.35)', fontSize: 10 }}>won</span>
+      <span style={{ color: '#4ade80', fontSize: 11, fontWeight: 700, fontFamily: 'var(--font-mono)' }}>{w.prize}</span>
+      <span style={{ color: 'rgba(255,255,255,0.25)', fontSize: 10 }}>·</span>
+      <span style={{ color: 'rgba(255,255,255,0.45)', fontSize: 10 }}>{w.lottery}</span>
+    </span>
+  )), []);
 
   return (
-    <section className="mx-4">
-      <motion.div
-        initial={{ opacity: 0, y: 12 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+    <section style={{ padding: '0 12px' }}>
+      <div
         style={{
           position: 'relative',
-          borderRadius: 'var(--r-xl)',
+          borderRadius: 20,
           overflow: 'hidden',
-          minHeight: 'clamp(260px, 46vh, 380px)',
-          // Насыщенная чистая заливка: глубокий navy + лёгкий фиолет сверху.
-          // Свет (god-rays + золото) вынесен в отдельные слои выше, чтобы не мутить базу.
-          background: `
-            radial-gradient(130% 80% at 50% -12%, rgba(124,58,237,0.22) 0%, rgba(124,58,237,0.06) 32%, transparent 60%),
-            linear-gradient(165deg, #19244f 0%, #0d1733 44%, #060c22 100%)
-          `,
-          borderTop: '2px solid rgba(255,255,255,0.22)',
-          borderLeft: '1.5px solid rgba(255,255,255,0.11)',
-          borderRight: '1.5px solid rgba(0,0,0,0.60)',
-          borderBottom: '3px solid rgba(0,0,0,0.85)',
-          boxShadow: `
-            inset 0 2px 0 rgba(255,255,255,0.22),
-            inset 0 -4px 14px rgba(0,0,0,0.45),
-            0 2px 6px rgba(0,0,0,0.6),
-            0 22px 54px -12px rgba(0,0,0,0.9),
-            0 0 64px -10px var(--secondary-glow),
-            0 0 30px rgba(124,58,237,0.20)
-          `,
+          background: 'linear-gradient(160deg, #0d1b3e 0%, #060d1f 50%, #0a0618 100%)',
+          border: '1px solid rgba(255,255,255,0.08)',
+          boxShadow: '0 0 0 1px rgba(0,0,0,0.5), 0 24px 48px -12px rgba(0,0,0,0.8)',
         }}
       >
-        {/* Центральное золотое свечение — сконцентрировано за суммой */}
-        <div
-          aria-hidden="true"
-          style={{
-            position: 'absolute',
-            inset: 0,
-            background:
-              'radial-gradient(ellipse 56% 44% at 50% 44%, rgba(250,219,20,0.18) 0%, rgba(250,219,20,0.05) 32%, transparent 62%)',
-            pointerEvents: 'none',
-            zIndex: 0,
-          }}
-        />
+        {/* Ambient glow behind jackpot */}
+        <div aria-hidden style={{
+          position: 'absolute', inset: 0, pointerEvents: 'none',
+          background: 'radial-gradient(ellipse 70% 50% at 50% 40%, rgba(250,185,11,0.12) 0%, transparent 70%)',
+        }} />
 
-        <div className="flex flex-col items-center" style={{ padding: 'clamp(36px,7vh,64px) clamp(16px,6vw,64px) 24px', position: 'relative', zIndex: 3 }}>
+        {/* Main content */}
+        <div style={{ padding: '32px 20px 24px', display: 'flex', flexDirection: 'column', alignItems: 'center', position: 'relative', zIndex: 1 }}>
 
-          {/* ── ШАГ 1: НАЗВАНИЕ БРЕНДА ───────────────────────────────────────
-              WEEKEND MILLIONS — единый блок, единый размер, единый вес.
-              Оба слова идут через пробел в одну строку.
-              Стиль: хромированный серебристо-белый металл с бликом,
-              намеренно холодный — чтобы не конкурировать с тёплым золотом цифр.
-          ─────────────────────────────────────────────────────────────────── */}
+          {/* Label */}
+          <motion.p
+            initial={{ opacity: 0, y: -8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, delay: 0.05 }}
+            style={{
+              fontSize: 11,
+              fontWeight: 700,
+              letterSpacing: '0.22em',
+              textTransform: 'uppercase',
+              color: 'rgba(250,185,11,0.65)',
+              fontFamily: 'var(--font-mono)',
+              marginBottom: 10,
+            }}
+          >
+            Total Jackpot
+          </motion.p>
+
+          {/* Jackpot number */}
           <motion.div
-            style={{ marginBottom: 12, display: 'flex', alignItems: 'center' }}
-            initial={{ opacity: 0, y: 10, filter: 'blur(6px)' }}
-            animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-            transition={{ delay: 0.05, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+            initial={{ opacity: 0, scale: 0.88, y: 12 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            transition={{ duration: 0.55, delay: 0.12, ease: [0.22, 1, 0.36, 1] }}
           >
             <span
               style={{
                 display: 'block',
                 fontFamily: 'var(--font-display)',
-                fontSize: 'clamp(28px, 8.5vw, 58px)',
+                fontSize: 'clamp(56px, 18vw, 88px)',
                 fontWeight: 900,
-                letterSpacing: '0.08em',
                 lineHeight: 1,
-                whiteSpace: 'nowrap',
-                textTransform: 'uppercase',
-                background: 'linear-gradient(180deg, #FFFFFF 0%, #D0DEFF 35%, #8AAAEE 75%, #5577CC 100%)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                backgroundClip: 'text',
-                filter: 'drop-shadow(0 1px 0 rgba(255,255,255,0.15)) drop-shadow(0 2px 10px rgba(100,140,255,0.35))',
+                letterSpacing: '-0.02em',
+                textAlign: 'center',
+                color: flash ? '#fff' : '#FADB14',
+                textShadow: flash
+                  ? '0 0 40px rgba(255,255,255,0.6), 0 0 80px rgba(250,185,11,0.5)'
+                  : '0 0 30px rgba(250,185,11,0.45), 0 4px 12px rgba(0,0,0,0.6)',
+                transition: 'color 0.2s, text-shadow 0.2s',
               }}
             >
-              WEEKEND MILLIONS
+              {formatJackpot(value)}
             </span>
           </motion.div>
 
-          {/* ── ШАГ 2: СУММА ДЖЕКПОТА ────────────────────────────────────────
-              Главный герой экрана. Входит с лёгким scale-up.
-          ─────────────────────────────────────────────────────────────────── */}
-          <motion.div
-            className="flex items-baseline"
-            style={{ gap: 8 }}
-            initial={{ opacity: 0, y: 16, scale: 0.92 }}
-            animate={
-              milestoneFlash
-                ? { scale: [1, 1.05, 1], opacity: 1, y: 0 }
-                : { opacity: 1, y: 0, scale: 1 }
-            }
-            transition={
-              milestoneFlash
-                ? { duration: 0.6, ease: 'easeOut' }
-                : { delay: 0.22, duration: 0.6, ease: [0.22, 1, 0.36, 1] }
-            }
-          >
-            <span
-              className="font-tabular"
-              style={{
-                fontSize: 'clamp(52px, 14vw, 80px)',
-                lineHeight: 0.9,
-                letterSpacing: '-0.03em',
-                fontFamily: 'var(--font-mono)',
-                fontWeight: 800,
-                background: `
-                  linear-gradient(100deg, transparent 44%, rgba(255,255,255,0.95) 50%, transparent 56%),
-                  linear-gradient(180deg, #FFF7B0 0%, #FADB14 25%, #D97706 60%, #92400E 100%)
-                `,
-                backgroundSize: '220% 100%, 100% 100%',
-                backgroundPosition: '220% 0, 0 0',
-                backgroundRepeat: 'no-repeat',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                backgroundClip: 'text',
-                animation: 'text-sheen 4.5s ease-in-out infinite',
-                animationDelay: '1.4s',
-                filter: `
-                  drop-shadow(0 2px 4px rgba(0,0,0,0.8))
-                  drop-shadow(0 0 18px rgba(250,219,20,0.6))
-                  drop-shadow(0 0 40px rgba(250,219,20,0.3))
-                `,
-              }}
-            >
-              {formatted}
-            </span>
-            <span
-              style={{
-                fontSize: 'clamp(13px, 2.8vw, 17px)',
-                fontWeight: 800,
-                fontFamily: 'var(--font-mono)',
-                letterSpacing: '0.04em',
-                color: 'var(--gold-soft)',
-                textShadow: '0 0 14px var(--gold-glow), 0 2px 4px rgba(0,0,0,0.5)',
-                marginBottom: 4,
-              }}
-            >
-              TON
-            </span>
-          </motion.div>
-
-          {/* ── ШАГ 3: ПОДПИСЬ ───────────────────────────────────────────────
-              Сокращено: только «Global Jackpot»
-          ─────────────────────────────────────────────────────────────────── */}
-          <motion.span
+          {/* Currency */}
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.28, duration: 0.35 }}
             style={{
-              marginTop: 10,
-              fontSize: 10,
-              letterSpacing: '0.22em',
-              textTransform: 'uppercase',
+              fontSize: 16,
+              fontWeight: 800,
+              letterSpacing: '0.14em',
+              color: 'rgba(250,185,11,0.55)',
               fontFamily: 'var(--font-mono)',
-              fontWeight: 500,
-              color: 'rgba(250,219,20,0.55)',
-              textShadow: '0 0 12px rgba(250,219,20,0.2)',
+              marginTop: 4,
+              marginBottom: 28,
             }}
-            initial={{ opacity: 0, y: 6 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.38, duration: 0.45, ease: 'easeOut' }}
           >
-            Global Jackpot
-          </motion.span>
+            TON
+          </motion.p>
 
-          {milestoneFlash && (
-            <motion.div
-              aria-hidden="true"
-              style={{
-                position: 'absolute',
-                top: '50%',
-                left: '50%',
-                width: 220,
-                height: 70,
-                transform: 'translate(-50%, -50%)',
-                borderRadius: 'var(--r-pill)',
-                border: '2px solid var(--gold)',
-                boxShadow: '0 0 40px var(--gold-glow), inset 0 0 25px var(--gold-dim)',
-                pointerEvents: 'none',
-                zIndex: 4,
-              }}
-              initial={{ opacity: 0.9, scale: 0.85 }}
-              animate={{ opacity: 0, scale: 1.5 }}
-              transition={{ duration: 0.8, ease: 'easeOut' }}
-            />
-          )}
+          {/* CTA */}
+          <motion.button
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.35, duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+            whileTap={{ scale: 0.96 }}
+            style={{
+              width: '100%',
+              maxWidth: 280,
+              height: 52,
+              borderRadius: 14,
+              border: 'none',
+              cursor: 'pointer',
+              background: 'linear-gradient(135deg, #FADB14 0%, #F5A623 100%)',
+              boxShadow: '0 0 0 1px rgba(250,185,11,0.3), 0 8px 24px rgba(250,185,11,0.35), inset 0 1px 0 rgba(255,255,255,0.3)',
+              color: '#0B0800',
+              fontSize: 15,
+              fontWeight: 900,
+              letterSpacing: '0.08em',
+              textTransform: 'uppercase',
+              fontFamily: 'var(--font-display)',
+            }}
+          >
+            Play Now
+          </motion.button>
 
+          {/* Sub-label */}
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.45 }}
+            style={{
+              marginTop: 12,
+              fontSize: 10,
+              color: 'rgba(255,255,255,0.25)',
+              fontFamily: 'var(--font-mono)',
+              letterSpacing: '0.08em',
+            }}
+          >
+            10 active lotteries · on-chain payouts
+          </motion.p>
         </div>
 
-        {/* ── QUICK STATS — заполняют нижнюю зону Hero ── */}
-        <motion.div
-          initial={{ opacity: 0, y: 8 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.42, duration: 0.45, ease: 'easeOut' }}
-          style={{
-            position: 'relative', zIndex: 3,
-            display: 'flex',
-            justifyContent: 'center',
-            gap: 0,
-            padding: '0 16px 20px',
-          }}
-        >
-          {[
-            { value: '10', label: 'Active lotteries' },
-            { value: '6×', label: 'Draws per day' },
-            { value: '100%', label: 'On-chain payouts' },
-          ].map((stat, i, arr) => (
-            <div
-              key={stat.label}
-              style={{
-                flex: 1,
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                gap: 2,
-                padding: '10px 4px',
-                borderRight: i < arr.length - 1 ? '1px solid rgba(255,255,255,0.08)' : 'none',
-              }}
-            >
-              <span style={{
-                fontFamily: 'var(--font-display)',
-                fontSize: 22,
-                fontWeight: 900,
-                letterSpacing: '0.02em',
-                lineHeight: 1,
-                color: '#fff',
-                textShadow: '0 0 20px rgba(255,255,255,0.25)',
-              }}>
-                {stat.value}
-              </span>
-              <span style={{
-                fontSize: 9,
-                fontWeight: 600,
-                textTransform: 'uppercase',
-                letterSpacing: '0.12em',
-                color: 'rgba(255,255,255,0.38)',
-                fontFamily: 'var(--font-mono)',
-                textAlign: 'center',
-                lineHeight: 1.3,
-              }}>
-                {stat.label}
-              </span>
-            </div>
-          ))}
-        </motion.div>
+        {/* Winners ticker */}
+        <div style={{
+          height: 36,
+          display: 'flex',
+          alignItems: 'center',
+          borderTop: '1px solid rgba(255,255,255,0.06)',
+          background: 'rgba(0,0,0,0.25)',
+          overflow: 'hidden',
+          position: 'relative',
+        }}>
+          {/* Fade edges */}
+          <div aria-hidden style={{ position: 'absolute', left: 0, top: 0, bottom: 0, width: 28, background: 'linear-gradient(90deg,rgba(6,9,20,0.95),transparent)', zIndex: 2, pointerEvents: 'none' }} />
+          <div aria-hidden style={{ position: 'absolute', right: 0, top: 0, bottom: 0, width: 28, background: 'linear-gradient(270deg,rgba(6,9,20,0.95),transparent)', zIndex: 2, pointerEvents: 'none' }} />
 
-        {/* ТИКЕР — шаг 4: последним, clip overflow чтобы не дёргалось при slideUp */}
-        <motion.div
-          initial={{ opacity: 0, y: 8 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.52, duration: 0.4, ease: 'easeOut' }}
-          style={{
-            position: 'relative',
-            display: 'flex',
-            alignItems: 'center',
-            gap: 10,
-            height: 38,
-            padding: '0 12px',
-            background: 'linear-gradient(180deg, #0C1629 0%, #080F1E 100%)',
-            borderTop: '1.5px solid rgba(255,255,255,0.08)',
-            boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.04)',
-            zIndex: 3,
-          }}
-        >
-          <span className="flex items-center shrink-0" style={{ gap: 5, zIndex: 3 }}>
-            <span
-              className="animate-pulse-live"
-              style={{
-                width: 6,
-                height: 6,
-                borderRadius: '50%',
-                background: 'var(--emerald)',
-                boxShadow: '0 0 8px var(--emerald-glow)',
-                display: 'inline-block',
-              }}
-            />
-            <span
-              style={{
-                fontSize: 8.5,
-                fontWeight: 800,
-                letterSpacing: '0.16em',
-                textTransform: 'uppercase',
-                color: 'var(--ink-2)',
-                fontFamily: 'var(--font-mono)',
-              }}
-            >
-              Recent wins
-            </span>
-          </span>
-
-          <span style={{ width: 1, height: 16, background: 'var(--line-strong)', flexShrink: 0, zIndex: 3 }} />
-
-          <div style={{ position: 'relative', flex: 1, overflow: 'hidden', height: '100%' }}>
-            <div
-              className="winners-scroll"
-              style={{ position: 'absolute', top: 0, height: '100%', display: 'flex', alignItems: 'center', paddingLeft: 20, paddingRight: 20 }}
-            >
-              {winnerRows}
-            </div>
-            <div style={{ position: 'absolute', top: 0, bottom: 0, left: 0, width: 32, background: 'linear-gradient(90deg, rgba(8,11,30,0.95) 0%, transparent 100%)', pointerEvents: 'none', zIndex: 2 }} />
-            <div style={{ position: 'absolute', top: 0, bottom: 0, right: 0, width: 32, background: 'linear-gradient(90deg, transparent 0%, rgba(8,11,30,0.95) 100%)', pointerEvents: 'none', zIndex: 2 }} />
+          <div
+            className="winners-scroll"
+            style={{ display: 'flex', alignItems: 'center', gap: 0, whiteSpace: 'nowrap' }}
+          >
+            {tickerItems}
           </div>
-        </motion.div>
-      </motion.div>
+        </div>
+      </div>
     </section>
   );
 }

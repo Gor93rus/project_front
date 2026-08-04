@@ -1,15 +1,19 @@
-// Намеренно минимальный: 4 CSS blob (compositor-only, transform) + статичный pulse.
-// Без JS-звёзд — они создавали 60 одновременных анимаций.
+// Static dark background — no animations
 export function AuroraBackground() {
   return (
-    <div className="aurora" aria-hidden="true">
-      <div className="aurora-pulse" />
-      <div className="aurora-blobs">
-        <div className="aurora-blob blob-1" />
-        <div className="aurora-blob blob-2" />
-        <div className="aurora-blob blob-3" />
-        <div className="aurora-blob blob-4" />
-      </div>
-    </div>
+    <div
+      aria-hidden="true"
+      style={{
+        position: 'fixed',
+        inset: 0,
+        zIndex: 0,
+        pointerEvents: 'none',
+        background: `
+          radial-gradient(ellipse 80% 40% at 20% 10%, rgba(10,60,180,0.12) 0%, transparent 60%),
+          radial-gradient(ellipse 60% 50% at 80% 80%, rgba(100,40,200,0.10) 0%, transparent 60%),
+          #06090f
+        `,
+      }}
+    />
   );
 }
