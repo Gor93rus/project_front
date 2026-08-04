@@ -150,11 +150,9 @@ function LotteryCard({ lottery, index = 0 }: { lottery: Lottery; index?: number 
         }} />
       </div>
 
-      {/* Pulsing neon border */}
-      <motion.div
-        style={{ position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 10, border: '2px solid transparent' }}
-        animate={{ borderColor: [`${accent}20`, `${accent}80`, `${accent}20`], boxShadow: [`0 0 0px ${accent}00`, `0 0 12px ${accent}60`, `0 0 0px ${accent}00`] }}
-        transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
+      {/* Static neon border */}
+      <div
+        style={{ position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 10, border: `2px solid ${accent}40`, boxShadow: `0 0 12px ${accent}30` }}
       />
 
       {/* Glass overlay */}

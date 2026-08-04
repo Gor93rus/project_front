@@ -91,11 +91,6 @@
   background: linear-gradient(135deg, rgb(var(--ga-100)) 0%, rgb(var(--ga-400)) 30%, rgb(var(--ga-600)) 65%, rgb(var(--ga-800)) 100%);
   -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
   filter: drop-shadow(0 2px 10px rgba(var(--ga-400),0.70)) drop-shadow(0 0 28px rgba(var(--ga-400),0.35)) drop-shadow(0 4px 8px rgba(0,0,0,0.90));
-  animation: jackpotPulse 3.5s ease-in-out infinite;
-}
-@keyframes jackpotPulse {
-  0%,100%{ filter: drop-shadow(0 2px 10px rgba(var(--ga-400),0.70)) drop-shadow(0 0 28px rgba(var(--ga-400),0.35)) drop-shadow(0 4px 8px rgba(0,0,0,0.90)); }
-  50%{ filter: drop-shadow(0 2px 18px rgba(var(--ga-100),0.90)) drop-shadow(0 0 50px rgba(var(--ga-400),0.55)) drop-shadow(0 4px 8px rgba(0,0,0,0.90)); }
 }
 
 /* ─── JACKPOT TEXT — crypto style (alternative) ─────────────────────────── */
@@ -104,21 +99,11 @@
   background: linear-gradient(135deg, rgb(var(--ga-100)) 0%, rgb(var(--ga-400)) 40%, rgb(var(--ga-500)) 80%, rgb(var(--ga-800)) 100%);
   -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
   filter: drop-shadow(0 4px 18px rgba(var(--ga-400),0.45)) drop-shadow(0 2px 8px rgba(0,0,0,0.80));
-  animation: jackpotCryptoPulse 3s ease-in-out infinite;
-}
-@keyframes jackpotCryptoPulse {
-  0%,100%{ filter: drop-shadow(0 4px 18px rgba(var(--ga-400),0.45)) drop-shadow(0 2px 8px rgba(0,0,0,0.80)); }
-  50%{ filter: drop-shadow(0 6px 30px rgba(var(--ga-100),0.65)) drop-shadow(0 2px 8px rgba(0,0,0,0.80)); }
 }
 
-/* ─── GLITCH ───────────────────────────────────────────────────────────────── */
-.glitch-r, .glitch-b { position: absolute; top: 0; left: 0; width: 100%; height: 100%; -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; pointer-events: none; opacity: 0; }
-.glitch-r { background-image: linear-gradient(135deg, #FCA5A5 0%, #F43F5E 50%, #BE123C 100%); animation: glitchR 8s ease-in-out infinite; }
-.glitch-b { background-image: linear-gradient(135deg, #7DD3FC 0%, rgb(var(--cyan-400)) 50%, #0369A1 100%); animation: glitchB 8s ease-in-out infinite; }
-.glitch-scan { position: absolute; inset: 0; background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(var(--cyan-400),0.012) 2px, rgba(var(--cyan-400),0.012) 4px); pointer-events: none; border-radius: inherit; animation: scanlineFlicker 8s ease-in-out infinite; opacity: 0; }
-@keyframes glitchR { 0%,88%,100%{opacity:0;transform:none} 89%{opacity:0.70;transform:translate(3px,0);clip-path:polygon(0 18%,100% 18%,100% 34%,0 34%)} 90%{opacity:0.75;transform:translate(-3px,0);clip-path:polygon(0 50%,100% 50%,100% 68%,0 68%)} 91%{opacity:0.55;transform:translate(4px,0);clip-path:polygon(0 4%,100% 4%,100% 14%,0 14%)} 92%{opacity:0} }
-@keyframes glitchB { 0%,88%,100%{opacity:0;transform:none} 89%{opacity:0.70;transform:translate(-3px,0);clip-path:polygon(0 52%,100% 52%,100% 70%,0 70%)} 90%{opacity:0.75;transform:translate(3px,0);clip-path:polygon(0 16%,100% 16%,100% 32%,0 32%)} 91%{opacity:0.55;transform:translate(-4px,0);clip-path:polygon(0 78%,100% 78%,100% 94%,0 94%)} 92%{opacity:0} }
-@keyframes scanlineFlicker { 0%,87%,100%{opacity:0} 88%,90%{opacity:1} 89%{opacity:0.4} }
+/* ─── GLITCH (removed — was infinite) ──────────────────────────────────── */
+.glitch-r, .glitch-b { display: none; }
+.glitch-scan { display: none; }
 
 /* ─── JACKPOT PROGRESS ─────────────────────────────────────────────────────── */
 .jackpot-progress-wrap {
@@ -159,9 +144,8 @@
 .cd-digit::after { content: ''; position: absolute; top: 50%; left: 4px; right: 4px; height: 1px; background: rgba(0,0,0,0.60); pointer-events: none; }
 .cd-digit.urgent {
   color: var(--coral-soft); text-shadow: 0 0 14px rgba(255,77,79,0.95), 0 0 30px rgba(255,77,79,0.45);
-  border-top-color: rgba(255,77,79,0.40); animation: urgentBlink 0.65s ease-in-out infinite;
+  border-top-color: rgba(255,77,79,0.40);
 }
-@keyframes urgentBlink { 0%,100%{opacity:1} 50%{opacity:0.30} }
 
 /* ─── TICKER ───────────────────────────────────────────────────────────────── */
 .ticker-track {
@@ -270,12 +254,8 @@
 .htp-btn:hover { transform: translateY(-2px); box-shadow: inset 0 1px 0 rgba(var(--primary-100),0.40), 0 0 0 1px rgba(var(--primary-400),0.30), 0 6px 22px rgba(var(--primary-600),0.45), 0 2px 6px rgba(0,0,0,0.50); }
 .htp-btn:active { transform: translateY(1px) scale(0.97); }
 
-/* ─── PULSE GLOW (CTA button animation) ─────────────────────────────────── */
-@keyframes pulseGlowSafe {
-  0%, 100% { box-shadow: inset 0 1px 0 rgba(var(--ga-100),0.35), 0 0 0 1px rgba(var(--ga-400),0.25), 0 4px 14px rgba(var(--ga-600),0.40); }
-  50%       { box-shadow: inset 0 1px 0 rgba(var(--ga-100),0.55), 0 0 0 2px rgba(var(--ga-400),0.55), 0 6px 24px rgba(var(--ga-600),0.65); }
-}
-.fire-btn.pulse-glow { animation: pulseGlowSafe 1.3s ease-in-out infinite; }
+/* ─── PULSE GLOW (removed — was infinite) ──────────────────────────────── */
+.fire-btn.pulse-glow { }
 
 /* ─── GLASS-3D — premium convex glass effect ────────────────────────────── */
 .glass-3d {
@@ -290,13 +270,8 @@
     0 8px 24px rgba(0,0,0,0.55) !important;
 }
 
-/* ─── HOT RING ─────────────────────────────────────────────────────────────── */
-.hot-ring {
-  position: absolute; inset: -2px; border-radius: 12px;
-  background: conic-gradient(from 0deg, rgba(var(--ga-100),0.75) 0%, rgba(255,77,79,0.92) 18%, rgba(255,77,79,0.65) 38%, rgba(var(--ga-400),0.52) 58%, rgba(var(--ga-100),0.75) 100%);
-  animation: hotSpin 4.5s linear infinite; z-index: -1; filter: blur(1.5px); opacity: 0.88;
-}
-@keyframes hotSpin { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
+/* ─── HOT RING (removed — was infinite) ──────────────────────────────────── */
+.hot-ring { display: none; }
 
 /* ─── PROGRESS BAR ─────────────────────────────────────────────────────────── */
 .progress-track {
@@ -475,30 +450,12 @@
 .icon-lime  { filter: drop-shadow(0 0 4px rgba(16,217,138,0.95)) drop-shadow(0 0 12px rgba(5,150,105,0.55)); }
 .icon-blue  { filter: drop-shadow(0 0 4px rgba(var(--cyan-100),0.95)) drop-shadow(0 0 12px rgba(var(--cyan-400),0.55)); }
 
-/* ─── AURORA BLOBS (lottery page scene) ─────────────────────────────────── */
-.aurora-b1 { animation: auroraBlob1 30s ease-in-out infinite alternate; }
-.aurora-b2 { animation: auroraBlob2 36s ease-in-out infinite alternate; }
-.aurora-b3 { animation: auroraBlob3 42s ease-in-out infinite alternate; }
-.aurora-b4 { animation: auroraBlob4 28s ease-in-out infinite alternate; }
-.aurora-b5 { animation: auroraBlob5 34s ease-in-out infinite alternate; }
-@keyframes auroraBlob1 { 0%,100%{transform:translate(-38px,-15px) scale(1)} 50%{transform:translate(55px,24px) scale(1.22)} }
-@keyframes auroraBlob2 { 0%,100%{transform:translate(52px,20px) scale(1)} 50%{transform:translate(-52px,-22px) scale(1.26)} }
-@keyframes auroraBlob3 { 0%,100%{transform:translate(14px,-26px) rotate(0deg)} 50%{transform:translate(-20px,28px) rotate(205deg)} }
-@keyframes auroraBlob4 { 0%,100%{transform:translate(-18px,14px)} 50%{transform:translate(30px,-24px)} }
-@keyframes auroraBlob5 { 0%,100%{transform:translate(10px,8px) scale(1)} 50%{transform:translate(-22px,-14px) scale(1.14)} }
-.float-y { animation: floatY 5s ease-in-out infinite; }
-@keyframes floatY { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
+/* ─── AURORA BLOBS (removed — were infinite) ──────────────────────────── */
+.aurora-b1, .aurora-b2, .aurora-b3, .aurora-b4, .aurora-b5 { }
 
-/* ─── CONFETTI ─────────────────────────────────────────────────────────────── */
-@keyframes confettiFall { 0%{transform:translateY(0) rotate(0deg);opacity:0} 8%{opacity:1} 100%{transform:translateY(65px) rotate(420deg);opacity:0} }
+/* ─── CONFETTI (removed — was infinite) ─────────────────────────────────── */
 
-/* ─── GOLD PARTICLES (Global Jackpot Hero) ────────────────────────────────── */
-@keyframes particleRise {
-  0%   { transform: translateY(0) scale(0); opacity: 0; }
-  10%  { transform: translateY(0) scale(1); opacity: inherit; }
-  60%  { opacity: inherit; }
-  100% { transform: translateY(-120px) scale(0.3); opacity: 0; }
-}
+/* ─── GOLD PARTICLES (removed — was infinite) ─────────────────────────── */
 
 /* ─── FEATURE CARDS (FeaturesBanner) ──────────────────────────────────────── */
 .feature-card {
@@ -544,30 +501,8 @@
     0 8px 24px rgba(0,0,0,0.55),
     0 0 40px -12px var(--fc-glow, var(--primary-glow)) !important;
 }
-/* Одиночный световой sweep — ТОЛЬКО на активной карточке.
-   В любой момент времени анимируется лишь одна карточка → дёшево для мобилы.
-   Псевдоэлемент с узкой диагональной световой полосой проходит по карточке. */
-.feature-card--active::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border-radius: var(--r-lg);
-  pointer-events: none;
-  z-index: 1;
-  background: linear-gradient(
-    105deg,
-    transparent 38%,
-    color-mix(in srgb, var(--fc-accent, var(--primary)) 22%, transparent) 48%,
-    rgba(255,255,255,0.10) 50%,
-    transparent 62%
-  );
-  background-size: 220% 100%;
-  animation: featureCardShimmer 4.2s ease-in-out infinite;
-}
-@keyframes featureCardShimmer {
-  0%      { background-position: 140% 0; }
-  55%,100%{ background-position: -40% 0; }
-}
+/* Shimmer (removed — was infinite) */
+.feature-card--active::after { display: none; }
 
 /* Неоновый глиф без подложки — двухслойное свечение (ближний ореол + дальний halo) */
 .feature-card-icon {
@@ -576,45 +511,18 @@
     drop-shadow(0 0 9px color-mix(in srgb, var(--fc-accent, var(--primary)) 45%, transparent));
   transition: filter 0.4s ease, transform 0.4s ease;
 }
-/* Иконка активной карточки — усиленный неоновый pulse */
+/* Active icon glow (static, no infinite animation) */
 .feature-card--active .feature-card-icon {
   transform: translateY(-1px);
-  animation: featureIconPulse 2.4s ease-in-out infinite;
-}
-@keyframes featureIconPulse {
-  0%, 100% {
-    filter:
-      drop-shadow(0 0 3px color-mix(in srgb, var(--fc-accent, var(--primary)) 90%, transparent))
-      drop-shadow(0 0 10px color-mix(in srgb, var(--fc-accent, var(--primary)) 50%, transparent));
-  }
-  50% {
-    filter:
-      drop-shadow(0 0 5px color-mix(in srgb, var(--fc-accent, var(--primary)) 100%, transparent))
-      drop-shadow(0 0 18px color-mix(in srgb, var(--fc-accent, var(--primary)) 75%, transparent));
-  }
 }
 
-/* Idle-анимации неоновых глифов */
+/* Idle icon animations (removed — were infinite) */
 .feature-icon-shell { line-height: 0; }
-.feature-icon-float { animation: featureIconFloat 3.2s ease-in-out infinite; }
-.feature-icon-pulse { animation: featureIconBreath 3s ease-in-out infinite; }
-.feature-icon-shimmer { animation: featureIconBreath 2.6s ease-in-out infinite; }
-@keyframes featureIconFloat {
-  0%, 100% { transform: translateY(0); }
-  50%      { transform: translateY(-2px); }
-}
-@keyframes featureIconBreath {
-  0%, 100% { transform: scale(1); }
-  50%      { transform: scale(1.06); }
-}
-/* Геометрический паттерн — медленный drift */
-.feature-card-pattern {
-  animation: patternDrift 20s linear infinite;
-}
-@keyframes patternDrift {
-  0%   { background-position: 0 0, 0 0, 0 0, 0 0, 0 0, 0 0; }
-  100% { background-position: 3px 2px, -2px 4px, 5px -3px, -4px 1px, 2px -5px, -1px 3px; }
-}
+.feature-icon-float { }
+.feature-icon-pulse { }
+.feature-icon-shimmer { }
+/* Geometric pattern (static) */
+.feature-card-pattern { }
 
 /* Tap feedback (mobile, replaces whileHover) */
 .feature-card-tap { transition: transform 0.2s ease, box-shadow 0.2s ease; }

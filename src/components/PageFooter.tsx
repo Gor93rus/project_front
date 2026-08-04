@@ -21,18 +21,16 @@ export function PageFooter() {
               stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
           </svg>
         </div>
-        <motion.p
+        <p
           className="text-2xs font-extrabold"
           style={{
             background: 'linear-gradient(135deg, #0098EA, var(--gold), #FF8E53)',
             WebkitBackgroundClip: 'text',
             WebkitTextFillColor: 'transparent',
           }}
-          animate={{ backgroundPosition: ['0% 50%', '100% 50%', '0% 50%'] }}
-          transition={{ duration: 4, repeat: Infinity, ease: 'linear' }}
         >
           Weekend Millions
-        </motion.p>
+        </p>
       </div>
 
       {/* Links */}

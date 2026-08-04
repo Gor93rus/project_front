@@ -71,23 +71,19 @@ function ScratchCard({ game }: { game: typeof SCRATCH_GAMES[0] }) {
         }} />
       </div>
 
-      {/* Пульсирующий неон-бордер */}
-      <motion.div
-        style={{ position: 'absolute', inset: 0, borderRadius: 20, pointerEvents: 'none', zIndex: 10, border: '2px solid transparent' }}
-        animate={{ borderColor: [`${accent}20`, `${accent}80`, `${accent}20`], boxShadow: [`0 0 0px ${accent}00`, `0 0 12px ${accent}60`, `0 0 0px ${accent}00`] }}
-        transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
+      {/* Static neon border */}
+      <div
+        style={{ position: 'absolute', inset: 0, borderRadius: 20, pointerEvents: 'none', zIndex: 10, border: `2px solid ${accent}40`, boxShadow: `0 0 12px ${accent}30` }}
       />
 
       {/* Hero-символ игры */}
-      <motion.div
+      <div
         style={{ position: 'absolute', top: '12%', left: 0, right: 0, display: 'flex', justifyContent: 'center', zIndex: 5, color: '#fff' }}
-        animate={{ y: [0, -5, 0], scale: [1, 1.05, 1] }}
-        transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
       >
         <div style={{ filter: `drop-shadow(0 8px 20px rgba(0,0,0,0.5)) drop-shadow(0 0 16px ${accent}aa)` }}>
           {GAME_ICONS[game.gameType]}
         </div>
-      </motion.div>
+      </div>
 
       {/* Маска затухания символа */}
       <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '53%', zIndex: 6, pointerEvents: 'none', maskImage: 'linear-gradient(180deg, #000 0%, #000 65%, transparent 100%)', WebkitMaskImage: 'linear-gradient(180deg, #000 0%, #000 65%, transparent 100%)' }} />
