@@ -324,6 +324,63 @@ export function GlobalJackpotHero() {
 
         </div>
 
+        {/* ── QUICK STATS — заполняют нижнюю зону Hero ── */}
+        <motion.div
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.42, duration: 0.45, ease: 'easeOut' }}
+          style={{
+            position: 'relative', zIndex: 3,
+            display: 'flex',
+            justifyContent: 'center',
+            gap: 0,
+            padding: '0 16px 20px',
+          }}
+        >
+          {[
+            { value: '10', label: 'Active lotteries' },
+            { value: '6×', label: 'Draws per day' },
+            { value: '100%', label: 'On-chain payouts' },
+          ].map((stat, i, arr) => (
+            <div
+              key={stat.label}
+              style={{
+                flex: 1,
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                gap: 2,
+                padding: '10px 4px',
+                borderRight: i < arr.length - 1 ? '1px solid rgba(255,255,255,0.08)' : 'none',
+              }}
+            >
+              <span style={{
+                fontFamily: 'var(--font-display)',
+                fontSize: 22,
+                fontWeight: 900,
+                letterSpacing: '0.02em',
+                lineHeight: 1,
+                color: '#fff',
+                textShadow: '0 0 20px rgba(255,255,255,0.25)',
+              }}>
+                {stat.value}
+              </span>
+              <span style={{
+                fontSize: 9,
+                fontWeight: 600,
+                textTransform: 'uppercase',
+                letterSpacing: '0.12em',
+                color: 'rgba(255,255,255,0.38)',
+                fontFamily: 'var(--font-mono)',
+                textAlign: 'center',
+                lineHeight: 1.3,
+              }}>
+                {stat.label}
+              </span>
+            </div>
+          ))}
+        </motion.div>
+
         {/* ТИКЕР — шаг 4: последним, clip overflow чтобы не дёргалось при slideUp */}
         <motion.div
           initial={{ opacity: 0, y: 8 }}
