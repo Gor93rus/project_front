@@ -59,17 +59,16 @@ export function GamificationBanner() {
               src="/images/reward-lock.png"
               alt="Locked"
               style={{
-                width: 52,
-                height: 52,
+                width: 48,
+                height: 48,
                 objectFit: 'contain',
-                filter: 'drop-shadow(0 0 12px rgba(250,185,11,0.60)) drop-shadow(0 3px 6px rgba(0,0,0,0.65))',
-                animation: 'chest-float 3.8s ease-in-out infinite',
+                filter: 'drop-shadow(0 0 10px rgba(250,185,11,0.50)) drop-shadow(0 3px 6px rgba(0,0,0,0.65))',
                 position: 'relative',
                 zIndex: 1,
               }}
             />
 
-            {/* Пульсирующий текст */}
+            {/* CTA текст — статичный */}
             <p
               style={{
                 position: 'relative',
@@ -79,7 +78,6 @@ export function GamificationBanner() {
                 letterSpacing: '0.04em',
                 color: 'var(--gold-soft)',
                 textShadow: '0 0 8px var(--gold-glow), 0 1px 4px rgba(0,0,0,0.8)',
-                animation: 'livePulse 2.5s ease-in-out infinite',
               }}
             >
               Connect wallet to unlock

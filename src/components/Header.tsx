@@ -117,11 +117,14 @@ export function Header() {
         {/* Left — project name */}
         <div className="flex items-center gap-2 shrink-0">
           <span
-            className="text-xs font-light leading-none"
             style={{
               fontFamily: 'var(--font-display)',
+              fontSize: 15,
+              fontWeight: 800,
+              letterSpacing: '0.06em',
+              textTransform: 'uppercase',
               color: 'var(--ink-0)',
-              letterSpacing: '-0.02em',
+              lineHeight: 1,
             }}
           >
             Weekend Millions

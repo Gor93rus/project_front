@@ -148,6 +148,7 @@ export function GlobalJackpotHero() {
           position: 'relative',
           borderRadius: 'var(--r-xl)',
           overflow: 'hidden',
+          minHeight: 'clamp(260px, 46vh, 380px)',
           // Насыщенная чистая заливка: глубокий navy + лёгкий фиолет сверху.
           // Свет (god-rays + золото) вынесен в отдельные слои выше, чтобы не мутить базу.
           background: `
@@ -181,7 +182,7 @@ export function GlobalJackpotHero() {
           }}
         />
 
-        <div className="flex flex-col items-center" style={{ padding: 'clamp(28px,5vw,56px) clamp(16px,6vw,64px) 22px', position: 'relative', zIndex: 3 }}>
+        <div className="flex flex-col items-center" style={{ padding: 'clamp(36px,7vh,64px) clamp(16px,6vw,64px) 24px', position: 'relative', zIndex: 3 }}>
 
           {/* ── ШАГ 1: НАЗВАНИЕ БРЕНДА ───────────────────────────────────────
               WEEKEND MILLIONS — единый блок, единый размер, единый вес.
@@ -199,7 +200,7 @@ export function GlobalJackpotHero() {
               style={{
                 display: 'block',
                 fontFamily: 'var(--font-display)',
-                fontSize: 'clamp(32px, 9vw, 58px)',
+                fontSize: 'clamp(28px, 8.5vw, 58px)',
                 fontWeight: 900,
                 letterSpacing: '0.08em',
                 lineHeight: 1,
@@ -237,7 +238,7 @@ export function GlobalJackpotHero() {
             <span
               className="font-tabular"
               style={{
-                fontSize: 'clamp(48px, 9vw, 80px)',
+                fontSize: 'clamp(52px, 14vw, 80px)',
                 lineHeight: 0.9,
                 letterSpacing: '-0.03em',
                 fontFamily: 'var(--font-mono)',
