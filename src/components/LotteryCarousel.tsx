@@ -106,25 +106,25 @@ function LotteryCard({ lottery, index = 0 }: { lottery: Lottery; index?: number 
   const phase = useDrawPhase(lottery.nextDraw);
   const isLive = phase === 'live';
   const isUpcoming = phase === 'upcoming';
+  const hasArt = !!lottery.cardImage;
+
+  // Resolve asset path — vite imports src/assets/** via URL
+  const artSrc = hasArt
+    ? new URL(`../assets/cards/${lottery.id}.png`, import.meta.url).href
+    : undefined;
 
   return (
     <motion.div
       onClick={() => nav(`/lottery/${lottery.id}`)}
       initial={{ opacity: 0, y: 24, scale: 0.96 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
-      transition={{
-        delay: index * 0.07,
-        duration: 0.45,
-        ease: [0.22, 1, 0.36, 1],
-      }}
+      transition={{ delay: index * 0.07, duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
       whileHover={{ y: -6 }}
       whileTap={{ scale: 0.96, y: 0 }}
       style={{
         position: 'relative', borderRadius: 20, flexShrink: 0, cursor: 'pointer',
         width: 182, minHeight: 390,
-        // Clip children (neon border stays inside card)
         overflow: 'hidden',
-        // Усиленная направленная фаска (glass-3d): светлый верх/лево, тёмный низ/право
         borderTop: '2px solid rgba(255,255,255,0.18)',
         borderLeft: '1.5px solid rgba(255,255,255,0.09)',
         borderRight: '1.5px solid rgba(0,0,0,0.6)',
@@ -137,76 +137,114 @@ function LotteryCard({ lottery, index = 0 }: { lottery: Lottery; index?: number 
           0 12px 30px -8px ${accent}66,
           0 0 26px ${accent}24
         `,
+        background: '#08111E',
       }}
     >
-      {/* Фон — radial-свечение + слои (без размытых blob'ов) */}
-      <div style={{ position: 'absolute', inset: 0, borderRadius: 20, overflow: 'hidden' }}>
-        <div style={{
-          position: 'absolute', inset: 0,
-          background: `radial-gradient(ellipse 80% 60% at 50% 28%, ${accent}55 0%, transparent 55%),
-            radial-gradient(ellipse 40% 30% at 70% 18%, ${accent}40 0%, transparent 48%),
-            repeating-linear-gradient(45deg, transparent 0px, ${accent}12 1px, transparent 4px),
-            linear-gradient(180deg, var(--bg-0) 0%, ${accent}25 30%, var(--bg-0) 70%, var(--bg-0) 100%)`,
-        }} />
-      </div>
+      {/* ── ART ZONE (верхние 55%) ── */}
+      <div style={{ position: 'relative', width: '100%', height: 214, overflow: 'hidden' }}>
+        {artSrc ? (
+          <>
+            <img
+              src={artSrc}
+              alt={lottery.name}
+              style={{
+                width: '100%',
+                height: '100%',
+                objectFit: 'cover',
+                objectPosition: 'center top',
+                display: 'block',
+              }}
+            />
+            {/* fade к нижней части карточки */}
+            <div style={{
+              position: 'absolute', bottom: 0, left: 0, right: 0, height: 80,
+              background: `linear-gradient(to bottom, transparent 0%, #08111E 100%)`,
+              pointerEvents: 'none',
+            }} />
+            {/* тёмный оверлей для читаемости баджа */}
+            <div style={{
+              position: 'absolute', top: 0, left: 0, right: 0, height: 48,
+              background: 'linear-gradient(to bottom, rgba(0,0,0,0.45) 0%, transparent 100%)',
+              pointerEvents: 'none',
+            }} />
+          </>
+        ) : (
+          /* Fallback — чистый градиент если нет арта */
+          <div style={{
+            width: '100%', height: '100%',
+            background: `radial-gradient(ellipse 80% 70% at 50% 30%, ${accent}55 0%, transparent 60%),
+              linear-gradient(180deg, ${accent}20 0%, transparent 100%)`,
+          }} />
+        )}
 
-      {/* Static accent border — no infinite animation */}
-      <div
-        style={{
-          position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 10,
-          border: `1.5px solid ${accent}40`,
-          borderRadius: 20,
-        }}
-      />
-
-      {/* Glass overlay */}
-      <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 5, background: 'linear-gradient(165deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.01) 35%, transparent 60%)' }} />
-      {/* Neon border top */}
-      <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 6, padding: 1, background: `linear-gradient(180deg, ${accent}50 0%, ${accent}25 50%, transparent 100%)`, WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)', WebkitMaskComposite: 'xor', maskComposite: 'exclude' }} />
-
-      {/* Content */}
-      <div style={{ position: 'relative', zIndex: 10, display: 'flex', flexDirection: 'column', height: '100%', minHeight: 390, padding: '10px 12px 14px' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 'auto', gap: 4 }}>
-          <span style={{ fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'rgba(255,255,255,0.65)', fontFamily: "var(--font-mono)", whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', minWidth: 0 }}>
-            {lottery.drawLabel}
-          </span>
+        {/* Бадж статуса — поверх арта, right:6 чтобы не обрезался */}
+        <div style={{ position: 'absolute', top: 8, right: 6, zIndex: 4, maxWidth: 72 }}>
           {isLive ? (
-            <span style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 11, fontWeight: 800, textTransform: 'uppercase', padding: '3px 7px', borderRadius: 6, background: `${accent}1f`, color: accent, border: `1px solid ${accent}45`, boxShadow: `0 0 10px ${accent}55`, fontFamily: "var(--font-mono)" }}>
-              <span className="animate-pulse-live" style={{ width: 6, height: 6, borderRadius: '50%', background: accent }} />
-              Live Draw
+            <span style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 10, fontWeight: 800, textTransform: 'uppercase', padding: '3px 7px', borderRadius: 6, background: 'rgba(0,0,0,0.80)', color: accent, border: `1px solid ${accent}55`, boxShadow: `0 0 10px ${accent}55`, fontFamily: 'var(--font-mono)', whiteSpace: 'nowrap' }}>
+              <span className="animate-pulse-live" style={{ width: 5, height: 5, borderRadius: '50%', background: accent, flexShrink: 0 }} />
+              Live
             </span>
           ) : isUpcoming ? (
-            <span style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 11, fontWeight: 800, textTransform: 'uppercase', padding: '3px 7px', borderRadius: 6, background: `${accent}1f`, color: accent, border: `1px solid ${accent}45`, fontFamily: "var(--font-mono)" }}>
+            <span style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 10, fontWeight: 800, textTransform: 'uppercase', padding: '3px 7px', borderRadius: 6, background: 'rgba(0,0,0,0.80)', color: accent, border: `1px solid ${accent}45`, fontFamily: 'var(--font-mono)', whiteSpace: 'nowrap' }}>
               Soon
             </span>
           ) : (
-            <span style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 11, fontWeight: 800, textTransform: 'uppercase', padding: '3px 7px', borderRadius: 6, background: `${accent}1f`, color: accent, border: `1px solid ${accent}45`, fontFamily: "var(--font-mono)" }}>
-              <span style={{ width: 6, height: 6, borderRadius: '50%', background: accent }} />
+            <span style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 10, fontWeight: 800, textTransform: 'uppercase', padding: '3px 7px', borderRadius: 6, background: 'rgba(0,0,0,0.80)', color: accent, border: `1px solid ${accent}45`, fontFamily: 'var(--font-mono)', whiteSpace: 'nowrap' }}>
+              <span style={{ width: 5, height: 5, borderRadius: '50%', background: accent, flexShrink: 0 }} />
               Open
             </span>
           )}
         </div>
-        <div style={{ marginTop: 'auto' }}>
-          <p style={{ fontSize: 18, fontWeight: 800, color: '#fff', textAlign: 'center', marginBottom: 2, letterSpacing: '0.02em', fontFamily: "var(--font-display)", textShadow: '0 2px 12px rgba(0,0,0,0.5)', lineHeight: 1.1, wordBreak: 'break-word', whiteSpace: 'normal', padding: '0 2px', textTransform: 'uppercase' }}>
-            {lottery.name}
-          </p>
-          <p style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', textAlign: 'center', color: 'rgba(255,255,255,0.45)', letterSpacing: '0.18em', marginBottom: 2, fontFamily: "var(--font-mono)" }}>
-            Jackpot
-          </p>
-          <GlitchJackpot target={lottery.jackpot} />
-          {isLive ? (
-            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 6, height: 28, marginBottom: 9 }}>
-              <span style={{ width: 6, height: 6, borderRadius: '50%', background: accent, animation: 'livePulse 1s ease-in-out infinite' }} />
-              <span style={{ fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.16em', color: accent, fontFamily: 'var(--font-mono)', textShadow: `0 0 10px ${accent}55` }}>
-                Drawing now
-              </span>
-            </div>
-          ) : (
-            <SegmentedCountdown target={lottery.nextDraw} accent={accent} />
-          )}
-          <PremiumButton label={`Play · ${lottery.ticketPrice} ${lottery.currency}`} accent={lottery.accentColor} gradient={lottery.gradient} />
+
+        {/* Draw label — левый верхний угол */}
+        <div style={{ position: 'absolute', top: 8, left: 8, zIndex: 4 }}>
+          <span style={{ fontSize: 9, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'rgba(255,255,255,0.60)', fontFamily: 'var(--font-mono)', background: 'rgba(0,0,0,0.55)', padding: '2px 6px', borderRadius: 4, backdropFilter: 'blur(4px)' }}>
+            {lottery.drawLabel}
+          </span>
         </div>
       </div>
+
+      {/* ── INFO ZONE (нижние 45%) ── */}
+      <div style={{ padding: '0 12px 14px', display: 'flex', flexDirection: 'column' }}>
+        {/* Название */}
+        <p style={{
+          fontSize: 22, fontWeight: 900, color: '#fff', textAlign: 'center',
+          marginBottom: 0, marginTop: -2,
+          letterSpacing: '0.05em', fontFamily: 'var(--font-display)',
+          textShadow: `0 2px 8px rgba(0,0,0,0.8), 0 0 20px ${accent}40`,
+          lineHeight: 1.0, textTransform: 'uppercase',
+        }}>
+          {lottery.shortName}
+        </p>
+
+        {/* Jackpot label */}
+        <p style={{ fontSize: 9, fontWeight: 700, textTransform: 'uppercase', textAlign: 'center', color: 'rgba(255,255,255,0.38)', letterSpacing: '0.20em', marginBottom: 1, marginTop: 4, fontFamily: 'var(--font-mono)' }}>
+          Jackpot
+        </p>
+
+        <GlitchJackpot target={lottery.jackpot} />
+
+        {/* Countdown / Drawing now */}
+        {isLive ? (
+          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 6, height: 28, marginBottom: 9 }}>
+            <span className="animate-pulse-live" style={{ width: 6, height: 6, borderRadius: '50%', background: accent }} />
+            <span style={{ fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.16em', color: accent, fontFamily: 'var(--font-mono)', textShadow: `0 0 10px ${accent}55` }}>
+              Drawing now
+            </span>
+          </div>
+        ) : (
+          <SegmentedCountdown target={lottery.nextDraw} accent={accent} />
+        )}
+
+        <PremiumButton label={`Play · ${lottery.ticketPrice} ${lottery.currency}`} accent={lottery.accentColor} gradient={lottery.gradient} />
+      </div>
+
+      {/* Accent border frame — поверх всего */}
+      <div style={{
+        position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 10,
+        border: `1.5px solid ${accent}30`,
+        borderRadius: 20,
+      }} />
     </motion.div>
   );
 }
