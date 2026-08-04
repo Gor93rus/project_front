@@ -82,8 +82,12 @@ export default {
         'glow-coral':     '0 0 20px rgba(255,77,79,0.45)',
       },
       // ── Шрифты ──
+      // display: Barlow Condensed (aggressive condensed headings, large jackpots/timers)
+      // sans:  Space Grotesk (body text, UI labels)
+      // mono:  JetBrains Mono (tabular numbers, balances, countdowns)
       fontFamily: {
-        display: ['Space Grotesk', 'system-ui', '-apple-system', 'Segoe UI', 'Roboto', 'sans-serif'],
+        display: ['Barlow Condensed', 'system-ui', '-apple-system', 'Segoe UI', 'Roboto', 'sans-serif'],
+        sans:    ['Space Grotesk', 'system-ui', '-apple-system', 'Segoe UI', 'Roboto', 'sans-serif'],
         mono:    ['JetBrains Mono', 'monospace'],
       },
       // ── Анимации ──
