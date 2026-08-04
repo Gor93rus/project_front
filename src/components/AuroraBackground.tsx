@@ -1,19 +1,44 @@
-// Static dark background — no animations
+import { useMemo } from 'react';
+
 export function AuroraBackground() {
+  const stars = useMemo(() =>
+    Array.from({ length: 60 }, () => ({
+      left: Math.random() * 100,
+      top: Math.random() * 100,
+      size: Math.random() * 1.6 + 0.6,
+      opacity: Math.random() * 0.7 + 0.2,
+      duration: Math.random() * 3 + 2,
+      delay: Math.random() * 6,
+    })),
+    []
+  );
+
   return (
-    <div
-      aria-hidden="true"
-      style={{
-        position: 'fixed',
-        inset: 0,
-        zIndex: 0,
-        pointerEvents: 'none',
-        background: `
-          radial-gradient(ellipse 80% 40% at 20% 10%, rgba(10,60,180,0.12) 0%, transparent 60%),
-          radial-gradient(ellipse 60% 50% at 80% 80%, rgba(100,40,200,0.10) 0%, transparent 60%),
-          #06090f
-        `,
-      }}
-    />
+    <div className="aurora" aria-hidden="true">
+      <div className="aurora-pulse" />
+      <div className="aurora-blobs">
+        <div className="aurora-blob blob-1" />
+        <div className="aurora-blob blob-2" />
+        <div className="aurora-blob blob-3" />
+        <div className="aurora-blob blob-4" />
+      </div>
+      <div className="aurora-stars">
+        {stars.map((s, i) => (
+          <span
+            key={i}
+            className="aurora-star"
+            style={{
+              left: `${s.left}vw`,
+              top: `${s.top}vh`,
+              width: `${s.size}px`,
+              height: `${s.size}px`,
+              animationDuration: `${s.duration}s`,
+              animationDelay: `${s.delay}s`,
+              ['--star-opacity' as string]: s.opacity,
+            }}
+          />
+        ))}
+      </div>
+    </div>
   );
 }

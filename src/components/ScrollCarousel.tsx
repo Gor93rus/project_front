@@ -4,6 +4,8 @@ interface Props {
   children: ReactNode;
   accent?: string;
   showProgress?: boolean;
+  autoScroll?: boolean;
+  autoScrollSpeed?: number; // px per second
   arrows?: boolean;
 }
 
@@ -20,11 +22,14 @@ function maskFor(progress: number) {
   return `linear-gradient(90deg, ${transparent}, ${opaque} 10%, ${opaque} 90%, ${transparent})`;
 }
 
-export function ScrollCarousel({ children, accent = '#3CB1FF', showProgress = true, arrows = false }: Props) {
+export function ScrollCarousel({ children, accent = '#3CB1FF', showProgress = true, autoScroll = false, autoScrollSpeed = 40, arrows = false }: Props) {
   const ref = useRef<HTMLDivElement>(null);
   const [progress, setProgress] = useState(0);
   const [activeIndex, setActiveIndex] = useState(0);
-  const arrowAnimRef = useRef<number | null>(null);
+  const autoScrollPaused = useRef(false);
+  const autoScrollTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const rafRef = useRef<number | null>(null);
+  const lastTimeRef = useRef<number>(0);
 
   const update = useCallback(() => {
     const el = ref.current;
@@ -32,6 +37,7 @@ export function ScrollCarousel({ children, accent = '#3CB1FF', showProgress = tr
     const max = el.scrollWidth - el.clientWidth;
     setProgress(max > 0 ? Math.max(0, Math.min(1, el.scrollLeft / max)) : 0);
 
+    // Определяем центральную карточку
     const containerCenter = el.scrollLeft + el.clientWidth / 2;
     const cards = el.children;
     let closestIdx = 0;
@@ -48,6 +54,42 @@ export function ScrollCarousel({ children, accent = '#3CB1FF', showProgress = tr
     setActiveIndex(closestIdx);
   }, []);
 
+  // Автоскролл — плавный rAF-цикл, бесшовный infinite loop
+  useEffect(() => {
+    if (!autoScroll) return;
+
+    const el = ref.current;
+    if (!el) return;
+
+    const prevSnap = el.style.scrollSnapType;
+    el.style.scrollSnapType = 'none';
+
+    lastTimeRef.current = 0;
+
+    const tick = (time: number) => {
+      if (!autoScrollPaused.current) {
+        const dt = lastTimeRef.current ? (time - lastTimeRef.current) / 1000 : 0;
+        lastTimeRef.current = time;
+        const half = el.scrollWidth / 2;
+        if (half > 0) {
+          const next = el.scrollLeft + autoScrollSpeed * dt;
+          el.scrollLeft = next >= half ? next - half : next;
+        }
+      } else {
+        lastTimeRef.current = time;
+      }
+      rafRef.current = requestAnimationFrame(tick);
+    };
+
+    rafRef.current = requestAnimationFrame(tick);
+
+    return () => {
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
+      if (autoScrollTimeout.current) clearTimeout(autoScrollTimeout.current);
+      if (el) el.style.scrollSnapType = prevSnap;
+    };
+  }, [autoScroll, autoScrollSpeed]);
+
   useEffect(() => {
     update();
     const ro = new ResizeObserver(update);
@@ -58,9 +100,13 @@ export function ScrollCarousel({ children, accent = '#3CB1FF', showProgress = tr
   const radius = 14;
   const circumference = 2 * Math.PI * radius;
 
+  // easeInOutCubic — плавнее чем браузерный linear ease в scrollTo smooth
+  const arrowAnimRef = useRef<number | null>(null);
+
   const scrollByPage = (dir: 1 | -1) => {
     const el = ref.current;
     if (!el) return;
+
     const cards = el.children;
     if (cards.length === 0) return;
 
@@ -71,27 +117,32 @@ export function ScrollCarousel({ children, accent = '#3CB1FF', showProgress = tr
     const targetLeft = target.offsetLeft - (el.clientWidth - target.offsetWidth) / 2;
     const startLeft = el.scrollLeft;
     const delta = targetLeft - startLeft;
+
+    // Если дистанция ничтожна — не анимируем
     if (Math.abs(delta) < 1) return;
 
-    // Снимаем snap, анимируем вручную, восстанавливаем — фикс бага когда prevSnap
-    // читался как 'none' при повторных кликах.
+    // Снимаем snap на время анимации чтобы браузер не перехватывал
+    const prevSnap = el.style.scrollSnapType;
     el.style.scrollSnapType = 'none';
+
     if (arrowAnimRef.current) cancelAnimationFrame(arrowAnimRef.current);
 
-    const DURATION = 480;
+    const DURATION = 480; // ms — достаточно для premium feel
     let startTime: number | null = null;
-    const ease = (t: number) => t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+
+    const easeInOutCubic = (t: number) =>
+      t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
 
     const step = (now: number) => {
       if (startTime === null) startTime = now;
-      const t = Math.min(1, (now - startTime) / DURATION);
-      el.scrollLeft = startLeft + delta * ease(t);
+      const elapsed = now - startTime;
+      const t = Math.min(1, elapsed / DURATION);
+      el.scrollLeft = startLeft + delta * easeInOutCubic(t);
       update();
       if (t < 1) {
         arrowAnimRef.current = requestAnimationFrame(step);
       } else {
-        // Восстанавливаем snap только по завершении анимации
-        el.style.scrollSnapType = 'x mandatory';
+        el.style.scrollSnapType = prevSnap;
         arrowAnimRef.current = null;
       }
     };
@@ -123,7 +174,7 @@ export function ScrollCarousel({ children, accent = '#3CB1FF', showProgress = tr
   const canScrollRight = progress < 0.98;
 
   return (
-    <div className="relative pt-1 pb-1" style={{ overflowY: 'visible' }}>
+      <div className="relative pt-1 pb-1" style={{ overflowY: 'visible' }}>
       {arrows && (
         <button
           type="button"
@@ -164,6 +215,13 @@ export function ScrollCarousel({ children, accent = '#3CB1FF', showProgress = tr
       )}
       <div
         ref={ref}
+        onPointerDown={() => {
+          autoScrollPaused.current = true;
+          if (autoScrollTimeout.current) clearTimeout(autoScrollTimeout.current);
+        }}
+        onPointerUp={() => {
+          autoScrollTimeout.current = setTimeout(() => { autoScrollPaused.current = false; }, 3000);
+        }}
         onScroll={update}
         className="flex gap-[10px] overflow-x-auto scrollbar-none scroll-mask"
         style={{
@@ -175,8 +233,7 @@ export function ScrollCarousel({ children, accent = '#3CB1FF', showProgress = tr
           paddingTop: 10,
           paddingBottom: 16,
           scrollSnapType: 'x mandatory',
-        }}
-      >
+        }}>
         {Array.isArray(children)
           ? (children as React.ReactElement[]).map((child, i) => (
               <div

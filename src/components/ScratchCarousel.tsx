@@ -4,39 +4,48 @@ import { ScrollCarousel } from './ScrollCarousel';
 import { PremiumButton } from './PremiumButton';
 import { GlitchJackpot } from './GlitchJackpot';
 
-// Маппинг gameType → имя файла в src/assets/cards/
-const SCRATCH_ART: Record<string, string> = {
-  THREE_ACES:  'scratch-three-aces.png',
-  ONE_SHOT:    'scratch-one-shot.png',
-  RAPIDO_X:    'scratch-rapido-x.png',
-  MINESWEEPER: 'scratch-minesweeper.png',
-  SUPERNOVA:   'scratch-supernova.png',
+const GAME_ICONS: Record<string, React.ReactNode> = {
+  THREE_ACES: (
+    <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="2" y="3" width="9" height="13" rx="2"/><rect x="13" y="8" width="9" height="13" rx="2"/>
+      <path d="M6 9h1M6 12h1M17 14h1M17 17h1"/>
+    </svg>
+  ),
+  ONE_SHOT: (
+    <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/><circle cx="12" cy="12" r="6" strokeDasharray="2 4"/>
+    </svg>
+  ),
+  RAPIDO_X: (
+    <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M13 2 4 14h7l-1 8 9-12h-7l1-8Z"/>
+    </svg>
+  ),
+  MINESWEEPER: (
+    <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 3v18M15 3v18"/>
+    </svg>
+  ),
+  SUPERNOVA: (
+    <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M12 2l3 7 7 .6-5.3 4.6 1.6 7-6.3-3.7-6.3 3.7 1.6-7L2 9.6 9 9l3-7Z"/>
+    </svg>
+  ),
 };
 
-function ScratchCard({ game, index = 0 }: { game: typeof SCRATCH_GAMES[0]; index?: number }) {
-  const accent  = game.gradient[0];
+function ScratchCard({ game }: { game: typeof SCRATCH_GAMES[0] }) {
+  const accent = game.gradient[0];
   const accent2 = game.gradient[1];
-
-  const artFileName = SCRATCH_ART[game.gameType];
-  const artSrc = artFileName
-    ? new URL(`../assets/cards/${artFileName}`, import.meta.url).href
-    : undefined;
 
   return (
     <motion.div
       className="shrink-0 cursor-pointer"
-      initial={{ opacity: 0, y: 24, scale: 0.96 }}
-      animate={{ opacity: 1, y: 0, scale: 1 }}
-      transition={{ delay: index * 0.07, duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
       whileHover={{ y: -6 }}
-      whileTap={{ scale: 0.96, y: 0 }}
+      transition={{ type: 'spring', stiffness: 300, damping: 18 }}
       style={{
-        position: 'relative',
-        borderRadius: 20,
-        flexShrink: 0,
-        width: 182,
-        minHeight: 390,
-        overflow: 'hidden',
+        position: 'relative', borderRadius: 20, flexShrink: 0,
+        width: 182, minHeight: 390,
+        // Усиленная направленная фаска (glass-3d): светлый верх/лево, тёмный низ/право
         borderTop: '2px solid rgba(255,255,255,0.18)',
         borderLeft: '1.5px solid rgba(255,255,255,0.09)',
         borderRight: '1.5px solid rgba(0,0,0,0.6)',
@@ -49,113 +58,73 @@ function ScratchCard({ game, index = 0 }: { game: typeof SCRATCH_GAMES[0]; index
           0 12px 30px -8px ${accent}66,
           0 0 26px ${accent}24
         `,
-        background: '#08111E',
       }}
     >
-      {/* ── ART ZONE ── */}
-      <div style={{ position: 'relative', width: '100%', height: 214, overflow: 'hidden' }}>
-        {artSrc ? (
-          <>
-            <img
-              src={artSrc}
-              alt={game.name}
-              style={{
-                width: '100%',
-                height: '100%',
-                objectFit: 'cover',
-                objectPosition: 'center top',
-                display: 'block',
-              }}
-            />
-            {/* fade к нижней части */}
-            <div style={{
-              position: 'absolute', bottom: 0, left: 0, right: 0, height: 80,
-              background: 'linear-gradient(to bottom, transparent 0%, #08111E 100%)',
-              pointerEvents: 'none',
-            }} />
-            {/* затемнение для баджа */}
-            <div style={{
-              position: 'absolute', top: 0, left: 0, right: 0, height: 48,
-              background: 'linear-gradient(to bottom, rgba(0,0,0,0.45) 0%, transparent 100%)',
-              pointerEvents: 'none',
-            }} />
-          </>
-        ) : (
-          <div style={{
-            width: '100%', height: '100%',
-            background: `radial-gradient(ellipse 80% 70% at 50% 30%, ${accent}55 0%, transparent 60%),
-              radial-gradient(ellipse 40% 30% at 70% 18%, ${accent2}40 0%, transparent 48%),
-              linear-gradient(180deg, ${accent}20 0%, transparent 100%)`,
-          }} />
-        )}
+      {/* Фон — radial-свечение + слои (без размытых blob'ов) */}
+      <div style={{ position: 'absolute', inset: 0, borderRadius: 20, overflow: 'hidden' }}>
+        <div style={{
+          position: 'absolute', inset: 0,
+          background: `radial-gradient(ellipse 80% 60% at 50% 28%, ${accent}55 0%, transparent 55%),
+            radial-gradient(ellipse 40% 30% at 70% 18%, ${accent2}40 0%, transparent 48%),
+            repeating-linear-gradient(45deg, transparent 0px, ${accent}12 1px, transparent 4px),
+            linear-gradient(180deg, var(--bg-0) 0%, ${accent}25 30%, var(--bg-0) 70%, var(--bg-0) 100%)`,
+        }} />
+      </div>
 
-        {/* Бадж INSTANT слева */}
-        <div style={{ position: 'absolute', top: 8, left: 8, zIndex: 4 }}>
-          <span style={{
-            fontSize: 9, fontWeight: 700, textTransform: 'uppercase',
-            letterSpacing: '0.08em', color: 'rgba(255,255,255,0.60)',
-            fontFamily: 'var(--font-mono)',
-            background: 'rgba(0,0,0,0.55)', padding: '2px 6px',
-            borderRadius: 4,
-          }}>
+      {/* Пульсирующий неон-бордер */}
+      <motion.div
+        style={{ position: 'absolute', inset: 0, borderRadius: 20, pointerEvents: 'none', zIndex: 10, border: '2px solid transparent' }}
+        animate={{ borderColor: [`${accent}20`, `${accent}80`, `${accent}20`], boxShadow: [`0 0 0px ${accent}00`, `0 0 12px ${accent}60`, `0 0 0px ${accent}00`] }}
+        transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
+      />
+
+      {/* Hero-символ игры */}
+      <motion.div
+        style={{ position: 'absolute', top: '12%', left: 0, right: 0, display: 'flex', justifyContent: 'center', zIndex: 5, color: '#fff' }}
+        animate={{ y: [0, -5, 0], scale: [1, 1.05, 1] }}
+        transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
+      >
+        <div style={{ filter: `drop-shadow(0 8px 20px rgba(0,0,0,0.5)) drop-shadow(0 0 16px ${accent}aa)` }}>
+          {GAME_ICONS[game.gameType]}
+        </div>
+      </motion.div>
+
+      {/* Маска затухания символа */}
+      <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '53%', zIndex: 6, pointerEvents: 'none', maskImage: 'linear-gradient(180deg, #000 0%, #000 65%, transparent 100%)', WebkitMaskImage: 'linear-gradient(180deg, #000 0%, #000 65%, transparent 100%)' }} />
+      {/* Glass overlay */}
+      <div style={{ position: 'absolute', inset: 0, borderRadius: 20, pointerEvents: 'none', zIndex: 8, background: 'linear-gradient(165deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.01) 35%, transparent 60%)' }} />
+      {/* Neon border top */}
+      <div style={{ position: 'absolute', inset: 0, borderRadius: 20, pointerEvents: 'none', zIndex: 9, padding: 1, background: `linear-gradient(180deg, ${accent}50 0%, ${accent}25 50%, transparent 100%)`, WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)', WebkitMaskComposite: 'xor', maskComposite: 'exclude' }} />
+
+      {/* Контент */}
+      <div style={{ position: 'relative', zIndex: 10, display: 'flex', flexDirection: 'column', height: '100%', minHeight: 390, padding: '10px 12px 14px' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 'auto' }}>
+          <span style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.12em', color: 'rgba(255,255,255,0.65)', fontFamily: 'var(--font-mono)' }}>
             Instant
           </span>
-        </div>
-
-        {/* Бадж SCRATCH справа */}
-        <div style={{ position: 'absolute', top: 8, right: 6, zIndex: 4 }}>
-          <span style={{
-            fontSize: 10, fontWeight: 800, textTransform: 'uppercase',
-            padding: '3px 7px', borderRadius: 6,
-            background: 'rgba(0,0,0,0.80)',
-            color: accent, border: `1px solid ${accent}55`,
-            boxShadow: `0 0 10px ${accent}55`,
-            fontFamily: 'var(--font-mono)', whiteSpace: 'nowrap',
-          }}>
+          <span style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 11, fontWeight: 800, textTransform: 'uppercase', padding: '3px 7px', borderRadius: 6, background: `${accent}22`, color: accent, border: `1px solid ${accent}55`, boxShadow: `0 0 10px ${accent}55`, fontFamily: 'var(--font-mono)' }}>
             Scratch
           </span>
         </div>
+
+        <div style={{ marginTop: 'auto' }}>
+          <p style={{ fontSize: 15, fontWeight: 700, color: '#fff', textAlign: 'center', marginBottom: 2, letterSpacing: '-0.02em', fontFamily: "'Space Grotesk', sans-serif", textShadow: '0 2px 12px rgba(0,0,0,0.5)' }}>
+            {game.name}
+          </p>
+          <p style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', textAlign: 'center', color: 'rgba(255,255,255,0.45)', letterSpacing: '0.18em', marginBottom: 2, fontFamily: 'var(--font-mono)' }}>
+            Jackpot
+          </p>
+          {/* Призовые — в стиле тиражных: золото, mono, glitch-вспышка при появлении */}
+          <GlitchJackpot target={game.topPrize} currency={game.currency} />
+          {/* Небольшой отступ перед кнопкой (счётчик билетов убран — батч 1М) */}
+          <div style={{ height: 3 }} />
+          <PremiumButton
+            label={`Buy · ${game.ticketPrice} ${game.currency}`}
+            accent={accent}
+            gradient={game.gradient}
+          />
+        </div>
       </div>
-
-      {/* ── INFO ZONE ── */}
-      <div style={{ padding: '0 12px 14px', display: 'flex', flexDirection: 'column' }}>
-        {/* Название */}
-        <p style={{
-          fontSize: 22, fontWeight: 900, color: '#fff', textAlign: 'center',
-          marginBottom: 0, marginTop: -2,
-          letterSpacing: '0.05em', fontFamily: 'var(--font-display)',
-          textShadow: `0 2px 8px rgba(0,0,0,0.8), 0 0 20px ${accent}40`,
-          lineHeight: 1.0, textTransform: 'uppercase',
-        }}>
-          {game.name}
-        </p>
-
-        <p style={{
-          fontSize: 9, fontWeight: 700, textTransform: 'uppercase',
-          textAlign: 'center', color: 'rgba(255,255,255,0.38)',
-          letterSpacing: '0.20em', marginBottom: 1, marginTop: 4,
-          fontFamily: 'var(--font-mono)',
-        }}>
-          Top Prize
-        </p>
-
-        <GlitchJackpot target={game.topPrize} currency={game.currency} />
-
-        <div style={{ height: 3 }} />
-
-        <PremiumButton
-          label={`Buy · ${game.ticketPrice} ${game.currency}`}
-          accent={accent}
-          gradient={game.gradient}
-        />
-      </div>
-
-      {/* Accent border frame */}
-      <div style={{
-        position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 10,
-        border: `1.5px solid ${accent}30`,
-        borderRadius: 20,
-      }} />
     </motion.div>
   );
 }
@@ -165,35 +134,33 @@ export function ScratchCarousel() {
     <section className="px-4">
       <div className="flex items-center justify-between mb-3">
         <span style={{
-          display: 'inline-flex',
-          alignItems: 'center',
-          gap: 4,
-          padding: '2px 8px',
-          borderRadius: 999,
-          fontSize: 10,
-          fontWeight: 700,
-          fontFamily: 'var(--font-mono)',
-          letterSpacing: '0.08em',
-          color: '#4ade80',
-          background: 'rgba(74,222,128,0.12)',
-          border: '1px solid rgba(74,222,128,0.35)',
-        }}>
-          <span
-            className="animate-pulse-live"
-            style={{
-              width: 5, height: 5,
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: 4,
+            padding: '2px 8px',
+            borderRadius: 999,
+            fontSize: 10,
+            fontWeight: 700,
+            fontFamily: 'var(--font-mono)',
+            letterSpacing: '0.08em',
+            color: '#4ade80',
+            background: 'rgba(74,222,128,0.12)',
+            border: '1px solid rgba(74,222,128,0.35)',
+          }}>
+            <span style={{
+              width: 5,
+              height: 5,
               borderRadius: '50%',
               background: '#4ade80',
               boxShadow: '0 0 6px #4ade80',
-              display: 'inline-block',
-            }}
-          />
-          {SCRATCH_GAMES.length} active
-        </span>
+              animation: 'livePulse 2s ease-in-out infinite',
+            }} />
+            {SCRATCH_GAMES.length} active
+          </span>
       </div>
 
       <ScrollCarousel accent="#4ade80" showProgress={false} arrows>
-        {SCRATCH_GAMES.map((g, i) => <ScratchCard key={g.id} game={g} index={i} />)}
+        {SCRATCH_GAMES.map(g => <ScratchCard key={g.id} game={g} />)}
       </ScrollCarousel>
     </section>
   );
