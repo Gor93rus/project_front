@@ -5,7 +5,6 @@ import { motion } from 'framer-motion';
 // SELECT COALESCE(SUM("currentJackpot"), 0) FROM "Lottery" WHERE active = true;
 // Результат: 67,500 TON (13 активных лотерей)
 const BASE_JACKPOT_FROM_DB = 67500;
-const LOTTERIES_COUNT = 13;
 
 // Форматтер: точка как разделитель тысяч (de-DE локаль)
 function formatJackpot(value: number): string {
@@ -61,103 +60,7 @@ function avatarFromName(name: string, index: number) {
   );
 }
 
-// ── Золотые частицы ─────────────────────────────────────────────────────────
-const PARTICLES = Array.from({ length: 10 }, (_, i) => ({
-  id: i,
-  left: `${5 + Math.random() * 90}%`,
-  delay: `${Math.random() * 3}s`,
-  duration: `${3.5 + Math.random() * 5}s`,
-  size: 2 + Math.random() * 3,
-  opacity: 0.2 + Math.random() * 0.35,
-}));
-
-function GoldParticles() {
-  return (
-    <div aria-hidden="true" className="absolute inset-0 pointer-events-none" style={{ zIndex: 1 }}>
-      {PARTICLES.map(p => (
-        <div
-          key={p.id}
-          className="absolute rounded-full"
-          style={{
-            left: p.left,
-            bottom: '-8px',
-            width: p.size,
-            height: p.size,
-            background: 'var(--gold)',
-            boxShadow: `0 0 ${p.size * 2}px var(--gold-glow)`,
-            opacity: p.opacity,
-            animation: `particleRise ${p.duration}s linear infinite`,
-            animationDelay: p.delay,
-          }}
-        />
-      ))}
-    </div>
-  );
-}
-
-// ── God-rays: настоящие лучи света из центра (яркое ядро + узкие чёткие спицы) ─
-// Конический градиент строим программно: 18 лучей, цвет чередуется gold → primary → secondary
-// для более богатого, многоцветного эффекта (вместо монохромного золота).
-const RAY_COUNT = 18;
-const RAY_CORE_COLORS = [
-  'rgba(255,244,170,0.34)',   // gold
-  'rgba(120,180,255,0.26)',   // primary blue
-  'rgba(200,160,255,0.24)',   // secondary purple
-];
-const RAY_SOFT_COLORS = [
-  'rgba(255,240,150,0.05)',
-  'rgba(120,180,255,0.04)',
-  'rgba(190,150,255,0.04)',
-];
-const RAY_GRADIENT = (() => {
-  const step = 360 / RAY_COUNT;
-  const stops: string[] = [];
-  for (let i = 0; i < RAY_COUNT; i++) {
-    const base = i * step;
-    const core = RAY_CORE_COLORS[i % RAY_CORE_COLORS.length];
-    const soft = RAY_SOFT_COLORS[i % RAY_SOFT_COLORS.length];
-    // каждый луч: тёмный зазор → плавный вход → яркое цветное ядро → плавный выход
-    stops.push(`transparent ${base.toFixed(2)}deg`);
-    stops.push(`${soft} ${(base + step * 0.30).toFixed(2)}deg`);
-    stops.push(`${core} ${(base + step * 0.42).toFixed(2)}deg`);
-    stops.push(`${soft} ${(base + step * 0.54).toFixed(2)}deg`);
-    stops.push(`transparent ${(base + step * 0.84).toFixed(2)}deg`);
-  }
-  return `conic-gradient(from 0deg at 50% 50%, ${stops.join(', ')})`;
-})();
-
-function GodRays() {
-  // Радиальная маска: на мобилке 62%, на десктопе 92% — лучи доходят до краёв контейнера.
-  const maskStyle = {
-    WebkitMaskImage:
-      'radial-gradient(circle at 50% 50%, #000 0%, rgba(0,0,0,0.65) 30%, transparent 92%)',
-    maskImage:
-      'radial-gradient(circle at 50% 50%, #000 0%, rgba(0,0,0,0.65) 30%, transparent 92%)',
-  } as const;
-
-  return (
-    <div
-      aria-hidden="true"
-      className="absolute pointer-events-none"
-      style={{
-        top: '44%',
-        left: '50%',
-        width: 'clamp(360px, 100vw, 1800px)',
-        height: 'clamp(360px, 100vw, 1800px)',
-        transform: 'translate(-50%, -50%)',
-        zIndex: 0,
-        mixBlendMode: 'screen',
-        ...maskStyle,
-      }}
-    >
-      <motion.div
-        style={{ width: '100%', height: '100%', background: RAY_GRADIENT }}
-        animate={{ rotate: 360 }}
-        transition={{ duration: 70, repeat: Infinity, ease: 'linear' }}
-      />
-    </div>
-  );
-}
+// GodRays и GoldParticles удалены — создавали ~12 бесконечных анимаций.
 
 // ── Winner Row (с лотереей) ─────────────────────────────────────────────────
 function WinnerRow({ entry, index }: { entry: WinnerEntry; index: number }) {
@@ -265,13 +168,7 @@ export function GlobalJackpotHero() {
           `,
         }}
       >
-        <div style={{ position: 'absolute', inset: 0, zIndex: 0, pointerEvents: 'none' }}>
-          <GodRays />
-        </div>
-
-        <GoldParticles />
-
-        {/* Центральное золотое свечение — сконцентрировано за суммой, не размывает верх */}
+        {/* Центральное золотое свечение — сконцентрировано за суммой */}
         <div
           aria-hidden="true"
           style={{
@@ -302,28 +199,17 @@ export function GlobalJackpotHero() {
               style={{
                 display: 'block',
                 fontFamily: 'var(--font-display)',
-                fontSize: 'clamp(28px, 8.5vw, 52px)',
+                fontSize: 'clamp(32px, 9vw, 58px)',
                 fontWeight: 900,
-                letterSpacing: '0.06em',
+                letterSpacing: '0.08em',
                 lineHeight: 1,
                 whiteSpace: 'nowrap',
-                background: `
-                  linear-gradient(110deg, transparent 36%, rgba(255,255,255,0.95) 50%, transparent 64%),
-                  linear-gradient(180deg, #FFFFFF 0%, #E8EEFF 20%, #B8CCFF 48%, #7899E8 78%, #4A6EC8 100%)
-                `,
-                backgroundSize: '260% 100%, 100% 100%',
-                backgroundPosition: '260% 0, 0 0',
-                backgroundRepeat: 'no-repeat',
+                textTransform: 'uppercase',
+                background: 'linear-gradient(180deg, #FFFFFF 0%, #D0DEFF 35%, #8AAAEE 75%, #5577CC 100%)',
                 WebkitBackgroundClip: 'text',
                 WebkitTextFillColor: 'transparent',
                 backgroundClip: 'text',
-                animation: 'text-sheen 6s ease-in-out infinite',
-                animationDelay: '0.8s',
-                filter: `
-                  drop-shadow(0 1px 0 rgba(255,255,255,0.2))
-                  drop-shadow(0 2px 12px rgba(120,160,255,0.4))
-                  drop-shadow(0 0 36px rgba(100,140,255,0.2))
-                `,
+                filter: 'drop-shadow(0 1px 0 rgba(255,255,255,0.15)) drop-shadow(0 2px 10px rgba(100,140,255,0.35))',
               }}
             >
               WEEKEND MILLIONS
@@ -456,16 +342,16 @@ export function GlobalJackpotHero() {
           }}
         >
           <span className="flex items-center shrink-0" style={{ gap: 5, zIndex: 3 }}>
-            <motion.span
+            <span
+              className="animate-pulse-live"
               style={{
                 width: 6,
                 height: 6,
                 borderRadius: '50%',
                 background: 'var(--emerald)',
                 boxShadow: '0 0 8px var(--emerald-glow)',
+                display: 'inline-block',
               }}
-              animate={{ opacity: [1, 0.3, 1] }}
-              transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
             />
             <span
               style={{

@@ -2,12 +2,9 @@ import { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 
 /**
- * Золотой джекпот с glitch-эффектом.
- * Glitch — НЕ бесконечный шум, а one-shot «вспышка» (~0.6с) при появлении карточки:
- * срабатывает каждый раз при монтировании (т.е. при заходе/возврате на главную).
- * Семантика: RGB-расщепление при «вскрытии» суммы, затем чистое стабильное золото.
- *
- * Используется одинаково и на тиражных, и на скретч-карточках.
+ * Джекпот с CountUp при монтировании.
+ * Glitch-слои удалены — они создавали 2 бесконечных CSS-анимации (glitchShift) на каждой карточке.
+ * Вместо этого: once-shot count-up за 0.5с + entrance от framer-motion.
  */
 export function GlitchJackpot({
   target,
@@ -17,7 +14,6 @@ export function GlitchJackpot({
   currency?: string;
 }) {
   const [display, setDisplay] = useState(0);
-  const [glitching, setGlitching] = useState(true);
   const reduceMotion = useRef(
     typeof window !== 'undefined' &&
       window.matchMedia?.('(prefers-reduced-motion: reduce)').matches,
@@ -26,11 +22,10 @@ export function GlitchJackpot({
   useEffect(() => {
     if (reduceMotion) {
       setDisplay(target);
-      setGlitching(false);
       return;
     }
 
-    // Count-up прокрутка суммы за ~0.6с (40 шагов × 16мс)
+    // Count-up за ~0.5с (40 шагов × 16мс)
     let s = 0;
     const step = Math.max(1, Math.floor(target / 40));
     const roll = setInterval(() => {
@@ -41,23 +36,10 @@ export function GlitchJackpot({
       } else {
         setDisplay(s);
       }
-    }, 16);
+    }, 14);
 
-    // One-shot вспышка glitch — гаснет через 0.6с
-    const stop = setTimeout(() => setGlitching(false), 600);
-
-    return () => {
-      clearInterval(roll);
-      clearTimeout(stop);
-    };
+    return () => clearInterval(roll);
   }, [target, reduceMotion]);
-
-  const num = display.toLocaleString();
-  const unit = (
-    <span style={{ fontSize: 11, marginLeft: 3, opacity: 0.75, fontFamily: "'Space Grotesk', sans-serif" }}>
-      {currency}
-    </span>
-  );
 
   return (
     <motion.div
@@ -68,48 +50,19 @@ export function GlitchJackpot({
     >
       <span
         style={{
-          position: 'relative',
           display: 'inline-block',
           fontSize: 22,
           fontWeight: 700,
           color: 'var(--gold)',
           fontFamily: 'var(--font-mono)',
-          textShadow: '0 0 24px var(--gold-glow)',
+          textShadow: '0 0 20px var(--gold-glow)',
           lineHeight: 1,
         }}
       >
-        {num}
-        {unit}
-        {glitching && (
-          <>
-            <span
-              aria-hidden="true"
-              style={{
-                position: 'absolute', top: 0, left: 0, width: '100%', height: '100%',
-                color: 'var(--primary)',
-                animation: 'glitchShift 0.5s ease-in-out infinite alternate',
-                clipPath: 'polygon(0 0, 100% 0, 100% 35%, 0 55%)',
-                pointerEvents: 'none',
-              }}
-            >
-              {num}
-              {unit}
-            </span>
-            <span
-              aria-hidden="true"
-              style={{
-                position: 'absolute', top: 0, left: 0, width: '100%', height: '100%',
-                color: 'var(--coral)',
-                animation: 'glitchShift 0.7s ease-in-out infinite alternate-reverse',
-                clipPath: 'polygon(0 55%, 100% 35%, 100% 100%, 0 100%)',
-                pointerEvents: 'none',
-              }}
-            >
-              {num}
-              {unit}
-            </span>
-          </>
-        )}
+        {display.toLocaleString()}
+        <span style={{ fontSize: 11, marginLeft: 3, opacity: 0.75, fontFamily: 'var(--font-body)' }}>
+          {currency}
+        </span>
       </span>
     </motion.div>
   );

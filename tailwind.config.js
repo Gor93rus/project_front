@@ -83,7 +83,8 @@ export default {
       },
       // ── Шрифты ──
       fontFamily: {
-        display: ['Space Grotesk', 'system-ui', '-apple-system', 'Segoe UI', 'Roboto', 'sans-serif'],
+        display: ['Barlow Condensed', 'Space Grotesk', 'system-ui', 'sans-serif'],
+        body:    ['Space Grotesk', 'system-ui', '-apple-system', 'Segoe UI', 'Roboto', 'sans-serif'],
         mono:    ['JetBrains Mono', 'monospace'],
       },
       // ── Анимации ──

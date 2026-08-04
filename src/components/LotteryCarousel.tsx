@@ -150,11 +150,13 @@ function LotteryCard({ lottery, index = 0 }: { lottery: Lottery; index?: number 
         }} />
       </div>
 
-      {/* Pulsing neon border */}
-      <motion.div
-        style={{ position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 10, border: '2px solid transparent' }}
-        animate={{ borderColor: [`${accent}20`, `${accent}80`, `${accent}20`], boxShadow: [`0 0 0px ${accent}00`, `0 0 12px ${accent}60`, `0 0 0px ${accent}00`] }}
-        transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
+      {/* Static accent border — no infinite animation */}
+      <div
+        style={{
+          position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 10,
+          border: `1.5px solid ${accent}40`,
+          borderRadius: 20,
+        }}
       />
 
       {/* Glass overlay */}
@@ -170,7 +172,7 @@ function LotteryCard({ lottery, index = 0 }: { lottery: Lottery; index?: number 
           </span>
           {isLive ? (
             <span style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 11, fontWeight: 800, textTransform: 'uppercase', padding: '3px 7px', borderRadius: 6, background: `${accent}1f`, color: accent, border: `1px solid ${accent}45`, boxShadow: `0 0 10px ${accent}55`, fontFamily: "var(--font-mono)" }}>
-              <span style={{ width: 6, height: 6, borderRadius: '50%', background: accent, animation: 'livePulse 1s ease-in-out infinite' }} />
+              <span className="animate-pulse-live" style={{ width: 6, height: 6, borderRadius: '50%', background: accent }} />
               Live Draw
             </span>
           ) : isUpcoming ? (
@@ -179,13 +181,13 @@ function LotteryCard({ lottery, index = 0 }: { lottery: Lottery; index?: number 
             </span>
           ) : (
             <span style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 11, fontWeight: 800, textTransform: 'uppercase', padding: '3px 7px', borderRadius: 6, background: `${accent}1f`, color: accent, border: `1px solid ${accent}45`, fontFamily: "var(--font-mono)" }}>
-              <span style={{ width: 6, height: 6, borderRadius: '50%', background: accent, animation: 'livePulse 2s ease-in-out infinite' }} />
+              <span style={{ width: 6, height: 6, borderRadius: '50%', background: accent }} />
               Open
             </span>
           )}
         </div>
         <div style={{ marginTop: 'auto' }}>
-          <p style={{ fontSize: 14, fontWeight: 700, color: '#fff', textAlign: 'center', marginBottom: 2, letterSpacing: '-0.01em', fontFamily: "'Space Grotesk', sans-serif", textShadow: '0 2px 12px rgba(0,0,0,0.5)', lineHeight: 1.2, wordBreak: 'break-word', whiteSpace: 'normal', padding: '0 2px' }}>
+          <p style={{ fontSize: 18, fontWeight: 800, color: '#fff', textAlign: 'center', marginBottom: 2, letterSpacing: '0.02em', fontFamily: "var(--font-display)", textShadow: '0 2px 12px rgba(0,0,0,0.5)', lineHeight: 1.1, wordBreak: 'break-word', whiteSpace: 'normal', padding: '0 2px', textTransform: 'uppercase' }}>
             {lottery.name}
           </p>
           <p style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', textAlign: 'center', color: 'rgba(255,255,255,0.45)', letterSpacing: '0.18em', marginBottom: 2, fontFamily: "var(--font-mono)" }}>
@@ -334,13 +336,12 @@ export function LotteryCarousel() {
             whiteSpace: 'nowrap',
             flexShrink: 0,
           }}>
-            <span style={{
+            <span className="animate-pulse-live" style={{
               width: 5,
               height: 5,
               borderRadius: '50%',
               background: '#4ade80',
               boxShadow: '0 0 6px #4ade80',
-              animation: 'livePulse 2s ease-in-out infinite',
             }} />
             {LOTTERIES.length} active
           </span>
