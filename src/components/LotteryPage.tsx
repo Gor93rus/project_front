@@ -3,7 +3,24 @@ import { motion } from 'framer-motion';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useLottery } from '../hooks/useLotteries';
 import { getLotteryMeta } from '../data/lotteries';
-import { GlitchJackpot } from './GlitchJackpot';
+
+/* ── Glitch Jackpot ── */
+function GlitchJackpot({ value, compact }: { value: number; compact?: boolean }) {
+  return (
+    <motion.div style={{ textAlign: 'center' }} initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }}>
+      <span style={{
+        position: 'relative', display: 'inline-block',
+        fontSize: compact ? 22 : 42, fontWeight: 700,
+        color: 'var(--gold)', fontFamily: "'Geist Mono', monospace",
+        textShadow: '0 0 32px var(--gold-glow)', lineHeight: 1,
+      }}>
+        {value.toLocaleString()}<span style={{ fontSize: compact ? 11 : 14, marginLeft: 3, opacity: 0.75, fontFamily: "'Space Grotesk', sans-serif" }}>TON</span>
+        <span className="glitch-clip glitch-ton">{value.toLocaleString()}<span style={{ fontSize: compact ? 11 : 14, marginLeft: 3, opacity: 0.75 }}>TON</span></span>
+        <span className="glitch-clip glitch-coral">{value.toLocaleString()}<span style={{ fontSize: compact ? 11 : 14, marginLeft: 3, opacity: 0.75 }}>TON</span></span>
+      </span>
+    </motion.div>
+  );
+}
 
 /* ── Segmented Countdown ── */
 function SegmentedCountdown({ target, accent }: { target: string; accent: string }) {
@@ -165,9 +182,8 @@ export function LotteryPage() {
     return (
       <div style={{ minHeight: '100vh', background: '#06080D', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <motion.div
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.4, ease: 'easeOut' }}
+          animate={{ rotate: 360 }}
+          transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
           style={{ width: 32, height: 32, borderRadius: '50%', border: '3px solid rgba(255,255,255,0.1)', borderTopColor: accent }}
         />
       </div>
@@ -186,22 +202,24 @@ export function LotteryPage() {
 
   return (
     <div style={{ position: 'relative', minHeight: '100vh', background: '#06080D', overflowX: 'hidden' }}>
-      {/* ── Static aurora layers ── */}
-      <div
+      {/* ── Aurora layers ── */}
+      <motion.div
         style={{
           position: 'fixed', inset: 0, zIndex: 0, pointerEvents: 'none',
           mixBlendMode: 'screen',
           background: `radial-gradient(ellipse 60% 50% at 25% 8%, ${accent}90 0%, transparent 55%), radial-gradient(ellipse 45% 40% at 72% 18%, rgba(0,168,225,0.65) 0%, transparent 55%), radial-gradient(ellipse 40% 40% at 12% 55%, rgba(168,85,247,0.55) 0%, transparent 55%), radial-gradient(ellipse 50% 40% at 58% 68%, rgba(240,185,11,0.50) 0%, transparent 55%)`,
-          opacity: 0.6,
         }}
+        animate={{ opacity: [0.5, 1, 0.6, 0.5] }}
+        transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
       />
-      <div
+      <motion.div
         style={{
           position: 'fixed', inset: 0, zIndex: 0, pointerEvents: 'none',
           mixBlendMode: 'overlay',
           background: `radial-gradient(ellipse 70% 60% at 50% 50%, ${accent}40 0%, transparent 60%)`,
-          opacity: 0.4,
         }}
+        animate={{ opacity: [0.25, 0.55, 0.25], scale: [1, 1.08, 1] }}
+        transition={{ duration: 12, repeat: Infinity, ease: 'easeInOut' }}
       />
       {/* Geometric dot pattern */}
       <div style={{
@@ -210,6 +228,21 @@ export function LotteryPage() {
         backgroundSize: '24px 24px',
       }} />
 
+      {/* ── Particles ── */}
+      {Array.from({ length: 15 }).map((_, i) => (
+        <motion.div
+          key={i}
+          style={{
+            position: 'fixed', zIndex: 0, pointerEvents: 'none',
+            width: 1.5, height: 1.5, borderRadius: '50%',
+            background: 'rgba(255,200,150,0.8)',
+            boxShadow: '0 0 5px rgba(255,140,66,0.5)',
+            left: `${Math.random() * 100}%`,
+          }}
+          animate={{ y: ['-5vh', '105vh'], opacity: [0, 0.7, 0.2, 0] }}
+          transition={{ duration: Math.random() * 12 + 8, repeat: Infinity, delay: Math.random() * 12, ease: 'linear' }}
+        />
+      ))}
 
       {/* ── Page ── */}
       <div style={{ position: 'relative', zIndex: 1, maxWidth: 390, margin: '0 auto', padding: '0 16px 110px', display: 'flex', flexDirection: 'column', gap: 20 }}>
@@ -229,7 +262,7 @@ export function LotteryPage() {
         {/* Jackpot */}
         <div style={{ textAlign: 'center', padding: '8px 0 0' }}>
           <div style={{ fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.2em', color: 'rgba(255,255,255,0.4)', fontFamily: "'Geist Mono', monospace", marginBottom: 6 }}>Jackpot</div>
-          <GlitchJackpot target={jackpotValue} />
+          <GlitchJackpot value={jackpotValue} />
         </div>
 
         <SegmentedCountdown target={nextDraw} accent={accent} />
@@ -273,6 +306,8 @@ export function LotteryPage() {
                   onClick={() => toggle(n)}
                   whileTap={{ scale: 0.9 }}
                   whileHover={{ scale: 1.04 }}
+                  animate={isSelected ? { scale: [1, 1.05, 1] } : {}}
+                  transition={isSelected ? { duration: 1.5, repeat: Infinity, ease: 'easeInOut' } : {}}
                   style={{
                     aspectRatio: '1', borderRadius: 14, cursor: 'pointer',
                     background: isSelected
@@ -334,9 +369,11 @@ export function LotteryPage() {
                 ? '0 4px 18px rgba(240,185,11,0.20), 0 2px 8px rgba(0,0,0,0.30), inset 0 1px 0 rgba(255,255,255,0.05)'
                 : '0 4px 14px rgba(0,0,0,0.30), inset 0 1px 0 rgba(255,255,255,0.04)',
             }}>
-              <span
+              <motion.span
                 style={{ display: 'flex', justifyContent: 'center', marginBottom: 4, color: pz.jp ? 'var(--gold)' : accent }}
-              >{Icons.prize}</span>
+                animate={{ scale: [1, 1.15, 1] }}
+                transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut', delay: i * 0.3 }}
+              >{Icons.prize}</motion.span>
               <div style={{ fontSize: 15, fontWeight: 700, color: pz.jp ? 'var(--gold)' : '#fff', fontFamily: "'Geist Mono', monospace" }}>{pz.m}</div>
               <div style={{ fontSize: 13, fontWeight: 700, color: pz.jp ? 'var(--gold)' : accent, marginTop: 4, fontFamily: "'Geist Mono', monospace" }}>{pz.s}</div>
               <div style={{ fontSize: 9, color: 'rgba(255,255,255,0.35)', marginTop: 2, fontFamily: "'Geist Mono', monospace" }}>{pz.l}</div>
@@ -346,9 +383,10 @@ export function LotteryPage() {
 
         {/* ── Fund info — glass card ── */}
         <div style={{ ...glassCard, gap: 0, textAlign: 'center', background: `linear-gradient(165deg, ${accent}25, ${accent}05)`, border: `1px solid ${accent}40`, borderRadius: 16 }}>
-          <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 6 }}>
+          <motion.div style={{ display: 'flex', justifyContent: 'center', marginBottom: 6 }}
+            animate={{ opacity: [0.6, 1, 0.6] }} transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}>
             <span style={{ color: accent }}>{Icons.fund}</span>
-          </div>
+          </motion.div>
           <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.6)', lineHeight: 1.6, fontFamily: "'Space Grotesk', sans-serif", margin: 0 }}>
             <span style={{ color: accent, fontWeight: 600 }}>50%</span> of ticket sales form the prize pool. <span style={{ color: accent, fontWeight: 600 }}>15%</span> accumulates in Jackpot.
           </p>

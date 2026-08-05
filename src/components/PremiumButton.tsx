@@ -47,12 +47,15 @@ export function PremiumButton({ label, accent, gradient, onClick, className = ''
         transition: { type: 'spring', stiffness: 500, damping: 10 },
       }}
     >
-      {/* Shimmer overlay (static) */}
-      <div
+      {/* Shimmer overlay */}
+      <motion.div
         className="absolute inset-0 pointer-events-none"
         style={{
-          background: 'linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.08) 50%, transparent 100%)',
+          background: 'linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.15) 50%, transparent 100%)',
+          backgroundSize: '200% 100%',
         }}
+        animate={{ backgroundPosition: ['200% 0%', '-200% 0%'] }}
+        transition={{ duration: 2.5, repeat: Infinity, ease: 'linear' }}
       />
       <span className="relative z-10">{label}</span>
     </motion.button>
