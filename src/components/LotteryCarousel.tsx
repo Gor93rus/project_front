@@ -48,26 +48,26 @@ function SegmentedCountdown({ target, accent }: { target: string; accent: string
   }, [target]);
 
   const ds: React.CSSProperties = {
-    width: 18, height: 22, borderRadius: 4,
+    width: 22, height: 28, borderRadius: 5,
     background: 'rgba(0,0,0,0.55)',
     border: '1px solid rgba(255,255,255,0.06)',
     display: 'flex', alignItems: 'center', justifyContent: 'center',
-    fontSize: 11, fontWeight: 600,
+    fontSize: 13, fontWeight: 600,
     fontFamily: "var(--font-mono)",
     color: accent,
-    textShadow: `0 0 8px ${accent}80`,
+    textShadow: `0 0 10px ${accent}80`,
     boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.04)',
     position: 'relative' as const, overflow: 'hidden',
   };
 
   const lbl: React.CSSProperties = {
-    fontSize: 5, fontWeight: 600, textTransform: 'uppercase',
-    color: 'rgba(255,255,255,0.3)', marginTop: 2, letterSpacing: '0.12em',
+    fontSize: 6, fontWeight: 600, textTransform: 'uppercase',
+    color: 'rgba(255,255,255,0.3)', marginTop: 3, letterSpacing: '0.12em',
     fontFamily: "var(--font-mono)",
   };
 
   const sep: React.CSSProperties = {
-    fontSize: 12, fontWeight: 600,
+    fontSize: 14, fontWeight: 600,
     color: 'rgba(255,255,255,0.2)',
     fontFamily: "var(--font-mono)",
   };
@@ -80,7 +80,7 @@ function SegmentedCountdown({ target, accent }: { target: string; accent: string
   );
 
   return (
-    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 4, marginBottom: 7 }}>
+    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 5, marginBottom: 9 }}>
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
         <div style={{ display: 'flex', gap: 2 }}>{ch(p.h[0])}{ch(p.h[1])}</div>
         <span style={lbl}>HRS</span>
@@ -121,7 +121,7 @@ function LotteryCard({ lottery, index = 0 }: { lottery: Lottery; index?: number 
       whileTap={{ scale: 0.96, y: 0 }}
       style={{
         position: 'relative', borderRadius: 20, flexShrink: 0, cursor: 'pointer',
-        width: 182, minHeight: 330,
+        width: 182, minHeight: 390,
         // Clip children (neon border stays inside card)
         overflow: 'hidden',
         // Усиленная направленная фаска (glass-3d): светлый верх/лево, тёмный низ/право
@@ -150,9 +150,11 @@ function LotteryCard({ lottery, index = 0 }: { lottery: Lottery; index?: number 
         }} />
       </div>
 
-      {/* Static neon border */}
-      <div
-        style={{ position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 10, border: `2px solid ${accent}40`, boxShadow: `0 0 12px ${accent}30` }}
+      {/* Pulsing neon border */}
+      <motion.div
+        style={{ position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 10, border: '2px solid transparent' }}
+        animate={{ borderColor: [`${accent}20`, `${accent}80`, `${accent}20`], boxShadow: [`0 0 0px ${accent}00`, `0 0 12px ${accent}60`, `0 0 0px ${accent}00`] }}
+        transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
       />
 
       {/* Glass overlay */}
@@ -161,7 +163,7 @@ function LotteryCard({ lottery, index = 0 }: { lottery: Lottery; index?: number 
       <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 6, padding: 1, background: `linear-gradient(180deg, ${accent}50 0%, ${accent}25 50%, transparent 100%)`, WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)', WebkitMaskComposite: 'xor', maskComposite: 'exclude' }} />
 
       {/* Content */}
-      <div style={{ position: 'relative', zIndex: 10, display: 'flex', flexDirection: 'column', height: '100%', minHeight: 330, padding: '10px 12px 12px' }}>
+      <div style={{ position: 'relative', zIndex: 10, display: 'flex', flexDirection: 'column', height: '100%', minHeight: 390, padding: '10px 12px 14px' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 'auto', gap: 4 }}>
           <span style={{ fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'rgba(255,255,255,0.65)', fontFamily: "var(--font-mono)", whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', minWidth: 0 }}>
             {lottery.drawLabel}
@@ -191,7 +193,7 @@ function LotteryCard({ lottery, index = 0 }: { lottery: Lottery; index?: number 
           </p>
           <GlitchJackpot target={lottery.jackpot} />
           {isLive ? (
-            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 6, height: 24, marginBottom: 6 }}>
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 6, height: 28, marginBottom: 9 }}>
               <span style={{ width: 6, height: 6, borderRadius: '50%', background: accent, animation: 'livePulse 1s ease-in-out infinite' }} />
               <span style={{ fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.16em', color: accent, fontFamily: 'var(--font-mono)', textShadow: `0 0 10px ${accent}55` }}>
                 Drawing now
