@@ -63,8 +63,8 @@ export function NavBar({ active, onTabChange }: Props) {
         background: scrolled
           ? 'linear-gradient(0deg, rgba(6,7,26,0.82) 0%, rgba(11,16,40,0.78) 100%)'
           : 'linear-gradient(0deg, rgba(6,7,26,0.88) 0%, rgba(11,16,40,0.84) 100%)',
-        backdropFilter: 'blur(20px) saturate(180%)',
-        WebkitBackdropFilter: 'blur(20px) saturate(180%)',
+        backdropFilter: 'blur(10px)',
+        WebkitBackdropFilter: 'blur(10px)',
         borderTop: scrolled
           ? '1px solid rgba(10,124,255,0.22)'
           : '1px solid rgba(255,255,255,0.07)',
