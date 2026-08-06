@@ -21,29 +21,15 @@
 /* ══════════════════════════════════════════════════
    AURORA — Web3 Casino mesh-градиенты (vivid, насыщенные)
    ══════════════════════════════════════════════════ */
-.aurora { position: fixed; inset: 0; z-index: 0; pointer-events: none; background: var(--bg-0); overflow: hidden; }
-.aurora-pulse {
-  position: absolute; inset: 0; opacity: 0.50;
-  background-image:
-    radial-gradient(circle at 30% 20%, rgba(10,124,255,0.15) 0%, transparent 55%),
-    radial-gradient(circle at 70% 60%, rgba(124,58,237,0.12) 0%, transparent 55%),
-    radial-gradient(circle at 50% 80%, rgba(250,219,20,0.06) 0%, transparent 60%);
-  animation: aurora-pulse 10s ease-in-out infinite;
+/* ── Aurora: статичный фон, без анимаций ── */
+.aurora {
+  position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden;
+  background:
+    radial-gradient(circle at 30% 20%, rgba(10,124,255,0.13) 0%, transparent 50%),
+    radial-gradient(circle at 75% 65%, rgba(124,58,237,0.10) 0%, transparent 50%),
+    radial-gradient(circle at 50% 90%, rgba(250,219,20,0.05) 0%, transparent 55%),
+    var(--bg-0);
 }
-@keyframes aurora-pulse { 0%,100%{opacity:0.40;transform:scale(1)} 50%{opacity:0.65;transform:scale(1.06)} }
-.aurora-blobs { position: absolute; inset: 0; mix-blend-mode: screen; }
-.aurora-blob { position: absolute; border-radius: 50%; filter: blur(55px); }
-.blob-1 { top:-25%; left:-20%; width:60%; height:60%; background:var(--primary); opacity:0.28; animation:blob-1 24s ease-in-out infinite alternate; }
-.blob-2 { bottom:-25%; right:-20%; width:55%; height:55%; background:var(--secondary); opacity:0.32; animation:blob-2 30s ease-in-out infinite alternate; }
-.blob-3 { top:40%; right:15%; width:30%; height:30%; background:var(--gold); opacity:0.16; animation:blob-3 38s ease-in-out infinite alternate; }
-.blob-4 { top:5%; right:25%; width:20%; height:20%; background:var(--emerald); opacity:0.12; animation:blob-4 34s ease-in-out infinite alternate; }
-@keyframes blob-1 { 0%{transform:translate(-40px,-20px) scale(1)} 50%{transform:translate(50px,20px) scale(1.18)} 100%{transform:translate(-40px,-20px) scale(1)} }
-@keyframes blob-2 { 0%{transform:translate(50px,20px) scale(1)} 50%{transform:translate(-50px,-20px) scale(1.22)} 100%{transform:translate(50px,20px) scale(1)} }
-@keyframes blob-3 { 0%{transform:translate(20px,-25px) rotate(0deg)} 50%{transform:translate(-20px,28px) rotate(180deg)} 100%{transform:translate(20px,-25px) rotate(360deg)} }
-@keyframes blob-4 { 0%{transform:translate(-25px,12px) scale(1)} 50%{transform:translate(28px,-18px) scale(1.20)} 100%{transform:translate(-25px,12px) scale(1)} }
-.aurora-stars { position: absolute; inset: 0; }
-.aurora-star { position: absolute; background: #fff; border-radius: 50%; opacity: 0; animation: twinkle ease-in-out infinite; }
-@keyframes twinkle { 0%,100%{opacity:0} 50%{opacity:var(--star-opacity,0.5)} }
 
 /* ══════════════════════════════════════════════════
    TICKER
