@@ -20,6 +20,7 @@ import {
 import { AuroraBackground } from './components/AuroraBackground';
 import { AnimatedSection } from './components/AnimatedSection';
 import { GlobalJackpotHero } from './components/GlobalJackpotHero';
+import { MockupHomePage } from './components/MockupHomePage';
 import { stagger, fadeUp, fadeUpCard } from './lib/animations';
 
 // "Glass rivet" разделитель секций — dot-grid полоса + светящийся glass-хаб с иконкой
@@ -283,6 +284,7 @@ function AppLayout() {
         <main className="flex-1 overflow-y-auto pt-2" style={{ paddingBottom: isLotteryPage ? 0 : 72 }}>
           <Routes>
             <Route path="/" element={<HomePage />} />
+            <Route path="/mockup-home" element={<MockupHomePage />} />
             <Route path="/live" element={<PlaceholderPage title="Live Draw" />} />
             <Route path="/cart" element={<PlaceholderPage title="Cart" />} />
             <Route path="/history" element={<PlaceholderPage title="History" />} />
