@@ -181,7 +181,7 @@ function DesktopCard({ item }: { item: FeatureItem }) {
 
 // ═══════════════════════════════════════════════════════════════════════════════
 // MOBILE SCROLL CAROUSEL — scroll-snap, 1 card per snap (100% width, 16:9)
-// ═══════════════════════════════════════════════════════════════════════════════
+// ═══════════════════════════════════��═══════════════════════════════════════════
 function MobileCarousel({ compact = false }: { compact?: boolean }) {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [activeIndex, setActiveIndex] = useState(0);
@@ -211,15 +211,18 @@ function MobileCarousel({ compact = false }: { compact?: boolean }) {
         ))}
       </div>
 
-      {/* Dot indicators */}
-      <div className="features-carousel-dots" aria-hidden="true">
-        {ITEMS.map((_, i) => (
-          <span
-            key={i}
-            className={`features-carousel-dot${i === activeIndex ? ' features-carousel-dot--active' : ''}`}
-          />
-        ))}
-      </div>
+      {/* Dot indicators — скрыты в compact-режиме (главная), чтобы не
+          занимать лишнюю вертикаль без скролла. */}
+      {!compact && (
+        <div className="features-carousel-dots" aria-hidden="true">
+          {ITEMS.map((_, i) => (
+            <span
+              key={i}
+              className={`features-carousel-dot${i === activeIndex ? ' features-carousel-dot--active' : ''}`}
+            />
+          ))}
+        </div>
+      )}
     </div>
   );
 }

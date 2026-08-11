@@ -2,12 +2,12 @@
  * RewardsPanel — компактная версия rewards-слота для узкой правой колонки
  * главной. Пустой placeholder под будущий контент (лутбокс/награды).
  */
-export function RewardsPanel() {
+export function RewardsPanel({ className = '' }: { className?: string } = {}) {
   return (
     <div
-      className="relative w-full overflow-hidden rounded-2xl"
+      className={`relative w-full overflow-hidden rounded-2xl ${className}`}
       style={{
-        height: 78,
+        minHeight: 78,
         background: 'linear-gradient(155deg, rgba(250,185,11,0.07) 0%, rgba(124,58,237,0.07) 55%, rgba(10,124,255,0.05) 100%)',
         borderTop: '2px solid rgba(255,255,255,0.10)',
         borderLeft: '1.5px solid rgba(255,255,255,0.07)',

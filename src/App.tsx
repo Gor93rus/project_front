@@ -23,7 +23,6 @@ import { GlobalJackpotHero } from './components/GlobalJackpotHero';
 import { MockupHomePage } from './components/MockupHomePage';
 import { CategoryEntryCard } from './components/CategoryEntryCard';
 import { GamificationCompact } from './components/GamificationCompact';
-import { LiveWinsPanel } from './components/LiveWinsPanel';
 import { RewardsPanel } from './components/RewardsPanel';
 import { LotteriesPage } from './components/LotteriesPage';
 import { ScratchCardsPage } from './components/ScratchCardsPage';
@@ -160,7 +159,7 @@ function RewardsBannerSlot() {
 /**
  * MOBILE HOME — новая раскладка по референсу Stitch:
  * Jackpot-якорь → Featured (FeaturesBanner) → 2-колоночная сетка
- * (лев��я: Lotteries/Scratch/Lootbox крупные карточки-входы,
+ * (лев����я: Lotteries/Scratch/Lootbox крупные карточки-входы,
  *  правая: Gamification compact + Rewards, легче по весу) → Live Wins.
  */
 function MobileHome() {
@@ -168,11 +167,10 @@ function MobileHome() {
 
   return (
     <div className="flex flex-col pb-2">
-      {/* Recent wins тикер убран из hero — та же информация уже есть
-          в компактном Live Wins ниже, дублирование не нужно. Хero ниже
-          ровно на высоту убранного тикера. */}
+      {/* Recent wins тикер возвращён в hero (замедленный marquee) — так
+          пользователь видит выигрыши сразу в самом заметном блоке. */}
       <AnimatedSection variants={fadeUp} delay={0.05}>
-        <GlobalJackpotHero showTicker={false} />
+        <GlobalJackpotHero />
       </AnimatedSection>
 
       <div style={{ height: 6 }} />
@@ -186,7 +184,7 @@ function MobileHome() {
       <div style={{ height: 10 }} />
 
       <AnimatedSection variants={stagger}>
-        <div className="px-4 grid grid-cols-2 gap-2.5 items-start">
+        <div className="px-4 grid grid-cols-2 gap-2.5 items-stretch">
           {/* Левая колонка — тяжёлая: 3 крупные карточки-входа */}
           <div className="flex flex-col gap-2.5">
             <CategoryEntryCard
@@ -214,13 +212,12 @@ function MobileHome() {
             />
           </div>
 
-          {/* Правая колонка — 3 элемента, чтобы совпасть по высоте с левой
-              и заполнить место, где раньше была пустота: Gamification,
-              Rewards, а теперь ещё и компактный Live Wins. */}
-          <div className="flex flex-col gap-2.5">
-            <GamificationCompact />
-            <RewardsPanel />
-            <LiveWinsPanel compact maxItems={4} />
+          {/* Правая колонка — Live Wins переехал обратно в hero, поэтому
+              здесь остаются 2 блока: Gamification и Rewards, растянутые
+              равными частями на всю высоту левой колонки. */}
+          <div className="flex flex-col gap-2.5 h-full">
+            <GamificationCompact className="flex-1" />
+            <RewardsPanel className="flex-1" />
           </div>
         </div>
       </AnimatedSection>

@@ -17,7 +17,7 @@ const BEVEL = {
  * Только аватар уровня + XP-бар, без stat-плиток (Streak/Bonuses/Badges) —
  * они не влезают комфортно в ~45% ширины экрана.
  */
-export function GamificationCompact() {
+export function GamificationCompact({ className = '' }: { className?: string } = {}) {
   const nav = useNavigate();
   const { connected, connect } = useTonWallet();
   const { level, loading } = useGamification();
@@ -27,7 +27,7 @@ export function GamificationCompact() {
   return (
     <button
       onClick={() => { if (!connected) { connect(); } else { nav('/profile'); } }}
-      className="relative w-full text-left overflow-hidden rounded-2xl p-2.5"
+      className={`relative w-full text-left overflow-hidden rounded-2xl p-2.5 flex flex-col justify-center ${className}`}
       style={{
         background:
           'linear-gradient(160deg, rgba(240,185,11,0.10) 0%, rgba(255,255,255,0.02) 35%, var(--bg-1) 100%)',
@@ -35,7 +35,7 @@ export function GamificationCompact() {
       }}
     >
       {!connected ? (
-        <div className="relative flex flex-col items-center justify-center gap-1.5 py-2" style={{ minHeight: 62 }}>
+        <div className="relative flex flex-col items-center justify-center gap-1.5 py-2 h-full" style={{ minHeight: 62 }}>
           <img
             src="/images/reward-lock.png"
             alt="Locked"

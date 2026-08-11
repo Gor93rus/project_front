@@ -91,7 +91,7 @@
 }
 .winners-ticker::before { left: 0; background: linear-gradient(90deg, rgba(8,16,40,0.98) 0%, transparent 100%); }
 .winners-ticker::after { right: 0; background: linear-gradient(90deg, transparent 0%, rgba(8,16,40,0.98) 100%); }
-.winners-scroll { animation: ticker 28s linear infinite; display: flex; align-items: center; }
+.winners-scroll { animation: ticker 46s linear infinite; display: flex; align-items: center; }
 
 /* ══════════════════════════════════════════════════
    ANIMATIONS (looping only — CSS keyframes)
