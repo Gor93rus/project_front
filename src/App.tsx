@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, useLocation, useNavigate } from 'react-router-dom';
 import { TonConnectUIProvider } from '@tonconnect/ui-react';
 import { Header } from './components/Header';
 import { NavBar, type NavTab } from './components/NavBar';
@@ -164,19 +164,26 @@ function RewardsBannerSlot() {
  *  правая: Gamification compact + Rewards, легче по весу) → Live Wins.
  */
 function MobileHome() {
+  const navigate = useNavigate();
+
   return (
     <div className="flex flex-col pb-2">
+      {/* Recent wins тикер убран из hero — та же информация уже есть
+          в компактном Live Wins ниже, дублирование не нужно. Хero ниже
+          ровно на высоту убранного тикера. */}
       <AnimatedSection variants={fadeUp} delay={0.05}>
-        <GlobalJackpotHero />
+        <GlobalJackpotHero showTicker={false} />
       </AnimatedSection>
 
       <div style={{ height: 8 }} />
 
+      {/* Featured banners — компактнее (21:9 вместо 16:9), чтобы оставить
+          больше места для сетки категорий без скролла. */}
       <AnimatedSection variants={fadeUpCard} delay={0.18}>
-        <FeaturesBanner />
+        <FeaturesBanner compact />
       </AnimatedSection>
 
-      <div style={{ height: 16 }} />
+      <div style={{ height: 14 }} />
 
       <AnimatedSection variants={stagger}>
         <div className="px-4 grid grid-cols-2 gap-3 items-start">
@@ -185,38 +192,36 @@ function MobileHome() {
             <CategoryEntryCard
               title="Draw Lotteries"
               subtitle="Enter now"
-              image="/images/card-massive-prizes.png"
+              icon="dice"
               accent="var(--primary)"
-              to="/lotteries"
+              onClick={() => navigate('/lotteries')}
+              index={0}
             />
             <CategoryEntryCard
               title="Scratch Cards"
               subtitle="Play"
-              image="/images/card-instant-payouts.svg"
+              icon="scratch"
               accent="var(--secondary)"
-              to="/scratch-cards"
+              onClick={() => navigate('/scratch-cards')}
+              index={1}
             />
             <CategoryEntryCard
               title="Lootbox"
               subtitle="Unlock"
-              image="/images/card-provably-fair.png"
+              icon="crate"
               accent="var(--gold)"
+              index={2}
             />
           </div>
 
-          {/* Правая колонка — легче: gamification + rewards, равный вес друг с другом */}
+          {/* Правая колонка — 3 элемента, чтобы совпасть по высоте с левой
+              и заполнить место, где раньше была пустота: Gamification,
+              Rewards, а теперь ещё и компактный Live Wins. */}
           <div className="flex flex-col gap-3">
             <GamificationCompact />
             <RewardsPanel />
+            <LiveWinsPanel compact maxItems={4} />
           </div>
-        </div>
-      </AnimatedSection>
-
-      <div style={{ height: 16 }} />
-
-      <AnimatedSection variants={fadeUpCard}>
-        <div className="px-4">
-          <LiveWinsPanel />
         </div>
       </AnimatedSection>
 

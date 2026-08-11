@@ -819,6 +819,12 @@
   scroll-snap-align: start;
 }
 
+/* Компактный вариант — используется на главной, где нужно уместить всё без скролла.
+   Шире и ниже (21:9 вместо 16:9), чтобы блок занимал меньше вертикального места. */
+.features-mobile-carousel--compact .feature-card-img--carousel-item {
+  aspect-ratio: 21 / 9;
+}
+
 /* ── DOT INDICATORS ─────────────────────────────────────────────────────────── */
 
 .features-carousel-dots {

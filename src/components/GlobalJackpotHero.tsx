@@ -199,7 +199,13 @@ function WinnerRow({ entry, index }: { entry: WinnerEntry; index: number }) {
 // ═══════════════════════════════════════════════════════════════════════════
 // MAIN COMPONENT
 // ═══════════════════════════════════════════════════════════════════════════
-export function GlobalJackpotHero() {
+interface GlobalJackpotHeroProps {
+  /** Показывать нижний тикер "Recent wins". На мобилке отключается —
+   *  там уже есть отдельный компактный блок LiveWinsPanel в сетке. */
+  showTicker?: boolean;
+}
+
+export function GlobalJackpotHero({ showTicker = true }: GlobalJackpotHeroProps = {}) {
   const [value, setValue] = useState(BASE_JACKPOT_FROM_DB);
   const [milestoneFlash, setMilestoneFlash] = useState(false);
   const prevMilestone = useRef(Math.floor(BASE_JACKPOT_FROM_DB / 10000));
@@ -438,62 +444,64 @@ export function GlobalJackpotHero() {
         </div>
 
         {/* ТИКЕР — шаг 4: последним, clip overflow чтобы не дёргалось при slideUp */}
-        <motion.div
-          initial={{ opacity: 0, y: 8 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.52, duration: 0.4, ease: 'easeOut' }}
-          style={{
-            position: 'relative',
-            display: 'flex',
-            alignItems: 'center',
-            gap: 10,
-            height: 38,
-            padding: '0 12px',
-            background: 'linear-gradient(180deg, #0C1629 0%, #080F1E 100%)',
-            borderTop: '1.5px solid rgba(255,255,255,0.08)',
-            boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.04)',
-            zIndex: 3,
-          }}
-        >
-          <span className="flex items-center shrink-0" style={{ gap: 5, zIndex: 3 }}>
-            <motion.span
-              style={{
-                width: 6,
-                height: 6,
-                borderRadius: '50%',
-                background: 'var(--emerald)',
-                boxShadow: '0 0 8px var(--emerald-glow)',
-              }}
-              animate={{ opacity: [1, 0.3, 1] }}
-              transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
-            />
-            <span
-              style={{
-                fontSize: 8.5,
-                fontWeight: 800,
-                letterSpacing: '0.16em',
-                textTransform: 'uppercase',
-                color: 'var(--ink-2)',
-                fontFamily: 'var(--font-mono)',
-              }}
-            >
-              Recent wins
+        {showTicker && (
+          <motion.div
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.52, duration: 0.4, ease: 'easeOut' }}
+            style={{
+              position: 'relative',
+              display: 'flex',
+              alignItems: 'center',
+              gap: 10,
+              height: 38,
+              padding: '0 12px',
+              background: 'linear-gradient(180deg, #0C1629 0%, #080F1E 100%)',
+              borderTop: '1.5px solid rgba(255,255,255,0.08)',
+              boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.04)',
+              zIndex: 3,
+            }}
+          >
+            <span className="flex items-center shrink-0" style={{ gap: 5, zIndex: 3 }}>
+              <motion.span
+                style={{
+                  width: 6,
+                  height: 6,
+                  borderRadius: '50%',
+                  background: 'var(--emerald)',
+                  boxShadow: '0 0 8px var(--emerald-glow)',
+                }}
+                animate={{ opacity: [1, 0.3, 1] }}
+                transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+              />
+              <span
+                style={{
+                  fontSize: 8.5,
+                  fontWeight: 800,
+                  letterSpacing: '0.16em',
+                  textTransform: 'uppercase',
+                  color: 'var(--ink-2)',
+                  fontFamily: 'var(--font-mono)',
+                }}
+              >
+                Recent wins
+              </span>
             </span>
-          </span>
 
-          <span style={{ width: 1, height: 16, background: 'var(--line-strong)', flexShrink: 0, zIndex: 3 }} />
+            <span style={{ width: 1, height: 16, background: 'var(--line-strong)', flexShrink: 0, zIndex: 3 }} />
 
-          <div style={{ position: 'relative', flex: 1, overflow: 'hidden', height: '100%' }}>
-            <div
-              className="winners-scroll"
-              style={{ position: 'absolute', top: 0, height: '100%', display: 'flex', alignItems: 'center', paddingLeft: 20, paddingRight: 20 }}
-            >
-              {winnerRows}
+            <div style={{ position: 'relative', flex: 1, overflow: 'hidden', height: '100%' }}>
+              <div
+                className="winners-scroll"
+                style={{ position: 'absolute', top: 0, height: '100%', display: 'flex', alignItems: 'center', paddingLeft: 20, paddingRight: 20 }}
+              >
+                {winnerRows}
+              </div>
+              <div style={{ position: 'absolute', top: 0, bottom: 0, left: 0, width: 32, background: 'linear-gradient(90deg, rgba(8,11,30,0.95) 0%, transparent 100%)', pointerEvents: 'none', zIndex: 2 }} />
+              <div style={{ position: 'absolute', top: 0, bottom: 0, right: 0, width: 32, background: 'linear-gradient(90deg, transparent 0%, rgba(8,11,30,0.95) 100%)', pointerEvents: 'none', zIndex: 2 }} />
             </div>
-            <div style={{ position: 'absolute', top: 0, bottom: 0, left: 0, width: 32, background: 'linear-gradient(90deg, rgba(8,11,30,0.95) 0%, transparent 100%)', pointerEvents: 'none', zIndex: 2 }} />
-            <div style={{ position: 'absolute', top: 0, bottom: 0, right: 0, width: 32, background: 'linear-gradient(90deg, transparent 0%, rgba(8,11,30,0.95) 100%)', pointerEvents: 'none', zIndex: 2 }} />
-          </div>
-        </motion.div>
+          </motion.div>
+        )}
       </motion.div>
     </section>
   );

@@ -182,7 +182,7 @@ function DesktopCard({ item }: { item: FeatureItem }) {
 // ═══════════════════════════════════════════════════════════════════════════════
 // MOBILE SCROLL CAROUSEL — scroll-snap, 1 card per snap (100% width, 16:9)
 // ═══════════════════════════════════════════════════════════════════════════════
-function MobileCarousel() {
+function MobileCarousel({ compact = false }: { compact?: boolean }) {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [activeIndex, setActiveIndex] = useState(0);
 
@@ -201,7 +201,7 @@ function MobileCarousel() {
   }, []);
 
   return (
-    <div className="features-mobile-carousel">
+    <div className={`features-mobile-carousel${compact ? ' features-mobile-carousel--compact' : ''}`}>
       <div
         ref={scrollRef}
         className="features-mobile-carousel__track scrollbar-none"
@@ -259,12 +259,12 @@ function DesktopGrid() {
 // ═══════════════════════════════════════════════════════════════════════════════
 // MAIN COMPONENT
 // ═══════════════════════════════════════════════════════════════════════════════
-export function FeaturesBanner() {
+export function FeaturesBanner({ compact = false }: { compact?: boolean } = {}) {
   return (
     <section className="px-4 pt-2">
-      {/* Mobile — scroll-snap carousel, 1 card = full width, 16:9 */}
+      {/* Mobile — scroll-snap карусель, 1 card = full width, 16:9 */}
       <div className="md:hidden">
-        <MobileCarousel />
+        <MobileCarousel compact={compact} />
       </div>
 
       {/* Desktop — 3 cards, images crossfade in place */}
