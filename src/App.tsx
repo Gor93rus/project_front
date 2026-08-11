@@ -21,6 +21,12 @@ import { AuroraBackground } from './components/AuroraBackground';
 import { AnimatedSection } from './components/AnimatedSection';
 import { GlobalJackpotHero } from './components/GlobalJackpotHero';
 import { MockupHomePage } from './components/MockupHomePage';
+import { CategoryEntryCard } from './components/CategoryEntryCard';
+import { GamificationCompact } from './components/GamificationCompact';
+import { LiveWinsPanel } from './components/LiveWinsPanel';
+import { RewardsPanel } from './components/RewardsPanel';
+import { LotteriesPage } from './components/LotteriesPage';
+import { ScratchCardsPage } from './components/ScratchCardsPage';
 import { stagger, fadeUp, fadeUpCard } from './lib/animations';
 
 // "Glass rivet" разделитель секций — dot-grid полоса + светящийся glass-хаб с иконкой
@@ -151,7 +157,83 @@ function RewardsBannerSlot() {
   );
 }
 
-function HomePage() {
+/**
+ * MOBILE HOME — новая раскладка по референсу Stitch:
+ * Jackpot-якорь → Featured (FeaturesBanner) → 2-колоночная сетка
+ * (левая: Lotteries/Scratch/Lootbox крупные карточки-входы,
+ *  правая: Gamification compact + Rewards, легче по весу) → Live Wins.
+ */
+function MobileHome() {
+  return (
+    <div className="flex flex-col pb-2">
+      <AnimatedSection variants={fadeUp} delay={0.05}>
+        <GlobalJackpotHero />
+      </AnimatedSection>
+
+      <div style={{ height: 8 }} />
+
+      <AnimatedSection variants={fadeUpCard} delay={0.18}>
+        <FeaturesBanner />
+      </AnimatedSection>
+
+      <div style={{ height: 16 }} />
+
+      <AnimatedSection variants={stagger}>
+        <div className="px-4 grid grid-cols-2 gap-3 items-start">
+          {/* Левая колонка — тяжёлая: 3 крупные карточки-входа */}
+          <div className="flex flex-col gap-3">
+            <CategoryEntryCard
+              title="Draw Lotteries"
+              subtitle="Enter now"
+              image="/images/card-massive-prizes.png"
+              accent="var(--primary)"
+              to="/lotteries"
+            />
+            <CategoryEntryCard
+              title="Scratch Cards"
+              subtitle="Play"
+              image="/images/card-instant-payouts.svg"
+              accent="var(--secondary)"
+              to="/scratch-cards"
+            />
+            <CategoryEntryCard
+              title="Lootbox"
+              subtitle="Unlock"
+              image="/images/card-provably-fair.png"
+              accent="var(--gold)"
+            />
+          </div>
+
+          {/* Правая колонка — легче: gamification + rewards, равный вес друг с другом */}
+          <div className="flex flex-col gap-3">
+            <GamificationCompact />
+            <RewardsPanel />
+          </div>
+        </div>
+      </AnimatedSection>
+
+      <div style={{ height: 16 }} />
+
+      <AnimatedSection variants={fadeUpCard}>
+        <div className="px-4">
+          <LiveWinsPanel />
+        </div>
+      </AnimatedSection>
+
+      <div style={{ height: 12 }} />
+
+      <AnimatedSection variants={fadeUp}>
+        <PageFooter />
+      </AnimatedSection>
+    </div>
+  );
+}
+
+/**
+ * DESKTOP HOME — прежняя раскладка (не меняем, десктоп будет
+ * переосмыслен отдельно позже).
+ */
+function DesktopHome() {
   return (
     <div className="flex flex-col pb-2">
       {/* Hero → Features: минимальный зазор — они единый смысловой блок */}
@@ -205,6 +287,19 @@ function HomePage() {
         <PageFooter />
       </AnimatedSection>
     </div>
+  );
+}
+
+function HomePage() {
+  return (
+    <>
+      <div className="md:hidden">
+        <MobileHome />
+      </div>
+      <div className="hidden md:block">
+        <DesktopHome />
+      </div>
+    </>
   );
 }
 
@@ -268,7 +363,10 @@ function AppLayout() {
     window.dispatchEvent(new PopStateEvent('popstate'));
   };
 
-  const isLotteryPage = location.pathname.startsWith('/lottery/');
+  const isLotteryPage =
+    location.pathname.startsWith('/lottery/') ||
+    location.pathname === '/lotteries' ||
+    location.pathname === '/scratch-cards';
 
   return (
     <div className="relative min-h-screen" style={{ background: 'var(--bg-0)' }}>
@@ -285,6 +383,8 @@ function AppLayout() {
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/mockup-home" element={<MockupHomePage />} />
+            <Route path="/lotteries" element={<LotteriesPage />} />
+            <Route path="/scratch-cards" element={<ScratchCardsPage />} />
             <Route path="/live" element={<PlaceholderPage title="Live Draw" />} />
             <Route path="/cart" element={<PlaceholderPage title="Cart" />} />
             <Route path="/history" element={<PlaceholderPage title="History" />} />
