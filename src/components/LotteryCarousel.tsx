@@ -100,7 +100,7 @@ function SegmentedCountdown({ target, accent }: { target: string; accent: string
 }
 
 /* ── Lottery Card ── */
-function LotteryCard({ lottery, index = 0 }: { lottery: Lottery; index?: number }) {
+export function LotteryCard({ lottery, index = 0, fluid = false }: { lottery: Lottery; index?: number; fluid?: boolean }) {
   const nav = useNavigate();
   const accent = lottery.accentColor;
   const phase = useDrawPhase(lottery.nextDraw);
@@ -121,7 +121,7 @@ function LotteryCard({ lottery, index = 0 }: { lottery: Lottery; index?: number 
       whileTap={{ scale: 0.96, y: 0 }}
       style={{
         position: 'relative', borderRadius: 20, flexShrink: 0, cursor: 'pointer',
-        width: 182, minHeight: 390,
+        width: fluid ? '100%' : 182, minHeight: 390,
         // Clip children (neon border stays inside card)
         overflow: 'hidden',
         // Усиленная направленная фаска (glass-3d): светлый верх/лево, тёмный низ/право
