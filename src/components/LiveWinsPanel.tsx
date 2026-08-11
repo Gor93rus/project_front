@@ -17,13 +17,23 @@ const MOCK_WINS: MockWin[] = [
   { user: 'm3h…d45', game: 'Three Aces', amount: '+9 USDT' },
 ];
 
-export function LiveWinsPanel() {
+interface LiveWinsPanelProps {
+  /** Компактный режим — используется в правой колонке главной (узкая
+   *  ширина, ограниченная высота, чтобы не создавать лишний скролл). */
+  compact?: boolean;
+  /** Сколько строк показывать. По умолчанию все 5, в compact — меньше. */
+  maxItems?: number;
+}
+
+export function LiveWinsPanel({ compact = false, maxItems }: LiveWinsPanelProps = {}) {
+  const items = MOCK_WINS.slice(0, maxItems ?? (compact ? 4 : MOCK_WINS.length));
+
   return (
     <div
       style={{
         position: 'relative',
         borderRadius: 18,
-        padding: '12px 14px',
+        padding: compact ? '10px 12px' : '12px 14px',
         borderTop: '2px solid rgba(255,255,255,0.14)',
         borderLeft: '1.5px solid rgba(255,255,255,0.07)',
         borderRight: '1.5px solid rgba(0,0,0,0.5)',
@@ -32,7 +42,7 @@ export function LiveWinsPanel() {
         boxShadow: 'inset 0 2px 0 rgba(255,255,255,0.08), 0 12px 28px -16px rgba(0,0,0,0.7)',
       }}
     >
-      <div className="flex items-center gap-1.5 mb-2.5">
+      <div className="flex items-center gap-1.5" style={{ marginBottom: compact ? 6 : 10 }}>
         <span
           style={{
             width: 6, height: 6, borderRadius: '50%',
@@ -41,27 +51,29 @@ export function LiveWinsPanel() {
           }}
         />
         <span style={{
-          fontSize: 11, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.08em',
+          fontSize: compact ? 10 : 11, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.08em',
           color: '#4ade80', fontFamily: 'var(--font-mono)',
         }}>
           Live Wins
         </span>
       </div>
 
-      <div className="flex flex-col gap-2">
-        {MOCK_WINS.map((w, i) => (
+      <div className="flex flex-col" style={{ gap: compact ? 6 : 8 }}>
+        {items.map((w, i) => (
           <div key={i} className="flex items-center justify-between gap-2" style={{ minWidth: 0 }}>
             <div style={{ minWidth: 0 }}>
               <p style={{
-                fontSize: 11, fontWeight: 700, color: 'var(--ink-0)', lineHeight: 1.3,
+                fontSize: compact ? 10 : 11, fontWeight: 700, color: 'var(--ink-0)', lineHeight: 1.3,
                 fontFamily: 'var(--font-mono)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis',
               }}>
                 {w.user}
               </p>
-              <p style={{ fontSize: 10, color: 'var(--ink-3)', lineHeight: 1.3 }}>{w.game}</p>
+              {!compact && (
+                <p style={{ fontSize: 10, color: 'var(--ink-3)', lineHeight: 1.3 }}>{w.game}</p>
+              )}
             </div>
             <span style={{
-              fontSize: 11, fontWeight: 800, color: '#4ade80', fontFamily: 'var(--font-mono)',
+              fontSize: compact ? 10 : 11, fontWeight: 800, color: '#4ade80', fontFamily: 'var(--font-mono)',
               whiteSpace: 'nowrap', flexShrink: 0,
             }}>
               {w.amount}
