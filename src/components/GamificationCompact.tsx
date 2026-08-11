@@ -27,7 +27,7 @@ export function GamificationCompact() {
   return (
     <button
       onClick={() => { if (!connected) { connect(); } else { nav('/profile'); } }}
-      className="relative w-full text-left overflow-hidden rounded-2xl p-3"
+      className="relative w-full text-left overflow-hidden rounded-2xl p-2.5"
       style={{
         background:
           'linear-gradient(160deg, rgba(240,185,11,0.10) 0%, rgba(255,255,255,0.02) 35%, var(--bg-1) 100%)',
@@ -35,13 +35,13 @@ export function GamificationCompact() {
       }}
     >
       {!connected ? (
-        <div className="relative flex flex-col items-center justify-center gap-1.5 py-3" style={{ minHeight: 76 }}>
+        <div className="relative flex flex-col items-center justify-center gap-1.5 py-2" style={{ minHeight: 62 }}>
           <img
             src="/images/reward-lock.png"
             alt="Locked"
             style={{
-              width: 34,
-              height: 34,
+              width: 28,
+              height: 28,
               objectFit: 'contain',
               filter: 'drop-shadow(0 0 10px rgba(250,185,11,0.55)) drop-shadow(0 2px 5px rgba(0,0,0,0.6))',
               animation: 'chest-float 3.8s ease-in-out infinite',

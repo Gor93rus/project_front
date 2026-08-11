@@ -160,7 +160,7 @@ function RewardsBannerSlot() {
 /**
  * MOBILE HOME — новая раскладка по референсу Stitch:
  * Jackpot-якорь → Featured (FeaturesBanner) → 2-колоночная сетка
- * (левая: Lotteries/Scratch/Lootbox крупные карточки-входы,
+ * (лев��я: Lotteries/Scratch/Lootbox крупные карточки-входы,
  *  правая: Gamification compact + Rewards, легче по весу) → Live Wins.
  */
 function MobileHome() {
@@ -175,20 +175,20 @@ function MobileHome() {
         <GlobalJackpotHero showTicker={false} />
       </AnimatedSection>
 
-      <div style={{ height: 8 }} />
+      <div style={{ height: 6 }} />
 
-      {/* Featured banners — компактнее (21:9 вместо 16:9), чтобы оставить
+      {/* Featured banners — компактнее (28:9 вместо 16:9), чтобы оставить
           больше места для сетки категорий без скролла. */}
       <AnimatedSection variants={fadeUpCard} delay={0.18}>
         <FeaturesBanner compact />
       </AnimatedSection>
 
-      <div style={{ height: 14 }} />
+      <div style={{ height: 10 }} />
 
       <AnimatedSection variants={stagger}>
-        <div className="px-4 grid grid-cols-2 gap-3 items-start">
+        <div className="px-4 grid grid-cols-2 gap-2.5 items-start">
           {/* Левая колонка — тяжёлая: 3 крупные карточки-входа */}
-          <div className="flex flex-col gap-3">
+          <div className="flex flex-col gap-2.5">
             <CategoryEntryCard
               title="Draw Lotteries"
               subtitle="Enter now"
@@ -217,7 +217,7 @@ function MobileHome() {
           {/* Правая колонка — 3 элемента, чтобы совпасть по высоте с левой
               и заполнить место, где раньше была пустота: Gamification,
               Rewards, а теперь ещё и компактный Live Wins. */}
-          <div className="flex flex-col gap-3">
+          <div className="flex flex-col gap-2.5">
             <GamificationCompact />
             <RewardsPanel />
             <LiveWinsPanel compact maxItems={4} />
@@ -225,7 +225,7 @@ function MobileHome() {
         </div>
       </AnimatedSection>
 
-      <div style={{ height: 12 }} />
+      <div style={{ height: 10 }} />
 
       <AnimatedSection variants={fadeUp}>
         <PageFooter />

@@ -290,7 +290,7 @@ export function GlobalJackpotHero({ showTicker = true }: GlobalJackpotHeroProps 
           }}
         />
 
-        <div className="flex flex-col items-center" style={{ padding: 'clamp(28px,5vw,56px) clamp(16px,6vw,64px) 22px', position: 'relative', zIndex: 3 }}>
+        <div className="flex flex-col items-center" style={{ padding: 'clamp(20px,4vw,44px) clamp(16px,6vw,64px) 16px', position: 'relative', zIndex: 3 }}>
 
           {/* ── ШАГ 1: НАЗВАНИЕ БРЕНДА ───────────────────────────────────────
               WEEKEND MILLIONS — единый блок, единый размер, единый вес.
@@ -299,7 +299,7 @@ export function GlobalJackpotHero({ showTicker = true }: GlobalJackpotHeroProps 
               намеренно холодный — чтобы не конкурировать с тёплым золотом цифр.
           ─────────────────────────────────────────────────────────────────── */}
           <motion.div
-            style={{ marginBottom: 12, display: 'flex', alignItems: 'center' }}
+            style={{ marginBottom: 8, display: 'flex', alignItems: 'center' }}
             initial={{ opacity: 0, y: 10, filter: 'blur(6px)' }}
             animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
             transition={{ delay: 0.05, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
@@ -308,7 +308,7 @@ export function GlobalJackpotHero({ showTicker = true }: GlobalJackpotHeroProps 
               style={{
                 display: 'block',
                 fontFamily: 'var(--font-display)',
-                fontSize: 'clamp(28px, 8.5vw, 52px)',
+                fontSize: 'clamp(24px, 7vw, 52px)',
                 fontWeight: 900,
                 letterSpacing: '0.06em',
                 lineHeight: 1,
@@ -357,7 +357,7 @@ export function GlobalJackpotHero({ showTicker = true }: GlobalJackpotHeroProps 
             <span
               className="font-tabular"
               style={{
-                fontSize: 'clamp(48px, 9vw, 80px)',
+                fontSize: 'clamp(38px, 7.5vw, 80px)',
                 lineHeight: 0.9,
                 letterSpacing: '-0.03em',
                 fontFamily: 'var(--font-mono)',
@@ -403,7 +403,7 @@ export function GlobalJackpotHero({ showTicker = true }: GlobalJackpotHeroProps 
           ─────────────────────────────────────────────────────────────────── */}
           <motion.span
             style={{
-              marginTop: 10,
+              marginTop: 6,
               fontSize: 10,
               letterSpacing: '0.22em',
               textTransform: 'uppercase',
