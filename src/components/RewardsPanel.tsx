@@ -1,11 +1,15 @@
 /**
  * RewardsPanel — компактная версия rewards-слота для узкой правой колонки
- * главной. Пустой placeholder под будущий контент (лутбокс/награды).
+ * главной. Сейчас это "coming soon" состояние (реальные rewards-изображения
+ * подключит продакт позже) — оформлено в той же визуальной грамматике,
+ * что и locked-состояние GamificationCompact рядом (тот же lock-icon,
+ * тот же gold-glow текст), чтобы обе карточки читались как согласованная
+ * пара, а не как случайный dev-placeholder рядом с готовым компонентом.
  */
 export function RewardsPanel({ className = '' }: { className?: string } = {}) {
   return (
     <div
-      className={`relative w-full overflow-hidden rounded-2xl ${className}`}
+      className={`relative w-full overflow-hidden rounded-2xl flex flex-col items-center justify-center gap-1.5 ${className}`}
       style={{
         minHeight: 78,
         background: 'linear-gradient(155deg, rgba(250,185,11,0.07) 0%, rgba(124,58,237,0.07) 55%, rgba(10,124,255,0.05) 100%)',
@@ -25,23 +29,30 @@ export function RewardsPanel({ className = '' }: { className?: string } = {}) {
           maskImage: 'radial-gradient(ellipse 80% 80% at 50% 50%, #000 40%, transparent 100%)',
         }}
       />
-      <div className="absolute inset-0 flex flex-col items-center justify-center gap-1 pointer-events-none" style={{ opacity: 0.3 }}>
-        <div
-          style={{
-            width: 28, height: 28, border: '2px dashed rgba(255,255,255,0.35)', borderRadius: 8,
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-          }}
-        >
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.6)" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-            <rect x="3" y="3" width="18" height="18" rx="3" />
-            <path d="M3 9l4-4 4 4 4-5 4 5" />
-            <circle cx="8.5" cy="7" r="1.5" fill="rgba(255,255,255,0.6)" stroke="none" />
-          </svg>
-        </div>
-        <p className="text-3xs font-bold uppercase tracking-widest" style={{ color: 'rgba(255,255,255,0.5)' }}>
-          Rewards
-        </p>
-      </div>
+      <img
+        src="/images/reward-lock.png"
+        alt="Locked"
+        style={{
+          width: 28,
+          height: 28,
+          objectFit: 'contain',
+          position: 'relative',
+          zIndex: 1,
+          filter: 'drop-shadow(0 0 10px rgba(250,185,11,0.55)) drop-shadow(0 2px 5px rgba(0,0,0,0.6))',
+          animation: 'chest-float 3.8s ease-in-out infinite',
+          animationDelay: '0.4s',
+        }}
+      />
+      <p
+        className="relative text-3xs font-bold uppercase tracking-widest text-center leading-tight"
+        style={{
+          zIndex: 1,
+          color: 'var(--gold-soft)',
+          textShadow: '0 0 8px var(--gold-glow), 0 1px 4px rgba(0,0,0,0.8)',
+        }}
+      >
+        Rewards soon
+      </p>
     </div>
   );
 }

@@ -48,7 +48,7 @@ function avatarFromName(name: string, index: number) {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        fontSize: 9,
+        fontSize: 11,
         fontWeight: 800,
         color: '#0B1028',
         fontFamily: 'var(--font-mono)',
@@ -175,15 +175,15 @@ function WinnerRow({ entry, index }: { entry: WinnerEntry; index: number }) {
       }}
     >
       {avatarFromName(entry.user, index)}
-      <span style={{ color: 'var(--ink-1)', fontWeight: 600, fontSize: 10.5 }}>{entry.user}</span>
-      <span style={{ color: 'var(--ink-3)', fontSize: 9, fontFamily: 'var(--font-mono)' }}>won</span>
-      <span style={{ color: 'var(--emerald-soft)', fontWeight: 700, fontFamily: 'var(--font-mono)', fontSize: 10.5 }}>
+      <span style={{ color: 'var(--ink-1)', fontWeight: 600, fontSize: 11 }}>{entry.user}</span>
+      <span style={{ color: 'var(--ink-3)', fontSize: 11, fontFamily: 'var(--font-mono)' }}>won</span>
+      <span style={{ color: 'var(--emerald-soft)', fontWeight: 700, fontFamily: 'var(--font-mono)', fontSize: 11 }}>
         {entry.prize}
       </span>
-      <span style={{ color: 'var(--ink-3)', fontSize: 9 }}>in</span>
+      <span style={{ color: 'var(--ink-3)', fontSize: 11 }}>in</span>
       <span style={{
         color: 'var(--primary-soft)',
-        fontSize: 9.5,
+        fontSize: 11,
         fontWeight: 600,
         background: 'var(--primary-dim)',
         padding: '2px 6px',
@@ -404,7 +404,7 @@ export function GlobalJackpotHero({ showTicker = true }: GlobalJackpotHeroProps 
           <motion.span
             style={{
               marginTop: 6,
-              fontSize: 10,
+              fontSize: 11,
               letterSpacing: '0.22em',
               textTransform: 'uppercase',
               fontFamily: 'var(--font-mono)',
@@ -476,7 +476,7 @@ export function GlobalJackpotHero({ showTicker = true }: GlobalJackpotHeroProps 
               />
               <span
                 style={{
-                  fontSize: 8.5,
+                  fontSize: 11,
                   fontWeight: 800,
                   letterSpacing: '0.16em',
                   textTransform: 'uppercase',

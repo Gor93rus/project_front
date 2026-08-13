@@ -111,7 +111,7 @@ export function CategoryEntryCard({ title, subtitle, icon, accent, onClick, inde
           {title}
         </p>
         <p style={{
-          fontSize: 10.5, fontWeight: 600, color: 'rgba(255,255,255,0.55)',
+          fontSize: 11, fontWeight: 600, color: 'rgba(255,255,255,0.55)',
           fontFamily: 'var(--font-mono)',
         }}>
           {subtitle}

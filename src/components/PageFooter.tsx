@@ -12,10 +12,12 @@ export function PageFooter() {
 
   return (
     <footer className="px-4 pt-6 pb-4">
-      {/* Brand */}
+      {/* Brand — цвета привязаны к токенам primary/secondary/gold (раньше здесь
+          был захардкоженный Telegram-blue #0098EA и оранжевый #FF8E53, которых
+          нет в палитре проекта). */}
       <div className="flex items-center gap-2 mb-4">
         <div className="w-7 h-7 rounded-lg flex items-center justify-center"
-          style={{ background: 'linear-gradient(135deg, #0098EA, #007cc7)' }}>
+          style={{ background: 'linear-gradient(135deg, var(--primary), rgb(var(--primary-600)))' }}>
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
             <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"
               stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
@@ -24,7 +26,7 @@ export function PageFooter() {
         <motion.p
           className="text-2xs font-extrabold"
           style={{
-            background: 'linear-gradient(135deg, #0098EA, var(--gold), #FF8E53)',
+            background: 'linear-gradient(135deg, var(--primary-bright), var(--gold), var(--secondary-soft))',
             WebkitBackgroundClip: 'text',
             WebkitTextFillColor: 'transparent',
           }}
