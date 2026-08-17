@@ -36,14 +36,21 @@ const ICONS: Record<'dice' | 'scratch' | 'crate', ReactNode> = {
 
 interface CategoryEntryCardProps {
   title: string;
+  /** Текст чипа-действия в правом нижнем углу: Enter now / Play / Unlock */
   subtitle: string;
   icon: 'dice' | 'scratch' | 'crate';
   accent: string;
+  /**
+   * Слот под арт категории. Пока арт не сгенерирован, слот пустой и карточка
+   * держится на градиенте и линейной иконке. Как только появится PNG/WebP —
+   * достаточно передать путь, вёрстка уже рассчитана под него.
+   */
+  art?: string;
   onClick?: () => void;
   index?: number;
 }
 
-export function CategoryEntryCard({ title, subtitle, icon, accent, onClick, index = 0 }: CategoryEntryCardProps) {
+export function CategoryEntryCard({ title, subtitle, icon, accent, art, onClick, index = 0 }: CategoryEntryCardProps) {
   const clickable = Boolean(onClick);
 
   return (
@@ -65,7 +72,7 @@ export function CategoryEntryCard({ title, subtitle, icon, accent, onClick, inde
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'flex-end',
-        padding: '10px 12px',
+        padding: '10px 12px 12px',
         borderTop: '2px solid rgba(255,255,255,0.16)',
         borderLeft: '1.5px solid rgba(255,255,255,0.08)',
         borderRight: '1.5px solid rgba(0,0,0,0.55)',
@@ -90,11 +97,32 @@ export function CategoryEntryCard({ title, subtitle, icon, accent, onClick, inde
       {/* Glass sheen */}
       <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 1, background: 'linear-gradient(165deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.01) 35%, transparent 60%)' }} />
 
-      {/* Icon */}
+      {/* Слот под арт категории — правая половина карточки, растворяется
+          влево, чтобы не спорить с заголовком */}
+      {art && (
+        <div
+          aria-hidden="true"
+          style={{
+            position: 'absolute',
+            top: 0,
+            right: 0,
+            bottom: 0,
+            width: '58%',
+            zIndex: 1,
+            backgroundImage: `url(${art})`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center right',
+            WebkitMaskImage: 'linear-gradient(90deg, transparent 0%, #000 55%)',
+            maskImage: 'linear-gradient(90deg, transparent 0%, #000 55%)',
+          }}
+        />
+      )}
+
+      {/* Иконка категории — держит карточку, пока нет арта */}
       <div
         style={{
           position: 'absolute', top: 10, right: 10, zIndex: 2,
-          color: accent, opacity: 0.9,
+          color: accent, opacity: art ? 0.55 : 0.9,
           filter: `drop-shadow(0 0 10px ${accent}70)`,
         }}
       >
@@ -102,21 +130,43 @@ export function CategoryEntryCard({ title, subtitle, icon, accent, onClick, inde
       </div>
 
       {/* Content */}
-      <div style={{ position: 'relative', zIndex: 2 }}>
+      <div style={{ position: 'relative', zIndex: 2, display: 'flex', flexDirection: 'column', gap: 7 }}>
         <p style={{
-          fontSize: 14, fontWeight: 700, color: '#fff', marginBottom: 2,
-          letterSpacing: '-0.01em', fontFamily: "'Space Grotesk', sans-serif",
+          fontSize: 14.5, fontWeight: 700, color: '#fff',
+          lineHeight: 1.1, letterSpacing: '-0.015em',
+          fontFamily: 'var(--font-display)',
           textShadow: '0 2px 10px rgba(0,0,0,0.5)',
         }}>
           {title}
         </p>
-        <p style={{
-          fontSize: 11, fontWeight: 600, color: 'rgba(255,255,255,0.55)',
+        {/* Чип-действие вместо блёклой подписи 11 кеглем: у карточки
+            появляется явная точка входа, а не описание */}
+        <span style={{
+          alignSelf: 'flex-start',
+          display: 'inline-flex',
+          alignItems: 'center',
+          gap: 4,
+          height: 20,
+          padding: '0 8px',
+          borderRadius: 'var(--r-pill)',
+          background: `linear-gradient(180deg, ${accent}33 0%, ${accent}1A 100%)`,
+          border: `1px solid ${accent}59`,
+          boxShadow: `inset 0 1px 0 rgba(255,255,255,0.14), 0 0 14px -6px ${accent}`,
           fontFamily: 'var(--font-mono)',
+          fontSize: 9.5,
+          fontWeight: 700,
+          letterSpacing: '0.10em',
+          textTransform: 'uppercase',
+          color: '#fff',
+          whiteSpace: 'nowrap',
         }}>
           {subtitle}
-        </p>
+          <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M9 5l7 7-7 7" />
+          </svg>
+        </span>
       </div>
+
     </motion.button>
   );
 }

@@ -100,6 +100,12 @@ export function RewardsPanel({ className = '' }: { className?: string } = {}) {
       className={`relative w-full overflow-hidden rounded-2xl text-left ${className}`}
       style={{
         minHeight: 78,
+        // button по умолчанию центрирует содержимое по вертикали — прижимаем
+        // контент к верху, чтобы ритм совпал с карточками левой колонки
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'flex-start',
+        alignItems: 'stretch',
         padding: '10px 12px 14px',
         background:
           'linear-gradient(160deg, rgba(124,58,237,0.10) 0%, rgba(255,255,255,0.02) 38%, var(--bg-1) 100%)',
