@@ -1,5 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
+import { WEEKEND_SPECIAL_CONFIG } from '../data/lottery-configs';
 
 // ── Реальные данные из БД (PostgreSQL) ────────────────────────────────────
 // SELECT COALESCE(SUM("currentJackpot"), 0) FROM "Lottery" WHERE active = true;
@@ -194,6 +196,168 @@ function WinnerRow({ entry, index }: { entry: WinnerEntry; index: number }) {
         {entry.lottery}
       </span>
     </span>
+  );
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// ПОЛОСА ЖИВОГО ТИРАЖА
+// ═══════════════════════════════════════════════════════════════════════════
+// Отсчёт считаем ровно теми же правилами, что и сама страница тиража
+// (DailyRushPage): MSK = UTC+3, часы из config.drawTimes, продажи закрываются
+// за salesCloseMinutes до розыгрыша. Мок nextDraw из src/data/lotteries.ts не
+// берём: для BIWEEKLY он выдаёт +48 часов, полоса расходилась бы со страницей.
+function useSalesCloseCountdown(drawTimes: string[], salesCloseMinutes: number) {
+  const [left, setLeft] = useState(0);
+
+  useEffect(() => {
+    const tick = () => {
+      const mskOffset = 3;
+      const mskHour = (new Date().getUTCHours() + mskOffset) % 24;
+      const drawHours = drawTimes.map(t => parseInt(t, 10));
+      let nextDrawHour = drawHours.find(h => h > mskHour);
+      if (nextDrawHour === undefined) nextDrawHour = drawHours[0] + 24;
+      const nextDrawTime = new Date();
+      // setUTCHours сам нормализует значение > 23 переносом на следующие сутки,
+      // поэтому дополнительный setUTCDate(+1) не нужен: в DailyRushPage он есть
+      // и даёт двойной перенос — после последнего розыгрыша суток там показывает
+      // ~46 часов вместо ~22. Здесь считаем без этой ошибки.
+      nextDrawTime.setUTCHours(nextDrawHour - mskOffset, 0, 0, 0);
+      const closeAt = nextDrawTime.getTime() - salesCloseMinutes * 60_000;
+      setLeft(Math.max(0, closeAt - Date.now()));
+    };
+    tick();
+    const id = setInterval(tick, 1000);
+    return () => clearInterval(id);
+    // drawTimes — константа из конфига, ссылка стабильна
+  }, [drawTimes, salesCloseMinutes]);
+
+  return left;
+}
+
+function formatClock(ms: number): string {
+  const total = Math.floor(ms / 1000);
+  const h = Math.floor(total / 3600);
+  const m = Math.floor((total % 3600) / 60);
+  const s = total % 60;
+  const pad = (n: number) => String(n).padStart(2, '0');
+  return `${pad(h)}:${pad(m)}:${pad(s)}`;
+}
+
+function LiveDrawStrip() {
+  const navigate = useNavigate();
+  const cfg = WEEKEND_SPECIAL_CONFIG;
+  const left = useSalesCloseCountdown(cfg.drawTimes, cfg.salesCloseMinutes);
+  const urgent = left > 0 && left <= 10 * 60_000;
+  const accent = urgent ? '#FF4D4F' : cfg.accentColor;
+
+  return (
+    <motion.button
+      type="button"
+      onClick={() => navigate(`/lottery/${cfg.slug}`)}
+      initial={{ opacity: 0, y: 8 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: 0.46, duration: 0.4, ease: 'easeOut' }}
+      style={{
+        position: 'relative',
+        zIndex: 3,
+        width: '100%',
+        height: 46,
+        display: 'flex',
+        alignItems: 'center',
+        gap: 10,
+        padding: '0 10px 0 12px',
+        textAlign: 'left',
+        background: `
+          linear-gradient(90deg, ${cfg.accentColor}26 0%, ${cfg.accentColor}0D 42%, transparent 78%),
+          linear-gradient(180deg, #141C36 0%, #0D1428 100%)
+        `,
+        borderTop: '1.5px solid rgba(255,255,255,0.10)',
+        boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.05)',
+        cursor: 'pointer',
+      }}
+    >
+      {/* Пульсирующая точка — единственный источник «живости» в полосе */}
+      <motion.span
+        aria-hidden="true"
+        style={{
+          width: 7,
+          height: 7,
+          borderRadius: '50%',
+          background: accent,
+          boxShadow: `0 0 10px ${accent}`,
+          flexShrink: 0,
+        }}
+        animate={{ opacity: [1, 0.25, 1] }}
+        transition={{ duration: urgent ? 1 : 2, repeat: Infinity, ease: 'easeInOut' }}
+      />
+
+      <span style={{ display: 'flex', flexDirection: 'column', gap: 2, minWidth: 0, flex: 1 }}>
+        <span
+          style={{
+            fontFamily: 'var(--font-display)',
+            fontSize: 13,
+            fontWeight: 700,
+            letterSpacing: '0.01em',
+            lineHeight: 1,
+            color: '#EAF0FF',
+            whiteSpace: 'nowrap',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+          }}
+        >
+          {cfg.title}
+        </span>
+        <span style={{ display: 'flex', alignItems: 'baseline', gap: 5, lineHeight: 1 }}>
+          <span
+            style={{
+              fontSize: 9.5,
+              fontWeight: 600,
+              letterSpacing: '0.14em',
+              textTransform: 'uppercase',
+              color: 'var(--ink-2)',
+              fontFamily: 'var(--font-mono)',
+            }}
+          >
+            Closes in
+          </span>
+          <span
+            className="font-tabular"
+            style={{
+              fontFamily: 'var(--font-mono)',
+              fontSize: 13,
+              fontWeight: 700,
+              letterSpacing: '0.02em',
+              color: accent,
+              textShadow: `0 0 12px ${accent}59`,
+            }}
+          >
+            {formatClock(left)}
+          </span>
+        </span>
+      </span>
+
+      <span
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: 6,
+          height: 32,
+          padding: '0 14px',
+          flexShrink: 0,
+          borderRadius: 'var(--r-pill)',
+          background: `linear-gradient(180deg, ${cfg.gradientColors[1]} 0%, ${cfg.gradientColors[0]} 100%)`,
+          boxShadow: `0 6px 16px -6px ${cfg.accentColor}, inset 0 1px 0 rgba(255,255,255,0.38)`,
+          fontFamily: 'var(--font-display)',
+          fontSize: 12.5,
+          fontWeight: 800,
+          letterSpacing: '0.02em',
+          color: '#1A0A02',
+          whiteSpace: 'nowrap',
+        }}
+      >
+        Play · {cfg.ticketPrice} TON
+      </span>
+    </motion.button>
   );
 }
 
@@ -443,6 +607,9 @@ export function GlobalJackpotHero({ showTicker = true }: GlobalJackpotHeroProps 
           )}
 
         </div>
+
+        {/* ПОЛОСА ЖИВОГО ТИРАЖА — единственное действие на первом экране */}
+        <LiveDrawStrip />
 
         {/* ТИКЕР — шаг 4: последним, clip overflow чтобы не дёргалось при slideUp */}
         {showTicker && (
