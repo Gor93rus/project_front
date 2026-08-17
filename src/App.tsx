@@ -225,7 +225,7 @@ function MobileHome() {
       <div style={{ height: 10 }} />
 
       <AnimatedSection variants={fadeUp}>
-        <PageFooter />
+        <PageFooter compact />
       </AnimatedSection>
     </div>
   );
