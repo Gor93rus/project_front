@@ -167,6 +167,11 @@ function MobileHome() {
 
   return (
     <div className="flex flex-col pb-2">
+      {/* Контентная часть держит минимальную высоту в один экран, поэтому
+          футер всегда начинается не выше линии фиксированного навбара:
+          вся юридическая информация и ссылки живут за первым экраном и
+          не отъедают внимание. 136px = отступ main сверху (61) + навбар (75). */}
+      <div className="flex flex-col" style={{ minHeight: 'calc(100dvh - 136px)' }}>
       {/* Recent wins тикер возвращён в hero (замедленный marquee) — так
           пользователь видит выигрыши сразу в самом заметном блоке. */}
       <AnimatedSection variants={fadeUp} delay={0.05}>
@@ -222,10 +227,12 @@ function MobileHome() {
         </div>
       </AnimatedSection>
 
+      </div>
+
       <div style={{ height: 10 }} />
 
       <AnimatedSection variants={fadeUp}>
-        <PageFooter compact />
+        <PageFooter />
       </AnimatedSection>
     </div>
   );
