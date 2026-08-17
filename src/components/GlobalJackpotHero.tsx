@@ -7,9 +7,10 @@ import { motion } from 'framer-motion';
 const BASE_JACKPOT_FROM_DB = 67500;
 const LOTTERIES_COUNT = 13;
 
-// Форматтер: точка как разделитель тысяч (de-DE локаль)
+// Форматтер: запятая как разделитель тысяч (en-US) — интерфейс англоязычный,
+// точка в нём читается как десятичный разделитель.
 function formatJackpot(value: number): string {
-  return value.toLocaleString('de-DE', { maximumFractionDigits: 0 });
+  return value.toLocaleString('en-US', { maximumFractionDigits: 0 });
 }
 
 // ── Победители с информацией о лотереях ────────────────────────────────────
@@ -21,13 +22,13 @@ interface WinnerEntry {
 }
 
 const GLOBAL_WINNERS_DB: WinnerEntry[] = [
-  { user: 'Alex K.', prize: '1.200 TON', lottery: 'Weekend Special', slug: 'weekend-special' },
+  { user: 'Alex K.', prize: '1,200 TON', lottery: 'Weekend Special', slug: 'weekend-special' },
   { user: 'Maria S.', prize: '340 TON', lottery: 'Daily Rush', slug: 'daily-rush-4x20' },
   { user: 'D***ov', prize: '88 TON', lottery: 'Flash Pro', slug: 'flash-pro' },
-  { user: 'Tony W.', prize: '2.500 TON', lottery: 'Big Weekend', slug: 'big-weekend' },
+  { user: 'Tony W.', prize: '2,500 TON', lottery: 'Big Weekend', slug: 'big-weekend' },
   { user: 'N***a', prize: '120 TON', lottery: 'Daily Thunder', slug: 'daily-thunder-5x36' },
   { user: 'Jake M.', prize: '670 TON', lottery: 'Daily Strike', slug: 'daily-strike-6x45' },
-  { user: 'Elena R.', prize: '1.800 TON', lottery: 'Supernova', slug: 'supernova' },
+  { user: 'Elena R.', prize: '1,800 TON', lottery: 'Supernova', slug: 'supernova' },
   { user: 'S***v', prize: '55 TON', lottery: 'Bounty 2x2', slug: 'bounty-2x2' },
 ];
 
@@ -490,15 +491,28 @@ export function GlobalJackpotHero({ showTicker = true }: GlobalJackpotHeroProps 
 
             <span style={{ width: 1, height: 16, background: 'var(--line-strong)', flexShrink: 0, zIndex: 3 }} />
 
-            <div style={{ position: 'relative', flex: 1, overflow: 'hidden', height: '100%' }}>
+            {/* Растворение краёв делаем настоящей маской, а не двумя цветными
+                накладками: накладки красились в rgba(8,11,30,.95), а фон полосы
+                — #0C1629 → #080F1E, цвета не совпадали и вместо растворения
+                получалась грязная плашка с обрезанными на середине словами. */}
+            <div
+              style={{
+                position: 'relative',
+                flex: 1,
+                overflow: 'hidden',
+                height: '100%',
+                WebkitMaskImage:
+                  'linear-gradient(90deg, transparent 0, #000 28px, #000 calc(100% - 28px), transparent 100%)',
+                maskImage:
+                  'linear-gradient(90deg, transparent 0, #000 28px, #000 calc(100% - 28px), transparent 100%)',
+              }}
+            >
               <div
                 className="winners-scroll"
-                style={{ position: 'absolute', top: 0, height: '100%', display: 'flex', alignItems: 'center', paddingLeft: 20, paddingRight: 20 }}
+                style={{ position: 'absolute', top: 0, height: '100%', display: 'flex', alignItems: 'center', paddingLeft: 28, paddingRight: 28 }}
               >
                 {winnerRows}
               </div>
-              <div style={{ position: 'absolute', top: 0, bottom: 0, left: 0, width: 32, background: 'linear-gradient(90deg, rgba(8,11,30,0.95) 0%, transparent 100%)', pointerEvents: 'none', zIndex: 2 }} />
-              <div style={{ position: 'absolute', top: 0, bottom: 0, right: 0, width: 32, background: 'linear-gradient(90deg, transparent 0%, rgba(8,11,30,0.95) 100%)', pointerEvents: 'none', zIndex: 2 }} />
             </div>
           </motion.div>
         )}
