@@ -36,17 +36,28 @@ export function GamificationCompact({ className = '' }: { className?: string } =
     >
       {!connected ? (
         <div className="relative flex flex-col items-center justify-center gap-1.5 py-2 h-full" style={{ minHeight: 62 }}>
-          <img
-            src="/images/reward-lock.png"
-            alt="Locked"
+          {/* Линейный замок в грамматике иконок CategoryEntryCard
+              (24-сетка, stroke 1.8, круглые концы) — вместо растрового
+              reward-lock.png 2048×2048 на 28 CSS-пикселях. */}
+          <svg
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.8"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            aria-hidden="true"
             style={{
-              width: 28,
-              height: 28,
-              objectFit: 'contain',
-              filter: 'drop-shadow(0 0 10px rgba(250,185,11,0.55)) drop-shadow(0 2px 5px rgba(0,0,0,0.6))',
-              animation: 'chest-float 3.8s ease-in-out infinite',
+              color: 'var(--gold-soft)',
+              filter: 'drop-shadow(0 0 9px var(--gold-glow))',
             }}
-          />
+          >
+            <rect x="4.5" y="10.5" width="15" height="9.5" rx="2.5" />
+            <path d="M8 10.5V7.8a4 4 0 0 1 8 0v2.7" />
+            <circle cx="12" cy="15.2" r="1.3" fill="currentColor" stroke="none" />
+          </svg>
           <p
             className="text-center text-3xs font-bold uppercase leading-tight"
             style={{

@@ -54,20 +54,28 @@ export function GamificationBanner() {
               </div>
             </div>
 
-            {/* Замок PNG */}
-            <img
-              src="/images/reward-lock.png"
-              alt="Locked"
+            {/* Линейный замок (был reward-lock.png 2048×2048 на 52 px) */}
+            <svg
+              width="44"
+              height="44"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.6"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
               style={{
-                width: 52,
-                height: 52,
-                objectFit: 'contain',
-                filter: 'drop-shadow(0 0 12px rgba(250,185,11,0.60)) drop-shadow(0 3px 6px rgba(0,0,0,0.65))',
-                animation: 'chest-float 3.8s ease-in-out infinite',
                 position: 'relative',
                 zIndex: 1,
+                color: 'var(--gold-soft)',
+                filter: 'drop-shadow(0 0 12px var(--gold-glow))',
               }}
-            />
+            >
+              <rect x="4.5" y="10.5" width="15" height="9.5" rx="2.5" />
+              <path d="M8 10.5V7.8a4 4 0 0 1 8 0v2.7" />
+              <circle cx="12" cy="15.2" r="1.3" fill="currentColor" stroke="none" />
+            </svg>
 
             {/* Пульсирующий текст */}
             <p
