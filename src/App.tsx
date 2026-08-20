@@ -212,12 +212,13 @@ function MobileHome() {
             />
           </div>
 
-          {/* Правая колонка — Live Wins переехал обратно в hero, поэтому
-              здесь остаются 2 блока: Gamification и Rewards, растянутые
-              равными частями на всю высоту левой колонки. */}
+          {/* Правая колонка. Мини-баннер снизу — фиксированные 90 px: это
+              вспомогательный слот новостей, ему не нужна половина колонки.
+              Весь остаток высоты забирает Gamification — единственный блок
+              правой колонки, ведущий в личный прогресс. */}
           <div className="flex flex-col gap-2.5 h-full">
             <GamificationCompact className="flex-1" />
-            <RewardsPanel className="flex-1" />
+            <RewardsPanel style={{ height: 90, flex: '0 0 90px' }} />
           </div>
         </div>
       </AnimatedSection>

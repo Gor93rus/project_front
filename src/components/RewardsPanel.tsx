@@ -74,7 +74,10 @@ const SLIDES: Slide[] = [
   },
 ];
 
-export function RewardsPanel({ className = '' }: { className?: string } = {}) {
+export function RewardsPanel({
+  className = '',
+  style,
+}: { className?: string; style?: React.CSSProperties } = {}) {
   const [index, setIndex] = useState(0);
   const pausedUntil = useRef(0);
 
@@ -115,6 +118,7 @@ export function RewardsPanel({ className = '' }: { className?: string } = {}) {
         borderBottom: '3px solid rgba(0,0,0,0.8)',
         boxShadow:
           'inset 0 2px 0 rgba(255,255,255,0.12), inset 0 -4px 14px rgba(0,0,0,0.45), 0 18px 38px -16px rgba(0,0,0,0.85)',
+        ...style,
       }}
     >
       {/* Мягкое свечение под акцент текущего слайда */}

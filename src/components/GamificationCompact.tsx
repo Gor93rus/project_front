@@ -35,39 +35,83 @@ export function GamificationCompact({ className = '' }: { className?: string } =
       }}
     >
       {!connected ? (
-        <div className="relative flex flex-col items-center justify-center gap-1.5 py-2 h-full" style={{ minHeight: 62 }}>
-          {/* Линейный замок в грамматике иконок CategoryEntryCard
-              (24-сетка, stroke 1.8, круглые концы) — вместо растрового
-              reward-lock.png 2048×2048 на 28 CSS-пикселях. */}
-          <svg
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.8"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            aria-hidden="true"
+        /* Locked-состояние теперь занимает всю высоту левой колонки минус
+           мини-баннер, поэтому одной строки капсом мало: блок читался как
+           дыра. Ритм: бейдж с замком → заголовок → пояснение → чип-действие,
+           та же грамматика, что у карточек-входов слева. */
+        <div className="relative flex flex-col items-center justify-center h-full gap-2.5 px-1 py-1">
+          <div
+            className="flex items-center justify-center rounded-xl shrink-0"
             style={{
-              color: 'var(--gold-soft)',
-              filter: 'drop-shadow(0 0 9px var(--gold-glow))',
+              width: 44,
+              height: 44,
+              background: 'linear-gradient(150deg, rgba(240,185,11,0.22), rgba(240,185,11,0.06))',
+              border: '1px solid rgba(240,185,11,0.28)',
+              boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.18), 0 0 18px -6px var(--gold-glow)',
             }}
           >
-            <rect x="4.5" y="10.5" width="15" height="9.5" rx="2.5" />
-            <path d="M8 10.5V7.8a4 4 0 0 1 8 0v2.7" />
-            <circle cx="12" cy="15.2" r="1.3" fill="currentColor" stroke="none" />
-          </svg>
-          <p
-            className="text-center text-3xs font-bold uppercase leading-tight"
+            {/* Линейный замок в грамматике иконок CategoryEntryCard
+                (24-сетка, stroke 1.8, круглые концы) — вместо растрового
+                reward-lock.png 2048×2048 на 28 CSS-пикселях. */}
+            <svg
+              width="22"
+              height="22"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.8"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
+              style={{ color: 'var(--gold-soft)' }}
+            >
+              <rect x="4.5" y="10.5" width="15" height="9.5" rx="2.5" />
+              <path d="M8 10.5V7.8a4 4 0 0 1 8 0v2.7" />
+              <circle cx="12" cy="15.2" r="1.3" fill="currentColor" stroke="none" />
+            </svg>
+          </div>
+
+          <div className="flex flex-col items-center" style={{ gap: 3 }}>
+            <p
+              className="text-center"
+              style={{
+                fontFamily: 'var(--font-display)',
+                fontSize: 13,
+                fontWeight: 700,
+                lineHeight: 1.15,
+                letterSpacing: '-0.01em',
+                color: 'var(--ink-0)',
+              }}
+            >
+              Level & rewards
+            </p>
+            <p
+              className="text-center"
+              style={{ fontSize: 10, lineHeight: 1.3, color: 'var(--ink-2)' }}
+            >
+              Earn XP on every ticket
+            </p>
+          </div>
+
+          <span
+            className="inline-flex items-center gap-1 rounded-full shrink-0"
             style={{
-              letterSpacing: '0.03em',
+              padding: '4px 9px',
+              background: 'rgba(240,185,11,0.14)',
+              border: '1px solid rgba(240,185,11,0.3)',
+              fontFamily: 'var(--font-mono)',
+              fontSize: 9,
+              fontWeight: 600,
+              letterSpacing: '0.1em',
+              textTransform: 'uppercase',
               color: 'var(--gold-soft)',
-              textShadow: '0 0 8px var(--gold-glow), 0 1px 4px rgba(0,0,0,0.8)',
             }}
           >
-            Connect to unlock level
-          </p>
+            Connect
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <path d="M9 6l6 6-6 6" />
+            </svg>
+          </span>
         </div>
       ) : (
         <div>
