@@ -7,7 +7,6 @@ import { ALL_LOTTERY_CONFIGS } from '../data/lottery-configs';
 // SELECT COALESCE(SUM("currentJackpot"), 0) FROM "Lottery" WHERE active = true;
 // Результат: 67,500 TON (13 активных лотерей)
 const BASE_JACKPOT_FROM_DB = 67500;
-const LOTTERIES_COUNT = 13;
 
 // Форматтер: запятая как разделитель тысяч (en-US) — интерфейс англоязычный,
 // точка в нём читается как десятичный разделитель.
