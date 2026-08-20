@@ -21,3 +21,10 @@ dist-ssr
 *.sln
 *.sw?
 .env
+
+# Пакетный менеджер проекта — npm, канон версий в package-lock.json.
+# Локи других менеджеров не коммитим, чтобы они не расходились с npm.
+bun.lock
+bun.lockb
+yarn.lock
+pnpm-lock.yaml
