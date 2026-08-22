@@ -4,7 +4,6 @@ import { motion, AnimatePresence } from 'framer-motion';
 // ── Данные ──────────────────────────────────────────────────────────────────
 interface FeatureItem {
   title: string;
-  image: string;
   // 4-sided bevel vars — верх акцентный, лево светлее акцента, право/низ тёмные
   borderTop: string;
   borderLeft: string;
@@ -23,7 +22,6 @@ interface FeatureItem {
 const ITEMS: FeatureItem[] = [
   {
     title: 'Instant Payouts',
-    image: '/images/card-instant-payouts.svg',
     borderTop:    'rgba(255,77,79,0.55)',   // coral
     borderLeft:   'rgba(255,77,79,0.28)',
     borderRight:  'rgba(60,10,0,0.55)',
@@ -36,7 +34,6 @@ const ITEMS: FeatureItem[] = [
   },
   {
     title: 'TON & USDT',
-    image: '/images/card-ton-usdt.png',
     borderTop:    'rgba(10,124,255,0.55)',  // primary
     borderLeft:   'rgba(10,124,255,0.28)',
     borderRight:  'rgba(0,20,60,0.55)',
@@ -49,7 +46,6 @@ const ITEMS: FeatureItem[] = [
   },
   {
     title: 'Provably Fair',
-    image: '/images/card-provably-fair.png',
     borderTop:    'rgba(82,196,26,0.55)',   // emerald
     borderLeft:   'rgba(82,196,26,0.28)',
     borderRight:  'rgba(0,40,20,0.55)',
@@ -62,7 +58,6 @@ const ITEMS: FeatureItem[] = [
   },
   {
     title: 'Massive Prizes',
-    image: '/images/card-massive-prizes.png',
     borderTop:    'rgba(250,219,20,0.55)',  // gold
     borderLeft:   'rgba(250,219,20,0.28)',
     borderRight:  'rgba(60,40,0,0.55)',
@@ -75,7 +70,6 @@ const ITEMS: FeatureItem[] = [
   },
   {
     title: 'Smart Contract',
-    image: '/images/card-smart-contract.png',
     borderTop:    'rgba(14,165,233,0.55)',  // cyan
     borderLeft:   'rgba(14,165,233,0.28)',
     borderRight:  'rgba(0,40,50,0.55)',
@@ -88,7 +82,6 @@ const ITEMS: FeatureItem[] = [
   },
   {
     title: 'Audited Security',
-    image: '/images/card-audited-security.png',
     borderTop:    'rgba(124,58,237,0.55)',  // secondary
     borderLeft:   'rgba(124,58,237,0.28)',
     borderRight:  'rgba(0,40,20,0.55)',
@@ -125,13 +118,10 @@ function FeatureCard({ item, index }: { item: FeatureItem; index: number }) {
       transition={{ type: 'spring', stiffness: 300, damping: 28, mass: 0.8, delay: index * 0.05 }}
       whileTap={{ scale: 0.97 }}
     >
-      <div
-        className="feature-card-img__bg"
-        style={{ backgroundImage: `url(${item.image})` }}
-        aria-hidden="true"
-      />
-      <div className="feature-card-img__tint" aria-hidden="true" />
       <div className="feature-card-img__bevel" aria-hidden="true" />
+      <div className="feature-card-img__footer">
+        <span className="feature-card-img__title">{item.title}</span>
+      </div>
     </motion.div>
   );
 }
@@ -169,13 +159,10 @@ function DesktopCard({ item }: { item: FeatureItem }) {
           transition={{ duration: 0.4, ease: 'easeInOut' }}
           style={{ position: 'absolute', inset: 0 }}
         >
-          <div
-            className="feature-card-img__bg"
-            style={{ backgroundImage: `url(${item.image})` }}
-            aria-hidden="true"
-          />
-          <div className="feature-card-img__tint" aria-hidden="true" />
           <div className="feature-card-img__bevel" aria-hidden="true" />
+          <div className="feature-card-img__footer">
+            <span className="feature-card-img__title">{item.title}</span>
+          </div>
         </motion.div>
       </AnimatePresence>
     </motion.div>
@@ -268,15 +255,13 @@ function DesktopGrid() {
 export function FeaturesBanner({ compact = false }: { compact?: boolean } = {}) {
   return (
     <section className="px-4 pt-2">
-      {/* Mobile — scroll-snap карусель, 1 card = full width, 16:9 */}
-      <div className="md:hidden">
-        <MobileCarousel compact={compact} />
-      </div>
-
-      {/* Desktop — 3 cards, images crossfade in place */}
-      <div className="hidden md:block">
-        <DesktopGrid />
-      </div>
+      {/*
+       * Ровно одна ветка в дереве. Раньше здесь стояла CSS-развилка
+       * md:hidden / hidden md:block — скрытый вариант всё равно монтировался
+       * и держал холостые entrance-анимации. Мобильная главная передаёт
+       * compact, DesktopHome вызывает баннер без пропа.
+       */}
+      {compact ? <MobileCarousel compact /> : <DesktopGrid />}
     </section>
   );
 }
