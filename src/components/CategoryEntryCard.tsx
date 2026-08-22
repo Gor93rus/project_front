@@ -11,17 +11,11 @@ interface CategoryEntryCardProps {
   /** Текст чипа-действия в правом нижнем углу: Enter now / Play / Unlock */
   subtitle: string;
   accent: string;
-  /**
-   * Слот под арт категории. Пока арт не сгенерирован, карточка держится на
-   * градиенте и типографике — линейных иконок больше нет. Как только появится
-   * WebP — достаточно передать путь, вёрстка уже рассчитана под него.
-   */
-  art?: string;
   onClick?: () => void;
   index?: number;
 }
 
-export function CategoryEntryCard({ title, subtitle, accent, art, onClick, index = 0 }: CategoryEntryCardProps) {
+export function CategoryEntryCard({ title, subtitle, accent, onClick, index = 0 }: CategoryEntryCardProps) {
   const clickable = Boolean(onClick);
 
   return (
@@ -67,27 +61,6 @@ export function CategoryEntryCard({ title, subtitle, accent, art, onClick, index
 
       {/* Glass sheen */}
       <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 1, background: 'linear-gradient(165deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.01) 35%, transparent 60%)' }} />
-
-      {/* Слот под арт категории — правая половина карточки, растворяется
-          влево, чтобы не спорить с заголовком */}
-      {art && (
-        <div
-          aria-hidden="true"
-          style={{
-            position: 'absolute',
-            top: 0,
-            right: 0,
-            bottom: 0,
-            width: '58%',
-            zIndex: 1,
-            backgroundImage: `url(${art})`,
-            backgroundSize: 'cover',
-            backgroundPosition: 'center right',
-            WebkitMaskImage: 'linear-gradient(90deg, transparent 0%, #000 55%)',
-            maskImage: 'linear-gradient(90deg, transparent 0%, #000 55%)',
-          }}
-        />
-      )}
 
       {/* Content */}
       <div style={{ position: 'relative', zIndex: 2, display: 'flex', flexDirection: 'column', gap: 7 }}>
