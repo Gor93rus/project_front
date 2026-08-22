@@ -63,7 +63,6 @@ function MobileHome() {
             <CategoryEntryCard
               title="Draw Lotteries"
               subtitle="Enter now"
-              icon="dice"
               accent="var(--primary)"
               onClick={() => navigate('/lotteries')}
               index={0}
@@ -71,7 +70,6 @@ function MobileHome() {
             <CategoryEntryCard
               title="Scratch Cards"
               subtitle="Play"
-              icon="scratch"
               accent="var(--secondary)"
               onClick={() => navigate('/scratch-cards')}
               index={1}
@@ -79,7 +77,6 @@ function MobileHome() {
             <CategoryEntryCard
               title="Lootbox"
               subtitle="Unlock"
-              icon="crate"
               accent="var(--gold)"
               index={2}
             />

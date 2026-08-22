@@ -1,5 +1,4 @@
 import { motion } from 'framer-motion';
-import type { ReactNode } from 'react';
 
 /**
  * CategoryEntryCard — крупная карточка-вход в категорию для левой (тяжёлой)
@@ -7,50 +6,22 @@ import type { ReactNode } from 'react';
  * тап ведёт на страницу со списком всех вариантов категории.
  */
 
-const ICONS: Record<'dice' | 'scratch' | 'crate', ReactNode> = {
-  dice: (
-    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-      <rect x="3" y="3" width="18" height="18" rx="4" />
-      <circle cx="8" cy="8" r="1.2" fill="currentColor" stroke="none" />
-      <circle cx="16" cy="8" r="1.2" fill="currentColor" stroke="none" />
-      <circle cx="12" cy="12" r="1.2" fill="currentColor" stroke="none" />
-      <circle cx="8" cy="16" r="1.2" fill="currentColor" stroke="none" />
-      <circle cx="16" cy="16" r="1.2" fill="currentColor" stroke="none" />
-    </svg>
-  ),
-  scratch: (
-    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-      <rect x="3" y="5" width="18" height="14" rx="2.5" />
-      <path d="M6 12h5M6 15.5h3" />
-      <path d="M14 9.5l3 3-3 3-1.5-1.5" />
-    </svg>
-  ),
-  crate: (
-    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M3 9l9-5 9 5-9 5-9-5Z" />
-      <path d="M3 9v8l9 5 9-5V9" />
-      <path d="M12 14v8" />
-    </svg>
-  ),
-};
-
 interface CategoryEntryCardProps {
   title: string;
   /** Текст чипа-действия в правом нижнем углу: Enter now / Play / Unlock */
   subtitle: string;
-  icon: 'dice' | 'scratch' | 'crate';
   accent: string;
   /**
-   * Слот под арт категории. Пока арт не сгенерирован, слот пустой и карточка
-   * держится на градиенте и линейной иконке. Как только появится PNG/WebP —
-   * достаточно передать путь, вёрстка уже рассчитана под него.
+   * Слот под арт категории. Пока арт не сгенерирован, карточка держится на
+   * градиенте и типографике — линейных иконок больше нет. Как только появится
+   * WebP — достаточно передать путь, вёрстка уже рассчитана под него.
    */
   art?: string;
   onClick?: () => void;
   index?: number;
 }
 
-export function CategoryEntryCard({ title, subtitle, icon, accent, art, onClick, index = 0 }: CategoryEntryCardProps) {
+export function CategoryEntryCard({ title, subtitle, accent, art, onClick, index = 0 }: CategoryEntryCardProps) {
   const clickable = Boolean(onClick);
 
   return (
@@ -118,22 +89,11 @@ export function CategoryEntryCard({ title, subtitle, icon, accent, art, onClick,
         />
       )}
 
-      {/* Иконка категории — держит карточку, пока нет арта */}
-      <div
-        style={{
-          position: 'absolute', top: 10, right: 10, zIndex: 2,
-          color: accent, opacity: art ? 0.55 : 0.9,
-          filter: `drop-shadow(0 0 10px ${accent}70)`,
-        }}
-      >
-        {ICONS[icon]}
-      </div>
-
       {/* Content */}
       <div style={{ position: 'relative', zIndex: 2, display: 'flex', flexDirection: 'column', gap: 7 }}>
         <p style={{
-          fontSize: 14.5, fontWeight: 700, color: '#fff',
-          lineHeight: 1.1, letterSpacing: '-0.015em',
+          fontSize: 18, fontWeight: 700, color: '#fff',
+          lineHeight: 1.0, letterSpacing: '-0.03em',
           fontFamily: 'var(--font-display)',
           textShadow: '0 2px 10px rgba(0,0,0,0.5)',
         }}>
