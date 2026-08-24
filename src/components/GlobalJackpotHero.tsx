@@ -433,17 +433,18 @@ function LiveDrawStrip() {
               display: 'flex',
               alignItems: 'center',
               gap: 6,
-              height: 32,
-              padding: '0 14px',
+              height: 28,
+              padding: '0 10px',
               flexShrink: 0,
               borderRadius: 'var(--r-pill)',
-              background: 'linear-gradient(180deg, #FF8C42 0%, #FF6B35 100%)',
-              boxShadow: '0 6px 16px -6px #FF8C42, inset 0 1px 0 rgba(255,255,255,0.38)',
+              background: 'linear-gradient(180deg, var(--gold-soft) 0%, var(--gold) 100%)',
+              border: '1px solid rgba(255,247,176,0.5)',
+              boxShadow: '0 5px 14px -7px var(--gold-glow), inset 0 1px 0 rgba(255,255,255,0.45)',
               fontFamily: 'var(--font-display)',
-              fontSize: 12.5,
+              fontSize: 11,
               fontWeight: 800,
-              letterSpacing: '0.02em',
-              color: '#1A0A02',
+              letterSpacing: '0.04em',
+              color: '#1A1302',
               whiteSpace: 'nowrap',
             }}
           >
@@ -757,19 +758,17 @@ export function GlobalJackpotHero({ showTicker = true }: GlobalJackpotHeroProps 
               />
               <span
                 style={{
-                  fontSize: 11,
+                  fontSize: 10,
                   fontWeight: 800,
-                  letterSpacing: '0.16em',
+                  letterSpacing: '0.12em',
                   textTransform: 'uppercase',
                   color: 'var(--ink-2)',
                   fontFamily: 'var(--font-mono)',
                 }}
               >
-                Recent wins
+                Upcoming draws
               </span>
             </span>
-
-            <span style={{ width: 1, height: 16, background: 'var(--line-strong)', flexShrink: 0, zIndex: 3 }} />
 
             {/* Растворение краёв делаем настоящей маской, а не двумя цветными
                 накладками: накладки красились в rgba(8,11,30,.95), а фон полосы
