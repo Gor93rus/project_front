@@ -159,8 +159,18 @@
   --coral-35: rgba(255,77,79,0.35);
 
   /* ── Шрифты ── */
+  /* Display остаётся Space Grotesk: его геометрия хорошо держит игровые labels,
+     а condensed-эффект задаётся tracking/weight на конкретных display-ролях. */
   --font-display: 'Space Grotesk', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
+
+  /* ── Forge surface language ── */
+  --forge-ink: #080B18;
+  --forge-steel: #263657;
+  --forge-highlight: rgba(173, 197, 255, 0.18);
+  --forge-shadow: rgba(0, 0, 0, 0.76);
+  --forge-gold-edge: rgba(250, 219, 20, 0.42);
+  --forge-grain: rgba(255, 255, 255, 0.028);
 
   /* ── Safe area ── */
   --safe-area-top: env(safe-area-inset-top, 0px);
