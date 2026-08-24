@@ -525,13 +525,11 @@ export function GlobalJackpotHero({ showTicker = true }: GlobalJackpotHeroProps 
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
-        className="jackpot-hero"
         style={{
           position: 'relative',
           borderRadius: 'var(--r-xl)',
           overflow: 'hidden',
-          // Насыщенная clean заливка: obsidian + холодная сталь сверху.
-          // Gold glow остаётся единственным героем, purple — только атмосферой.
+          // Насыщенная чистая заливка: глубокий navy + лёгкий фиолет сверху.
           // Свет (god-rays + золото) вынесен в отдельные слои выше, чтобы не мутить базу.
           background: `
             radial-gradient(130% 80% at 50% -12%, rgba(124,58,237,0.22) 0%, rgba(124,58,237,0.06) 32%, transparent 60%),
@@ -726,7 +724,7 @@ export function GlobalJackpotHero({ showTicker = true }: GlobalJackpotHeroProps 
         {/* ПОЛОСА ЖИВОГО ТИРАЖА — единственное действие на первом экране */}
         <LiveDrawStrip />
 
-        {/* ТИКЕР — шаг 4: последним, clip overflow чт��бы не дёргалось при slideUp */}
+        {/* ТИКЕР — шаг 4: последним, clip overflow чтобы не дёргалось при slideUp */}
         {showTicker && (
           <motion.div
             initial={{ opacity: 0, y: 8 }}
