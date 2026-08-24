@@ -171,9 +171,24 @@ function DesktopCard({ item }: { item: FeatureItem }) {
 
 // ═══════════════════════════════════════════════════════════════════════════════
 // MOBILE SCROLL CAROUSEL — scroll-snap, 1 card per snap (100% width, 16:9)
-// ═══════════════════════════════════���══════���════════════════════════════════════
+// ═══════════════════════════════════���═══════════════════════════════════════════
 function MobileCarousel({ compact = false }: { compact?: boolean }) {
   const scrollRef = useRef<HTMLDivElement>(null);
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+
+    const onScroll = () => {
+      const cardWidth = el.scrollWidth / ITEMS.length;
+      const index = Math.round(el.scrollLeft / cardWidth);
+      setActiveIndex(Math.min(Math.max(index, 0), ITEMS.length - 1));
+    };
+
+    el.addEventListener('scroll', onScroll, { passive: true });
+    return () => el.removeEventListener('scroll', onScroll);
+  }, []);
 
   return (
     <div className={`features-mobile-carousel${compact ? ' features-mobile-carousel--compact' : ''}`}>
@@ -186,7 +201,18 @@ function MobileCarousel({ compact = false }: { compact?: boolean }) {
         ))}
       </div>
 
-
+      {/* Dot indicators — скрыты в compact-режиме (главная), чтобы не
+          занимать лишнюю вертикаль без скролла. */}
+      {!compact && (
+        <div className="features-carousel-dots" aria-hidden="true">
+          {ITEMS.map((_, i) => (
+            <span
+              key={i}
+              className={`features-carousel-dot${i === activeIndex ? ' features-carousel-dot--active' : ''}`}
+            />
+          ))}
+        </div>
+      )}
     </div>
   );
 }
