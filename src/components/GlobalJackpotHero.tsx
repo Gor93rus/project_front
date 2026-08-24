@@ -177,12 +177,12 @@ function WinnerRow({ entry, index }: { entry: WinnerEntry; index: number }) {
       }}
     >
       {avatarFromName(entry.user, index)}
-      <span style={{ color: 'var(--ink-1)', fontWeight: 600, fontSize: 11 }}>{entry.user}</span>
-      <span style={{ color: 'var(--ink-3)', fontSize: 11, fontFamily: 'var(--font-mono)' }}>won</span>
-      <span style={{ color: 'var(--emerald-soft)', fontWeight: 700, fontFamily: 'var(--font-mono)', fontSize: 11 }}>
+      <span style={{ color: 'var(--ink-1)', fontWeight: 750, fontSize: 11 }}>{entry.user}</span>
+      <span style={{ color: 'var(--ink-2)', fontSize: 11, fontWeight: 600, fontFamily: 'var(--font-mono)' }}>won</span>
+      <span style={{ color: 'var(--emerald-soft)', fontWeight: 800, fontFamily: 'var(--font-mono)', fontSize: 11, textShadow: '0 0 8px var(--emerald-glow)' }}>
         {entry.prize}
       </span>
-      <span style={{ color: 'var(--ink-3)', fontSize: 11 }}>in</span>
+      <span style={{ color: 'var(--ink-2)', fontSize: 11, fontWeight: 600 }}>in</span>
       <span style={{
         color: 'var(--primary-soft)',
         fontSize: 11,
@@ -734,62 +734,32 @@ export function GlobalJackpotHero({ showTicker = true }: GlobalJackpotHeroProps 
               position: 'relative',
               display: 'flex',
               alignItems: 'center',
-              gap: 10,
               height: 38,
-              padding: '0 12px',
+              padding: 0,
               background: 'linear-gradient(180deg, #0C1629 0%, #080F1E 100%)',
               borderTop: '1.5px solid rgba(255,255,255,0.08)',
               boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.04)',
               zIndex: 3,
             }}
           >
-            <span className="flex items-center shrink-0" style={{ gap: 5, zIndex: 3 }}>
-              <motion.span
-                style={{
-                  width: 6,
-                  height: 6,
-                  borderRadius: '50%',
-                  background: 'var(--emerald)',
-                  boxShadow: '0 0 8px var(--emerald-glow)',
-                }}
-                animate={{ opacity: [1, 0.3, 1] }}
-                transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
-              />
-              <span
-                style={{
-                  fontSize: 11,
-                  fontWeight: 800,
-                  letterSpacing: '0.16em',
-                  textTransform: 'uppercase',
-                  color: 'var(--ink-2)',
-                  fontFamily: 'var(--font-mono)',
-                }}
-              >
-                Recent wins
-              </span>
-            </span>
-
-            <span style={{ width: 1, height: 16, background: 'var(--line-strong)', flexShrink: 0, zIndex: 3 }} />
-
-            {/* Растворение краёв делаем настоящей маской, а не двумя цветными
-                накладками: накладки красились в rgba(8,11,30,.95), а фон полосы
-                — #0C1629 → #080F1E, цвета не совпадали и вместо растворения
-                получалась грязная плашка с обрезанными на середине словами. */}
+            {/* Ticker идёт от края до края hero: без дополнительного label
+                Recent wins и вертикального разделителя. Края мягко маскируются,
+                чтобы первая и последняя карточка не обрезались резко. */}
             <div
               style={{
                 position: 'relative',
-                flex: 1,
+                width: '100%',
                 overflow: 'hidden',
                 height: '100%',
                 WebkitMaskImage:
-                  'linear-gradient(90deg, transparent 0, #000 28px, #000 calc(100% - 28px), transparent 100%)',
+                  'linear-gradient(90deg, transparent 0, #000 18px, #000 calc(100% - 18px), transparent 100%)',
                 maskImage:
-                  'linear-gradient(90deg, transparent 0, #000 28px, #000 calc(100% - 28px), transparent 100%)',
+                  'linear-gradient(90deg, transparent 0, #000 18px, #000 calc(100% - 18px), transparent 100%)',
               }}
             >
               <div
                 className="winners-scroll"
-                style={{ position: 'absolute', top: 0, height: '100%', display: 'flex', alignItems: 'center', paddingLeft: 28, paddingRight: 28 }}
+                style={{ position: 'absolute', top: 0, height: '100%', display: 'flex', alignItems: 'center', paddingLeft: 18, paddingRight: 18 }}
               >
                 {winnerRows}
               </div>
