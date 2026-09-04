@@ -145,6 +145,97 @@
     min-height: 100vh;
   }
 }
+
+/* Mobile home composition: compact first screen without shrinking touch targets. */
+@media (max-width: 767px) {
+  .mobile-home--compact {
+    gap: 0;
+  }
+
+  .mobile-home--compact .global-jackpot-hero > div {
+    /* Keep the hero visually dense while preserving its live strip and ticker. */
+  }
+
+  .mobile-home--compact .global-jackpot-hero {
+    margin-inline: 12px;
+  }
+
+  .mobile-home--compact .global-jackpot-hero > div > div:nth-child(4) {
+    padding: 12px 12px 10px !important;
+  }
+
+  .mobile-home--compact .global-jackpot-hero > div > div:nth-child(4) > div:first-child {
+    margin-bottom: 4px !important;
+  }
+
+  .mobile-home--compact .global-jackpot-hero > div > div:nth-child(4) > div:first-child span {
+    font-size: 17px !important;
+  }
+
+  .mobile-home--compact .global-jackpot-hero > div > div:first-child {
+    top: 39% !important;
+  }
+
+  .mobile-home--compact .global-jackpot-hero > div > div:nth-child(4) > div:nth-child(2) span:first-child {
+    font-size: 42px !important;
+  }
+
+  .mobile-home--compact .global-jackpot-hero > div > div:nth-child(4) > div:nth-child(2) span:last-child {
+    font-size: 12px !important;
+  }
+
+  .mobile-home--compact .global-jackpot-hero > div > div:nth-child(4) > span {
+    margin-top: 3px !important;
+    font-size: 9px !important;
+  }
+
+  .mobile-home--compact .global-jackpot-hero > div > div:nth-child(5) {
+    height: 40px !important;
+  }
+
+  .mobile-home--compact .global-jackpot-hero > div > div:nth-child(6) {
+    height: 32px !important;
+  }
+
+  .mobile-home--compact .grid.grid-cols-2 {
+    gap: 8px;
+  }
+
+  .mobile-home--compact .grid.grid-cols-2 > button {
+    min-height: 84px !important;
+    padding: 8px 10px 9px !important;
+  }
+
+  .mobile-home--compact .grid.grid-cols-2 > button p {
+    font-size: 16px !important;
+  }
+
+  .mobile-home--compact .grid.grid-cols-2 > button span {
+    height: 24px !important;
+    padding-inline: 9px !important;
+  }
+
+  .mobile-home--compact .features-mobile-carousel--compact .feature-card-img--carousel-item {
+    aspect-ratio: 40 / 9;
+  }
+
+  .mobile-home--compact .mobile-home-gamification {
+    min-height: 92px;
+    max-height: 104px;
+    padding: 8px !important;
+  }
+
+  .mobile-home--compact .mobile-home-gamification > div {
+    gap: 5px !important;
+  }
+
+  .mobile-home--compact .mobile-home-gamification > div > div:first-child {
+    width: 34px !important;
+    height: 34px !important;
+  }
+}
+
+
 .app-shell-decor {
   display: none;
   position: fixed;

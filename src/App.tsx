@@ -39,7 +39,7 @@ function MobileHome() {
   const navigate = useNavigate();
 
   return (
-    <div className="mobile-home flex flex-col pb-2">
+    <div className="mobile-home mobile-home--compact flex flex-col pb-2">
       {/* Первый экран: jackpot и ключевые действия должны читаться без скролла. */}
       <AnimatedSection variants={fadeUp} delay={0.05}>
         <GlobalJackpotHero />
@@ -89,7 +89,7 @@ function MobileHome() {
       <div style={{ height: 10 }} />
 
       <AnimatedSection variants={fadeUpCard}>
-        <GamificationCompact />
+        <GamificationCompact className="mobile-home-gamification" />
       </AnimatedSection>
 
       <div style={{ height: 10 }} />

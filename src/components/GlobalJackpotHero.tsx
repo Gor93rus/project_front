@@ -520,7 +520,7 @@ export function GlobalJackpotHero({ showTicker = true }: GlobalJackpotHeroProps 
   );
 
   return (
-    <section className="mx-4">
+    <section className="global-jackpot-hero mx-4">
       <motion.div
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
