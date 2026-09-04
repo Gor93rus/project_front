@@ -39,61 +39,66 @@ function MobileHome() {
   const navigate = useNavigate();
 
   return (
-    <div className="flex flex-col pb-2">
-      {/* Recent wins тикер возвращён в hero (замедленный marquee) — так
-          пользователь видит выигрыши сразу в самом заметном блоке. */}
+    <div className="mobile-home flex flex-col pb-2">
+      {/* Первый экран: jackpot и ключевые действия должны читаться без скролла. */}
       <AnimatedSection variants={fadeUp} delay={0.05}>
         <GlobalJackpotHero />
       </AnimatedSection>
 
       <div style={{ height: 6 }} />
 
-      {/* Featured banners — компактнее (28:9 вместо 16:9), чтобы оставить
-          больше места для сетки категорий без скролла. */}
-      <AnimatedSection variants={fadeUpCard} delay={0.18}>
+      {/* Прямой переход к выплатам — сразу после jackpot, как в Stitch. */}
+      <AnimatedSection variants={fadeUpCard} delay={0.14}>
         <FeaturesBanner compact />
       </AnimatedSection>
 
       <div style={{ height: 10 }} />
 
+      {/* Главные игровые режимы — одна компактная двухколоночная зона. */}
       <AnimatedSection variants={stagger}>
         <div className="px-4 grid grid-cols-2 gap-2.5 items-stretch">
-          {/* Левая колонка — тяжёлая: 3 крупные карточки-входа */}
-          <div className="flex flex-col gap-2.5">
-            <CategoryEntryCard
-              title="Draw Lotteries"
-              subtitle="Enter now"
-              accent="var(--primary)"
-              onClick={() => navigate('/lotteries')}
-              index={0}
-            />
-            <CategoryEntryCard
-              title="Scratch Cards"
-              subtitle="Play"
-              accent="var(--secondary)"
-              onClick={() => navigate('/scratch-cards')}
-              index={1}
-            />
-            <CategoryEntryCard
-              title="Lootbox"
-              subtitle="Unlock"
-              accent="var(--gold)"
-              index={2}
-            />
-          </div>
-
-          {/* Правая колонка. Мини-баннер снизу — фиксированные 90 px: это
-              вспомогательный слот новостей, ему не нужна половина колонки.
-              Весь остаток высоты забирает Gamification — единственный блок
-              правой колонки, ведущий в личный прогресс. */}
-          <div className="flex flex-col gap-2.5 h-full">
-            <GamificationCompact className="flex-1" />
-            <RewardsPanel style={{ height: 90, flex: '0 0 90px' }} />
-          </div>
+          <CategoryEntryCard
+            title="Draw Lotteries"
+            subtitle="Enter now"
+            accent="var(--primary)"
+            onClick={() => navigate('/lotteries')}
+            index={0}
+          />
+          <CategoryEntryCard
+            title="Scratch Cards"
+            subtitle="Play"
+            accent="var(--secondary)"
+            onClick={() => navigate('/scratch-cards')}
+            index={1}
+          />
         </div>
       </AnimatedSection>
 
       <div style={{ height: 10 }} />
+
+      {/* Вторичный контент идёт ниже основных CTA и перед футером. */}
+      <AnimatedSection variants={fadeUpCard}>
+        <CategoryEntryCard
+          title="Mystic Lootbox"
+          subtitle="Unlock rare TON rewards"
+          accent="var(--gold)"
+          index={2}
+        />
+      </AnimatedSection>
+
+      <div style={{ height: 10 }} />
+
+      <AnimatedSection variants={fadeUpCard}>
+        <GamificationCompact />
+      </AnimatedSection>
+
+      <div style={{ height: 10 }} />
+
+      <AnimatedSection variants={fadeUpCard}>
+        <RewardsPanel />
+      </AnimatedSection>
+
+      <div style={{ height: 12 }} />
 
       <AnimatedSection variants={fadeUp}>
         <PageFooter />
