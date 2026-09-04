@@ -45,18 +45,22 @@ function MobileHome() {
         <GlobalJackpotHero />
       </AnimatedSection>
 
-      <div style={{ height: 6 }} />
+      <div className="mobile-home__gap mobile-home__gap--hero" />
 
       {/* Прямой переход к выплатам — сразу после jackpot, как в Stitch. */}
       <AnimatedSection variants={fadeUpCard} delay={0.14}>
         <FeaturesBanner compact />
       </AnimatedSection>
 
-      <div style={{ height: 10 }} />
+      <div className="mobile-home__gap" />
 
       {/* Главные игровые режимы — одна компактная двухколоночная зона. */}
       <AnimatedSection variants={stagger}>
+<<<<<<< HEAD
         <div className="px-4 grid grid-cols-2 gap-2.5 items-stretch">
+=======
+        <div className="mobile-home__primary-grid px-4 grid grid-cols-2 items-stretch">
+>>>>>>> 504b983 (feat: refactor mobile home layout and add compact view)
           <CategoryEntryCard
             title="Draw Lotteries"
             subtitle="Enter now"
@@ -74,7 +78,29 @@ function MobileHome() {
         </div>
       </AnimatedSection>
 
-      <div style={{ height: 10 }} />
+      <div className="mobile-home__gap" />
+
+      <AnimatedSection variants={fadeUpCard}>
+        <div className="px-4">
+          <CategoryEntryCard
+            title="Mystic Lootbox"
+            subtitle="Unlock"
+            accent="var(--gold)"
+            index={2}
+          />
+        </div>
+      </AnimatedSection>
+
+      <div className="mobile-home__gap" />
+
+      <AnimatedSection variants={fadeUpCard}>
+        <div className="px-4 mobile-home__secondary-grid">
+          <GamificationCompact className="mobile-home-gamification" />
+          <RewardsPanel />
+        </div>
+      </AnimatedSection>
+
+      <div className="mobile-home__gap mobile-home__gap--footer" />
 
       {/* Вторичный контент идёт ниже основных CTA и перед футером. */}
       <AnimatedSection variants={fadeUpCard}>
