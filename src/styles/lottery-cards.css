@@ -629,7 +629,9 @@
   will-change: transform;
 
   /* Полностью непрозрачный тёмный фон */
-  background: #07091c;
+  background:
+    radial-gradient(72% 140% at 88% 50%, var(--fc-glow, rgba(10,124,255,0.18)), transparent 62%),
+    linear-gradient(105deg, #101a38 0%, #080d24 58%, #111735 100%);
 
   /*
    * 3D glass bevel — 4-sided асимметричный бортик, точно как у лотерейных карточек:

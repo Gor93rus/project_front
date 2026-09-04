@@ -113,7 +113,7 @@
 .anim-pulse-glow{animation:pulse-glow 2s ease-in-out infinite}
 .anim-flicker{animation:flame-flicker 0.6s ease-in-out infinite}
 
-/* ════════════════════════���═════════════════════════
+/* ════════════════════���═══���═════════════════════════
    PREMIUM CARD OVERLAYS
    ══════════════════════════════════════════════════ */
 .premium-glass { position:absolute; inset:0; pointer-events:none; background:linear-gradient(160deg,rgba(255,255,255,0.06) 0%,rgba(255,255,255,0.01) 30%,transparent 60%),radial-gradient(120% 60% at 0% 0%,rgba(255,255,255,0.06),transparent 60%); }
@@ -145,6 +145,97 @@
     min-height: 100vh;
   }
 }
+
+/* Mobile home composition: compact first screen without shrinking touch targets. */
+@media (max-width: 767px) {
+  .mobile-home--compact {
+    gap: 0;
+  }
+
+  .mobile-home--compact .global-jackpot-hero > div {
+    /* Keep the hero visually dense while preserving its live strip and ticker. */
+  }
+
+  .mobile-home--compact .global-jackpot-hero {
+    margin-inline: 12px;
+  }
+
+  .mobile-home--compact .global-jackpot-hero > div > div:nth-child(4) {
+    padding: 12px 12px 10px !important;
+  }
+
+  .mobile-home--compact .global-jackpot-hero > div > div:nth-child(4) > div:first-child {
+    margin-bottom: 4px !important;
+  }
+
+  .mobile-home--compact .global-jackpot-hero > div > div:nth-child(4) > div:first-child span {
+    font-size: 17px !important;
+  }
+
+  .mobile-home--compact .global-jackpot-hero > div > div:first-child {
+    top: 39% !important;
+  }
+
+  .mobile-home--compact .global-jackpot-hero > div > div:nth-child(4) > div:nth-child(2) span:first-child {
+    font-size: 42px !important;
+  }
+
+  .mobile-home--compact .global-jackpot-hero > div > div:nth-child(4) > div:nth-child(2) span:last-child {
+    font-size: 12px !important;
+  }
+
+  .mobile-home--compact .global-jackpot-hero > div > div:nth-child(4) > span {
+    margin-top: 3px !important;
+    font-size: 9px !important;
+  }
+
+  .mobile-home--compact .global-jackpot-hero > div > div:nth-child(5) {
+    height: 40px !important;
+  }
+
+  .mobile-home--compact .global-jackpot-hero > div > div:nth-child(6) {
+    height: 32px !important;
+  }
+
+  .mobile-home--compact .grid.grid-cols-2 {
+    gap: 8px;
+  }
+
+  .mobile-home--compact .grid.grid-cols-2 > button {
+    min-height: 84px !important;
+    padding: 8px 10px 9px !important;
+  }
+
+  .mobile-home--compact .grid.grid-cols-2 > button p {
+    font-size: 16px !important;
+  }
+
+  .mobile-home--compact .grid.grid-cols-2 > button span {
+    height: 24px !important;
+    padding-inline: 9px !important;
+  }
+
+  .mobile-home--compact .features-mobile-carousel--compact .feature-card-img--carousel-item {
+    aspect-ratio: 40 / 9;
+  }
+
+  .mobile-home--compact .mobile-home-gamification {
+    min-height: 92px;
+    max-height: 104px;
+    padding: 8px !important;
+  }
+
+  .mobile-home--compact .mobile-home-gamification > div {
+    gap: 5px !important;
+  }
+
+  .mobile-home--compact .mobile-home-gamification > div > div:first-child {
+    width: 34px !important;
+    height: 34px !important;
+  }
+}
+
+
 .app-shell-decor {
   display: none;
   position: fixed;
@@ -391,6 +482,113 @@
 .reward-3d--streak .reward-3d__face--back {
   background: linear-gradient(135deg, #ffd166, #ef4444);
 }
+
+/* Mobile home: preserve hierarchy while fitting the primary actions above the fold. */
+@media (max-width: 767px) {
+  .mobile-home--compact {
+    gap: 0;
+  }
+
+  .mobile-home--compact .global-jackpot-hero {
+    margin-inline: 12px;
+  }
+
+  .mobile-home__gap {
+    height: 8px;
+    flex: 0 0 8px;
+  }
+
+  .mobile-home__gap--hero {
+    height: 6px;
+    flex-basis: 6px;
+  }
+
+  .mobile-home__gap--footer {
+    height: 12px;
+    flex-basis: 12px;
+  }
+
+  .mobile-home--compact .global-jackpot-hero > div {
+    border-radius: 22px !important;
+  }
+
+  .mobile-home--compact .global-jackpot-hero > div > div:nth-child(4) {
+    padding: 10px 12px 8px !important;
+  }
+
+  .mobile-home--compact .global-jackpot-hero > div > div:nth-child(4) > div:first-child {
+    margin-bottom: 2px !important;
+  }
+
+  .mobile-home--compact .global-jackpot-hero > div > div:nth-child(4) > div:first-child span {
+    font-size: 15px !important;
+  }
+
+  .mobile-home--compact .global-jackpot-hero > div > div:first-child {
+    top: 38% !important;
+  }
+
+  .mobile-home--compact .global-jackpot-hero > div > div:nth-child(4) > div:nth-child(2) span:first-child {
+    font-size: 39px !important;
+  }
+
+  .mobile-home--compact .global-jackpot-hero > div > div:nth-child(4) > div:nth-child(2) span:last-child {
+    font-size: 11px !important;
+  }
+
+  .mobile-home--compact .global-jackpot-hero > div > div:nth-child(4) > span {
+    margin-top: 2px !important;
+    font-size: 8px !important;
+  }
+
+  .mobile-home--compact .global-jackpot-hero > div > div:nth-child(5) {
+    height: 36px !important;
+  }
+
+  .mobile-home--compact .global-jackpot-hero > div > div:nth-child(6) {
+    height: 28px !important;
+  }
+
+  .mobile-home--compact .features-mobile-carousel--compact .feature-card-img--carousel-item {
+    min-height: 76px;
+  }
+
+  .mobile-home__primary-grid {
+    gap: 8px;
+  }
+
+  .mobile-home__primary-grid > button {
+    min-height: 84px !important;
+    padding: 8px 10px 9px !important;
+  }
+
+  .mobile-home__primary-grid > button p {
+    font-size: 16px !important;
+  }
+
+  .mobile-home__primary-grid > button span {
+    height: 24px !important;
+    padding-inline: 9px !important;
+  }
+
+  .mobile-home--compact > .motion-safe\:transform,
+  .mobile-home--compact > div:has(> .rewards-unlock-card) {
+    margin-inline: 12px;
+  }
+
+  .mobile-home__secondary-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.08fr) minmax(0, 0.92fr);
+    gap: 8px;
+    align-items: stretch;
+  }
+
+  .mobile-home-gamification,
+  .mobile-home__secondary-grid > * {
+    min-width: 0;
+  }
+}
+
 .reward-3d--badge .reward-3d__face {
   clip-path: polygon(50% 0%, 62% 28%, 92% 32%, 70% 52%, 76% 84%, 50% 67%, 24% 84%, 30% 52%, 8% 32%, 38% 28%);
   border-radius: 8px;
