@@ -619,7 +619,7 @@ export function GlobalJackpotHero({ showTicker = true }: GlobalJackpotHeroProps 
           ─────────────────────────────────────────────────────────────────── */}
           <motion.div
             className="flex items-baseline"
-            style={{ gap: 8 }}
+            style={{ gap: 5 }}
             initial={{ opacity: 0, y: 16, scale: 0.92 }}
             animate={
               milestoneFlash
@@ -635,9 +635,9 @@ export function GlobalJackpotHero({ showTicker = true }: GlobalJackpotHeroProps 
             <span
               className="font-tabular"
               style={{
-                fontSize: 'clamp(38px, 7.5vw, 80px)',
-                lineHeight: 0.9,
-                letterSpacing: '-0.03em',
+                fontSize: 'clamp(44px, 11vw, 80px)',
+                lineHeight: 0.92,
+                letterSpacing: '-0.045em',
                 fontFamily: 'var(--font-mono)',
                 fontWeight: 800,
                 background: `
