@@ -56,11 +56,7 @@ function MobileHome() {
 
       {/* Главные игровые режимы — одна компактная двухколоночная зона. */}
       <AnimatedSection variants={stagger}>
-<<<<<<< HEAD
-        <div className="px-4 grid grid-cols-2 gap-2.5 items-stretch">
-=======
         <div className="mobile-home__primary-grid px-4 grid grid-cols-2 items-stretch">
->>>>>>> 504b983 (feat: refactor mobile home layout and add compact view)
           <CategoryEntryCard
             title="Draw Lotteries"
             subtitle="Enter now"
