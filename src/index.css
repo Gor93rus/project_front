@@ -107,6 +107,17 @@
 @keyframes ring-expand { 0%{transform:scale(0.4);opacity:0.8} 100%{transform:scale(1.6);opacity:0} }
 @keyframes confetti-fall { 0%{transform:translateY(-10px) rotate(0deg);opacity:0} 10%{opacity:1} 100%{transform:translateY(40px) rotate(360deg);opacity:0} }
 @keyframes text-sheen { 0%{background-position:220% 0,0 0} 55%,100%{background-position:-120% 0,0 0} }
+/* God-rays: вращение запечённого SVG-слоя через CSS (без JS-интерполяции,
+   без conic-gradient, без mask-image, без mix-blend-mode). */
+.god-rays-spinner {
+  will-change: transform;
+  transform: translateZ(0);
+  animation: godRaysSpin 70s linear infinite;
+}
+@keyframes godRaysSpin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
 
 .anim-float-y{animation:float-y 2.6s ease-in-out infinite}
 .anim-spin-slow{animation:spin-slow 6s linear infinite}
@@ -146,94 +157,6 @@
   }
 }
 
-/* Mobile home composition: compact first screen without shrinking touch targets. */
-@media (max-width: 767px) {
-  .mobile-home--compact {
-    gap: 0;
-  }
-
-  .mobile-home--compact .global-jackpot-hero > div {
-    /* Keep the hero visually dense while preserving its live strip and ticker. */
-  }
-
-  .mobile-home--compact .global-jackpot-hero {
-    margin-inline: 12px;
-  }
-
-  .mobile-home--compact .global-jackpot-hero > div > div:nth-child(4) {
-    padding: 12px 12px 10px !important;
-  }
-
-  .mobile-home--compact .global-jackpot-hero > div > div:nth-child(4) > div:first-child {
-    margin-bottom: 4px !important;
-  }
-
-  .mobile-home--compact .global-jackpot-hero > div > div:nth-child(4) > div:first-child span {
-    font-size: 17px !important;
-  }
-
-  .mobile-home--compact .global-jackpot-hero > div > div:first-child {
-    top: 39% !important;
-  }
-
-  .mobile-home--compact .global-jackpot-hero > div > div:nth-child(4) > div:nth-child(2) span:first-child {
-    font-size: 42px !important;
-  }
-
-  .mobile-home--compact .global-jackpot-hero > div > div:nth-child(4) > div:nth-child(2) span:last-child {
-    font-size: 12px !important;
-  }
-
-  .mobile-home--compact .global-jackpot-hero > div > div:nth-child(4) > span {
-    margin-top: 3px !important;
-    font-size: 9px !important;
-  }
-
-  .mobile-home--compact .global-jackpot-hero > div > div:nth-child(5) {
-    height: 40px !important;
-  }
-
-  .mobile-home--compact .global-jackpot-hero > div > div:nth-child(6) {
-    height: 32px !important;
-  }
-
-  .mobile-home--compact .grid.grid-cols-2 {
-    gap: 8px;
-  }
-
-  .mobile-home--compact .grid.grid-cols-2 > button {
-    min-height: 84px !important;
-    padding: 8px 10px 9px !important;
-  }
-
-  .mobile-home--compact .grid.grid-cols-2 > button p {
-    font-size: 16px !important;
-  }
-
-  .mobile-home--compact .grid.grid-cols-2 > button span {
-    height: 24px !important;
-    padding-inline: 9px !important;
-  }
-
-  .mobile-home--compact .features-mobile-carousel--compact .feature-card-img--carousel-item {
-    aspect-ratio: 40 / 9;
-  }
-
-  .mobile-home--compact .mobile-home-gamification {
-    min-height: 92px;
-    max-height: 104px;
-    padding: 8px !important;
-  }
-
-  .mobile-home--compact .mobile-home-gamification > div {
-    gap: 5px !important;
-  }
-
-  .mobile-home--compact .mobile-home-gamification > div > div:first-child {
-    width: 34px !important;
-    height: 34px !important;
-  }
-}
 
 
 .app-shell-decor {
@@ -517,11 +440,7 @@
   }
 
   .mobile-home--compact .global-jackpot-hero > div > div:nth-child(4) > div:first-child {
-    margin-bottom: 2px !important;
-  }
-
-  .mobile-home--compact .global-jackpot-hero > div > div:nth-child(4) > div:first-child span {
-    font-size: 15px !important;
+    margin-bottom: 8px !important;
   }
 
   .mobile-home--compact .global-jackpot-hero > div > div:first-child {
@@ -529,7 +448,7 @@
   }
 
   .mobile-home--compact .global-jackpot-hero > div > div:nth-child(4) > div:nth-child(2) span:first-child {
-    font-size: 39px !important;
+    font-size: 48px !important;
   }
 
   .mobile-home--compact .global-jackpot-hero > div > div:nth-child(4) > div:nth-child(2) span:last-child {
@@ -537,7 +456,7 @@
   }
 
   .mobile-home--compact .global-jackpot-hero > div > div:nth-child(4) > span {
-    margin-top: 2px !important;
+    margin-top: 8px !important;
     font-size: 8px !important;
   }
 
@@ -551,6 +470,7 @@
 
   .mobile-home--compact .features-mobile-carousel--compact .feature-card-img--carousel-item {
     min-height: 76px;
+    aspect-ratio: 40 / 9;
   }
 
   .mobile-home__primary-grid {
@@ -586,6 +506,21 @@
   .mobile-home-gamification,
   .mobile-home__secondary-grid > * {
     min-width: 0;
+  }
+
+  .mobile-home--compact .mobile-home-gamification {
+    min-height: 92px;
+    max-height: 104px;
+    padding: 8px !important;
+  }
+
+  .mobile-home--compact .mobile-home-gamification > div {
+    gap: 5px !important;
+  }
+
+  .mobile-home--compact .mobile-home-gamification > div > div:first-child {
+    width: 34px !important;
+    height: 34px !important;
   }
 }
 

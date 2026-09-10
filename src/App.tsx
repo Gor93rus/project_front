@@ -98,28 +98,6 @@ function MobileHome() {
 
       <div className="mobile-home__gap mobile-home__gap--footer" />
 
-      {/* Вторичный контент идёт ниже основных CTA и перед футером. */}
-      <AnimatedSection variants={fadeUpCard}>
-        <CategoryEntryCard
-          title="Mystic Lootbox"
-          subtitle="Unlock rare TON rewards"
-          accent="var(--gold)"
-          index={2}
-        />
-      </AnimatedSection>
-
-      <div style={{ height: 10 }} />
-
-      <AnimatedSection variants={fadeUpCard}>
-        <GamificationCompact className="mobile-home-gamification" />
-      </AnimatedSection>
-
-      <div style={{ height: 10 }} />
-
-      <AnimatedSection variants={fadeUpCard}>
-        <RewardsPanel />
-      </AnimatedSection>
-
       <div style={{ height: 12 }} />
 
       <AnimatedSection variants={fadeUp}>

@@ -1,20 +1,21 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { ALL_LOTTERY_CONFIGS } from '../data/lottery-configs';
+import { api } from '../lib/api';
 
-// ── Реальные данные из БД (PostgreSQL) ────────────────────────────────────
+// в”Ђв”Ђ Р РµР°Р»СЊРЅС‹Рµ РґР°РЅРЅС‹Рµ РёР· Р‘Р” (PostgreSQL) в”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђ
 // SELECT COALESCE(SUM("currentJackpot"), 0) FROM "Lottery" WHERE active = true;
-// Результат: 67,500 TON (13 активных лотерей)
+// Р РµР·СѓР»СЊС‚Р°С‚: 67,500 TON (13 Р°РєС‚РёРІРЅС‹С… Р»РѕС‚РµСЂРµР№)
 const BASE_JACKPOT_FROM_DB = 67500;
 
-// Форматтер: запятая как разделитель тысяч (en-US) — интерфейс англоязычный,
-// точка в нём читается как десятичный разделитель.
+// Р¤РѕСЂРјР°С‚С‚РµСЂ: Р·Р°РїСЏС‚Р°СЏ РєР°Рє СЂР°Р·РґРµР»РёС‚РµР»СЊ С‚С‹СЃСЏС‡ (en-US) вЂ” РёРЅС‚РµСЂС„РµР№СЃ Р°РЅРіР»РѕСЏР·С‹С‡РЅС‹Р№,
+// С‚РѕС‡РєР° РІ РЅС‘Рј С‡РёС‚Р°РµС‚СЃСЏ РєР°Рє РґРµСЃСЏС‚РёС‡РЅС‹Р№ СЂР°Р·РґРµР»РёС‚РµР»СЊ.
 function formatJackpot(value: number): string {
   return value.toLocaleString('en-US', { maximumFractionDigits: 0 });
 }
 
-// ── Победители с информацией о лотереях ────────────────────────────────────
+// в”Ђв”Ђ РџРѕР±РµРґРёС‚РµР»Рё СЃ РёРЅС„РѕСЂРјР°С†РёРµР№ Рѕ Р»РѕС‚РµСЂРµСЏС… в”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђ
 interface WinnerEntry {
   user: string;
   prize: string;
@@ -35,7 +36,7 @@ const GLOBAL_WINNERS_DB: WinnerEntry[] = [
 
 const AVATAR_COLORS = ['#FADB14', '#FF6B35', '#0A7CFF', '#7C3AED', '#52C41A', '#FF4D4F', '#0EA5E9', '#F97316'];
 
-// ── Аватар из имени ─────────────────────────────────────────────────────────
+// в”Ђв”Ђ РђРІР°С‚Р°СЂ РёР· РёРјРµРЅРё в”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђ
 function avatarFromName(name: string, index: number) {
   const letter = name.charAt(0).toUpperCase();
   const bg = AVATAR_COLORS[index % AVATAR_COLORS.length];
@@ -63,105 +64,63 @@ function avatarFromName(name: string, index: number) {
   );
 }
 
-// ── Золотые частицы ─────────────────────────────────────────────────────────
-const PARTICLES = Array.from({ length: 10 }, (_, i) => ({
-  id: i,
-  left: `${5 + Math.random() * 90}%`,
-  delay: `${Math.random() * 3}s`,
-  duration: `${3.5 + Math.random() * 5}s`,
-  size: 2 + Math.random() * 3,
-  opacity: 0.2 + Math.random() * 0.35,
-}));
 
-function GoldParticles() {
-  return (
-    <div aria-hidden="true" className="absolute inset-0 pointer-events-none" style={{ zIndex: 1 }}>
-      {PARTICLES.map(p => (
-        <div
-          key={p.id}
-          className="absolute rounded-full"
-          style={{
-            left: p.left,
-            bottom: '-8px',
-            width: p.size,
-            height: p.size,
-            background: 'var(--gold)',
-            boxShadow: `0 0 ${p.size * 2}px var(--gold-glow)`,
-            opacity: p.opacity,
-            animation: `particleRise ${p.duration}s linear infinite`,
-            animationDelay: p.delay,
-          }}
-        />
-      ))}
-    </div>
-  );
-}
-
-// ── God-rays: настоящие лучи света из центра (яркое ядро + узкие чёткие спицы) ─
-// Конический градиент строим программно: 18 лучей, цвет чередуется gold → primary → secondary
-// для более богатого, многоцветного эффекта (вместо монохромного золота).
+// в”Ђв”Ђ God-rays: РЅР°СЃС‚РѕСЏС‰РёРµ Р»СѓС‡Рё СЃРІРµС‚Р° РёР· С†РµРЅС‚СЂР° (СЏСЂРєРѕРµ СЏРґСЂРѕ + СѓР·РєРёРµ С‡С‘С‚РєРёРµ СЃРїРёС†С‹) в”Ђ
+// РљРѕРЅРёС‡РµСЃРєРёР№ РіСЂР°РґРёРµРЅС‚ СЃС‚СЂРѕРёРј РїСЂРѕРіСЂР°РјРјРЅРѕ: 18 Р»СѓС‡РµР№, С†РІРµС‚ С‡РµСЂРµРґСѓРµС‚СЃСЏ gold в†’ primary в†’ secondary
+// РґР»СЏ Р±РѕР»РµРµ Р±РѕРіР°С‚РѕРіРѕ, РјРЅРѕРіРѕС†РІРµС‚РЅРѕРіРѕ СЌС„С„РµРєС‚Р° (РІРјРµСЃС‚Рѕ РјРѕРЅРѕС…СЂРѕРјРЅРѕРіРѕ Р·РѕР»РѕС‚Р°).
 const RAY_COUNT = 18;
-const RAY_CORE_COLORS = [
-  'rgba(255,244,170,0.34)',   // gold
-  'rgba(120,180,255,0.26)',   // primary blue
-  'rgba(200,160,255,0.24)',   // secondary purple
-];
-const RAY_SOFT_COLORS = [
-  'rgba(255,240,150,0.05)',
-  'rgba(120,180,255,0.04)',
-  'rgba(190,150,255,0.04)',
-];
-const RAY_GRADIENT = (() => {
-  const step = 360 / RAY_COUNT;
-  const stops: string[] = [];
-  for (let i = 0; i < RAY_COUNT; i++) {
-    const base = i * step;
-    const core = RAY_CORE_COLORS[i % RAY_CORE_COLORS.length];
-    const soft = RAY_SOFT_COLORS[i % RAY_SOFT_COLORS.length];
-    // каждый луч: тёмный зазор → плавный вход → яркое цветное ядро → плавный выход
-    stops.push(`transparent ${base.toFixed(2)}deg`);
-    stops.push(`${soft} ${(base + step * 0.30).toFixed(2)}deg`);
-    stops.push(`${core} ${(base + step * 0.42).toFixed(2)}deg`);
-    stops.push(`${soft} ${(base + step * 0.54).toFixed(2)}deg`);
-    stops.push(`transparent ${(base + step * 0.84).toFixed(2)}deg`);
-  }
-  return `conic-gradient(from 0deg at 50% 50%, ${stops.join(', ')})`;
-})();
+const RAY_COLORS = ['#FFF4AA', '#78B4FF', '#C8A0FF'];
 
 function GodRays() {
-  // Радиальная маска: на мобилке 62%, на десктопе 92% — лучи доходят до краёв контейнера.
-  const maskStyle = {
-    WebkitMaskImage:
-      'radial-gradient(circle at 50% 50%, #000 0%, rgba(0,0,0,0.65) 30%, transparent 92%)',
-    maskImage:
-      'radial-gradient(circle at 50% 50%, #000 0%, rgba(0,0,0,0.65) 30%, transparent 92%)',
-  } as const;
-
   return (
     <div
       aria-hidden="true"
-      className="absolute pointer-events-none"
       style={{
+        position: 'absolute',
         top: '44%',
         left: '50%',
         width: 'clamp(360px, 100vw, 1800px)',
         height: 'clamp(360px, 100vw, 1800px)',
         transform: 'translate(-50%, -50%)',
         zIndex: 0,
-        mixBlendMode: 'screen',
-        ...maskStyle,
+        opacity: 0.6,
+        contain: 'paint',
       }}
     >
-      <motion.div
-        style={{ width: '100%', height: '100%', background: RAY_GRADIENT }}
-        animate={{ rotate: 360 }}
-        transition={{ duration: 70, repeat: Infinity, ease: 'linear' }}
-      />
+      <svg
+        viewBox="0 0 400 400"
+        className="god-rays-spinner"
+        style={{ width: '100%', height: '100%', display: 'block' }}
+      >
+        <defs>
+          <radialGradient id="god-rays-fade" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stopColor="#fff" stopOpacity="1" />
+            <stop offset="30%" stopColor="#fff" stopOpacity="0.6" />
+            <stop offset="92%" stopColor="#fff" stopOpacity="0" />
+          </radialGradient>
+          <mask id="god-rays-mask">
+            <rect x="0" y="0" width="400" height="400" fill="url(#god-rays-fade)" />
+          </mask>
+          <filter id="god-rays-blur" x="-30%" y="-30%" width="160%" height="160%">
+            <feGaussianBlur stdDeviation="2.5" />
+          </filter>
+        </defs>
+        <g mask="url(#god-rays-mask)" filter="url(#god-rays-blur)">
+          {Array.from({ length: RAY_COUNT }).map((_, i) => (
+            <path
+              key={i}
+              d="M200 200 L208 0 L192 0 Z"
+              fill={RAY_COLORS[i % RAY_COLORS.length]}
+              transform={`rotate(${i * (360 / RAY_COUNT)} 200 200)`}
+            />
+          ))}
+        </g>
+      </svg>
     </div>
   );
 }
 
-// ── Winner Row (с лотереей) ─────────────────────────────────────────────────
+// в”Ђв”Ђ Winner Row (СЃ Р»РѕС‚РµСЂРµРµР№) в”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђ
 function WinnerRow({ entry, index }: { entry: WinnerEntry; index: number }) {
   return (
     <span
@@ -198,17 +157,17 @@ function WinnerRow({ entry, index }: { entry: WinnerEntry; index: number }) {
   );
 }
 
-// ═══════════════════════════════════════════════════════════════════════════
-// ПОЛОСА ЖИВОГО ТИРАЖА
-// ═══════════════════════════════════════════════════════════════════════════
-// Отсчёт считаем ровно теми же правилами, что и сама страница тиража
-// (DailyRushPage): MSK = UTC+3, часы из config.drawTimes, продажи закрываются
-// за salesCloseMinutes до розыгрыша. Мок nextDraw из src/data/lotteries.ts не
-// берём: для BIWEEKLY он выдаёт +48 часов, полоса расходилась бы со страницей.
+// в•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђ
+// РџРћР›РћРЎРђ Р–РР’РћР“Рћ РўРР РђР–Рђ
+// в•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђ
+// РћС‚СЃС‡С‘С‚ СЃС‡РёС‚Р°РµРј СЂРѕРІРЅРѕ С‚РµРјРё Р¶Рµ РїСЂР°РІРёР»Р°РјРё, С‡С‚Рѕ Рё СЃР°РјР° СЃС‚СЂР°РЅРёС†Р° С‚РёСЂР°Р¶Р°
+// (DailyRushPage): MSK = UTC+3, С‡Р°СЃС‹ РёР· config.drawTimes, РїСЂРѕРґР°Р¶Рё Р·Р°РєСЂС‹РІР°СЋС‚СЃСЏ
+// Р·Р° salesCloseMinutes РґРѕ СЂРѕР·С‹РіСЂС‹С€Р°. РњРѕРє nextDraw РёР· src/data/lotteries.ts РЅРµ
+// Р±РµСЂС‘Рј: РґР»СЏ BIWEEKLY РѕРЅ РІС‹РґР°С‘С‚ +48 С‡Р°СЃРѕРІ, РїРѕР»РѕСЃР° СЂР°СЃС…РѕРґРёР»Р°СЃСЊ Р±С‹ СЃРѕ СЃС‚СЂР°РЅРёС†РµР№.
 /**
- * Карта slug → маршрут. Конкатенацией `/lottery/${slug}` пользоваться нельзя:
- * у Daily Rush слаг `daily-rush-4x20`, а маршрут в App.tsx — `/lottery/daily-rush`,
- * то есть клик уводил бы на fallback-страницу `/lottery/:slug`.
+ * РљР°СЂС‚Р° slug в†’ РјР°СЂС€СЂСѓС‚. РљРѕРЅРєР°С‚РµРЅР°С†РёРµР№ `/lottery/${slug}` РїРѕР»СЊР·РѕРІР°С‚СЊСЃСЏ РЅРµР»СЊР·СЏ:
+ * Сѓ Daily Rush СЃР»Р°Рі `daily-rush-4x20`, Р° РјР°СЂС€СЂСѓС‚ РІ App.tsx вЂ” `/lottery/daily-rush`,
+ * С‚Рѕ РµСЃС‚СЊ РєР»РёРє СѓРІРѕРґРёР» Р±С‹ РЅР° fallback-СЃС‚СЂР°РЅРёС†Сѓ `/lottery/:slug`.
  */
 const ROUTE_BY_SLUG: Record<string, string> = {
   'daily-rush-4x20': '/lottery/daily-rush',
@@ -228,27 +187,27 @@ const STRIP_SLOTS = 4;
 const URGENT_MS = 5 * 60_000;
 
 /**
- * Сколько осталось до закрытия продаж конкретного тиража.
- * Считаем ровно теми же правилами, что и страница тиража: MSK = UTC+3,
- * часы из config.drawTimes, продажи закрываются за salesCloseMinutes до
- * розыгрыша. Мок nextDraw из src/data/lotteries.ts не берём: для BIWEEKLY он
- * выдаёт +48 часов, полоса расходилась бы со страницей.
+ * РЎРєРѕР»СЊРєРѕ РѕСЃС‚Р°Р»РѕСЃСЊ РґРѕ Р·Р°РєСЂС‹С‚РёСЏ РїСЂРѕРґР°Р¶ РєРѕРЅРєСЂРµС‚РЅРѕРіРѕ С‚РёСЂР°Р¶Р°.
+ * РЎС‡РёС‚Р°РµРј СЂРѕРІРЅРѕ С‚РµРјРё Р¶Рµ РїСЂР°РІРёР»Р°РјРё, С‡С‚Рѕ Рё СЃС‚СЂР°РЅРёС†Р° С‚РёСЂР°Р¶Р°: MSK = UTC+3,
+ * С‡Р°СЃС‹ РёР· config.drawTimes, РїСЂРѕРґР°Р¶Рё Р·Р°РєСЂС‹РІР°СЋС‚СЃСЏ Р·Р° salesCloseMinutes РґРѕ
+ * СЂРѕР·С‹РіСЂС‹С€Р°. РњРѕРє nextDraw РёР· src/data/lotteries.ts РЅРµ Р±РµСЂС‘Рј: РґР»СЏ BIWEEKLY РѕРЅ
+ * РІС‹РґР°С‘С‚ +48 С‡Р°СЃРѕРІ, РїРѕР»РѕСЃР° СЂР°СЃС…РѕРґРёР»Р°СЃСЊ Р±С‹ СЃРѕ СЃС‚СЂР°РЅРёС†РµР№.
  *
- * setUTCHours сам нормализует значение > 23 переносом на следующие сутки,
- * поэтому дополнительный setUTCDate(+1) не нужен: в DailyRushPage он есть
- * и даёт двойной перенос — после последнего розыгрыша суток там показывает
- * ~46 часов вместо ~22. Здесь считаем без этой ошибки.
+ * setUTCHours СЃР°Рј РЅРѕСЂРјР°Р»РёР·СѓРµС‚ Р·РЅР°С‡РµРЅРёРµ > 23 РїРµСЂРµРЅРѕСЃРѕРј РЅР° СЃР»РµРґСѓСЋС‰РёРµ СЃСѓС‚РєРё,
+ * РїРѕСЌС‚РѕРјСѓ РґРѕРїРѕР»РЅРёС‚РµР»СЊРЅС‹Р№ setUTCDate(+1) РЅРµ РЅСѓР¶РµРЅ: РІ DailyRushPage РѕРЅ РµСЃС‚СЊ
+ * Рё РґР°С‘С‚ РґРІРѕР№РЅРѕР№ РїРµСЂРµРЅРѕСЃ вЂ” РїРѕСЃР»Рµ РїРѕСЃР»РµРґРЅРµРіРѕ СЂРѕР·С‹РіСЂС‹С€Р° СЃСѓС‚РѕРє С‚Р°Рј РїРѕРєР°Р·С‹РІР°РµС‚
+ * ~46 С‡Р°СЃРѕРІ РІРјРµСЃС‚Рѕ ~22. Р—РґРµСЃСЊ СЃС‡РёС‚Р°РµРј Р±РµР· СЌС‚РѕР№ РѕС€РёР±РєРё.
  */
 function msToSalesClose(drawTimes: string[], salesCloseMinutes: number): number {
   const now = Date.now();
   const mskOffset = 3;
   let best = Infinity;
 
-  // Перебираем все розыгрыши на сегодня и на завтра и берём первый, продажи
-  // на который ещё открыты. Сравнивать только часы (`h > mskHour`, как было
-  // раньше) нельзя: в 19:57 MSK розыгрыш 20:00 с закрытием продаж в 19:50 уже
-  // недоступен, а счётчик залипал на 00:00:00 и такой тираж занимал верх
-  // списка. Сутки нормализует сам setUTCHours/setUTCDate.
+  // РџРµСЂРµР±РёСЂР°РµРј РІСЃРµ СЂРѕР·С‹РіСЂС‹С€Рё РЅР° СЃРµРіРѕРґРЅСЏ Рё РЅР° Р·Р°РІС‚СЂР° Рё Р±РµСЂС‘Рј РїРµСЂРІС‹Р№, РїСЂРѕРґР°Р¶Рё
+  // РЅР° РєРѕС‚РѕСЂС‹Р№ РµС‰С‘ РѕС‚РєСЂС‹С‚С‹. РЎСЂР°РІРЅРёРІР°С‚СЊ С‚РѕР»СЊРєРѕ С‡Р°СЃС‹ (`h > mskHour`, РєР°Рє Р±С‹Р»Рѕ
+  // СЂР°РЅСЊС€Рµ) РЅРµР»СЊР·СЏ: РІ 19:57 MSK СЂРѕР·С‹РіСЂС‹С€ 20:00 СЃ Р·Р°РєСЂС‹С‚РёРµРј РїСЂРѕРґР°Р¶ РІ 19:50 СѓР¶Рµ
+  // РЅРµРґРѕСЃС‚СѓРїРµРЅ, Р° СЃС‡С‘С‚С‡РёРє Р·Р°Р»РёРїР°Р» РЅР° 00:00:00 Рё С‚Р°РєРѕР№ С‚РёСЂР°Р¶ Р·Р°РЅРёРјР°Р» РІРµСЂС…
+  // СЃРїРёСЃРєР°. РЎСѓС‚РєРё РЅРѕСЂРјР°Р»РёР·СѓРµС‚ СЃР°Рј setUTCHours/setUTCDate.
   for (const t of drawTimes) {
     const hour = parseInt(t, 10);
     for (const dayOffset of [0, 1]) {
@@ -270,40 +229,89 @@ interface StripItem {
   left: number;
 }
 
-/** 4 тиража с ближайшим закрытием продаж, отсортированные по времени. */
+interface RawStripItem {
+  slug: string;
+  title: string;
+  ticketPrice: number;
+  salesCloseAt: number;
+}
+
+/**
+ * 4 nearest draws by sales close, sorted by time.
+ * Primary source: GET /draws/current (real backend). Fallback: local configs
+ * (msToSalesClose) when the backend is unreachable (e.g. local dev).
+ */
 function useUpcomingDraws(): StripItem[] {
-  const [items, setItems] = useState<StripItem[]>([]);
+  const [draws, setDraws] = useState<RawStripItem[]>([]);
+  const [now, setNow] = useState(Date.now());
 
   useEffect(() => {
-    const tick = () => {
-      const next = ALL_LOTTERY_CONFIGS
-        .map(c => ({
+    let cancelled = false;
+
+    const load = async () => {
+      let next: RawStripItem[];
+
+      try {
+        const res = await api.getCurrentDraws();
+        if (cancelled) return;
+        next = res.draws
+          .filter(
+            (d) =>
+              d.draw.timeUntilClose &&
+              d.draw.timeUntilClose.milliseconds > 0 &&
+              !d.draw.isLocked,
+          )
+          .map((d) => ({
+            slug: d.lottery.slug,
+            title: d.lottery.name,
+            ticketPrice: Number(d.lottery.ticketPrice),
+            salesCloseAt: new Date(d.draw.salesCloseAt).getTime(),
+          }));
+      } catch {
+        if (cancelled) return;
+        next = ALL_LOTTERY_CONFIGS.map((c) => ({
           slug: c.slug,
           title: c.title,
           ticketPrice: c.ticketPrice,
-          left: msToSalesClose(c.drawTimes, c.salesCloseMinutes),
-        }))
-        // Сортировка по остатку сама выносит вперёд «горящие» тиражи (< 5 мин),
-        // отдельного правила приоритета не нужно.
-        .sort((a, b) => a.left - b.left)
+          salesCloseAt: Date.now() + msToSalesClose(c.drawTimes, c.salesCloseMinutes),
+        }));
+      }
+
+      if (cancelled) return;
+      next = next
+        .filter((i) => i.salesCloseAt > Date.now())
+        .sort((a, b) => a.salesCloseAt - b.salesCloseAt)
         .slice(0, STRIP_SLOTS);
-      setItems(next);
+      setDraws(next);
     };
-    tick();
-    const id = setInterval(tick, 1000);
+
+    load();
+    const id = setInterval(load, 30000);
+    return () => {
+      cancelled = true;
+      clearInterval(id);
+    };
+  }, []);
+
+  useEffect(() => {
+    const id = setInterval(() => setNow(Date.now()), 1000);
     return () => clearInterval(id);
   }, []);
 
-  return items;
+  return draws.map((d) => ({
+    slug: d.slug,
+    title: d.title,
+    ticketPrice: d.ticketPrice,
+    left: Math.max(0, d.salesCloseAt - now),
+  }));
 }
 
 function formatClock(ms: number): string {
-  const total = Math.floor(ms / 1000);
-  const h = Math.floor(total / 3600);
-  const m = Math.floor((total % 3600) / 60);
+  const total = Math.max(0, Math.floor(ms / 1000));
+  const m = Math.floor(total / 60);
   const s = total % 60;
   const pad = (n: number) => String(n).padStart(2, '0');
-  return `${pad(h)}:${pad(m)}:${pad(s)}`;
+  return `${pad(m)}:${pad(s)}`;
 }
 
 function LiveDrawStrip() {
@@ -311,9 +319,6 @@ function LiveDrawStrip() {
   const items = useUpcomingDraws();
   const [slot, setSlot] = useState(0);
 
-  // Ротация не останавливается: полоса — фоновый информер, пауза по тапу
-  // сделала бы поведение непредсказуемым (пользователь тапает, чтобы уйти
-  // на тираж, а не чтобы управлять каруселью).
   useEffect(() => {
     const id = setInterval(() => setSlot(i => (i + 1) % STRIP_SLOTS), STRIP_ROTATE_MS);
     return () => clearInterval(id);
@@ -323,15 +328,11 @@ function LiveDrawStrip() {
   if (!item) return null;
 
   const urgent = item.left > 0 && item.left <= URGENT_MS;
-  // Цвет — единственный носитель срочности. Фон полосы намеренно нейтральный:
-  // цветные подложки по accentColor каждого тиража давали третий акцент
-  // в 46 px под и без того ярким jackpot-баннером.
   const accent = urgent ? '#FF4D4F' : 'var(--emerald)';
 
   return (
     <motion.button
       type="button"
-      // Ведём на тираж, показанный в момент клика.
       onClick={() => navigate(ROUTE_BY_SLUG[item.slug] ?? `/lottery/${item.slug}`)}
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
@@ -340,11 +341,11 @@ function LiveDrawStrip() {
         position: 'relative',
         zIndex: 3,
         width: '100%',
-        height: 46,
+        height: 56,
         display: 'flex',
         alignItems: 'center',
-        gap: 10,
-        padding: '0 10px 0 12px',
+        gap: 12,
+        padding: '0 12px',
         textAlign: 'left',
         background: 'linear-gradient(180deg, #141C36 0%, #0D1428 100%)',
         borderTop: '1.5px solid rgba(255,255,255,0.10)',
@@ -352,7 +353,6 @@ function LiveDrawStrip() {
         cursor: 'pointer',
       }}
     >
-      {/* Пульсирующая точка — единственный источник «живости» в полосе */}
       <motion.span
         aria-hidden="true"
         style={{
@@ -367,147 +367,62 @@ function LiveDrawStrip() {
         transition={{ duration: urgent ? 1 : 2, repeat: Infinity, ease: 'easeInOut' }}
       />
 
-      {/* Смена слайда — мягкое появление на месте (opacity + 4 px по Y),
-          без выезда сбоку: полоса не должна читаться как ещё одна карусель.
-          Текст и чип цены живут в одном анимируемом блоке: раздельно чип
-          успевал перекраситься на кадр раньше названия и на переходе
-          показывал цену уже следующего тиража. */}
       <AnimatePresence mode="wait" initial={false}>
-        <motion.span
+        <motion.div
           key={item.slug}
           initial={{ opacity: 0, y: 4 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -4 }}
           transition={{ duration: 0.26, ease: 'easeOut' }}
-          style={{ display: 'flex', alignItems: 'center', gap: 10, flex: 1, minWidth: 0 }}
+          style={{ display: 'flex', flexDirection: 'column', gap: 4, flex: 1, minWidth: 0 }}
         >
-          <span style={{ display: 'flex', flexDirection: 'column', gap: 2, minWidth: 0, flex: 1 }}>
-            <span
-              style={{
-                fontFamily: 'var(--font-display)',
-                fontSize: 13,
-                fontWeight: 700,
-                letterSpacing: '0.01em',
-                lineHeight: 1,
-                color: '#EAF0FF',
-                whiteSpace: 'nowrap',
-                overflow: 'hidden',
-                textOverflow: 'ellipsis',
-              }}
-            >
+          <span style={{ display: 'flex', alignItems: 'baseline', gap: 8, minWidth: 0 }}>
+            <span style={{ fontSize: 9, fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--ink-3)', fontFamily: 'var(--font-mono)', flexShrink: 0 }}>
+              Next Draw
+            </span>
+            <span style={{ fontFamily: 'var(--font-display)', fontSize: 14, fontWeight: 700, letterSpacing: '0.01em', lineHeight: 1, color: '#EAF0FF', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', minWidth: 0 }}>
               {item.title}
             </span>
-            <span style={{ display: 'flex', alignItems: 'baseline', gap: 5, lineHeight: 1 }}>
-              <span
-                style={{
-                  fontSize: 9.5,
-                  fontWeight: 600,
-                  letterSpacing: '0.14em',
-                  textTransform: 'uppercase',
-                  color: 'var(--ink-2)',
-                  fontFamily: 'var(--font-mono)',
-                }}
-              >
-                Closes in
-              </span>
-              <span
-                className="font-tabular"
-                style={{
-                  fontFamily: 'var(--font-mono)',
-                  fontSize: 13,
-                  fontWeight: 700,
-                  letterSpacing: '0.02em',
-                  color: accent,
-                  textShadow: `0 0 12px ${accent}59`,
-                }}
-              >
-                {formatClock(item.left)}
-              </span>
+          </span>
+          <span style={{ display: 'flex', alignItems: 'baseline', gap: 8, lineHeight: 1 }}>
+            <span style={{ fontSize: 9, fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--ink-3)', fontFamily: 'var(--font-mono)', flexShrink: 0 }}>
+              closes in
+            </span>
+            {urgent && (
+              <svg width="9" height="11" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" style={{ color: accent, flexShrink: 0 }}>
+                <path d="M13 2 4 14h7l-1 8 9-12h-7l1-8Z" />
+              </svg>
+            )}
+            <span className="font-tabular" style={{ fontFamily: 'var(--font-mono)', fontSize: 14, fontWeight: 700, letterSpacing: '0.04em', color: accent, lineHeight: 1 }}>
+              {formatClock(item.left)}
             </span>
           </span>
-
-          {/* Чип-действие. Цвет фиксирован (не берётся из конфига тиража),
-              иначе при ротации кнопка перекрашивалась бы каждые 5 секунд. */}
-          <span
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: 6,
-              height: 32,
-              padding: '0 14px',
-              flexShrink: 0,
-              borderRadius: 'var(--r-pill)',
-              background: 'linear-gradient(180deg, #FF8C42 0%, #FF6B35 100%)',
-              boxShadow: '0 6px 16px -6px #FF8C42, inset 0 1px 0 rgba(255,255,255,0.38)',
-              fontFamily: 'var(--font-display)',
-              fontSize: 12.5,
-              fontWeight: 800,
-              letterSpacing: '0.02em',
-              color: '#1A0A02',
-              whiteSpace: 'nowrap',
-            }}
-          >
-            Play · {item.ticketPrice} TON
-          </span>
-        </motion.span>
+        </motion.div>
       </AnimatePresence>
 
-      {/* Индикатор позиции в ротации */}
-      <span
-        aria-hidden="true"
-        style={{ position: 'absolute', right: 10, bottom: 3, display: 'flex', gap: 3 }}
-      >
-        {Array.from({ length: STRIP_SLOTS }).map((_, i) => (
-          <span
-            key={i}
-            style={{
-              width: i === slot ? 9 : 3,
-              height: 2,
-              borderRadius: 1,
-              background: i === slot ? 'rgba(255,255,255,0.55)' : 'rgba(255,255,255,0.16)',
-              transition: 'width 0.3s ease, background 0.3s ease',
-            }}
-          />
-        ))}
+      <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: 34, padding: '0 18px', flexShrink: 0, borderRadius: 'var(--r-pill)', background: 'linear-gradient(180deg, #FFEC3D 0%, #FADB14 55%, #D4B106 100%)', borderTop: '1px solid rgba(255,255,255,0.5)', borderBottom: '1px solid rgba(0,0,0,0.3)', boxShadow: '0 3px 10px rgba(250,219,20,0.30), inset 0 1px 0 rgba(255,255,255,0.5)', fontFamily: 'var(--font-display)', fontSize: 13, fontWeight: 800, letterSpacing: '0.02em', color: '#1A1500', whiteSpace: 'nowrap' }}>
+        Play
       </span>
     </motion.button>
   );
 }
 
-// ═══════════════════════════════════════════════════════════════════════════
+// в•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђ
 // MAIN COMPONENT
-// ═══════════════════════════════════════════════════════════════════════════
+// в•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђ
 interface GlobalJackpotHeroProps {
-  /** Показывать нижний тикер "Recent wins". На мобилке отключается —
-   *  там уже есть отдельный компактный блок LiveWinsPanel в сетке. */
+  /** РџРѕРєР°Р·С‹РІР°С‚СЊ РЅРёР¶РЅРёР№ С‚РёРєРµСЂ "Recent wins". РќР° РјРѕР±РёР»РєРµ РѕС‚РєР»СЋС‡Р°РµС‚СЃСЏ вЂ”
+   *  С‚Р°Рј СѓР¶Рµ РµСЃС‚СЊ РѕС‚РґРµР»СЊРЅС‹Р№ РєРѕРјРїР°РєС‚РЅС‹Р№ Р±Р»РѕРє LiveWinsPanel РІ СЃРµС‚РєРµ. */
   showTicker?: boolean;
 }
 
 export function GlobalJackpotHero({ showTicker = true }: GlobalJackpotHeroProps = {}) {
-  const [value, setValue] = useState(BASE_JACKPOT_FROM_DB);
-  const [milestoneFlash, setMilestoneFlash] = useState(false);
-  const prevMilestone = useRef(Math.floor(BASE_JACKPOT_FROM_DB / 10000));
-
-  useEffect(() => {
-    // Реалистичная модель роста пула: каждые ~3с добавляем небольшую случайную сумму.
-    // Базовый тик: 0.08–0.22 TON каждые 3с = ~2–5 TON/мин = ~3000–7000 TON/сутки.
-    // Визуально создаёт ощущение активного пула без нереалистичных скачков.
-    const tick = () => {
-      setValue(v => {
-        const increment = 0.08 + Math.random() * 0.14;
-        const next = v + increment;
-        const currentMilestone = Math.floor(next / 1000);
-        if (currentMilestone > prevMilestone.current) {
-          prevMilestone.current = currentMilestone;
-          setMilestoneFlash(true);
-          setTimeout(() => setMilestoneFlash(false), 800);
-        }
-        return next;
-      });
-    };
-    const id = setInterval(tick, 3000);
-    return () => clearInterval(id);
-  }, []);
+  // Jackpot is a static real value from DB. Fake ticker removed.
+  // Reserved for future API (milestoneFlash mechanism):
+  //   const [value, setValue] = useState(BASE_JACKPOT_FROM_DB);
+  //   const [milestoneFlash, setMilestoneFlash] = useState(false);
+  //   useEffect(() => { /* fetch -> setValue + setMilestoneFlash */ }, []);
+  const value = BASE_JACKPOT_FROM_DB;
 
   const formatted = formatJackpot(value);
 
@@ -529,23 +444,18 @@ export function GlobalJackpotHero({ showTicker = true }: GlobalJackpotHeroProps 
           position: 'relative',
           borderRadius: 'var(--r-xl)',
           overflow: 'hidden',
-          // Насыщенная чистая заливка: глубокий navy + лёгкий фиолет сверху.
-          // Свет (god-rays + золото) вынесен в отдельные слои выше, чтобы не мутить базу.
-          background: `
-            radial-gradient(130% 80% at 50% -12%, rgba(124,58,237,0.22) 0%, rgba(124,58,237,0.06) 32%, transparent 60%),
-            linear-gradient(165deg, #19244f 0%, #0d1733 44%, #060c22 100%)
-          `,
+          // РќР°СЃС‹С‰РµРЅРЅР°СЏ С‡РёСЃС‚Р°СЏ Р·Р°Р»РёРІРєР°: РіР»СѓР±РѕРєРёР№ navy + Р»С‘РіРєРёР№ С„РёРѕР»РµС‚ СЃРІРµСЂС…Сѓ.
+          // РЎРІРµС‚ (god-rays + Р·РѕР»РѕС‚Рѕ) РІС‹РЅРµСЃРµРЅ РІ РѕС‚РґРµР»СЊРЅС‹Рµ СЃР»РѕРё РІС‹С€Рµ, С‡С‚РѕР±С‹ РЅРµ РјСѓС‚РёС‚СЊ Р±Р°Р·Сѓ.
+          background: 'linear-gradient(165deg, #141e38 0%, #0d1733 44%, #060c22 100%)',
           borderTop: '2px solid rgba(255,255,255,0.22)',
           borderLeft: '1.5px solid rgba(255,255,255,0.11)',
           borderRight: '1.5px solid rgba(0,0,0,0.60)',
           borderBottom: '3px solid rgba(0,0,0,0.85)',
           boxShadow: `
-            inset 0 2px 0 rgba(255,255,255,0.22),
+            inset 0 2px 0 rgba(255,255,255,0.18),
             inset 0 -4px 14px rgba(0,0,0,0.45),
             0 2px 6px rgba(0,0,0,0.6),
-            0 22px 54px -12px rgba(0,0,0,0.9),
-            0 0 64px -10px var(--secondary-glow),
-            0 0 30px rgba(124,58,237,0.20)
+            0 22px 54px -12px rgba(0,0,0,0.9)
           `,
         }}
       >
@@ -553,9 +463,8 @@ export function GlobalJackpotHero({ showTicker = true }: GlobalJackpotHeroProps 
           <GodRays />
         </div>
 
-        <GoldParticles />
 
-        {/* Центральное золотое свечение — сконцентрировано за суммой, не размывает верх */}
+        {/* Р¦РµРЅС‚СЂР°Р»СЊРЅРѕРµ Р·РѕР»РѕС‚РѕРµ СЃРІРµС‡РµРЅРёРµ вЂ” СЃРєРѕРЅС†РµРЅС‚СЂРёСЂРѕРІР°РЅРѕ Р·Р° СЃСѓРјРјРѕР№, РЅРµ СЂР°Р·РјС‹РІР°РµС‚ РІРµСЂС… */}
         <div
           aria-hidden="true"
           style={{
@@ -570,12 +479,12 @@ export function GlobalJackpotHero({ showTicker = true }: GlobalJackpotHeroProps 
 
         <div className="flex flex-col items-center" style={{ padding: 'clamp(20px,4vw,44px) clamp(16px,6vw,64px) 16px', position: 'relative', zIndex: 3 }}>
 
-          {/* ── ШАГ 1: НАЗВАНИЕ БРЕНДА ───────────────────────────────────────
-              WEEKEND MILLIONS — единый блок, единый размер, единый вес.
-              Оба слова идут через пробел в одну строку.
-              Стиль: хромированный серебристо-белый металл с бликом,
-              намеренно холодный — чтобы не конкурировать с тёплым золотом цифр.
-          ─────────────────────────────────────────────────────────────────── */}
+          {/* в”Ђв”Ђ РЁРђР“ 1: РќРђР—Р’РђРќРР• Р‘Р Р•РќР”Рђ в”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђ
+              WEEKEND MILLIONS вЂ” РµРґРёРЅС‹Р№ Р±Р»РѕРє, РµРґРёРЅС‹Р№ СЂР°Р·РјРµСЂ, РµРґРёРЅС‹Р№ РІРµСЃ.
+              РћР±Р° СЃР»РѕРІР° РёРґСѓС‚ С‡РµСЂРµР· РїСЂРѕР±РµР» РІ РѕРґРЅСѓ СЃС‚СЂРѕРєСѓ.
+              РЎС‚РёР»СЊ: С…СЂРѕРјРёСЂРѕРІР°РЅРЅС‹Р№ СЃРµСЂРµР±СЂРёСЃС‚Рѕ-Р±РµР»С‹Р№ РјРµС‚Р°Р»Р» СЃ Р±Р»РёРєРѕРј,
+              РЅР°РјРµСЂРµРЅРЅРѕ С…РѕР»РѕРґРЅС‹Р№ вЂ” С‡С‚РѕР±С‹ РЅРµ РєРѕРЅРєСѓСЂРёСЂРѕРІР°С‚СЊ СЃ С‚С‘РїР»С‹Рј Р·РѕР»РѕС‚РѕРј С†РёС„СЂ.
+          в”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђ */}
           <motion.div
             style={{ marginBottom: 8, display: 'flex', alignItems: 'center' }}
             initial={{ opacity: 0, y: 10, filter: 'blur(6px)' }}
@@ -614,30 +523,22 @@ export function GlobalJackpotHero({ showTicker = true }: GlobalJackpotHeroProps 
             </span>
           </motion.div>
 
-          {/* ── ШАГ 2: СУММА ДЖЕКПОТА ────────────────────────────────────────
-              Главный герой экрана. Входит с лёгким scale-up.
-          ─────────────────────────────────────────────────────────────────── */}
+          {/* в”Ђв”Ђ РЁРђР“ 2: РЎРЈРњРњРђ Р”Р–Р•РљРџРћРўРђ в”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђ
+              Р“Р»Р°РІРЅС‹Р№ РіРµСЂРѕР№ СЌРєСЂР°РЅР°. Р’С…РѕРґРёС‚ СЃ Р»С‘РіРєРёРј scale-up.
+          в”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђ */}
           <motion.div
             className="flex items-baseline"
             style={{ gap: 5 }}
             initial={{ opacity: 0, y: 16, scale: 0.92 }}
-            animate={
-              milestoneFlash
-                ? { scale: [1, 1.05, 1], opacity: 1, y: 0 }
-                : { opacity: 1, y: 0, scale: 1 }
-            }
-            transition={
-              milestoneFlash
-                ? { duration: 0.6, ease: 'easeOut' }
-                : { delay: 0.22, duration: 0.6, ease: [0.22, 1, 0.36, 1] }
-            }
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            transition={{ delay: 0.22, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
           >
             <span
               className="font-tabular"
               style={{
-                fontSize: 'clamp(44px, 11vw, 80px)',
+                fontSize: 'clamp(48px, 13vw, 84px)',
                 lineHeight: 0.92,
-                letterSpacing: '-0.045em',
+                letterSpacing: '-0.03em',
                 fontFamily: 'var(--font-mono)',
                 fontWeight: 800,
                 background: `
@@ -650,9 +551,7 @@ export function GlobalJackpotHero({ showTicker = true }: GlobalJackpotHeroProps 
                 WebkitBackgroundClip: 'text',
                 WebkitTextFillColor: 'transparent',
                 backgroundClip: 'text',
-                animation: 'text-sheen 4.5s ease-in-out infinite',
-                animationDelay: '1.4s',
-                filter: `
+                                                filter: `
                   drop-shadow(0 2px 4px rgba(0,0,0,0.8))
                   drop-shadow(0 0 18px rgba(250,219,20,0.6))
                   drop-shadow(0 0 40px rgba(250,219,20,0.3))
@@ -676,9 +575,9 @@ export function GlobalJackpotHero({ showTicker = true }: GlobalJackpotHeroProps 
             </span>
           </motion.div>
 
-          {/* ── ШАГ 3: ПОДПИСЬ ───────────────────────────────────────────────
-              Сокращено: только «Global Jackpot»
-          ─────────────────────────────────────────────────────────────────── */}
+          {/* в”Ђв”Ђ РЁРђР“ 3: РџРћР”РџРРЎР¬ в”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђ
+              РЎРѕРєСЂР°С‰РµРЅРѕ: С‚РѕР»СЊРєРѕ В«Global JackpotВ»
+          в”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђ */}
           <motion.span
             style={{
               marginTop: 6,
@@ -697,34 +596,12 @@ export function GlobalJackpotHero({ showTicker = true }: GlobalJackpotHeroProps 
             Global Jackpot
           </motion.span>
 
-          {milestoneFlash && (
-            <motion.div
-              aria-hidden="true"
-              style={{
-                position: 'absolute',
-                top: '50%',
-                left: '50%',
-                width: 220,
-                height: 70,
-                transform: 'translate(-50%, -50%)',
-                borderRadius: 'var(--r-pill)',
-                border: '2px solid var(--gold)',
-                boxShadow: '0 0 40px var(--gold-glow), inset 0 0 25px var(--gold-dim)',
-                pointerEvents: 'none',
-                zIndex: 4,
-              }}
-              initial={{ opacity: 0.9, scale: 0.85 }}
-              animate={{ opacity: 0, scale: 1.5 }}
-              transition={{ duration: 0.8, ease: 'easeOut' }}
-            />
-          )}
-
         </div>
 
-        {/* ПОЛОСА ЖИВОГО ТИРАЖА — единственное действие на первом экране */}
+        {/* РџРћР›РћРЎРђ Р–РР’РћР“Рћ РўРР РђР–Рђ вЂ” РµРґРёРЅСЃС‚РІРµРЅРЅРѕРµ РґРµР№СЃС‚РІРёРµ РЅР° РїРµСЂРІРѕРј СЌРєСЂР°РЅРµ */}
         <LiveDrawStrip />
 
-        {/* ТИКЕР — шаг 4: последним, clip overflow чтобы не дёргалось при slideUp */}
+        {/* РўРРљР•Р  вЂ” С€Р°Рі 4: РїРѕСЃР»РµРґРЅРёРј, clip overflow С‡С‚РѕР±С‹ РЅРµ РґС‘СЂРіР°Р»РѕСЃСЊ РїСЂРё slideUp */}
         {showTicker && (
           <motion.div
             initial={{ opacity: 0, y: 8 }}
@@ -742,9 +619,9 @@ export function GlobalJackpotHero({ showTicker = true }: GlobalJackpotHeroProps 
               zIndex: 3,
             }}
           >
-            {/* Ticker идёт от края до края hero: без дополнительного label
-                Recent wins и вертикального разделителя. Края мягко маскируются,
-                чтобы первая и последняя карточка не обрезались резко. */}
+            {/* Ticker РёРґС‘С‚ РѕС‚ РєСЂР°СЏ РґРѕ РєСЂР°СЏ hero: Р±РµР· РґРѕРїРѕР»РЅРёС‚РµР»СЊРЅРѕРіРѕ label
+                Recent wins Рё РІРµСЂС‚РёРєР°Р»СЊРЅРѕРіРѕ СЂР°Р·РґРµР»РёС‚РµР»СЏ. РљСЂР°СЏ РјСЏРіРєРѕ РјР°СЃРєРёСЂСѓСЋС‚СЃСЏ,
+                С‡С‚РѕР±С‹ РїРµСЂРІР°СЏ Рё РїРѕСЃР»РµРґРЅСЏСЏ РєР°СЂС‚РѕС‡РєР° РЅРµ РѕР±СЂРµР·Р°Р»РёСЃСЊ СЂРµР·РєРѕ. */}
             <div
               style={{
                 position: 'relative',
