@@ -433,42 +433,10 @@
     flex-basis: 12px;
   }
 
-  .mobile-home--compact .global-jackpot-hero > div {
-    border-radius: 22px !important;
-  }
-
-  .mobile-home--compact .global-jackpot-hero > div > div:nth-child(4) {
-    padding: 10px 12px 8px !important;
-  }
-
-  .mobile-home--compact .global-jackpot-hero > div > div:nth-child(4) > div:first-child {
-    margin-bottom: 8px !important;
-  }
-
-  .mobile-home--compact .global-jackpot-hero > div > div:first-child {
-    top: 38% !important;
-  }
-
-  .mobile-home--compact .global-jackpot-hero > div > div:nth-child(4) > div:nth-child(2) span:first-child {
-    font-size: 48px !important;
-  }
-
-  .mobile-home--compact .global-jackpot-hero > div > div:nth-child(4) > div:nth-child(2) span:last-child {
-    font-size: 11px !important;
-  }
-
-  .mobile-home--compact .global-jackpot-hero > div > div:nth-child(4) > span {
-    margin-top: 8px !important;
-    font-size: 8px !important;
-  }
-
-  .mobile-home--compact .global-jackpot-hero > div > div:nth-child(5) {
-    height: 36px !important;
-  }
-
-  .mobile-home--compact .global-jackpot-hero > div > div:nth-child(6) {
-    height: 28px !important;
-  }
+  /* Border-radius/God-Rays-top/ticker-height для .global-jackpot-hero перенесены
+     в сам компонент через проп `compact` (GlobalJackpotHero.tsx) — там же было
+     6 мёртвых правил на несуществующих div:nth-child(4)/(6) (4-й потомок —
+     LiveDrawStrip, это <button>, не <div>), удалены как не имевшие эффекта. */
 
   .mobile-home--compact .features-mobile-carousel--compact .feature-card-img--carousel-item {
     min-height: 76px;

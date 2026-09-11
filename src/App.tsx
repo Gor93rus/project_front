@@ -49,7 +49,7 @@ function MobileHome() {
     <div className="mobile-home mobile-home--compact flex flex-col pb-2">
       {/* Первый экран: jackpot и ключевые действия должны читаться без скролла. */}
       <AnimatedSection variants={fadeUp} delay={0.05}>
-        <GlobalJackpotHero />
+        <GlobalJackpotHero compact />
       </AnimatedSection>
 
       <div className="mobile-home__gap mobile-home__gap--hero" />

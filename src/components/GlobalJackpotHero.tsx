@@ -414,9 +414,13 @@ interface GlobalJackpotHeroProps {
   /** РџРѕРєР°Р·С‹РІР°С‚СЊ РЅРёР¶РЅРёР№ С‚РёРєРµСЂ "Recent wins". РќР° РјРѕР±РёР»РєРµ РѕС‚РєР»СЋС‡Р°РµС‚СЃСЏ вЂ”
    *  С‚Р°Рј СѓР¶Рµ РµСЃС‚СЊ РѕС‚РґРµР»СЊРЅС‹Р№ РєРѕРјРїР°РєС‚РЅС‹Р№ Р±Р»РѕРє LiveWinsPanel РІ СЃРµС‚РєРµ. */
   showTicker?: boolean;
+  /** Мобильная компактная раскладка (совпадает с прежним `.mobile-home--compact`
+   *  под max-width:767px): чуть меньший радиус карточки, ужатая обёртка God Rays
+   *  и ниже полоса тикера. Перенесено из index.css 1:1, без изменения значений. */
+  compact?: boolean;
 }
 
-export function GlobalJackpotHero({ showTicker = true }: GlobalJackpotHeroProps = {}) {
+export function GlobalJackpotHero({ showTicker = true, compact = false }: GlobalJackpotHeroProps = {}) {
   // Jackpot is a static real value from DB. Fake ticker removed.
   // Reserved for future API (milestoneFlash mechanism):
   //   const [value, setValue] = useState(BASE_JACKPOT_FROM_DB);
@@ -442,7 +446,7 @@ export function GlobalJackpotHero({ showTicker = true }: GlobalJackpotHeroProps 
         transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
         style={{
           position: 'relative',
-          borderRadius: 'var(--r-xl)',
+          borderRadius: compact ? 22 : 'var(--r-xl)',
           overflow: 'hidden',
           // РќР°СЃС‹С‰РµРЅРЅР°СЏ С‡РёСЃС‚Р°СЏ Р·Р°Р»РёРІРєР°: РіР»СѓР±РѕРєРёР№ navy + Р»С‘РіРєРёР№ С„РёРѕР»РµС‚ СЃРІРµСЂС…Сѓ.
           // РЎРІРµС‚ (god-rays + Р·РѕР»РѕС‚Рѕ) РІС‹РЅРµСЃРµРЅ РІ РѕС‚РґРµР»СЊРЅС‹Рµ СЃР»РѕРё РІС‹С€Рµ, С‡С‚РѕР±С‹ РЅРµ РјСѓС‚РёС‚СЊ Р±Р°Р·Сѓ.
@@ -459,7 +463,17 @@ export function GlobalJackpotHero({ showTicker = true }: GlobalJackpotHeroProps 
           `,
         }}
       >
-        <div style={{ position: 'absolute', inset: 0, zIndex: 0, pointerEvents: 'none' }}>
+        <div
+          style={{
+            position: 'absolute',
+            top: compact ? '38%' : 0,
+            right: 0,
+            bottom: 0,
+            left: 0,
+            zIndex: 0,
+            pointerEvents: 'none',
+          }}
+        >
           <GodRays />
         </div>
 
@@ -611,7 +625,7 @@ export function GlobalJackpotHero({ showTicker = true }: GlobalJackpotHeroProps 
               position: 'relative',
               display: 'flex',
               alignItems: 'center',
-              height: 38,
+              height: compact ? 36 : 38,
               padding: 0,
               background: 'linear-gradient(180deg, #0C1629 0%, #080F1E 100%)',
               borderTop: '1.5px solid rgba(255,255,255,0.08)',
