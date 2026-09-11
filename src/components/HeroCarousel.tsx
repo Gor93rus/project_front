@@ -15,12 +15,9 @@ function HeroSlide({ lottery }: { lottery: Lottery }) {
         scrollSnapAlign: 'center',
         boxShadow: `0 16px 40px -16px ${lottery.gradient[0]}b0, 0 4px 12px -4px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.2)`,
       }}>
-      <div className="hero-aurora-1" style={{ ['--aurora-1' as string]: `${lottery.accentColor}55` }} />
-      <div className="hero-aurora-2" style={{ ['--aurora-2' as string]: `${lottery.gradient[0]}55` }} />
       <div className="hero-spotlight" />
       <CardPattern pattern={lottery.pattern} color="#ffffff" />
       <div className="premium-glass" />
-      <div className="premium-shimmer" />
       <div className="premium-edge" />
 
       {/* Bottom vignette */}

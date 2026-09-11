@@ -33,7 +33,7 @@ const GAME_ICONS: Record<string, React.ReactNode> = {
   ),
 };
 
-function ScratchCard({ game }: { game: typeof SCRATCH_GAMES[0] }) {
+export function ScratchCard({ game, fluid = false }: { game: typeof SCRATCH_GAMES[0]; fluid?: boolean }) {
   const accent = game.gradient[0];
   const accent2 = game.gradient[1];
 
@@ -44,7 +44,7 @@ function ScratchCard({ game }: { game: typeof SCRATCH_GAMES[0] }) {
       transition={{ type: 'spring', stiffness: 300, damping: 18 }}
       style={{
         position: 'relative', borderRadius: 20, flexShrink: 0,
-        width: 182, minHeight: 390,
+        width: fluid ? '100%' : 182, minHeight: 390,
         // Усиленная направленная фаска (glass-3d): светлый верх/лево, тёмный низ/право
         borderTop: '2px solid rgba(255,255,255,0.18)',
         borderLeft: '1.5px solid rgba(255,255,255,0.09)',

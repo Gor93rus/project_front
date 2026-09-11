@@ -4,7 +4,6 @@ import { motion, AnimatePresence } from 'framer-motion';
 // ── Данные ──────────────────────────────────────────────────────────────────
 interface FeatureItem {
   title: string;
-  image: string;
   // 4-sided bevel vars — верх акцентный, лево светлее акцента, право/низ тёмные
   borderTop: string;
   borderLeft: string;
@@ -17,24 +16,25 @@ interface FeatureItem {
   insetTop: string;
 }
 
+/* Цвета акцентов привязаны к 6 ролевым токенам проекта (см. design-tokens.css) —
+   никаких новых оттенков сверх палитры: primary/secondary/gold/emerald/coral/cyan.
+   Раньше здесь жили захардкоженные rgba, не совпадавшие ни с одним токеном. */
 const ITEMS: FeatureItem[] = [
   {
     title: 'Instant Payouts',
-    image: '/images/card-instant-payouts.svg',
-    borderTop:    'rgba(255,100,60,0.55)',
-    borderLeft:   'rgba(255,100,60,0.28)',
+    borderTop:    'rgba(255,77,79,0.55)',   // coral
+    borderLeft:   'rgba(255,77,79,0.28)',
     borderRight:  'rgba(60,10,0,0.55)',
     borderBottom: 'rgba(50,8,0,0.70)',
-    borderTopH:   'rgba(255,100,60,0.85)',
-    borderLeftH:  'rgba(255,100,60,0.45)',
-    ring:         'rgba(255,100,60,0.08)',
-    glow:         'rgba(255,100,60,0.12)',
+    borderTopH:   'rgba(255,77,79,0.85)',
+    borderLeftH:  'rgba(255,77,79,0.45)',
+    ring:         'rgba(255,77,79,0.08)',
+    glow:         'rgba(255,77,79,0.12)',
     insetTop:     'rgba(255,160,130,0.14)',
   },
   {
     title: 'TON & USDT',
-    image: '/images/card-ton-usdt.png',
-    borderTop:    'rgba(10,124,255,0.55)',
+    borderTop:    'rgba(10,124,255,0.55)',  // primary
     borderLeft:   'rgba(10,124,255,0.28)',
     borderRight:  'rgba(0,20,60,0.55)',
     borderBottom: 'rgba(0,15,50,0.70)',
@@ -46,55 +46,51 @@ const ITEMS: FeatureItem[] = [
   },
   {
     title: 'Provably Fair',
-    image: '/images/card-provably-fair.png',
-    borderTop:    'rgba(40,200,100,0.55)',
-    borderLeft:   'rgba(40,200,100,0.28)',
+    borderTop:    'rgba(82,196,26,0.55)',   // emerald
+    borderLeft:   'rgba(82,196,26,0.28)',
     borderRight:  'rgba(0,40,20,0.55)',
     borderBottom: 'rgba(0,30,15,0.70)',
-    borderTopH:   'rgba(40,200,100,0.85)',
-    borderLeftH:  'rgba(40,200,100,0.45)',
-    ring:         'rgba(40,200,100,0.08)',
-    glow:         'rgba(40,200,100,0.12)',
+    borderTopH:   'rgba(82,196,26,0.85)',
+    borderLeftH:  'rgba(82,196,26,0.45)',
+    ring:         'rgba(82,196,26,0.08)',
+    glow:         'rgba(82,196,26,0.12)',
     insetTop:     'rgba(120,230,160,0.14)',
   },
   {
     title: 'Massive Prizes',
-    image: '/images/card-massive-prizes.png',
-    borderTop:    'rgba(250,190,20,0.55)',
-    borderLeft:   'rgba(250,190,20,0.28)',
+    borderTop:    'rgba(250,219,20,0.55)',  // gold
+    borderLeft:   'rgba(250,219,20,0.28)',
     borderRight:  'rgba(60,40,0,0.55)',
     borderBottom: 'rgba(50,32,0,0.70)',
-    borderTopH:   'rgba(250,190,20,0.85)',
-    borderLeftH:  'rgba(250,190,20,0.45)',
-    ring:         'rgba(250,190,20,0.08)',
-    glow:         'rgba(250,190,20,0.12)',
+    borderTopH:   'rgba(250,219,20,0.85)',
+    borderLeftH:  'rgba(250,219,20,0.45)',
+    ring:         'rgba(250,219,20,0.08)',
+    glow:         'rgba(250,219,20,0.12)',
     insetTop:     'rgba(255,230,120,0.14)',
   },
   {
     title: 'Smart Contract',
-    image: '/images/card-smart-contract.png',
-    borderTop:    'rgba(0,210,230,0.55)',
-    borderLeft:   'rgba(0,210,230,0.28)',
+    borderTop:    'rgba(14,165,233,0.55)',  // cyan
+    borderLeft:   'rgba(14,165,233,0.28)',
     borderRight:  'rgba(0,40,50,0.55)',
     borderBottom: 'rgba(0,30,40,0.70)',
-    borderTopH:   'rgba(0,210,230,0.85)',
-    borderLeftH:  'rgba(0,210,230,0.45)',
-    ring:         'rgba(0,210,230,0.08)',
-    glow:         'rgba(0,210,230,0.12)',
+    borderTopH:   'rgba(14,165,233,0.85)',
+    borderLeftH:  'rgba(14,165,233,0.45)',
+    ring:         'rgba(14,165,233,0.08)',
+    glow:         'rgba(14,165,233,0.12)',
     insetTop:     'rgba(100,240,250,0.14)',
   },
   {
     title: 'Audited Security',
-    image: '/images/card-audited-security.png',
-    borderTop:    'rgba(80,210,120,0.55)',
-    borderLeft:   'rgba(80,210,120,0.28)',
+    borderTop:    'rgba(124,58,237,0.55)',  // secondary
+    borderLeft:   'rgba(124,58,237,0.28)',
     borderRight:  'rgba(0,40,20,0.55)',
     borderBottom: 'rgba(0,30,15,0.70)',
-    borderTopH:   'rgba(80,210,120,0.85)',
-    borderLeftH:  'rgba(80,210,120,0.45)',
-    ring:         'rgba(80,210,120,0.08)',
-    glow:         'rgba(80,210,120,0.12)',
-    insetTop:     'rgba(140,240,170,0.14)',
+    borderTopH:   'rgba(124,58,237,0.85)',
+    borderLeftH:  'rgba(124,58,237,0.45)',
+    ring:         'rgba(124,58,237,0.08)',
+    glow:         'rgba(124,58,237,0.12)',
+    insetTop:     'rgba(180,150,255,0.14)',
   },
 ];
 
@@ -122,13 +118,10 @@ function FeatureCard({ item, index }: { item: FeatureItem; index: number }) {
       transition={{ type: 'spring', stiffness: 300, damping: 28, mass: 0.8, delay: index * 0.05 }}
       whileTap={{ scale: 0.97 }}
     >
-      <div
-        className="feature-card-img__bg"
-        style={{ backgroundImage: `url(${item.image})` }}
-        aria-hidden="true"
-      />
-      <div className="feature-card-img__tint" aria-hidden="true" />
       <div className="feature-card-img__bevel" aria-hidden="true" />
+      <div className="feature-card-img__footer">
+        <span className="feature-card-img__title">{item.title}</span>
+      </div>
     </motion.div>
   );
 }
@@ -166,13 +159,10 @@ function DesktopCard({ item }: { item: FeatureItem }) {
           transition={{ duration: 0.4, ease: 'easeInOut' }}
           style={{ position: 'absolute', inset: 0 }}
         >
-          <div
-            className="feature-card-img__bg"
-            style={{ backgroundImage: `url(${item.image})` }}
-            aria-hidden="true"
-          />
-          <div className="feature-card-img__tint" aria-hidden="true" />
           <div className="feature-card-img__bevel" aria-hidden="true" />
+          <div className="feature-card-img__footer">
+            <span className="feature-card-img__title">{item.title}</span>
+          </div>
         </motion.div>
       </AnimatePresence>
     </motion.div>
@@ -181,8 +171,8 @@ function DesktopCard({ item }: { item: FeatureItem }) {
 
 // ═══════════════════════════════════════════════════════════════════════════════
 // MOBILE SCROLL CAROUSEL — scroll-snap, 1 card per snap (100% width, 16:9)
-// ═══════════════════════════════════════════════════════════════════════════════
-function MobileCarousel() {
+// ═══════════════════════════════════���═══════════════════════════════════════════
+function MobileCarousel({ compact = false }: { compact?: boolean }) {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [activeIndex, setActiveIndex] = useState(0);
 
@@ -201,7 +191,7 @@ function MobileCarousel() {
   }, []);
 
   return (
-    <div className="features-mobile-carousel">
+    <div className={`features-mobile-carousel${compact ? ' features-mobile-carousel--compact' : ''}`}>
       <div
         ref={scrollRef}
         className="features-mobile-carousel__track scrollbar-none"
@@ -211,15 +201,18 @@ function MobileCarousel() {
         ))}
       </div>
 
-      {/* Dot indicators */}
-      <div className="features-carousel-dots" aria-hidden="true">
-        {ITEMS.map((_, i) => (
-          <span
-            key={i}
-            className={`features-carousel-dot${i === activeIndex ? ' features-carousel-dot--active' : ''}`}
-          />
-        ))}
-      </div>
+      {/* Dot indicators — скрыты в compact-режиме (главная), чтобы не
+          занимать лишнюю вертикаль без скролла. */}
+      {!compact && (
+        <div className="features-carousel-dots" aria-hidden="true">
+          {ITEMS.map((_, i) => (
+            <span
+              key={i}
+              className={`features-carousel-dot${i === activeIndex ? ' features-carousel-dot--active' : ''}`}
+            />
+          ))}
+        </div>
+      )}
     </div>
   );
 }
@@ -259,18 +252,16 @@ function DesktopGrid() {
 // ═══════════════════════════════════════════════════════════════════════════════
 // MAIN COMPONENT
 // ═══════════════════════════════════════════════════════════════════════════════
-export function FeaturesBanner() {
+export function FeaturesBanner({ compact = false }: { compact?: boolean } = {}) {
   return (
     <section className="px-4 pt-2">
-      {/* Mobile — scroll-snap carousel, 1 card = full width, 16:9 */}
-      <div className="md:hidden">
-        <MobileCarousel />
-      </div>
-
-      {/* Desktop — 3 cards, images crossfade in place */}
-      <div className="hidden md:block">
-        <DesktopGrid />
-      </div>
+      {/*
+       * Ровно одна ветка в дереве. Раньше здесь стояла CSS-развилка
+       * md:hidden / hidden md:block — скрытый вариант всё равно монтировался
+       * и держал холостые entrance-анимации. Мобильная главная передаёт
+       * compact, DesktopHome вызывает баннер без пропа.
+       */}
+      {compact ? <MobileCarousel compact /> : <DesktopGrid />}
     </section>
   );
 }

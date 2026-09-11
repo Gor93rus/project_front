@@ -1,13 +1,9 @@
-import { useState, useEffect } from 'react';
-import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
+import { useState, useEffect, lazy, Suspense } from 'react';
+import { BrowserRouter, Routes, Route, useLocation, useNavigate } from 'react-router-dom';
 import { TonConnectUIProvider } from '@tonconnect/ui-react';
 import { Header } from './components/Header';
 import { NavBar, type NavTab } from './components/NavBar';
 import { FeaturesBanner } from './components/FeaturesBanner';
-import { LotteryCarousel } from './components/LotteryCarousel';
-import { ScratchCarousel } from './components/ScratchCarousel';
-import { GamificationBanner } from './components/GamificationBanner';
-// RewardsUnlockBanner removed — replaced by RewardsBannerSlot below
 import { ProfilePage } from './components/ProfilePage';
 import { LotteryPage } from './components/LotteryPage';
 import { DailyRushPage } from './components/DailyRushPage';
@@ -20,183 +16,87 @@ import {
 import { AuroraBackground } from './components/AuroraBackground';
 import { AnimatedSection } from './components/AnimatedSection';
 import { GlobalJackpotHero } from './components/GlobalJackpotHero';
+import { CategoryEntryCard } from './components/CategoryEntryCard';
+import { GamificationCompact } from './components/GamificationCompact';
+import { RewardsPanel } from './components/RewardsPanel';
+import { LotteriesPage } from './components/LotteriesPage';
+import { ScratchCardsPage } from './components/ScratchCardsPage';
 import { stagger, fadeUp, fadeUpCard } from './lib/animations';
 
-// "Glass rivet" разделитель секций — dot-grid полоса + светящийся glass-хаб с иконкой
-type RivetIcon = 'dice' | 'scratch' | 'trophy';
+/** Порог десктопа совпадает с брейкпоинтом md в Tailwind. */
+const DESKTOP_QUERY = '(min-width: 768px)';
 
-function RivetGlyph({ icon }: { icon: RivetIcon }) {
-  if (icon === 'dice') {
-    return (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-        <rect x="3" y="3" width="18" height="18" rx="4" />
-        <circle cx="8" cy="8" r="1.2" fill="currentColor" stroke="none" />
-        <circle cx="16" cy="8" r="1.2" fill="currentColor" stroke="none" />
-        <circle cx="12" cy="12" r="1.2" fill="currentColor" stroke="none" />
-        <circle cx="8" cy="16" r="1.2" fill="currentColor" stroke="none" />
-        <circle cx="16" cy="16" r="1.2" fill="currentColor" stroke="none" />
-      </svg>
-    );
-  }
-  if (icon === 'scratch') {
-    return (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-        <rect x="3" y="5" width="18" height="14" rx="2.5" />
-        <path d="M6 12h5M6 15.5h3" />
-        <path d="M14 9.5l3 3-3 3-1.5-1.5" />
-      </svg>
-    );
-  }
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M8 4h8v4a4 4 0 0 1-8 0V4Z" />
-      <path d="M8 5H5a2 2 0 0 0 2 4M16 5h3a2 2 0 0 1-2 4" />
-      <path d="M12 13v3M9 20h6M10 16.5h4v2a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1v-2Z" />
-    </svg>
-  );
-}
-
-const RIVET_THEME: Record<RivetIcon, { glow: string; icon: string; dot: string; beamColor: string; delay: string; duration: string }> = {
-  dice:    { glow: 'rgba(10,124,255,0.30)',  icon: 'var(--primary)',   dot: 'rgba(10,124,255,0.20)',  beamColor: 'rgba(10,124,255,0.70)',  delay: '0s',    duration: '3.4s' },
-  scratch: { glow: 'rgba(124,58,237,0.32)',  icon: 'var(--secondary)', dot: 'rgba(124,58,237,0.20)', beamColor: 'rgba(124,58,237,0.70)', delay: '1.1s',  duration: '3.8s' },
-  trophy:  { glow: 'rgba(250,219,20,0.32)',  icon: 'var(--gold)',      dot: 'rgba(250,219,20,0.20)', beamColor: 'rgba(250,219,20,0.80)',  delay: '0.55s', duration: '3.2s' },
-};
-
-function GlassRivet({ label, icon }: { label: string; icon: RivetIcon }) {
-  const theme = RIVET_THEME[icon];
-  return (
-    <div
-      className="glass-rivet"
-      aria-hidden="true"
-      style={{
-        ['--rivet-glow' as string]: theme.glow,
-        ['--rivet-icon' as string]: theme.icon,
-        ['--rivet-dot' as string]: theme.dot,
-        ['--rivet-beam' as string]: theme.beamColor,
-        ['--rivet-delay' as string]: theme.delay,
-        ['--rivet-duration' as string]: theme.duration,
-      }}
-    >
-      <span className="glass-rivet__line" />
-      <span className="glass-rivet__hub">
-        <RivetGlyph icon={icon} />
-        <span className="glass-rivet__hub-label">{label}</span>
-      </span>
-      <span className="glass-rivet__line" />
-    </div>
-  );
-}
+// Десктопная главная уезжает в отдельный чанк: мобильный бандл её не тянет.
+const DesktopHome = lazy(() => import('./components/DesktopHome'));
 
 /**
- * RewardsBannerSlot — адаптивный пустой баннер под изображения о наградах.
- * Полная ширина (с паддингами) на мобилке и десктопе.
- * Высота: 160px mobile / 200px desktop — то же что и GamificationBanner.
+ * MOBILE HOME — новая раскладка по референсу Stitch:
+ * Jackpot-якорь → Featured (FeaturesBanner) → 2-колоночная сетка
+ * (лев����я: Lotteries/Scratch/Lootbox крупные карточки-входы,
+ *  правая: Gamification compact + Rewards, легче по весу) → Live Wins.
  */
-function RewardsBannerSlot() {
-  return (
-    <div className="px-4">
-      <div
-        className="rewards-banner-slot relative w-full overflow-hidden rounded-2xl"
-        style={{
-          height: 'var(--rewards-banner-h, 160px)',
-          background:
-            'linear-gradient(155deg, rgba(250,185,11,0.07) 0%, rgba(124,58,237,0.07) 55%, rgba(10,124,255,0.05) 100%)',
-          borderTop: '2px solid rgba(255,255,255,0.10)',
-          borderLeft: '1.5px solid rgba(255,255,255,0.07)',
-          borderRight: '1.5px solid rgba(0,0,0,0.45)',
-          borderBottom: '3px solid rgba(0,0,0,0.72)',
-          boxShadow:
-            'inset 0 2px 0 rgba(255,255,255,0.07), inset 0 -4px 14px rgba(0,0,0,0.35), 0 12px 32px -16px rgba(0,0,0,0.7)',
-        }}
-      >
-        {/* Внутренний dot-grid паттерн как намёк на контент */}
-        <div
-          className="absolute inset-0 pointer-events-none"
-          style={{
-            backgroundImage: 'radial-gradient(rgba(255,255,255,0.045) 1px, transparent 1px)',
-            backgroundSize: '20px 20px',
-            WebkitMaskImage: 'radial-gradient(ellipse 80% 80% at 50% 50%, #000 40%, transparent 100%)',
-            maskImage: 'radial-gradient(ellipse 80% 80% at 50% 50%, #000 40%, transparent 100%)',
-          }}
-        />
-        {/* Placeholder подсказка — убери когда добавишь изображения */}
-        <div
-          className="absolute inset-0 flex flex-col items-center justify-center gap-1.5 pointer-events-none"
-          style={{ opacity: 0.28 }}
-        >
-          <div
-            style={{
-              width: 36,
-              height: 36,
-              border: '2px dashed rgba(255,255,255,0.35)',
-              borderRadius: 10,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-          >
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.6)" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-              <rect x="3" y="3" width="18" height="18" rx="3" />
-              <path d="M3 9l4-4 4 4 4-5 4 5" />
-              <circle cx="8.5" cy="7" r="1.5" fill="rgba(255,255,255,0.6)" stroke="none" />
-            </svg>
-          </div>
-          <p className="text-3xs font-bold uppercase tracking-widest" style={{ color: 'rgba(255,255,255,0.5)' }}>
-            Rewards showcase
-          </p>
-        </div>
-      </div>
-    </div>
-  );
-}
+function MobileHome() {
+  const navigate = useNavigate();
 
-function HomePage() {
   return (
-    <div className="flex flex-col pb-2">
-      {/* Hero → Features: минимальный зазор — они единый смысловой блок */}
+    <div className="mobile-home mobile-home--compact flex flex-col pb-2">
+      {/* Первый экран: jackpot и ключевые действия должны читаться без скролла. */}
       <AnimatedSection variants={fadeUp} delay={0.05}>
         <GlobalJackpotHero />
       </AnimatedSection>
 
-      <div style={{ height: 8 }} />
+      <div className="mobile-home__gap mobile-home__gap--hero" />
 
-      <AnimatedSection variants={fadeUpCard} delay={0.18}>
-        <FeaturesBanner />
+      {/* Прямой переход к выплатам — сразу после jackpot, как в Stitch. */}
+      <AnimatedSection variants={fadeUpCard} delay={0.14}>
+        <FeaturesBanner compact />
       </AnimatedSection>
 
-      {/* Features → Lotteries */}
-      <div style={{ height: 20 }} />
-      <GlassRivet label="Draw Lotteries" icon="dice" />
-      <div style={{ height: 14 }} />
+      <div className="mobile-home__gap" />
 
+      {/* Главные игровые режимы — одна компактная двухколоночная зона. */}
       <AnimatedSection variants={stagger}>
-        <LotteryCarousel />
+        <div className="mobile-home__primary-grid px-4 grid grid-cols-2 items-stretch">
+          <CategoryEntryCard
+            title="Draw Lotteries"
+            subtitle="Enter now"
+            accent="var(--primary)"
+            onClick={() => navigate('/lotteries')}
+            index={0}
+          />
+          <CategoryEntryCard
+            title="Scratch Cards"
+            subtitle="Play"
+            accent="var(--secondary)"
+            onClick={() => navigate('/scratch-cards')}
+            index={1}
+          />
+        </div>
       </AnimatedSection>
 
-      {/* Lotteries → Scratch */}
-      <div style={{ height: 20 }} />
-      <GlassRivet label="Scratch Cards" icon="scratch" />
-      <div style={{ height: 14 }} />
-
-      <AnimatedSection variants={stagger}>
-        <ScratchCarousel />
-      </AnimatedSection>
-
-      {/* Scratch → Gamification */}
-      <div style={{ height: 20 }} />
-      <GlassRivet label="Rewards" icon="trophy" />
-      <div style={{ height: 14 }} />
+      <div className="mobile-home__gap" />
 
       <AnimatedSection variants={fadeUpCard}>
-        {/* Rewards showcase banner — пустой слот для изображений о наградах */}
-        <RewardsBannerSlot />
+        <div className="px-4">
+          <CategoryEntryCard
+            title="Mystic Lootbox"
+            subtitle="Unlock"
+            accent="var(--gold)"
+            index={2}
+          />
+        </div>
       </AnimatedSection>
 
-      <div style={{ height: 10 }} />
+      <div className="mobile-home__gap" />
 
       <AnimatedSection variants={fadeUpCard}>
-        <GamificationBanner />
+        <div className="px-4 mobile-home__secondary-grid">
+          <GamificationCompact className="mobile-home-gamification" />
+          <RewardsPanel />
+        </div>
       </AnimatedSection>
+
+      <div className="mobile-home__gap mobile-home__gap--footer" />
 
       <div style={{ height: 12 }} />
 
@@ -204,6 +104,41 @@ function HomePage() {
         <PageFooter />
       </AnimatedSection>
     </div>
+  );
+}
+
+/**
+ * Развилка мобильной и десктопной главной сделана в рантайме, а не классами
+ * md:hidden / hidden md:block: при CSS-развилке React монтировал оба дерева
+ * сразу, поэтому на телефоне работали таймеры, карусели и анимации скрытого
+ * десктопа. Теперь монтируется ровно одна ветка, а десктопная приезжает
+ * отдельным чанком и на мобильных не скачивается вовсе.
+ */
+function useIsDesktop() {
+  const [isDesktop, setIsDesktop] = useState(
+    () => typeof window !== 'undefined' && window.matchMedia(DESKTOP_QUERY).matches,
+  );
+
+  useEffect(() => {
+    const mq = window.matchMedia(DESKTOP_QUERY);
+    const onChange = (e: MediaQueryListEvent) => setIsDesktop(e.matches);
+    mq.addEventListener('change', onChange);
+    setIsDesktop(mq.matches);
+    return () => mq.removeEventListener('change', onChange);
+  }, []);
+
+  return isDesktop;
+}
+
+function HomePage() {
+  const isDesktop = useIsDesktop();
+
+  if (!isDesktop) return <MobileHome />;
+
+  return (
+    <Suspense fallback={<div style={{ minHeight: '100dvh' }} />}>
+      <DesktopHome />
+    </Suspense>
   );
 }
 
@@ -267,7 +202,10 @@ function AppLayout() {
     window.dispatchEvent(new PopStateEvent('popstate'));
   };
 
-  const isLotteryPage = location.pathname.startsWith('/lottery/');
+  const isLotteryPage =
+    location.pathname.startsWith('/lottery/') ||
+    location.pathname === '/lotteries' ||
+    location.pathname === '/scratch-cards';
 
   return (
     <div className="relative min-h-screen" style={{ background: 'var(--bg-0)' }}>
@@ -283,6 +221,8 @@ function AppLayout() {
         <main className="flex-1 overflow-y-auto pt-2" style={{ paddingBottom: isLotteryPage ? 0 : 72 }}>
           <Routes>
             <Route path="/" element={<HomePage />} />
+            <Route path="/lotteries" element={<LotteriesPage />} />
+            <Route path="/scratch-cards" element={<ScratchCardsPage />} />
             <Route path="/live" element={<PlaceholderPage title="Live Draw" />} />
             <Route path="/cart" element={<PlaceholderPage title="Cart" />} />
             <Route path="/history" element={<PlaceholderPage title="History" />} />
