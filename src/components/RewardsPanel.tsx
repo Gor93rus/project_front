@@ -74,18 +74,6 @@ const SLIDES: Slide[] = [
   },
 ];
 
-    kicker: 'Rewards',
-    title: 'Chests & badges soon',
-    icon: (
-      <svg {...iconProps}>
-        <rect x="3" y="8" width="18" height="12" rx="2.5" />
-        <path d="M3 12.5h18M12 8v12" />
-        <path d="M12 8c-2.5 0-4.5-.9-4.5-2.5S9 3.5 12 8Zm0 0c2.5 0 4.5-.9 4.5-2.5S15 3.5 12 8Z" />
-      </svg>
-    ),
-  },
-];
-
 export function RewardsPanel({
   className = '',
   style,

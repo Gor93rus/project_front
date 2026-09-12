@@ -21,13 +21,7 @@ import { GamificationCompact } from './components/GamificationCompact';
 import { RewardsPanel } from './components/RewardsPanel';
 import { LotteriesPage } from './components/LotteriesPage';
 import { ScratchCardsPage } from './components/ScratchCardsPage';
-import { MockupHomePage } from './components/MockupHomePage';
-import { CategoryEntryCard } from './components/CategoryEntryCard';
-import { GamificationCompact } from './components/GamificationCompact';
 import { LiveWinsPanel } from './components/LiveWinsPanel';
-import { RewardsPanel } from './components/RewardsPanel';
-import { LotteriesPage } from './components/LotteriesPage';
-import { ScratchCardsPage } from './components/ScratchCardsPage';
 import { stagger, fadeUp, fadeUpCard } from './lib/animations';
 
 /** Порог десктопа совпадает с брейкпоинтом md в Tailwind. */
@@ -230,7 +224,6 @@ function AppLayout() {
             <Route path="/" element={<HomePage />} />
             <Route path="/lotteries" element={<LotteriesPage />} />
             <Route path="/scratch-cards" element={<ScratchCardsPage />} />
-            <Route path="/mockup-home" element={<MockupHomePage />} />
             <Route path="/lotteries" element={<LotteriesPage />} />
             <Route path="/scratch-cards" element={<ScratchCardsPage />} />
             <Route path="/live" element={<PlaceholderPage title="Live Draw" />} />
