@@ -62,7 +62,7 @@ export function CategoryEntryCard({ title, subtitle, accent, onClick, index = 0 
       {/* Glass sheen */}
       <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 1, background: 'linear-gradient(165deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.01) 35%, transparent 60%)' }} />
 
-      {/* Content */}
+  {/* Content */}
       <div style={{ position: 'relative', zIndex: 2, display: 'flex', flexDirection: 'column', gap: 7 }}>
         <p style={{
           fontSize: 18, fontWeight: 700, color: '#fff',
@@ -99,7 +99,6 @@ export function CategoryEntryCard({ title, subtitle, accent, onClick, index = 0 
           </svg>
         </span>
       </div>
-
     </motion.button>
   );
 }

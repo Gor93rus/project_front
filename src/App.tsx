@@ -21,6 +21,7 @@ import { GamificationCompact } from './components/GamificationCompact';
 import { RewardsPanel } from './components/RewardsPanel';
 import { LotteriesPage } from './components/LotteriesPage';
 import { ScratchCardsPage } from './components/ScratchCardsPage';
+import { LiveWinsPanel } from './components/LiveWinsPanel';
 import { stagger, fadeUp, fadeUpCard } from './lib/animations';
 
 /** Порог десктопа совпадает с брейкпоинтом md в Tailwind. */
@@ -42,7 +43,7 @@ function MobileHome() {
     <div className="mobile-home mobile-home--compact flex flex-col pb-2">
       {/* Первый экран: jackpot и ключевые действия должны читаться без скролла. */}
       <AnimatedSection variants={fadeUp} delay={0.05}>
-        <GlobalJackpotHero />
+        <GlobalJackpotHero compact />
       </AnimatedSection>
 
       <div className="mobile-home__gap mobile-home__gap--hero" />
@@ -221,6 +222,8 @@ function AppLayout() {
         <main className="flex-1 overflow-y-auto pt-2" style={{ paddingBottom: isLotteryPage ? 0 : 72 }}>
           <Routes>
             <Route path="/" element={<HomePage />} />
+            <Route path="/lotteries" element={<LotteriesPage />} />
+            <Route path="/scratch-cards" element={<ScratchCardsPage />} />
             <Route path="/lotteries" element={<LotteriesPage />} />
             <Route path="/scratch-cards" element={<ScratchCardsPage />} />
             <Route path="/live" element={<PlaceholderPage title="Live Draw" />} />
