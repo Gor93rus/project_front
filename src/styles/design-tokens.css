@@ -214,6 +214,75 @@
   --md-bg-card-gradient: linear-gradient(145deg, var(--bg-2) 0%, var(--bg-1) 100%);
   --md-bg-page-gradient: linear-gradient(180deg, var(--bg-1) 0%, var(--bg-0) 100%);
   --md-shadow-card: var(--shadow-card);
+
+  /* ═══════════════════════════════════════════════════════════════════════
+     V2.0 — Carbon OLED / Drop Economy (референс: The Market)
+     Этап 1 миграции: токены объявлены, НЕ применены ни к одному компоненту.
+     Префикс --v2-* — сосуществует со старой "Dark Vault" моделью выше,
+     ничего из старых токенов не переопределяет и не ломает.
+     Источник: DESIGN_SYSTEM_NEW_v2.0 (присланный пользователем канон).
+     ═══════════════════════════════════════════════════════════════════════ */
+
+  /* ── V2 Фоновая иерархия (Carbon Base) ── */
+  --v2-bg-page: #08090E;
+  --v2-bg-surface-0: #0D0F17;
+  --v2-bg-card: #121522;
+  --v2-bg-card-raised: #181C2E;
+  --v2-bg-input: #101320;
+
+  /* ── V2 Navy Underglow (мягкая глубинная подсветка подложек) ── */
+  --v2-navy-glow-deep: rgba(14, 28, 64, 0.45);
+  --v2-navy-glow-bright: rgba(26, 49, 110, 0.25);
+  --v2-navy-card-border: rgba(30, 48, 92, 0.40);
+
+  /* ── V2 Ролевая модель (Action & Brand) ──
+     Primary — двухцветный градиент (cyan → blue), храним оба стопа отдельно. */
+  --v2-primary-from: #00E5FF;
+  --v2-primary-to: #0A7CFF;
+  --v2-gold: #FFB800;
+  --v2-ruby: #FF2D55;
+  --v2-emerald: #00E676;
+  --v2-cyber-purple: #8B5CF6;
+
+  /* ── V2 Drop Economy — шкала редкости ──
+     Правило The Market: один доминантный цвет + радиальный спотлайт на карточку. */
+  --v2-rarity-common: #8E9BAE;
+  --v2-rarity-common-glow: rgba(142, 155, 174, 0.15);
+  --v2-rarity-rare: #00E5FF;
+  --v2-rarity-rare-glow: rgba(0, 229, 255, 0.25);
+  --v2-rarity-epic: #A855F7;
+  --v2-rarity-epic-glow: rgba(168, 85, 247, 0.30);
+  --v2-rarity-legendary: #FFB800;
+  --v2-rarity-legendary-glow: rgba(255, 184, 0, 0.35);
+  --v2-rarity-mythic: #FF2D55;
+  --v2-rarity-mythic-glow: rgba(255, 45, 85, 0.35);
+
+  /* ── V2 Радиусы (шкала The Market) ── */
+  --v2-radius-xs: 6px;
+  --v2-radius-sm: 10px;
+  --v2-radius-md: 14px;
+  --v2-radius-lg: 18px;
+  --v2-radius-xl: 22px;
+  --v2-radius-2xl: 28px;
+  --v2-radius-dock: 32px;
+
+  /* ── V2 Типографическая шкала (px, из The Market spec) ──
+     Значения размера — не Tailwind fontSize (тот меняется в Этапе 3 точечно
+     по компонентам, чтобы не сломать текущую верстку разом). */
+  --v2-text-3xs: 7px;
+  --v2-text-2xs: 9px;
+  --v2-text-xs: 11px;
+  --v2-text-sm: 13px;
+  --v2-text-base: 15px;
+  --v2-text-lg: 17px;
+  --v2-text-xl: 20px;
+  --v2-text-2xl: 24px;
+  --v2-text-3xl: 30px;
+  --v2-text-4xl: 38px;
+
+  /* ── V2 Шрифт ── Этап 2 подключит файлы и заменит стек здесь.
+     Пока переменная объявлена, но НЕ используется — body ещё на --font-display. */
+  --v2-font-sans: 'Gilroy', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
 /* ── Base styles ── */
@@ -258,4 +327,43 @@ button { font-family: inherit; cursor: pointer; }
 .glass-card-hover:hover {
   transform: translateY(-2px);
   box-shadow: var(--elev-2);
+}
+
+/* ── V2 Rarity Card Accents (Drop Economy, The Market) ──
+   Пока не применены ни в одном компоненте — готовы к Этапу 3/4.
+   Правило: один доминантный цвет + радиальный спотлайт, без смешения. */
+.card-common {
+  border: 1px solid rgba(142, 155, 174, 0.16);
+  background: radial-gradient(80% 60% at 50% 0%, rgba(142, 155, 174, 0.08) 0%, #121522 100%);
+}
+.card-rare {
+  border: 1px solid rgba(0, 229, 255, 0.25);
+  background: radial-gradient(80% 60% at 50% 0%, rgba(0, 229, 255, 0.12) 0%, #121522 100%);
+  box-shadow: 0 8px 32px -8px rgba(0, 229, 255, 0.18);
+}
+.card-epic {
+  border: 1px solid rgba(168, 85, 247, 0.25);
+  background: radial-gradient(80% 60% at 50% 0%, rgba(168, 85, 247, 0.14) 0%, #121522 100%);
+  box-shadow: 0 8px 32px -8px rgba(168, 85, 247, 0.20);
+}
+.card-legendary {
+  border: 1px solid rgba(255, 184, 0, 0.28);
+  background: radial-gradient(80% 60% at 50% 0%, rgba(255, 184, 0, 0.15) 0%, #121522 100%);
+  box-shadow: 0 8px 32px -8px rgba(255, 184, 0, 0.22);
+}
+.card-mythic {
+  border: 1px solid rgba(255, 45, 85, 0.30);
+  background: radial-gradient(80% 60% at 50% 0%, rgba(255, 45, 85, 0.16) 0%, #121522 100%);
+  box-shadow: 0 8px 32px -8px rgba(255, 45, 85, 0.24);
+}
+
+/* ── V2 Artifact Spotlight (радиальная подсветка 3D-предметов, Этап 6) ── */
+.artifact-spotlight-blue {
+  background: radial-gradient(circle at 50% 50%, rgba(0, 229, 255, 0.28) 0%, rgba(0, 229, 255, 0) 70%);
+}
+.artifact-spotlight-gold {
+  background: radial-gradient(circle at 50% 50%, rgba(255, 184, 0, 0.28) 0%, rgba(255, 184, 0, 0) 70%);
+}
+.artifact-spotlight-ruby {
+  background: radial-gradient(circle at 50% 50%, rgba(255, 45, 85, 0.28) 0%, rgba(255, 45, 85, 0) 70%);
 }
