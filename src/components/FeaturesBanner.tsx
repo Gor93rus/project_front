@@ -171,7 +171,7 @@ function DesktopCard({ item }: { item: FeatureItem }) {
 
 // ═══════════════════════════════════════════════════════════════════════════════
 // MOBILE SCROLL CAROUSEL — scroll-snap, 1 card per snap (100% width, 16:9)
-// ═══════════════════════════════════���═══════════════════════════════════════════
+// ═══════════════════════════════════���══════���════════════════════════════════════
 function MobileCarousel({ compact = false }: { compact?: boolean }) {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [activeIndex, setActiveIndex] = useState(0);
@@ -250,18 +250,61 @@ function DesktopGrid() {
 }
 
 // ═══════════════════════════════════════════════════════════════════════════════
+// MOBILE INSTANT PAYOUTS BANNER
+// ═══════════════════════════════════════════════════════════════════════════════
+const TON_FIRE_COIN_SRC =
+  'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/grok-image-8d5ba273-cb3c-4b98-b981-1239c4bc14ca-hL9vouGJ4zXsM7iDztiRNVL7lIQXEn.png';
+
+function InstantPayoutsBanner() {
+  return (
+    <motion.div
+      className="relative flex min-h-[140px] flex-row items-center justify-between overflow-hidden rounded-[24px] border border-[#FFB800]/25 bg-[#08090E] p-5"
+      style={{ isolation: 'isolate' }}
+      whileTap={{ scale: 0.98 }}
+    >
+      <div
+        className="pointer-events-none absolute inset-y-0 right-0 z-0 w-3/4"
+        style={{
+          background:
+            'radial-gradient(circle at 80% 50%, rgba(255, 184, 0, 0.28) 0%, transparent 65%)',
+        }}
+        aria-hidden="true"
+      />
+
+      <div className="relative z-10 w-1/2 shrink-0">
+        <span className="mb-1.5 block w-max rounded-full border border-[#FFB800]/40 bg-[#FFB800]/10 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-[#FFB800]">
+          Instant Payouts
+        </span>
+        <h2 className="text-[18px] font-bold leading-tight text-white">Lightning Payouts</h2>
+        <p className="mt-1 text-[12px] leading-snug text-[#8E9BAE]">
+          Sub-5 second transfers directly to your TON wallet on-chain.
+        </p>
+      </div>
+
+      <div className="relative z-10 flex h-full w-1/2 items-center justify-center">
+        <motion.div
+          animate={{ y: [0, -6, 0] }}
+          transition={{ duration: 3.5, repeat: Infinity, ease: 'easeInOut' }}
+          className="relative -mr-5"
+        >
+          <img
+            src={TON_FIRE_COIN_SRC}
+            alt="Instant TON"
+            className="h-32 w-32 object-contain drop-shadow-[0_10px_20px_rgba(255,184,0,0.2)] mix-blend-screen"
+          />
+        </motion.div>
+      </div>
+    </motion.div>
+  );
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
 // MAIN COMPONENT
 // ═══════════════════════════════════════════════════════════════════════════════
 export function FeaturesBanner({ compact = false }: { compact?: boolean } = {}) {
   return (
     <section className="px-4 pt-2">
-      {/*
-       * Ровно одна ветка в дереве. Раньше здесь стояла CSS-развилка
-       * md:hidden / hidden md:block — скрытый вариант всё равно монтировался
-       * и держал холостые entrance-анимации. Мобильная главная передаёт
-       * compact, DesktopHome вызывает баннер без пропа.
-       */}
-      {compact ? <MobileCarousel compact /> : <DesktopGrid />}
+      {compact ? <InstantPayoutsBanner /> : <DesktopGrid />}
     </section>
   );
 }
