@@ -36,7 +36,7 @@ const iconProps = {
 const SLIDES: Slide[] = [
   {
     key: 'referral',
-    accent: 'var(--primary)',
+    accent: 'var(--rarity-rare)',
     kicker: 'Invite',
     title: 'Earn from every friend',
     icon: (
@@ -49,7 +49,7 @@ const SLIDES: Slide[] = [
   },
   {
     key: 'streak',
-    accent: 'var(--gold)',
+    accent: 'var(--rarity-legendary)',
     kicker: 'Daily streak',
     title: 'Bonus every 7 days',
     icon: (
@@ -61,7 +61,7 @@ const SLIDES: Slide[] = [
   },
   {
     key: 'rewards',
-    accent: 'var(--secondary)',
+    accent: 'var(--rarity-epic)',
     kicker: 'Rewards',
     title: 'Chests & badges soon',
     icon: (
@@ -111,13 +111,10 @@ export function RewardsPanel({
         alignItems: 'stretch',
         padding: '10px 12px 14px',
         background:
-          'linear-gradient(160deg, rgba(124,58,237,0.10) 0%, rgba(255,255,255,0.02) 38%, var(--bg-1) 100%)',
-        borderTop: '2px solid rgba(255,255,255,0.16)',
-        borderLeft: '1.5px solid rgba(255,255,255,0.08)',
-        borderRight: '1.5px solid rgba(0,0,0,0.55)',
-        borderBottom: '3px solid rgba(0,0,0,0.8)',
+          'linear-gradient(160deg, rgba(139,92,246,0.10) 0%, rgba(255,255,255,0.02) 38%, var(--bg-card) 100%)',
+        border: '1px solid rgba(255,255,255,0.08)',
         boxShadow:
-          'inset 0 2px 0 rgba(255,255,255,0.12), inset 0 -4px 14px rgba(0,0,0,0.45), 0 18px 38px -16px rgba(0,0,0,0.85)',
+          '0 8px 32px -8px rgba(139,92,246,0.15), inset 0 1px 0 rgba(255,255,255,0.06)',
         ...style,
       }}
     >

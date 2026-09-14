@@ -2,7 +2,7 @@ import { useState, useEffect, lazy, Suspense } from 'react';
 import { BrowserRouter, Routes, Route, useLocation, useNavigate } from 'react-router-dom';
 import { TonConnectUIProvider } from '@tonconnect/ui-react';
 import { Header } from './components/Header';
-import { NavBar, type NavTab } from './components/NavBar';
+import { FloatingDock, type DockTab } from './components/FloatingDock';
 import { FeaturesBanner } from './components/FeaturesBanner';
 import { ProfilePage } from './components/ProfilePage';
 import { LotteryPage } from './components/LotteryPage';
@@ -61,14 +61,14 @@ function MobileHome() {
           <CategoryEntryCard
             title="Draw Lotteries"
             subtitle="Enter now"
-            accent="var(--primary)"
+            accent="var(--rarity-epic)"
             onClick={() => navigate('/lotteries')}
             index={0}
           />
           <CategoryEntryCard
             title="Scratch Cards"
             subtitle="Play"
-            accent="var(--secondary)"
+            accent="var(--rarity-rare)"
             onClick={() => navigate('/scratch-cards')}
             index={1}
           />
@@ -82,7 +82,7 @@ function MobileHome() {
           <CategoryEntryCard
             title="Mystic Lootbox"
             subtitle="Unlock"
-            accent="var(--gold)"
+            accent="var(--rarity-mythic)"
             index={2}
           />
         </div>
@@ -180,7 +180,7 @@ function useTelegramBackButton() {
 }
 
 function AppLayout() {
-  const [activeTab, setActiveTab] = useState<NavTab>('home');
+  const [activeTab, setActiveTab] = useState<DockTab>('home');
   const location = useLocation();
 
   useTelegramBackButton();
@@ -195,7 +195,7 @@ function AppLayout() {
     else if (path === '/profile') setActiveTab('profile');
   }, [location.pathname]);
 
-  const handleTabChange = (tab: NavTab) => {
+  const handleTabChange = (tab: DockTab) => {
     setActiveTab(tab);
     // Navigate programmatically
     const path = tab === 'home' ? '/' : `/${tab}`;
@@ -219,7 +219,7 @@ function AppLayout() {
       )}
       <div className={`relative z-10 flex flex-col min-h-screen${isLotteryPage ? '' : ' app-shell-capsule'}`}>
         {!isLotteryPage && <Header />}
-        <main className="flex-1 overflow-y-auto pt-2" style={{ paddingBottom: isLotteryPage ? 0 : 72 }}>
+        <main className="flex-1 overflow-y-auto pt-2" style={{ paddingBottom: isLotteryPage ? 0 : 96 }}>
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/lotteries" element={<LotteriesPage />} />
@@ -243,7 +243,7 @@ function AppLayout() {
             <Route path="/lottery/:slug" element={<LotteryPage />} />
           </Routes>
         </main>
-        {!isLotteryPage && <NavBar active={activeTab} onTabChange={handleTabChange} />}
+        {!isLotteryPage && <FloatingDock active={activeTab} onTabChange={handleTabChange} />}
       </div>
     </div>
   );

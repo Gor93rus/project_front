@@ -4,12 +4,9 @@ import { useTonWallet } from '../hooks/useTonWallet';
 
 /* glass-3d directional bevel (светлый верх/лево, тёмный низ/право) */
 const BEVEL = {
-  borderTop: '2px solid rgba(255,255,255,0.16)',
-  borderLeft: '1.5px solid rgba(255,255,255,0.08)',
-  borderRight: '1.5px solid rgba(0,0,0,0.55)',
-  borderBottom: '3px solid rgba(0,0,0,0.8)',
+  border: '1px solid rgba(255,184,0,0.20)',
   boxShadow:
-    'inset 0 2px 0 rgba(255,255,255,0.12), inset 0 -4px 14px rgba(0,0,0,0.45), 0 18px 38px -16px rgba(0,0,0,0.85), 0 0 26px -10px var(--gold-glow)',
+    '0 8px 32px -8px rgba(255,184,0,0.18), inset 0 1px 0 rgba(255,255,255,0.06)',
 } as const;
 
 /**
@@ -30,7 +27,7 @@ export function GamificationCompact({ className = '' }: { className?: string } =
       className={`relative w-full text-left overflow-hidden rounded-2xl p-2.5 flex flex-col justify-center ${className}`}
       style={{
         background:
-          'linear-gradient(160deg, rgba(240,185,11,0.10) 0%, rgba(255,255,255,0.02) 35%, var(--bg-1) 100%)',
+          'linear-gradient(160deg, rgba(255,184,0,0.10) 0%, rgba(255,255,255,0.02) 35%, var(--bg-card) 100%)',
         ...BEVEL,
       }}
     >
@@ -45,9 +42,9 @@ export function GamificationCompact({ className = '' }: { className?: string } =
             style={{
               width: 44,
               height: 44,
-              background: 'linear-gradient(150deg, rgba(240,185,11,0.22), rgba(240,185,11,0.06))',
-              border: '1px solid rgba(240,185,11,0.28)',
-              boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.18), 0 0 18px -6px var(--gold-glow)',
+              background: 'linear-gradient(150deg, rgba(255,184,0,0.22), rgba(255,184,0,0.06))',
+              border: '1px solid rgba(255,184,0,0.28)',
+              boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.18), 0 0 18px -6px rgba(255,184,0,0.45)',
             }}
           >
             {/* Линейный замок в грамматике иконок CategoryEntryCard
@@ -63,7 +60,7 @@ export function GamificationCompact({ className = '' }: { className?: string } =
               strokeLinecap="round"
               strokeLinejoin="round"
               aria-hidden="true"
-              style={{ color: 'var(--gold-soft)' }}
+              style={{ color: '#FFD000' }}
             >
               <rect x="4.5" y="10.5" width="15" height="9.5" rx="2.5" />
               <path d="M8 10.5V7.8a4 4 0 0 1 8 0v2.7" />
@@ -97,14 +94,14 @@ export function GamificationCompact({ className = '' }: { className?: string } =
             className="inline-flex items-center gap-1 rounded-full shrink-0"
             style={{
               padding: '4px 9px',
-              background: 'rgba(240,185,11,0.14)',
-              border: '1px solid rgba(240,185,11,0.3)',
+              background: 'rgba(255,184,0,0.14)',
+              border: '1px solid rgba(255,184,0,0.3)',
               fontFamily: 'var(--font-mono)',
               fontSize: 9,
               fontWeight: 600,
               letterSpacing: '0.1em',
               textTransform: 'uppercase',
-              color: 'var(--gold-soft)',
+              color: '#FFD000',
             }}
           >
             Connect
@@ -121,7 +118,7 @@ export function GamificationCompact({ className = '' }: { className?: string } =
               style={{
                 color: 'var(--bg-0)',
                 background: 'linear-gradient(135deg, var(--gold), var(--gold-soft))',
-                boxShadow: '0 4px 10px var(--gold-glow), inset 0 1px 0 rgba(255,255,255,0.4)',
+                boxShadow: '0 4px 10px rgba(255,184,0,0.45), inset 0 1px 0 rgba(255,255,255,0.4)',
               }}
             >
               {loading ? '·' : level?.level ?? 1}
@@ -141,7 +138,7 @@ export function GamificationCompact({ className = '' }: { className?: string } =
               style={{
                 width: `${xpPct}%`,
                 background: 'linear-gradient(90deg, var(--primary), var(--primary-soft))',
-                boxShadow: '0 0 10px var(--primary-glow)',
+                boxShadow: '0 0 10px rgba(0,229,255,0.40)',
               }}
             />
           </div>

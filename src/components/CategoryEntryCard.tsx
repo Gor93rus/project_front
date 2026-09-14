@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion';
+import { hapticImpact } from '../lib/haptic';
 
 /**
  * CategoryEntryCard — крупная карточка-вход в категорию для левой (тяжёлой)
@@ -18,9 +19,14 @@ interface CategoryEntryCardProps {
 export function CategoryEntryCard({ title, subtitle, accent, onClick, index = 0 }: CategoryEntryCardProps) {
   const clickable = Boolean(onClick);
 
+  const handleClick = () => {
+    hapticImpact('light');
+    onClick?.();
+  };
+
   return (
     <motion.button
-      onClick={onClick}
+      onClick={clickable ? handleClick : undefined}
       initial={{ opacity: 0, y: 16, scale: 0.97 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
       transition={{ delay: index * 0.06, duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
@@ -30,7 +36,7 @@ export function CategoryEntryCard({ title, subtitle, accent, onClick, index = 0 
         position: 'relative',
         flex: 1,
         minHeight: 92,
-        borderRadius: 16,
+        borderRadius: 18,
         overflow: 'hidden',
         cursor: clickable ? 'pointer' : 'default',
         textAlign: 'left',
@@ -38,31 +44,26 @@ export function CategoryEntryCard({ title, subtitle, accent, onClick, index = 0 
         flexDirection: 'column',
         justifyContent: 'flex-end',
         padding: '10px 12px 12px',
-        borderTop: '2px solid rgba(255,255,255,0.16)',
-        borderLeft: '1.5px solid rgba(255,255,255,0.08)',
-        borderRight: '1.5px solid rgba(0,0,0,0.55)',
-        borderBottom: '3px solid rgba(0,0,0,0.8)',
+        border: `1px solid ${accent}30`,
         boxShadow: `
-          inset 0 2px 0 rgba(255,255,255,0.14),
-          inset 0 -4px 12px rgba(0,0,0,0.45),
-          0 14px 30px -14px rgba(0,0,0,0.85),
-          0 0 22px -8px ${accent}55
+          0 8px 32px -8px ${accent}22,
+          inset 0 1px 0 rgba(255,255,255,0.06)
         `,
       }}
     >
-      {/* Background */}
+      {/* Background — Carbon OLED + rarity spotlight */}
       <div style={{ position: 'absolute', inset: 0, zIndex: 0 }}>
         <div style={{
           position: 'absolute', inset: 0,
-          background: `radial-gradient(ellipse 90% 70% at 12% 0%, ${accent}45 0%, transparent 60%),
-            linear-gradient(180deg, var(--bg-1) 0%, var(--bg-0) 100%)`,
+          background: `radial-gradient(ellipse 90% 70% at 12% 0%, ${accent}30 0%, transparent 60%),
+            linear-gradient(180deg, var(--bg-card) 0%, var(--bg-page) 100%)`,
         }} />
       </div>
 
       {/* Glass sheen */}
       <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 1, background: 'linear-gradient(165deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.01) 35%, transparent 60%)' }} />
 
-  {/* Content */}
+      {/* Content */}
       <div style={{ position: 'relative', zIndex: 2, display: 'flex', flexDirection: 'column', gap: 7 }}>
         <p style={{
           fontSize: 18, fontWeight: 700, color: '#fff',
@@ -82,8 +83,8 @@ export function CategoryEntryCard({ title, subtitle, accent, onClick, index = 0 
           height: 26,
           padding: '0 11px',
           borderRadius: 'var(--r-pill)',
-          background: `linear-gradient(180deg, ${accent}59 0%, ${accent}33 100%)`,
-          border: `1px solid ${accent}A6`,
+          background: `linear-gradient(180deg, ${accent}50 0%, ${accent}28 100%)`,
+          border: `1px solid ${accent}90`,
           boxShadow: `inset 0 1px 0 rgba(255,255,255,0.18), 0 0 16px -6px ${accent}`,
           fontFamily: 'var(--font-mono)',
           fontSize: 11,

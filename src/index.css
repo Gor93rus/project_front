@@ -207,13 +207,13 @@
   filter: blur(50px);
 }
 
-/* Constrain fixed NavBar to the app-capsule width on desktop */
+/* Constrain fixed FloatingDock to the app-capsule width on desktop */
 @media (min-width: 768px) {
-  nav.fixed.bottom-0.left-0.right-0 {
+  nav.fixed.z-50 {
     left: 50%;
     right: auto;
-    width: 680px;
-    max-width: 680px;
+    width: 648px;
+    max-width: 648px;
     transform: translateX(-50%);
   }
 }
