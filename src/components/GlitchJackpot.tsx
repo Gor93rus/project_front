@@ -54,7 +54,7 @@ export function GlitchJackpot({
 
   const num = display.toLocaleString();
   const unit = (
-    <span style={{ fontSize: 11, marginLeft: 3, opacity: 0.75, fontFamily: "'Space Grotesk', sans-serif" }}>
+    <span style={{ fontSize: 11, marginLeft: 3, opacity: 0.75, fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
       {currency}
     </span>
   );

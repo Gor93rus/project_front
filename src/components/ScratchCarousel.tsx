@@ -108,7 +108,7 @@ export function ScratchCard({ game, fluid = false }: { game: typeof SCRATCH_GAME
         </div>
 
         <div style={{ marginTop: 'auto' }}>
-          <p style={{ fontSize: 15, fontWeight: 700, color: '#fff', textAlign: 'center', marginBottom: 2, letterSpacing: '-0.02em', fontFamily: "'Space Grotesk', sans-serif", textShadow: '0 2px 12px rgba(0,0,0,0.5)' }}>
+          <p style={{ fontSize: 15, fontWeight: 700, color: '#fff', textAlign: 'center', marginBottom: 2, letterSpacing: '-0.02em', fontFamily: "'Plus Jakarta Sans', sans-serif", textShadow: '0 2px 12px rgba(0,0,0,0.5)' }}>
             {game.name}
           </p>
           <p style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', textAlign: 'center', color: 'rgba(255,255,255,0.45)', letterSpacing: '0.18em', marginBottom: 2, fontFamily: 'var(--font-mono)' }}>

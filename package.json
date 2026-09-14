@@ -12,7 +12,7 @@
   },
   "dependencies": {
     "@fontsource/jetbrains-mono": "^5.2.8",
-    "@fontsource/space-grotesk": "^5.2.10",
+    "@fontsource/plus-jakarta-sans": "^5.3.0",
     "@supabase/supabase-js": "^2.57.4",
     "@tonconnect/ui-react": "^2.4.4",
     "@twa-dev/sdk": "^8.0.2",

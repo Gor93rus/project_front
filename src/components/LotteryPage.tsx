@@ -14,7 +14,7 @@ function GlitchJackpot({ value, compact }: { value: number; compact?: boolean })
         color: 'var(--gold)', fontFamily: "'Geist Mono', monospace",
         textShadow: '0 0 32px var(--gold-glow)', lineHeight: 1,
       }}>
-        {value.toLocaleString()}<span style={{ fontSize: compact ? 11 : 14, marginLeft: 3, opacity: 0.75, fontFamily: "'Space Grotesk', sans-serif" }}>TON</span>
+        {value.toLocaleString()}<span style={{ fontSize: compact ? 11 : 14, marginLeft: 3, opacity: 0.75, fontFamily: "'Plus Jakarta Sans', sans-serif" }}>TON</span>
         <span className="glitch-clip glitch-ton">{value.toLocaleString()}<span style={{ fontSize: compact ? 11 : 14, marginLeft: 3, opacity: 0.75 }}>TON</span></span>
         <span className="glitch-clip glitch-coral">{value.toLocaleString()}<span style={{ fontSize: compact ? 11 : 14, marginLeft: 3, opacity: 0.75 }}>TON</span></span>
       </span>
@@ -251,7 +251,7 @@ export function LotteryPage() {
           <button onClick={() => nav(-1)} style={{ width: 36, height: 36, borderRadius: 12, background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.10)', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: 'rgba(255,255,255,0.65)' }}>
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M15 18l-6-6 6-6"/></svg>
           </button>
-          <span style={{ flex: 1, fontSize: 17, fontWeight: 700, color: '#fff', letterSpacing: '-0.02em', fontFamily: "'Space Grotesk', sans-serif", background: `linear-gradient(135deg, #fff, ${accent})`, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+          <span style={{ flex: 1, fontSize: 17, fontWeight: 700, color: '#fff', letterSpacing: '-0.02em', fontFamily: "'Plus Jakarta Sans', sans-serif", background: `linear-gradient(135deg, #fff, ${accent})`, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
             {name}
           </span>
           <span style={{ fontSize: 9, fontWeight: 700, textTransform: 'uppercase', padding: '4px 10px', borderRadius: 8, background: 'var(--coral-18)', color: 'var(--coral)', border: '1px solid var(--coral-35)', fontFamily: "'Geist Mono', monospace" }}>
@@ -280,7 +280,7 @@ export function LotteryPage() {
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
               <span style={{ color: accent, opacity: 0.9 }}>{Icons.grid}</span>
-              <span style={{ fontSize: 14, fontWeight: 700, color: '#fff', fontFamily: "'Space Grotesk', sans-serif" }}>Choose {MAX} numbers</span>
+              <span style={{ fontSize: 14, fontWeight: 700, color: '#fff', fontFamily: "'Plus Jakarta Sans', sans-serif" }}>Choose {MAX} numbers</span>
             </div>
             <motion.span
               style={{ fontSize: 12, fontWeight: 600, color: selected.length === MAX ? accent : 'rgba(255,255,255,0.4)', fontFamily: "'Geist Mono', monospace" }}
@@ -336,11 +336,11 @@ export function LotteryPage() {
           {/* Buttons */}
           <div style={{ display: 'flex', gap: 9, marginTop: 16 }}>
             <motion.button onClick={randomPick} whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.95 }}
-              style={{ flex: 1, padding: '12px 0', borderRadius: 12, border: `1px solid ${accent}45`, fontSize: 12, fontWeight: 600, cursor: 'pointer', background: `${accent}25`, color: accent, fontFamily: "'Space Grotesk', sans-serif", boxShadow: '0 2px 10px rgba(0,0,0,0.30)' }}>Random</motion.button>
+              style={{ flex: 1, padding: '12px 0', borderRadius: 12, border: `1px solid ${accent}45`, fontSize: 12, fontWeight: 600, cursor: 'pointer', background: `${accent}25`, color: accent, fontFamily: "'Plus Jakarta Sans', sans-serif", boxShadow: '0 2px 10px rgba(0,0,0,0.30)' }}>Random</motion.button>
             <motion.button onClick={luckyPick} whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.95 }}
-              style={{ flex: 1, padding: '12px 0', borderRadius: 12, border: `1px solid ${accent}45`, fontSize: 12, fontWeight: 600, cursor: 'pointer', background: `${accent}25`, color: accent, fontFamily: "'Space Grotesk', sans-serif", boxShadow: '0 2px 10px rgba(0,0,0,0.30)' }}>Lucky Picks</motion.button>
+              style={{ flex: 1, padding: '12px 0', borderRadius: 12, border: `1px solid ${accent}45`, fontSize: 12, fontWeight: 600, cursor: 'pointer', background: `${accent}25`, color: accent, fontFamily: "'Plus Jakarta Sans', sans-serif", boxShadow: '0 2px 10px rgba(0,0,0,0.30)' }}>Lucky Picks</motion.button>
             <motion.button onClick={clearPick} whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.95 }}
-              style={{ padding: '12px 16px', borderRadius: 12, border: '1px solid rgba(255,255,255,0.12)', fontSize: 12, fontWeight: 600, cursor: 'pointer', background: 'rgba(255,255,255,0.04)', color: 'rgba(255,255,255,0.5)', fontFamily: "'Space Grotesk', sans-serif", boxShadow: '0 2px 10px rgba(0,0,0,0.30)' }}>Clear</motion.button>
+              style={{ padding: '12px 16px', borderRadius: 12, border: '1px solid rgba(255,255,255,0.12)', fontSize: 12, fontWeight: 600, cursor: 'pointer', background: 'rgba(255,255,255,0.04)', color: 'rgba(255,255,255,0.5)', fontFamily: "'Plus Jakarta Sans', sans-serif", boxShadow: '0 2px 10px rgba(0,0,0,0.30)' }}>Clear</motion.button>
           </div>
         </div>
 
@@ -348,9 +348,9 @@ export function LotteryPage() {
         <div style={{ ...glassCard, gap: 0, padding: 14, borderRadius: 16 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 7, marginBottom: 8 }}>
             <span style={{ color: accent, opacity: 0.85 }}>{Icons.rules}</span>
-            <span style={{ fontSize: 13, fontWeight: 700, color: '#fff', fontFamily: "'Space Grotesk', sans-serif" }}>How to Play</span>
+            <span style={{ fontSize: 13, fontWeight: 700, color: '#fff', fontFamily: "'Plus Jakarta Sans', sans-serif" }}>How to Play</span>
           </div>
-          <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.55)', lineHeight: 1.7, fontFamily: "'Space Grotesk', sans-serif" }}>
+          <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.55)', lineHeight: 1.7, fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
             Select <span style={{ color: accent, fontWeight: 600 }}>{MAX} numbers from {numbersMax}</span>. Match numbers to win prizes from the pool.
           </div>
         </div>
@@ -387,7 +387,7 @@ export function LotteryPage() {
             animate={{ opacity: [0.6, 1, 0.6] }} transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}>
             <span style={{ color: accent }}>{Icons.fund}</span>
           </motion.div>
-          <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.6)', lineHeight: 1.6, fontFamily: "'Space Grotesk', sans-serif", margin: 0 }}>
+          <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.6)', lineHeight: 1.6, fontFamily: "'Plus Jakarta Sans', sans-serif", margin: 0 }}>
             <span style={{ color: accent, fontWeight: 600 }}>50%</span> of ticket sales form the prize pool. <span style={{ color: accent, fontWeight: 600 }}>15%</span> accumulates in Jackpot.
           </p>
         </div>
@@ -411,7 +411,7 @@ export function LotteryPage() {
             color: '#06080D',
             background: added ? 'linear-gradient(135deg, #10B981, #34D399)' : 'linear-gradient(135deg, #F0B90B, #F8D33A)',
             boxShadow: added ? '0 4px 24px rgba(16,185,129,0.45)' : '0 4px 24px rgba(240,185,11,0.45), 0 0 0 1px rgba(240,185,11,0.25)',
-            fontFamily: "'Space Grotesk', sans-serif",
+            fontFamily: "'Plus Jakarta Sans', sans-serif",
             opacity: selected.length === MAX ? 1 : 0.4,
             position: 'relative' as const, overflow: 'hidden',
           }}

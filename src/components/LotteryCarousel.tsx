@@ -185,7 +185,7 @@ export function LotteryCard({ lottery, index = 0, fluid = false }: { lottery: Lo
           )}
         </div>
         <div style={{ marginTop: 'auto' }}>
-          <p style={{ fontSize: 14, fontWeight: 700, color: '#fff', textAlign: 'center', marginBottom: 2, letterSpacing: '-0.01em', fontFamily: "'Space Grotesk', sans-serif", textShadow: '0 2px 12px rgba(0,0,0,0.5)', lineHeight: 1.2, wordBreak: 'break-word', whiteSpace: 'normal', padding: '0 2px' }}>
+          <p style={{ fontSize: 14, fontWeight: 700, color: '#fff', textAlign: 'center', marginBottom: 2, letterSpacing: '-0.01em', fontFamily: "'Plus Jakarta Sans', sans-serif", textShadow: '0 2px 12px rgba(0,0,0,0.5)', lineHeight: 1.2, wordBreak: 'break-word', whiteSpace: 'normal', padding: '0 2px' }}>
             {lottery.name}
           </p>
           <p style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', textAlign: 'center', color: 'rgba(255,255,255,0.45)', letterSpacing: '0.18em', marginBottom: 2, fontFamily: "var(--font-mono)" }}>
@@ -271,7 +271,7 @@ function HowItWorksModal({ onClose }: { onClose: () => void }) {
                 boxShadow: '0 0 10px rgba(0,152,234,0.25)',
               }}>{i + 1}</span>
               <div>
-                <p style={{ fontSize: 12, fontWeight: 700, color: 'var(--ink-0)', marginBottom: 2, fontFamily: "'Space Grotesk', sans-serif" }}>{s.title}</p>
+                <p style={{ fontSize: 12, fontWeight: 700, color: 'var(--ink-0)', marginBottom: 2, fontFamily: "'Plus Jakarta Sans', sans-serif" }}>{s.title}</p>
                 <p style={{ fontSize: 11, lineHeight: 1.5, color: 'var(--ink-2)' }}>{s.text}</p>
               </div>
             </div>

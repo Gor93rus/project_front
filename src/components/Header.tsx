@@ -104,7 +104,7 @@ export function Header() {
       style={{
         // Safe area — covers Dynamic Island / notch / camera cutouts
         paddingTop: 'var(--safe-area-top)',
-        // Same translucent navy + blur language as NavBar, mirrored top→bottom
+        // Same translucent navy + blur language as FloatingDock, mirrored top→bottom
         background: scrolled
           ? 'linear-gradient(180deg, rgba(6,7,26,0.96) 0%, rgba(11,16,40,0.94) 100%)'
           : 'linear-gradient(180deg, rgba(6,7,26,0.98) 0%, rgba(11,16,40,0.96) 100%)',

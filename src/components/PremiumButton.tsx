@@ -17,7 +17,7 @@ export function PremiumButton({ label, accent, gradient, onClick, className = ''
       style={{
     background: `linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%)`,
     color: '#fff',
-    fontFamily: "'Space Grotesk', sans-serif",
+    fontFamily: "'Plus Jakarta Sans', sans-serif",
     border: '1px solid rgba(255,255,255,0.15)',
     boxShadow: `
       0 4px 14px var(--primary-glow),

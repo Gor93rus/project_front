@@ -95,7 +95,7 @@
 
 /* ─── JACKPOT TEXT — crypto style (alternative) ─────────────────────────── */
 .jackpot-crypto {
-  font-family: 'Space Grotesk', sans-serif; font-weight: 900;
+  font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 900;
   background: linear-gradient(135deg, rgb(var(--ga-100)) 0%, rgb(var(--ga-400)) 40%, rgb(var(--ga-500)) 80%, rgb(var(--ga-800)) 100%);
   -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
   filter: drop-shadow(0 4px 18px rgba(var(--ga-400),0.45)) drop-shadow(0 2px 8px rgba(0,0,0,0.80));
