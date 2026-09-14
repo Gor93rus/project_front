@@ -171,7 +171,7 @@ function DesktopCard({ item }: { item: FeatureItem }) {
 
 // ═══════════════════════════════════════════════════════════════════════════════
 // MOBILE SCROLL CAROUSEL — scroll-snap, 1 card per snap (100% width, 16:9)
-// ═══════════════════════════════════���══════���════════════════════════════════════
+// ═══════════════════════════════════���══════�����════════════════════════════════════
 function MobileCarousel({ compact = false }: { compact?: boolean }) {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [activeIndex, setActiveIndex] = useState(0);
@@ -258,42 +258,36 @@ const TON_FIRE_COIN_SRC =
 function InstantPayoutsBanner() {
   return (
     <motion.div
-      className="relative flex min-h-[140px] flex-row items-center justify-between overflow-hidden rounded-[24px] border border-[#FFB800]/25 bg-[#08090E] p-5"
+      className="relative flex h-[115px] min-h-[115px] items-center justify-between overflow-hidden rounded-[20px] border border-[#FFB800]/30 bg-[#0F121E] px-4 py-3"
       style={{ isolation: 'isolate' }}
       whileTap={{ scale: 0.98 }}
     >
       <div
-        className="pointer-events-none absolute inset-y-0 right-0 z-0 w-3/4"
-        style={{
-          background:
-            'radial-gradient(circle at 80% 50%, rgba(255, 184, 0, 0.28) 0%, transparent 65%)',
-        }}
+        className="pointer-events-none absolute right-0 top-1/2 z-0 h-40 w-40 -translate-y-1/2 rounded-full bg-[#FFB800]/25 blur-2xl"
         aria-hidden="true"
       />
 
-      <div className="relative z-10 w-1/2 shrink-0">
-        <span className="mb-1.5 block w-max rounded-full border border-[#FFB800]/40 bg-[#FFB800]/10 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-[#FFB800]">
+      <div className="relative z-10 max-w-[58%]">
+        <span className="mb-1 block w-max rounded-md border border-[#FFB800]/30 bg-[#FFB800]/10 px-2 py-0.5 text-[9px] font-black uppercase tracking-widest text-[#FFB800]">
           Instant Payouts
         </span>
-        <h2 className="text-[18px] font-bold leading-tight text-white">Lightning Payouts</h2>
-        <p className="mt-1 text-[12px] leading-snug text-[#8E9BAE]">
-          Sub-5 second transfers directly to your TON wallet on-chain.
+        <h2 className="text-[15px] font-bold leading-tight text-white">Lightning Payouts</h2>
+        <p className="mt-0.5 line-clamp-2 text-[11px] leading-snug text-[#8E9BAE]">
+          Sub-5 sec transfers directly to your TON wallet on-chain.
         </p>
       </div>
 
-      <div className="relative z-10 flex h-full w-1/2 items-center justify-center">
-        <motion.div
-          animate={{ y: [0, -6, 0] }}
-          transition={{ duration: 3.5, repeat: Infinity, ease: 'easeInOut' }}
-          className="relative -mr-5"
-        >
-          <img
-            src={TON_FIRE_COIN_SRC}
-            alt="Instant TON"
-            className="h-32 w-32 object-contain drop-shadow-[0_10px_20px_rgba(255,184,0,0.2)] mix-blend-screen"
-          />
-        </motion.div>
-      </div>
+      <motion.div
+        animate={{ y: [0, -4, 0] }}
+        transition={{ duration: 3.5, repeat: Infinity, ease: 'easeInOut' }}
+        className="pointer-events-none absolute -right-4 -top-2 z-[1] h-36 w-36"
+      >
+        <img
+          src={TON_FIRE_COIN_SRC}
+          alt="Instant TON"
+          className="h-full w-full scale-125 object-contain drop-shadow-[0_10px_20px_rgba(255,184,0,0.2)] mix-blend-screen"
+        />
+      </motion.div>
     </motion.div>
   );
 }
