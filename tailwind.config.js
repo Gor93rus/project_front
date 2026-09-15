@@ -119,11 +119,10 @@ export default {
       },
       // ── Шрифты ──
       fontFamily: {
-        display: ['Space Grotesk', 'system-ui', '-apple-system', 'Segoe UI', 'Roboto', 'sans-serif'],
+        display: ['Switzer', 'system-ui', '-apple-system', 'Segoe UI', 'Roboto', 'sans-serif'],
         mono:    ['JetBrains Mono', 'monospace'],
-        // ── V2 — подключается в Этапе 2 (General Sans, self-host). Пока
-        // объявлено на будущее, body ещё использует display выше. ──
-        'v2-sans': ['General Sans', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+        // ── V2 — Этап 2: Switzer (self-host, Fontshare ITF Free License), покрывает wght 100–900. ──
+        'v2-sans': ['Switzer', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
       },
       // ── V2 Радиусы (шкала The Market, Этап 1 — объявлены, не применены) ──
       borderRadius: {
