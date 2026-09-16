@@ -112,9 +112,12 @@ export function RewardsPanel({
         padding: '10px 12px 14px',
         background:
           'linear-gradient(160deg, rgba(139,92,246,0.10) 0%, rgba(255,255,255,0.02) 38%, var(--bg-card) 100%)',
-        border: '1px solid rgba(255,255,255,0.08)',
+        borderTop: '1.5px solid rgba(139,92,246,0.40)',
+        borderLeft: '1px solid rgba(139,92,246,0.20)',
+        borderRight: '1.5px solid rgba(0,0,0,0.50)',
+        borderBottom: '2px solid rgba(0,0,0,0.72)',
         boxShadow:
-          '0 8px 32px -8px rgba(139,92,246,0.15), inset 0 1px 0 rgba(255,255,255,0.06)',
+          'inset 0 1px 0 rgba(255,255,255,0.10), inset 0 -2px 6px rgba(0,0,0,0.45), 0 0 0 1px rgba(255,255,255,0.03), 0 8px 32px -8px rgba(139,92,246,0.15), 0 4px 16px rgba(0,0,0,0.55)',
         ...style,
       }}
     >

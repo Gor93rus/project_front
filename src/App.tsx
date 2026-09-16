@@ -92,8 +92,8 @@ function MobileHome() {
 
       <AnimatedSection variants={fadeUpCard}>
         <div className="px-4 mobile-home__secondary-grid">
-          <GamificationCompact className="mobile-home-gamification" />
           <RewardsPanel />
+          <GamificationCompact className="mobile-home-gamification" />
         </div>
       </AnimatedSection>
 

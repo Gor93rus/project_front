@@ -1,15 +1,8 @@
 import { motion } from 'framer-motion';
 import { hapticImpact } from '../lib/haptic';
 
-/**
- * CategoryEntryCard — крупная карточка-вход в категорию для левой (тяжёлой)
- * колонки главной на мобилке. Заменяет карусель вариантов одной обложкой:
- * тап ведёт на страницу со списком всех вариантов категории.
- */
-
 interface CategoryEntryCardProps {
   title: string;
-  /** Текст чипа-действия в правом нижнем углу: Enter now / Play / Unlock */
   subtitle: string;
   accent: string;
   onClick?: () => void;
@@ -44,10 +37,17 @@ export function CategoryEntryCard({ title, subtitle, accent, onClick, index = 0 
         flexDirection: 'column',
         justifyContent: 'flex-end',
         padding: '10px 12px 12px',
-        border: `1px solid ${accent}30`,
+        // 4-sided glass-3D bevel — light top/left, dark right/bottom
+        borderTop: `1.5px solid ${accent}55`,
+        borderLeft: `1px solid ${accent}28`,
+        borderRight: `1.5px solid rgba(0,0,0,0.50)`,
+        borderBottom: `2px solid rgba(0,0,0,0.72)`,
         boxShadow: `
+          inset 0 1px 0 ${accent}22,
+          inset 0 -2px 6px rgba(0,0,0,0.45),
+          0 0 0 1px rgba(255,255,255,0.03),
           0 8px 32px -8px ${accent}22,
-          inset 0 1px 0 rgba(255,255,255,0.06)
+          0 4px 16px rgba(0,0,0,0.55)
         `,
       }}
     >
@@ -60,8 +60,12 @@ export function CategoryEntryCard({ title, subtitle, accent, onClick, index = 0 
         }} />
       </div>
 
-      {/* Glass sheen */}
-      <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 1, background: 'linear-gradient(165deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.01) 35%, transparent 60%)' }} />
+      {/* Glass bevel overlay — diagonal specular + bottom vignette */}
+      <div style={{
+        position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 1,
+        background: `linear-gradient(142deg, rgba(255,255,255,0.13) 0%, rgba(255,255,255,0.05) 28%, transparent 50%),
+          linear-gradient(to bottom, transparent 40%, rgba(0,0,0,0.18) 100%)`,
+      }} />
 
       {/* Content */}
       <div style={{ position: 'relative', zIndex: 2, display: 'flex', flexDirection: 'column', gap: 7 }}>
@@ -73,8 +77,6 @@ export function CategoryEntryCard({ title, subtitle, accent, onClick, index = 0 
         }}>
           {title}
         </p>
-        {/* Чип-действие вместо блёклой подписи 11 кеглем: у карточки
-            появляется явная точка входа, а не описание */}
         <span style={{
           alignSelf: 'flex-start',
           display: 'inline-flex',
