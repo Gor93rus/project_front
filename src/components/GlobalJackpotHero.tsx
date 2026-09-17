@@ -66,10 +66,11 @@ function avatarFromName(name: string, index: number) {
 
 
 // в”Ђв”Ђ God-rays: РЅР°СЃС‚РѕСЏС‰РёРµ Р»СѓС‡Рё СЃРІРµС‚Р° РёР· С†РµРЅС‚СЂР° (СЏСЂРєРѕРµ СЏРґСЂРѕ + СѓР·РєРёРµ С‡С‘С‚РєРёРµ СЃРїРёС†С‹) в”Ђ
-// РљРѕРЅРёС‡РµСЃРєРёР№ РіСЂР°РґРёРµРЅС‚ СЃС‚СЂРѕРёРј РїСЂРѕРіСЂР°РјРјРЅРѕ: 18 Р»СѓС‡РµР№, С†РІРµС‚ С‡РµСЂРµРґСѓРµС‚СЃСЏ gold в†’ primary в†’ secondary
-// РґР»СЏ Р±РѕР»РµРµ Р±РѕРіР°С‚РѕРіРѕ, РјРЅРѕРіРѕС†РІРµС‚РЅРѕРіРѕ СЌС„С„РµРєС‚Р° (РІРјРµСЃС‚Рѕ РјРѕРЅРѕС…СЂРѕРјРЅРѕРіРѕ Р·РѕР»РѕС‚Р°).
+// РљРѕРЅРёС‡РµСЃРєРёР№ РіСЂР°РґРёРµРЅС‚ СЃС‚СЂРѕРёРј РїСЂРѕРіСЂР°РјРјРЅРѕ: 18 Р»СѓС‡РµР№.
+// Design Bible v2.0: РѕРґРёРЅ Р°РєС†РµРЅС‚РЅС‹Р№ С†РІРµС‚ РЅР° РєР°СЂС‚РѕС‡РєСѓ (СЂР°РЅСЊС€Рµ Р±С‹Р»Рѕ 3 СЂР°Р·РЅС‹С… С†РІРµС‚Р° вЂ” golВ†blueВ†purple).
+// Hero РґР¶РµРєРїРѕС‚Р° = Legendary в†’ РµРґРёРЅС‹Р№ gold-РѕС‚С‚РµРЅРѕРє.
 const RAY_COUNT = 18;
-const RAY_COLORS = ['#FFF4AA', '#78B4FF', '#C8A0FF'];
+const RAY_COLORS = ['#FFF4AA'];
 
 function GodRays() {
   return (
@@ -446,7 +447,7 @@ export function GlobalJackpotHero({ showTicker = true, compact = false }: Global
         transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
         style={{
           position: 'relative',
-          borderRadius: compact ? 22 : 'var(--r-xl)',
+          borderRadius: 'var(--v2-radius-2xl)',
           overflow: 'hidden',
           // РќР°СЃС‹С‰РµРЅРЅР°СЏ С‡РёСЃС‚Р°СЏ Р·Р°Р»РёРІРєР°: РіР»СѓР±РѕРєРёР№ navy + Р»С‘РіРєРёР№ С„РёРѕР»РµС‚ СЃРІРµСЂС…Сѓ.
           // РЎРІРµС‚ (god-rays + Р·РѕР»РѕС‚Рѕ) РІС‹РЅРµСЃРµРЅ РІ РѕС‚РґРµР»СЊРЅС‹Рµ СЃР»РѕРё РІС‹С€Рµ, С‡С‚РѕР±С‹ РЅРµ РјСѓС‚РёС‚СЊ Р±Р°Р·Сѓ.
@@ -550,25 +551,16 @@ export function GlobalJackpotHero({ showTicker = true, compact = false }: Global
             <span
               className="font-tabular"
               style={{
-                fontSize: 'clamp(48px, 13vw, 84px)',
-                lineHeight: 0.92,
-                letterSpacing: '-0.03em',
+                // Design System v2.0 text-4xl: 38px / lh 1.05 / Black(900) / Legendary Gold (#FFB800), flat.
+                fontSize: 'var(--v2-text-4xl)',
+                lineHeight: 1.05,
+                letterSpacing: '-0.04em',
                 fontFamily: 'var(--font-mono)',
-                fontWeight: 800,
-                background: `
-                  linear-gradient(100deg, transparent 44%, rgba(255,255,255,0.95) 50%, transparent 56%),
-                  linear-gradient(180deg, #FFF7B0 0%, #FADB14 25%, #D97706 60%, #92400E 100%)
-                `,
-                backgroundSize: '220% 100%, 100% 100%',
-                backgroundPosition: '220% 0, 0 0',
-                backgroundRepeat: 'no-repeat',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                backgroundClip: 'text',
-                                                filter: `
+                fontWeight: 900,
+                color: 'var(--v2-rarity-legendary)',
+                filter: `
                   drop-shadow(0 2px 4px rgba(0,0,0,0.8))
-                  drop-shadow(0 0 18px rgba(250,219,20,0.6))
-                  drop-shadow(0 0 40px rgba(250,219,20,0.3))
+                  drop-shadow(0 0 18px var(--v2-rarity-legendary-glow))
                 `,
               }}
             >
