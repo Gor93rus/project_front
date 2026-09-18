@@ -617,7 +617,7 @@
 
 .feature-card-img {
   position: relative;
-  border-radius: var(--r-lg);
+  border-radius: var(--v2-radius-lg);
   overflow: hidden;
   cursor: pointer;
 
