@@ -61,14 +61,14 @@ function MobileHome() {
           <CategoryEntryCard
             title="Draw Lotteries"
             subtitle="Enter now"
-            accent="var(--primary)"
+            rarity="epic"
             onClick={() => navigate('/lotteries')}
             index={0}
           />
           <CategoryEntryCard
             title="Scratch Cards"
             subtitle="Play"
-            accent="var(--secondary)"
+            rarity="rare"
             onClick={() => navigate('/scratch-cards')}
             index={1}
           />
@@ -82,7 +82,7 @@ function MobileHome() {
           <CategoryEntryCard
             title="Mystic Lootbox"
             subtitle="Unlock"
-            accent="var(--gold)"
+            rarity="mythic"
             index={2}
           />
         </div>
