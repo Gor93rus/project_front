@@ -42,14 +42,12 @@ const RARITY_STYLES: Record<Rarity, { border: string; shadow: string; glow: stri
 
 interface CategoryEntryCardProps {
   title: string;
-  /** Текст чипа-действия в правом нижнем углу: Enter now / Play / Unlock */
-  subtitle: string;
   rarity: Rarity;
   onClick?: () => void;
   index?: number;
 }
 
-export function CategoryEntryCard({ title, subtitle, rarity, onClick, index = 0 }: CategoryEntryCardProps) {
+export function CategoryEntryCard({ title, rarity, onClick, index = 0 }: CategoryEntryCardProps) {
   const clickable = Boolean(onClick);
   const style = RARITY_STYLES[rarity];
 
@@ -61,7 +59,7 @@ export function CategoryEntryCard({ title, subtitle, rarity, onClick, index = 0 
       transition={{ delay: index * 0.06, duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
       whileHover={clickable ? { y: -3 } : undefined}
       whileTap={clickable ? { scale: 0.97 } : undefined}
-      className={`relative overflow-hidden rounded-[var(--v2-radius-xl)] bg-[#0F121E] p-4 flex flex-col justify-between min-h-[130px] flex-1 border transition-all duration-300 text-left ${style.border} ${style.shadow} ${clickable ? 'cursor-pointer' : 'cursor-default'}`}
+      className={`relative overflow-hidden rounded-[var(--v2-radius-xl)] bg-[#0F121E] p-4 flex flex-col justify-center min-h-[130px] w-full flex-1 border transition-all duration-300 text-left ${style.border} ${style.shadow} ${clickable ? 'cursor-pointer' : 'cursor-default'}`}
     >
       {/* Radial spotlight — заготовка под будущий 3D hero-ассет */}
       <div
@@ -69,17 +67,10 @@ export function CategoryEntryCard({ title, subtitle, rarity, onClick, index = 0 
         style={{ background: `radial-gradient(circle, ${style.glow} 0%, transparent 70%)` }}
       />
 
-      {/* Content */}
-      <p className="font-bold text-white text-lg leading-tight z-20 max-w-[65%]" style={{ fontFamily: 'var(--font-display)' }}>
+      {/* Content — только заголовок; pill-чип убран, карточки сами по себе тактильны (whileTap) */}
+      <p className="font-bold text-white text-lg leading-tight z-20 max-w-[75%]" style={{ fontFamily: 'var(--font-display)' }}>
         {title}
       </p>
-
-      <span className="mt-3 inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-3xs font-black uppercase tracking-wider text-white bg-[#1A1D2D] border border-white/10 w-max z-20 shadow-md" style={{ fontFamily: 'var(--font-mono)' }}>
-        {subtitle}
-        <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke={style.glow} strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M9 5l7 7-7 7" />
-        </svg>
-      </span>
     </motion.button>
   );
 }

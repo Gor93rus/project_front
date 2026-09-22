@@ -55,33 +55,31 @@ function MobileHome() {
 
       <div className="mobile-home__gap" />
 
-      {/* Главные игровые режимы — одна компактная двухколоночная зона. */}
-      <AnimatedSection variants={stagger}>
-        <div className="mobile-home__primary-grid px-4 grid grid-cols-2 items-stretch">
+      {/* Draw Lotteries — основа проекта, во всю ширину, тот же ранг что FeaturesBanner. */}
+      <AnimatedSection variants={fadeUpCard}>
+        <div className="px-4">
           <CategoryEntryCard
             title="Draw Lotteries"
-            subtitle="Enter now"
             rarity="epic"
             onClick={() => navigate('/lotteries')}
             index={0}
-          />
-          <CategoryEntryCard
-            title="Scratch Cards"
-            subtitle="Play"
-            rarity="rare"
-            onClick={() => navigate('/scratch-cards')}
-            index={1}
           />
         </div>
       </AnimatedSection>
 
       <div className="mobile-home__gap" />
 
-      <AnimatedSection variants={fadeUpCard}>
-        <div className="px-4">
+      {/* Второстепенные режимы — компактная двухколоночная зона. */}
+      <AnimatedSection variants={stagger}>
+        <div className="mobile-home__primary-grid px-4 grid grid-cols-2 items-stretch">
+          <CategoryEntryCard
+            title="Scratch Cards"
+            rarity="rare"
+            onClick={() => navigate('/scratch-cards')}
+            index={1}
+          />
           <CategoryEntryCard
             title="Mystic Lootbox"
-            subtitle="Unlock"
             rarity="mythic"
             index={2}
           />
