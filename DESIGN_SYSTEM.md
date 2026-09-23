@@ -186,7 +186,9 @@ index.css
 | `GlobalJackpotHero.tsx` | ✅ | God-rays → один золотой акцент; радиус → `--v2-radius-2xl`; счётчик → `--v2-text-4xl`/900/flat Legendary Gold |
 | `FeaturesBanner` / `lottery-cards.css` | ✅ | `.feature-card-img` радиус → `--v2-radius-lg`. Цвета/типографика заголовка — сознательно НЕ тронуты |
 | `CategoryEntryCard.tsx` | ✅ | Полный рерайт по Image Bible v2.0: rarity border/shadow, radial spotlight, `--v2-radius-xl`, `text-lg`/`text-3xs`. Rarity: Draw Lotteries=Epic, Scratch Cards=Rare, Mystic Lootbox=Mythic. 3D hero-ассет и текстура карточки — отложены |
-| `GamificationCompact.tsx` | ⏳ Не начато | — |
+| `App.tsx` / `MobileHome` — раскладка карточек | ✅ | Draw Lotteries во всю ширину (тот же ранг что FeaturesBanner), Scratch Cards/Mystic Lootbox в 2 колонки ниже; pill-чип (текст+стрелка) убран со всех трёх — только заголовок |
+| `GamificationCompact.tsx` | ✅ | `--gold*` → `--v2-rarity-legendary*`, `rounded-2xl` → `--v2-radius-lg`, типографика 13/10/9/8px → `--v2-text-sm/xs/2xs/3xs` |
+| `RewardsPanel.tsx` | ✅ | `rounded-2xl` → `--v2-radius-lg`; акценты Invite→`--v2-primary-from` (циан), Streak→`--v2-rarity-legendary`, Rewards→`--v2-cyber-purple`; title/kicker → `--v2-text-sm`/`--v2-text-2xs` |
 | `App.tsx` / `MobileHome` (общий фон страницы, отступы) | ⏳ Не начато | Страница ещё на старом `--bg-0`, не на `--v2-bg-page` |
 | `<RarityCard/>` как переиспользуемый компонент (код из Design Bible) | ⏳ Отдельный этап (4) | Не начато, не обсуждено детально |
 | 3D-артефакты / текстуры карточек | ⏳ Отложено (Этап 6) | Ждёт ассетов от пользователя |

@@ -36,7 +36,7 @@ const iconProps = {
 const SLIDES: Slide[] = [
   {
     key: 'referral',
-    accent: 'var(--primary)',
+    accent: 'var(--v2-primary-from)',
     kicker: 'Invite',
     title: 'Earn from every friend',
     icon: (
@@ -49,7 +49,7 @@ const SLIDES: Slide[] = [
   },
   {
     key: 'streak',
-    accent: 'var(--gold)',
+    accent: 'var(--v2-rarity-legendary)',
     kicker: 'Daily streak',
     title: 'Bonus every 7 days',
     icon: (
@@ -61,7 +61,7 @@ const SLIDES: Slide[] = [
   },
   {
     key: 'rewards',
-    accent: 'var(--secondary)',
+    accent: 'var(--v2-cyber-purple)',
     kicker: 'Rewards',
     title: 'Chests & badges soon',
     icon: (
@@ -100,8 +100,9 @@ export function RewardsPanel({
     <button
       type="button"
       onClick={advance}
-      className={`relative w-full overflow-hidden rounded-2xl text-left ${className}`}
+      className={`relative w-full overflow-hidden text-left ${className}`}
       style={{
+        borderRadius: 'var(--v2-radius-lg)',
         minHeight: 78,
         // button по умолчанию центрирует содержимое по вертикали — прижимаем
         // контент к верху, чтобы ритм совпал с карточками левой колонки
@@ -158,7 +159,7 @@ export function RewardsPanel({
             <span
               style={{
                 fontFamily: 'var(--font-mono)',
-                fontSize: 9,
+                fontSize: 'var(--v2-text-2xs)',
                 fontWeight: 600,
                 letterSpacing: '0.14em',
                 textTransform: 'uppercase',
@@ -171,7 +172,7 @@ export function RewardsPanel({
           <span
             style={{
               fontFamily: 'var(--font-display)',
-              fontSize: 12.5,
+              fontSize: 'var(--v2-text-sm)',
               fontWeight: 700,
               lineHeight: 1.2,
               letterSpacing: '-0.01em',
