@@ -21,7 +21,6 @@ import { GamificationCompact } from './components/GamificationCompact';
 import { RewardsPanel } from './components/RewardsPanel';
 import { LotteriesPage } from './components/LotteriesPage';
 import { ScratchCardsPage } from './components/ScratchCardsPage';
-import { LiveWinsPanel } from './components/LiveWinsPanel';
 import { stagger, fadeUp, fadeUpCard } from './lib/animations';
 
 /** Порог десктопа совпадает с брейкпоинтом md в Tailwind. */

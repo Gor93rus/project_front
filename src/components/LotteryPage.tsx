@@ -111,8 +111,6 @@ export function LotteryPage() {
   const [selected, setSelected] = useState<number[]>([]);
   const [added, setAdded] = useState(false);
 
-  // Если реального slug нет в мете, пробуем запасной
-  const fallbackSlug = meta ? slug : 'daily-rush-4x20';
   const accent = meta?.accentColor ?? '#FF6B35';
 
   // Данные из API
