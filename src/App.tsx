@@ -208,6 +208,7 @@ function AppLayout() {
   return (
     <div className="relative min-h-screen" style={{ background: 'var(--bg-0)' }}>
       {!isLotteryPage && <AuroraBackground />}
+      {!isLotteryPage && <div className="dot-grid" aria-hidden="true" />}
       {!isLotteryPage && (
         <>
           <div className="app-shell-decor app-shell-decor--left" aria-hidden="true" />
