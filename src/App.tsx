@@ -62,6 +62,7 @@ function MobileHome() {
             rarity="epic"
             onClick={() => navigate('/lotteries')}
             index={0}
+            glass
           />
         </div>
       </AnimatedSection>

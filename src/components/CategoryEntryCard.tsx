@@ -45,9 +45,12 @@ interface CategoryEntryCardProps {
   rarity: Rarity;
   onClick?: () => void;
   index?: number;
+  /** Frosted-glass вариант по референсу The Vault (Behance) — direction fork,
+   * пока только на одной карточке (Draw Lotteries), не распространён на все. */
+  glass?: boolean;
 }
 
-export function CategoryEntryCard({ title, rarity, onClick, index = 0 }: CategoryEntryCardProps) {
+export function CategoryEntryCard({ title, rarity, onClick, index = 0, glass = false }: CategoryEntryCardProps) {
   const clickable = Boolean(onClick);
   const style = RARITY_STYLES[rarity];
 
@@ -59,13 +62,28 @@ export function CategoryEntryCard({ title, rarity, onClick, index = 0 }: Categor
       transition={{ delay: index * 0.06, duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
       whileHover={clickable ? { y: -3 } : undefined}
       whileTap={clickable ? { scale: 0.97 } : undefined}
-      className={`relative overflow-hidden rounded-[var(--v2-radius-xl)] bg-[#0F121E] p-4 flex flex-col justify-center min-h-[130px] w-full flex-1 border transition-all duration-300 text-left ${style.border} ${style.shadow} ${clickable ? 'cursor-pointer' : 'cursor-default'}`}
+      className={`relative overflow-hidden rounded-[var(--v2-radius-xl)] p-4 flex flex-col justify-center min-h-[130px] w-full flex-1 border transition-all duration-300 text-left ${glass ? 'border-white/[0.08]' : style.border} ${style.shadow} ${clickable ? 'cursor-pointer' : 'cursor-default'}`}
+      style={glass ? { background: 'rgba(24,28,46,0.4)', backdropFilter: 'blur(24px) saturate(140%)', WebkitBackdropFilter: 'blur(24px) saturate(140%)' } : { background: '#0F121E' }}
     >
       {/* Radial spotlight — заготовка под будущий 3D hero-ассет */}
       <div
         className="absolute -right-2 -bottom-2 w-32 h-32 rounded-full blur-2xl pointer-events-none z-0"
         style={{ background: `radial-gradient(circle, ${style.glow} 0%, transparent 70%)` }}
       />
+      {glass && (
+        <>
+          {/* Rarity-цветная обводка, ярче прежней для явного "стеклянного" края */}
+          <div
+            className="absolute inset-0 rounded-[var(--v2-radius-xl)] pointer-events-none z-0"
+            style={{ border: `1.5px solid ${style.glow}`, opacity: 0.6 }}
+          />
+          {/* Верхний глянцевый блик — типичный для frosted glass в референсе */}
+          <div
+            className="absolute inset-x-0 top-0 h-1/2 rounded-t-[var(--v2-radius-xl)] pointer-events-none z-0"
+            style={{ background: 'linear-gradient(180deg, rgba(255,255,255,0.10) 0%, transparent 100%)' }}
+          />
+        </>
+      )}
 
       {/* Content — только заголовок; pill-чип убран, карточки сами по себе тактильны (whileTap) */}
       <p className="font-bold text-white text-lg leading-tight z-20 max-w-[75%]" style={{ fontFamily: 'var(--font-display)' }}>
