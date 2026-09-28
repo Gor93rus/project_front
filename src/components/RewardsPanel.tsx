@@ -111,17 +111,28 @@ export function RewardsPanel({
         justifyContent: 'flex-start',
         alignItems: 'stretch',
         padding: '10px 12px 14px',
-        background:
-          'linear-gradient(160deg, rgba(124,58,237,0.10) 0%, rgba(255,255,255,0.02) 38%, var(--bg-1) 100%)',
-        borderTop: '2px solid rgba(255,255,255,0.16)',
-        borderLeft: '1.5px solid rgba(255,255,255,0.08)',
-        borderRight: '1.5px solid rgba(0,0,0,0.55)',
-        borderBottom: '3px solid rgba(0,0,0,0.8)',
-        boxShadow:
-          'inset 0 2px 0 rgba(255,255,255,0.12), inset 0 -4px 14px rgba(0,0,0,0.45), 0 18px 38px -16px rgba(0,0,0,0.85)',
+        // Frosted glass по референсу The Vault (Behance) — тот же паттерн,
+        // что и на CategoryEntryCard/GamificationCompact, чтобы правая
+        // колонка не выбивалась из общего стиля левой.
+        background: 'rgba(24,28,46,0.4)',
+        backdropFilter: 'blur(24px) saturate(140%)',
+        WebkitBackdropFilter: 'blur(24px) saturate(140%)',
+        border: `1.5px solid ${slide.accent}99`,
+        boxShadow: '0 18px 38px -16px rgba(0,0,0,0.85)',
         ...style,
       }}
     >
+      {/* Едва заметная процедурная текстура — см. .glass-grain в index.css,
+          тот же паттерн, что на CategoryEntryCard/GamificationCompact */}
+      <div
+        className="absolute inset-0 pointer-events-none z-0 glass-grain"
+        style={{ borderRadius: 'var(--v2-radius-lg)' }}
+      />
+      {/* Верхний глянцевый блик — та же грамматика frosted glass, что и у CategoryEntryCard */}
+      <div
+        className="absolute inset-x-0 top-0 h-1/2 pointer-events-none z-0"
+        style={{ borderRadius: 'var(--v2-radius-lg) var(--v2-radius-lg) 0 0', background: 'linear-gradient(180deg, rgba(255,255,255,0.10) 0%, transparent 100%)' }}
+      />
       {/* Мягкое свечение под акцент текущего слайда */}
       <motion.div
         key={`glow-${slide.key}`}

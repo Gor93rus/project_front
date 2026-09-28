@@ -2,14 +2,19 @@ import { useNavigate } from 'react-router-dom';
 import { useGamification } from '../hooks/useGamification';
 import { useTonWallet } from '../hooks/useTonWallet';
 
-/* glass-3d directional bevel (светлый верх/лево, тёмный низ/право) */
-const BEVEL = {
-  borderTop: '2px solid rgba(255,255,255,0.16)',
-  borderLeft: '1.5px solid rgba(255,255,255,0.08)',
-  borderRight: '1.5px solid rgba(0,0,0,0.55)',
-  borderBottom: '3px solid rgba(0,0,0,0.8)',
-  boxShadow:
-    'inset 0 2px 0 rgba(255,255,255,0.12), inset 0 -4px 14px rgba(0,0,0,0.45), 0 18px 38px -16px rgba(0,0,0,0.85), 0 0 26px -10px var(--v2-rarity-legendary-glow)',
+/* Frosted glass по референсу The Vault (Behance) — тот же паттерн, что и
+ * на CategoryEntryCard (Draw Lotteries/Scratch Cards/Mystic Lootbox), чтобы
+ * правая колонка не выбивалась из общего стиля левой. */
+/* "Кислотный" gold — насыщеннее токена --v2-rarity-legendary-glow (35%
+ * альфа), чтобы обводка/сияние читались так же ярко, как на карточках слева. */
+const ACID_GOLD = 'rgba(255,214,0,0.6)';
+
+const GLASS = {
+  background: 'rgba(24,28,46,0.4)',
+  backdropFilter: 'blur(24px) saturate(140%)',
+  WebkitBackdropFilter: 'blur(24px) saturate(140%)',
+  border: `1.5px solid ${ACID_GOLD}`,
+  boxShadow: `0 18px 38px -16px rgba(0,0,0,0.85), 0 0 26px -10px ${ACID_GOLD}`,
 } as const;
 
 /**
@@ -30,11 +35,19 @@ export function GamificationCompact({ className = '' }: { className?: string } =
       className={`relative w-full text-left overflow-hidden p-2.5 flex flex-col justify-center ${className}`}
       style={{
         borderRadius: 'var(--v2-radius-lg)',
-        background:
-          'linear-gradient(160deg, rgba(240,185,11,0.10) 0%, rgba(255,255,255,0.02) 35%, var(--bg-1) 100%)',
-        ...BEVEL,
+        ...GLASS,
       }}
     >
+      {/* Едва заметная процедурная текстура — см. .glass-grain в index.css */}
+      <div
+        className="absolute inset-0 pointer-events-none z-0 glass-grain"
+        style={{ borderRadius: 'var(--v2-radius-lg)' }}
+      />
+      {/* Верхний глянцевый блик — та же грамматика frosted glass, что и у CategoryEntryCard */}
+      <div
+        className="absolute inset-x-0 top-0 h-1/2 pointer-events-none z-0"
+        style={{ borderRadius: 'var(--v2-radius-lg) var(--v2-radius-lg) 0 0', background: 'linear-gradient(180deg, rgba(255,255,255,0.10) 0%, transparent 100%)' }}
+      />
       {!connected ? (
         /* Locked-состояние теперь занимает всю высоту левой колонки минус
            мини-баннер, поэтому одной строки капсом мало: блок читался как

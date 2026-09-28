@@ -77,11 +77,13 @@ function MobileHome() {
             rarity="rare"
             onClick={() => navigate('/scratch-cards')}
             index={1}
+            glass
           />
           <CategoryEntryCard
             title="Mystic Lootbox"
             rarity="mythic"
             index={2}
+            glass
           />
         </div>
       </AnimatedSection>

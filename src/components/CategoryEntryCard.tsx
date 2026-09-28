@@ -12,31 +12,39 @@ import { motion } from 'framer-motion';
 
 type Rarity = 'common' | 'rare' | 'epic' | 'legendary' | 'mythic';
 
-const RARITY_STYLES: Record<Rarity, { border: string; shadow: string; glow: string }> = {
+/* glow — насыщеннее и "кислотнее" прежних 30%-альфа версий (только на
+   glass-варианте, через spotlight-blob и rarity-обводку); border/shadow
+   для non-glass карточек не трогаем — это отдельная, ещё не форкнутая ветка. */
+const RARITY_STYLES: Record<Rarity, { border: string; shadow: string; glow: string; glowAcid: string }> = {
   common: {
     border: 'border-rarity-common/30',
     shadow: 'shadow-[0_8px_25px_-5px_rgba(142,155,174,0.2)]',
     glow: 'rgba(142,155,174,0.3)',
+    glowAcid: 'rgba(180,190,205,0.55)',
   },
   rare: {
     border: 'border-rarity-rare/30',
     shadow: 'shadow-[0_8px_25px_-5px_rgba(0,229,255,0.2)]',
     glow: 'rgba(0,229,255,0.3)',
+    glowAcid: 'rgba(0,255,255,0.6)',
   },
   epic: {
     border: 'border-rarity-epic/30',
     shadow: 'shadow-[0_8px_25px_-5px_rgba(168,85,247,0.2)]',
     glow: 'rgba(168,85,247,0.3)',
+    glowAcid: 'rgba(200,60,255,0.6)',
   },
   legendary: {
     border: 'border-rarity-legendary/30',
     shadow: 'shadow-[0_8px_25px_-5px_rgba(255,184,0,0.2)]',
     glow: 'rgba(255,184,0,0.3)',
+    glowAcid: 'rgba(255,214,0,0.6)',
   },
   mythic: {
     border: 'border-rarity-mythic/30',
     shadow: 'shadow-[0_8px_25px_-5px_rgba(255,45,85,0.2)]',
     glow: 'rgba(255,45,85,0.3)',
+    glowAcid: 'rgba(255,20,110,0.6)',
   },
 };
 
@@ -65,17 +73,21 @@ export function CategoryEntryCard({ title, rarity, onClick, index = 0, glass = f
       className={`relative overflow-hidden rounded-[var(--v2-radius-xl)] p-4 flex flex-col justify-center min-h-[130px] w-full flex-1 border transition-all duration-300 text-left ${glass ? 'border-white/[0.08]' : style.border} ${style.shadow} ${clickable ? 'cursor-pointer' : 'cursor-default'}`}
       style={glass ? { background: 'rgba(24,28,46,0.4)', backdropFilter: 'blur(24px) saturate(140%)', WebkitBackdropFilter: 'blur(24px) saturate(140%)' } : { background: '#0F121E' }}
     >
-      {/* Radial spotlight — заготовка под будущий 3D hero-ассет */}
+      {/* Radial spotlight — заготовка под будущий 3D hero-ассет.
+          На glass-варианте берём более насыщенный ("кислотный") тон и
+          чуть плотнее ядро, чтобы читалось на фоне полупрозрачного стекла. */}
       <div
-        className="absolute -right-2 -bottom-2 w-32 h-32 rounded-full blur-2xl pointer-events-none z-0"
-        style={{ background: `radial-gradient(circle, ${style.glow} 0%, transparent 70%)` }}
+        className={`absolute -right-2 -bottom-2 w-32 h-32 rounded-full pointer-events-none z-0 ${glass ? 'blur-xl' : 'blur-2xl'}`}
+        style={{ background: `radial-gradient(circle, ${glass ? style.glowAcid : style.glow} 0%, transparent 70%)` }}
       />
       {glass && (
         <>
+          {/* Едва заметная процедурная текстура — см. .glass-grain в index.css */}
+          <div className="absolute inset-0 rounded-[var(--v2-radius-xl)] pointer-events-none z-0 glass-grain" />
           {/* Rarity-цветная обводка, ярче прежней для явного "стеклянного" края */}
           <div
             className="absolute inset-0 rounded-[var(--v2-radius-xl)] pointer-events-none z-0"
-            style={{ border: `1.5px solid ${style.glow}`, opacity: 0.6 }}
+            style={{ border: `1.5px solid ${style.glowAcid}`, opacity: 0.7 }}
           />
           {/* Верхний глянцевый блик — типичный для frosted glass в референсе */}
           <div
