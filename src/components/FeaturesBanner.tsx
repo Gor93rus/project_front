@@ -96,11 +96,17 @@ const ITEMS: FeatureItem[] = [
 
 // ═══════════════════════════════════════════════════════════════════════════════
 // MOBILE FEATURE CARD — uses CSS class for 100%-width carousel slot (16:9)
+//
+// Карточка ничего не делает: это подпись-картинка в карусели, никакого роута за
+// ней нет и не планируется. Поэтому у неё нет ни hover-состояния, ни pressed, ни
+// тактильного отклика: раньше она показывала whileTap scale 0.97 и курсор-руку,
+// то есть обещала нажатие, которого не было. Класс --static глушит :hover из
+// lottery-cards.css (он остаётся у desktop-варианта в DesktopHome).
 // ═══════════════════════════════════════════════════════════════════════════════
 function FeatureCard({ item, index }: { item: FeatureItem; index: number }) {
   return (
     <motion.div
-      className="feature-card-img feature-card-img--carousel-item shrink-0"
+      className="feature-card-img feature-card-img--carousel-item feature-card-img--static shrink-0"
       style={{
         isolation: 'isolate',
         ['--fc-border-top' as string]:    item.borderTop,
@@ -116,7 +122,6 @@ function FeatureCard({ item, index }: { item: FeatureItem; index: number }) {
       initial={{ opacity: 0, y: 16, scale: 0.96 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
       transition={{ type: 'spring', stiffness: 300, damping: 28, mass: 0.8, delay: index * 0.05 }}
-      whileTap={{ scale: 0.97 }}
     >
       <div className="feature-card-img__bevel" aria-hidden="true" />
       <div className="feature-card-img__footer">

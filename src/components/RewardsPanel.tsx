@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
+import { hapticImpact } from '../lib/haptic';
 
 /**
  * RewardsPanel — мини-баннер правой колонки главной.
@@ -90,6 +91,7 @@ export function RewardsPanel({
   }, []);
 
   const advance = () => {
+    hapticImpact('light');
     pausedUntil.current = Date.now() + PAUSE_MS;
     setIndex(i => (i + 1) % SLIDES.length);
   };
@@ -97,9 +99,13 @@ export function RewardsPanel({
   const slide = SLIDES[index];
 
   return (
-    <button
+    <motion.button
       type="button"
       onClick={advance}
+      /* Отклик по той же грамматике, что у CategoryEntryCard/GamificationCompact */
+      whileHover={{ y: -3 }}
+      whileTap={{ scale: 0.97 }}
+      transition={{ duration: 0.18, ease: 'easeOut' }}
       className={`relative w-full overflow-hidden text-left ${className}`}
       style={{
         borderRadius: 'var(--v2-radius-lg)',
@@ -220,6 +226,6 @@ export function RewardsPanel({
           />
         ))}
       </span>
-    </button>
+    </motion.button>
   );
 }

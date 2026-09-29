@@ -1,6 +1,8 @@
+import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { useGamification } from '../hooks/useGamification';
 import { useTonWallet } from '../hooks/useTonWallet';
+import { hapticImpact } from '../lib/haptic';
 
 /* Frosted glass по референсу The Vault (Behance) — тот же паттерн, что и
  * на CategoryEntryCard (Draw Lotteries/Scratch Cards/Mystic Lootbox), чтобы
@@ -30,13 +32,18 @@ export function GamificationCompact({ className = '' }: { className?: string } =
   const xpPct = level ? Math.min(100, Math.round(level.xpProgress.percentage)) : 0;
 
   return (
-    <button
-      onClick={() => { if (!connected) { connect(); } else { nav('/profile'); } }}
+    <motion.button
+      onClick={() => { hapticImpact('light'); if (!connected) { connect(); } else { nav('/profile'); } }}
       className={`relative w-full text-left overflow-hidden p-2.5 flex flex-col justify-center ${className}`}
       style={{
         borderRadius: 'var(--v2-radius-lg)',
         ...GLASS,
       }}
+      /* Та же грамматика отклика, что у CategoryEntryCard: подъём под курсором
+         и лёгкое сжатие при нажатии. Карточка — не якорь, ей движение можно. */
+      whileHover={{ y: -3 }}
+      whileTap={{ scale: 0.97 }}
+      transition={{ duration: 0.18, ease: 'easeOut' }}
     >
       {/* Едва заметная процедурная текстура — см. .glass-grain в index.css */}
       <div
@@ -162,6 +169,6 @@ export function GamificationCompact({ className = '' }: { className?: string } =
           </div>
         </div>
       )}
-    </button>
+    </motion.button>
   );
 }

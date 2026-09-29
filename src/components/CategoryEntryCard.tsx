@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion';
+import { hapticImpact } from '../lib/haptic';
 
 /**
  * CategoryEntryCard — крупная карточка-вход в категорию для левой (тяжёлой)
@@ -64,7 +65,7 @@ export function CategoryEntryCard({ title, rarity, onClick, index = 0, glass = f
 
   return (
     <motion.button
-      onClick={onClick}
+      onClick={() => { if (!clickable) return; hapticImpact('light'); onClick?.(); }}
       initial={{ opacity: 0, y: 16, scale: 0.97 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
       transition={{ delay: index * 0.06, duration: 0.4, ease: [0.22, 1, 0.36, 1] }}

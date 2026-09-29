@@ -658,9 +658,11 @@
     box-shadow         0.25s ease;
 }
 
-/* Hover / active — все бордеры чуть ярче, glow усиливается */
+/* Hover / active — все бордеры чуть ярче, glow усиливается.
+   --static исключён: у подписи-картинки в мобильной карусели нет действия,
+   значит не должно быть и реакции на курсор. */
 .feature-card-img--active,
-.feature-card-img:hover {
+.feature-card-img:hover:not(.feature-card-img--static) {
   border-top-color:   var(--fc-border-top-h,    rgba(255,255,255,0.50));
   border-left-color:  var(--fc-border-left-h,   rgba(255,255,255,0.24));
   box-shadow:
@@ -668,6 +670,11 @@
     0 0 0 1px   var(--fc-ring,        rgba(255,255,255,0.08)),
     0 0 28px    var(--fc-glow,        rgba(255,255,255,0.12)),
     0 6px 22px  rgba(0,0,0,0.70);
+}
+
+/* Статичная подпись: курсор не приглашает к клику. */
+.feature-card-img--static {
+  cursor: default;
 }
 
 /* Full-bleed background image — cover сохраняет пропорции без искажений */

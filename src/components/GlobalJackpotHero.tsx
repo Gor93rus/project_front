@@ -3,6 +3,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { ALL_LOTTERY_CONFIGS } from '../data/lottery-configs';
 import { api } from '../lib/api';
+import { hapticImpact } from '../lib/haptic';
 
 // в”Ђв”Ђ Р РµР°Р»СЊРЅС‹Рµ РґР°РЅРЅС‹Рµ РёР· Р‘Р” (PostgreSQL) в”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђ
 // SELECT COALESCE(SUM("currentJackpot"), 0) FROM "Lottery" WHERE active = true;
@@ -334,7 +335,9 @@ function LiveDrawStrip() {
   return (
     <motion.button
       type="button"
-      onClick={() => navigate(ROUTE_BY_SLUG[item.slug] ?? `/lottery/${item.slug}`)}
+      /* Якорь первого экрана: отклик только тактильный. Строка не поднимается
+         и не сжимается — движение здесь читается как дрожание макета. */
+      onClick={() => { hapticImpact('light'); navigate(ROUTE_BY_SLUG[item.slug] ?? `/lottery/${item.slug}`); }}
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.46, duration: 0.4, ease: 'easeOut' }}
