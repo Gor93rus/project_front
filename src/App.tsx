@@ -39,23 +39,33 @@ function MobileHome() {
   const navigate = useNavigate();
 
   return (
-    <div className="mobile-home mobile-home--compact flex flex-col pb-2">
-      {/* Первый экран: jackpot и ключевые действия должны читаться без скролла. */}
-      <AnimatedSection variants={fadeUp} delay={0.05}>
+    <div className="mobile-home mobile-home--compact flex flex-col">
+      {/* Первый экран: jackpot и ключевые действия должны читаться без скролла.
+          Классы mh-row / mh-row--* — точки входа для геометрии первого экрана
+          (см. блок «MOBILE HOME» в index.css): ряды с карточками тянутся по
+          свободной высоте, hero и баннер держат свою.
+
+          mh-stack — «тело» главной без футера. Именно он получает min-height
+          в высоту свободной области экрана: тогда свободное место уходит в
+          ряды карточек, а футер гарантированно начинается ниже линии дока.
+          На сам .mobile-home min-height вешать нельзя — он посчитал бы в эту
+          высоту и футер, и поднял бы его ровно в видимую зону. */}
+      <div className="mh-stack">
+      <AnimatedSection variants={fadeUp} delay={0.05} className="mh-row mh-row--hero">
         <GlobalJackpotHero compact />
       </AnimatedSection>
 
       <div className="mobile-home__gap mobile-home__gap--hero" />
 
       {/* Прямой переход к выплатам — сразу после jackpot, как в Stitch. */}
-      <AnimatedSection variants={fadeUpCard} delay={0.14}>
+      <AnimatedSection variants={fadeUpCard} delay={0.14} className="mh-row mh-row--features">
         <FeaturesBanner compact />
       </AnimatedSection>
 
       <div className="mobile-home__gap" />
 
       {/* Draw Lotteries — основа проекта, во всю ширину, тот же ранг что FeaturesBanner. */}
-      <AnimatedSection variants={fadeUpCard}>
+      <AnimatedSection variants={fadeUpCard} className="mh-row mh-row--draw">
         <div className="px-4">
           <CategoryEntryCard
             title="Draw Lotteries"
@@ -70,7 +80,7 @@ function MobileHome() {
       <div className="mobile-home__gap" />
 
       {/* Второстепенные режимы — компактная двухколоночная зона. */}
-      <AnimatedSection variants={stagger}>
+      <AnimatedSection variants={stagger} className="mh-row mh-row--primary">
         <div className="mobile-home__primary-grid px-4 grid grid-cols-2 items-stretch">
           <CategoryEntryCard
             title="Scratch Cards"
@@ -90,7 +100,7 @@ function MobileHome() {
 
       <div className="mobile-home__gap" />
 
-      <AnimatedSection variants={fadeUpCard}>
+      <AnimatedSection variants={fadeUpCard} className="mh-row mh-row--secondary">
         <div className="px-4 mobile-home__secondary-grid">
           <GamificationCompact className="mobile-home-gamification" />
           <RewardsPanel />
@@ -98,10 +108,9 @@ function MobileHome() {
       </AnimatedSection>
 
       <div className="mobile-home__gap mobile-home__gap--footer" />
-
-      <div style={{ height: 12 }} />
-
-      <AnimatedSection variants={fadeUp}>
+      </div>
+      {/* Футер стоит вне mh-stack: он и должен жить ниже первого экрана. */}
+      <AnimatedSection variants={fadeUp} className="mh-row mh-row--footer">
         <PageFooter />
       </AnimatedSection>
     </div>
@@ -220,7 +229,13 @@ function AppLayout() {
       )}
       <div className={`relative z-10 flex flex-col min-h-screen${isLotteryPage ? '' : ' app-shell-capsule'}`}>
         {!isLotteryPage && <Header />}
-        <main className="flex-1 overflow-y-auto pt-2" style={{ paddingBottom: isLotteryPage ? 0 : 72 }}>
+        {/* Резерв снизу = высота дока + safe-area. Раньше стояло магическое 72px:
+            оно на 3px меньше самого дока и вообще не учитывало safe-area, из-за
+            чего на реальном iPhone контент заезжал под док. */}
+        <main
+          className="flex-1 overflow-y-auto pt-2"
+          style={{ paddingBottom: isLotteryPage ? 0 : 'calc(var(--dock-h) + var(--safe-area-bottom))' }}
+        >
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/lotteries" element={<LotteriesPage />} />

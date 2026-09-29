@@ -168,6 +168,17 @@
   --safe-area-left: env(safe-area-inset-left, 0px);
   --safe-area-right: env(safe-area-inset-right, 0px);
 
+  /* ── Нижний док (NavBar) ──
+     Полная высота дока на устройстве без выреза: 59px контента (иконка 30 +
+     gap 4 + лейбл ~14 + py-2 16 + бордер 1) ≈ 75px. Safe-area снизу док
+     добавляет сам (NavBar.tsx), поэтому резерв под док считается как
+     calc(var(--dock-h) + var(--safe-area-bottom)). */
+  --dock-h: 75px;
+
+  /* ── Шапка (Header.tsx) ── 52px строки + 1px бордер, без safe-area-top
+     (её Header добавляет себе сам через paddingTop). */
+  --header-h: 53px;
+
   /* ── Telegram переменные ── */
   --tg-bg-color: var(--bg-0);
   --tg-text-color: var(--ink-0);
