@@ -2,7 +2,7 @@ import { useState, useEffect, lazy, Suspense } from 'react';
 import { BrowserRouter, Routes, Route, useLocation, useNavigate } from 'react-router-dom';
 import { TonConnectUIProvider } from '@tonconnect/ui-react';
 import { Header } from './components/Header';
-import { FloatingDock, type DockTab } from './components/FloatingDock';
+import { NavBar, type NavTab } from './components/NavBar';
 import { FeaturesBanner } from './components/FeaturesBanner';
 import { ProfilePage } from './components/ProfilePage';
 import { LotteryPage } from './components/LotteryPage';
@@ -21,7 +21,6 @@ import { GamificationCompact } from './components/GamificationCompact';
 import { RewardsPanel } from './components/RewardsPanel';
 import { LotteriesPage } from './components/LotteriesPage';
 import { ScratchCardsPage } from './components/ScratchCardsPage';
-import { LiveWinsPanel } from './components/LiveWinsPanel';
 import { stagger, fadeUp, fadeUpCard } from './lib/animations';
 
 /** Порог десктопа совпадает с брейкпоинтом md в Tailwind. */
@@ -40,68 +39,78 @@ function MobileHome() {
   const navigate = useNavigate();
 
   return (
-    <div className="mobile-home mobile-home--compact flex flex-col pb-2">
-      {/* Первый экран: jackpot и ключевые действия должны читаться без скролла. */}
-      <AnimatedSection variants={fadeUp} delay={0.05}>
+    <div className="mobile-home mobile-home--compact flex flex-col">
+      {/* Первый экран: jackpot и ключевые действия должны читаться без скролла.
+          Классы mh-row / mh-row--* — точки входа для геометрии первого экрана
+          (см. блок «MOBILE HOME» в index.css): ряды с карточками тянутся по
+          свободной высоте, hero и баннер держат свою.
+
+          mh-stack — «тело» главной без футера. Именно он получает min-height
+          в высоту свободной области экрана: тогда свободное место уходит в
+          ряды карточек, а футер гарантированно начинается ниже линии дока.
+          На сам .mobile-home min-height вешать нельзя — он посчитал бы в эту
+          высоту и футер, и поднял бы его ровно в видимую зону. */}
+      <div className="mh-stack">
+      <AnimatedSection variants={fadeUp} delay={0.05} className="mh-row mh-row--hero">
         <GlobalJackpotHero compact />
       </AnimatedSection>
 
       <div className="mobile-home__gap mobile-home__gap--hero" />
 
       {/* Прямой переход к выплатам — сразу после jackpot, как в Stitch. */}
-      <AnimatedSection variants={fadeUpCard} delay={0.14}>
+      <AnimatedSection variants={fadeUpCard} delay={0.14} className="mh-row mh-row--features">
         <FeaturesBanner compact />
       </AnimatedSection>
 
       <div className="mobile-home__gap" />
 
-      {/* Главные игровые режимы — одна компактная двухколоночная зона. */}
-      <AnimatedSection variants={stagger}>
-        <div className="mobile-home__primary-grid px-4 grid grid-cols-2 items-stretch">
-          <CategoryEntryCard
-            title="Draw Lotteries"
-            subtitle="Enter now"
-            accent="var(--rarity-epic)"
-            onClick={() => navigate('/lotteries')}
-            index={0}
-          />
-          <CategoryEntryCard
-            title="Scratch Cards"
-            subtitle="Play"
-            accent="var(--rarity-rare)"
-            onClick={() => navigate('/scratch-cards')}
-            index={1}
-          />
-        </div>
-      </AnimatedSection>
-
-      <div className="mobile-home__gap" />
-
-      <AnimatedSection variants={fadeUpCard}>
+      {/* Draw Lotteries — основа проекта, во всю ширину, тот же ранг что FeaturesBanner. */}
+      <AnimatedSection variants={fadeUpCard} className="mh-row mh-row--draw">
         <div className="px-4">
           <CategoryEntryCard
-            title="Mystic Lootbox"
-            subtitle="Unlock"
-            accent="var(--rarity-mythic)"
-            index={2}
+            title="Draw Lotteries"
+            rarity="epic"
+            onClick={() => navigate('/lotteries')}
+            index={0}
+            glass
           />
         </div>
       </AnimatedSection>
 
       <div className="mobile-home__gap" />
 
-      <AnimatedSection variants={fadeUpCard}>
+      {/* Второстепенные режимы — компактная двухколоночная зона. */}
+      <AnimatedSection variants={stagger} className="mh-row mh-row--primary">
+        <div className="mobile-home__primary-grid px-4 grid grid-cols-2 items-stretch">
+          <CategoryEntryCard
+            title="Scratch Cards"
+            rarity="rare"
+            onClick={() => navigate('/scratch-cards')}
+            index={1}
+            glass
+          />
+          <CategoryEntryCard
+            title="Mystic Lootbox"
+            rarity="mythic"
+            index={2}
+            glass
+          />
+        </div>
+      </AnimatedSection>
+
+      <div className="mobile-home__gap" />
+
+      <AnimatedSection variants={fadeUpCard} className="mh-row mh-row--secondary">
         <div className="px-4 mobile-home__secondary-grid">
-          <RewardsPanel />
           <GamificationCompact className="mobile-home-gamification" />
+          <RewardsPanel />
         </div>
       </AnimatedSection>
 
       <div className="mobile-home__gap mobile-home__gap--footer" />
-
-      <div style={{ height: 12 }} />
-
-      <AnimatedSection variants={fadeUp}>
+      </div>
+      {/* Футер стоит вне mh-stack: он и должен жить ниже первого экрана. */}
+      <AnimatedSection variants={fadeUp} className="mh-row mh-row--footer">
         <PageFooter />
       </AnimatedSection>
     </div>
@@ -180,7 +189,7 @@ function useTelegramBackButton() {
 }
 
 function AppLayout() {
-  const [activeTab, setActiveTab] = useState<DockTab>('home');
+  const [activeTab, setActiveTab] = useState<NavTab>('home');
   const location = useLocation();
 
   useTelegramBackButton();
@@ -195,7 +204,7 @@ function AppLayout() {
     else if (path === '/profile') setActiveTab('profile');
   }, [location.pathname]);
 
-  const handleTabChange = (tab: DockTab) => {
+  const handleTabChange = (tab: NavTab) => {
     setActiveTab(tab);
     // Navigate programmatically
     const path = tab === 'home' ? '/' : `/${tab}`;
@@ -211,6 +220,7 @@ function AppLayout() {
   return (
     <div className="relative min-h-screen" style={{ background: 'var(--bg-0)' }}>
       {!isLotteryPage && <AuroraBackground />}
+      {!isLotteryPage && <div className="dot-grid" aria-hidden="true" />}
       {!isLotteryPage && (
         <>
           <div className="app-shell-decor app-shell-decor--left" aria-hidden="true" />
@@ -219,7 +229,13 @@ function AppLayout() {
       )}
       <div className={`relative z-10 flex flex-col min-h-screen${isLotteryPage ? '' : ' app-shell-capsule'}`}>
         {!isLotteryPage && <Header />}
-        <main className="flex-1 overflow-y-auto pt-2" style={{ paddingBottom: isLotteryPage ? 0 : 96 }}>
+        {/* Резерв снизу = высота дока + safe-area. Раньше стояло магическое 72px:
+            оно на 3px меньше самого дока и вообще не учитывало safe-area, из-за
+            чего на реальном iPhone контент заезжал под док. */}
+        <main
+          className="flex-1 overflow-y-auto pt-2"
+          style={{ paddingBottom: isLotteryPage ? 0 : 'calc(var(--dock-h) + var(--safe-area-bottom))' }}
+        >
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/lotteries" element={<LotteriesPage />} />
@@ -243,7 +259,7 @@ function AppLayout() {
             <Route path="/lottery/:slug" element={<LotteryPage />} />
           </Routes>
         </main>
-        {!isLotteryPage && <FloatingDock active={activeTab} onTabChange={handleTabChange} />}
+        {!isLotteryPage && <NavBar active={activeTab} onTabChange={handleTabChange} />}
       </div>
     </div>
   );

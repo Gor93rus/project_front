@@ -5,7 +5,7 @@
 // ──────────────────────────────────────────────
 
 import { useState, useEffect } from 'react';
-import { api, type LotteryDetailResponse, type CurrentDrawsResponse } from '../lib/api';
+import { api, type CurrentDrawsResponse } from '../lib/api';
 
 export interface LiveDrawData {
   /** Джекпот (строка из API, конвертируется в число) */

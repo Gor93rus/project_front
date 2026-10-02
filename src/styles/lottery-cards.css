@@ -95,7 +95,7 @@
 
 /* ─── JACKPOT TEXT — crypto style (alternative) ─────────────────────────── */
 .jackpot-crypto {
-  font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 900;
+  font-family: 'Space Grotesk', sans-serif; font-weight: 900;
   background: linear-gradient(135deg, rgb(var(--ga-100)) 0%, rgb(var(--ga-400)) 40%, rgb(var(--ga-500)) 80%, rgb(var(--ga-800)) 100%);
   -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
   filter: drop-shadow(0 4px 18px rgba(var(--ga-400),0.45)) drop-shadow(0 2px 8px rgba(0,0,0,0.80));
@@ -617,7 +617,7 @@
 
 .feature-card-img {
   position: relative;
-  border-radius: var(--r-lg);
+  border-radius: var(--v2-radius-lg);
   overflow: hidden;
   cursor: pointer;
 
@@ -658,9 +658,11 @@
     box-shadow         0.25s ease;
 }
 
-/* Hover / active — все бордеры чуть ярче, glow усиливается */
+/* Hover / active — все бордеры чуть ярче, glow усиливается.
+   --static исключён: у подписи-картинки в мобильной карусели нет действия,
+   значит не должно быть и реакции на курсор. */
 .feature-card-img--active,
-.feature-card-img:hover {
+.feature-card-img:hover:not(.feature-card-img--static) {
   border-top-color:   var(--fc-border-top-h,    rgba(255,255,255,0.50));
   border-left-color:  var(--fc-border-left-h,   rgba(255,255,255,0.24));
   box-shadow:
@@ -668,6 +670,11 @@
     0 0 0 1px   var(--fc-ring,        rgba(255,255,255,0.08)),
     0 0 28px    var(--fc-glow,        rgba(255,255,255,0.12)),
     0 6px 22px  rgba(0,0,0,0.70);
+}
+
+/* Статичная подпись: курсор не приглашает к клику. */
+.feature-card-img--static {
+  cursor: default;
 }
 
 /* Full-bleed background image — cover сохраняет пропорции без искажений */

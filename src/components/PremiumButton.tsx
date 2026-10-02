@@ -4,12 +4,11 @@ import { hapticImpact } from '../lib/haptic';
 interface PremiumButtonProps {
   label: string;
   accent: string;
-  gradient: readonly [string, string];
   onClick?: () => void;
   className?: string;
 }
 
-export function PremiumButton({ label, accent, gradient, onClick, className = '' }: PremiumButtonProps) {
+export function PremiumButton({ label, accent, onClick, className = '' }: PremiumButtonProps) {
   return (
     <motion.button
       onClick={() => { hapticImpact('medium'); onClick?.(); }}
@@ -17,7 +16,7 @@ export function PremiumButton({ label, accent, gradient, onClick, className = ''
       style={{
     background: `linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%)`,
     color: '#fff',
-    fontFamily: "'Plus Jakarta Sans', sans-serif",
+    fontFamily: "'Space Grotesk', sans-serif",
     border: '1px solid rgba(255,255,255,0.15)',
     boxShadow: `
       0 4px 14px var(--primary-glow),

@@ -1,6 +1,7 @@
 import { useTonRate } from '../hooks/useTonRate';
 import { useTonWallet } from '../hooks/useTonWallet';
 import { useScrolled } from '../hooks/useScrolled';
+import { hapticImpact } from '../lib/haptic';
 
 // ── TonRatePill — TON price + 24h change ──────────────────────────────────────
 function TonRatePill() {
@@ -54,7 +55,8 @@ function WalletButton() {
 
   return (
     <button
-      onClick={connected ? disconnect : connect}
+      /* Шапка — фиксированный элемент: отклик только тактильный, без движения. */
+      onClick={() => { hapticImpact('light'); if (connected) disconnect(); else connect(); }}
       className="flex items-center gap-1.5 px-3 transition-all duration-200"
       style={{
         height: 30,
@@ -104,7 +106,7 @@ export function Header() {
       style={{
         // Safe area — covers Dynamic Island / notch / camera cutouts
         paddingTop: 'var(--safe-area-top)',
-        // Same translucent navy + blur language as FloatingDock, mirrored top→bottom
+        // Same translucent navy + blur language as NavBar, mirrored top→bottom
         background: scrolled
           ? 'linear-gradient(180deg, rgba(6,7,26,0.96) 0%, rgba(11,16,40,0.94) 100%)'
           : 'linear-gradient(180deg, rgba(6,7,26,0.98) 0%, rgba(11,16,40,0.96) 100%)',

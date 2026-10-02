@@ -3,6 +3,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { ALL_LOTTERY_CONFIGS } from '../data/lottery-configs';
 import { api } from '../lib/api';
+import { hapticImpact } from '../lib/haptic';
 
 // в”Ђв”Ђ Р РµР°Р»СЊРЅС‹Рµ РґР°РЅРЅС‹Рµ РёР· Р‘Р” (PostgreSQL) в”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђ
 // SELECT COALESCE(SUM("currentJackpot"), 0) FROM "Lottery" WHERE active = true;
@@ -34,7 +35,7 @@ const GLOBAL_WINNERS_DB: WinnerEntry[] = [
   { user: 'S***v', prize: '55 TON', lottery: 'Bounty 2x2', slug: 'bounty-2x2' },
 ];
 
-const AVATAR_COLORS = ['#FFB800', '#FF6B35', '#00E5FF', '#8B5CF6', '#00E676', '#FF2D55', '#0EA5E9', '#F97316'];
+const AVATAR_COLORS = ['#FADB14', '#FF6B35', '#0A7CFF', '#7C3AED', '#52C41A', '#FF4D4F', '#0EA5E9', '#F97316'];
 
 // в”Ђв”Ђ РђРІР°С‚Р°СЂ РёР· РёРјРµРЅРё в”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђ
 function avatarFromName(name: string, index: number) {
@@ -66,10 +67,11 @@ function avatarFromName(name: string, index: number) {
 
 
 // в”Ђв”Ђ God-rays: РЅР°СЃС‚РѕСЏС‰РёРµ Р»СѓС‡Рё СЃРІРµС‚Р° РёР· С†РµРЅС‚СЂР° (СЏСЂРєРѕРµ СЏРґСЂРѕ + СѓР·РєРёРµ С‡С‘С‚РєРёРµ СЃРїРёС†С‹) в”Ђ
-// РљРѕРЅРёС‡РµСЃРєРёР№ РіСЂР°РґРёРµРЅС‚ СЃС‚СЂРѕРёРј РїСЂРѕРіСЂР°РјРјРЅРѕ: 18 Р»СѓС‡РµР№, С†РІРµС‚ С‡РµСЂРµРґСѓРµС‚СЃСЏ gold в†’ primary в†’ secondary
-// РґР»СЏ Р±РѕР»РµРµ Р±РѕРіР°С‚РѕРіРѕ, РјРЅРѕРіРѕС†РІРµС‚РЅРѕРіРѕ СЌС„С„РµРєС‚Р° (РІРјРµСЃС‚Рѕ РјРѕРЅРѕС…СЂРѕРјРЅРѕРіРѕ Р·РѕР»РѕС‚Р°).
+// РљРѕРЅРёС‡РµСЃРєРёР№ РіСЂР°РґРёРµРЅС‚ СЃС‚СЂРѕРёРј РїСЂРѕРіСЂР°РјРјРЅРѕ: 18 Р»СѓС‡РµР№.
+// Design Bible v2.0: РѕРґРёРЅ Р°РєС†РµРЅС‚РЅС‹Р№ С†РІРµС‚ РЅР° РєР°СЂС‚РѕС‡РєСѓ (СЂР°РЅСЊС€Рµ Р±С‹Р»Рѕ 3 СЂР°Р·РЅС‹С… С†РІРµС‚Р° вЂ” golВ†blueВ†purple).
+// Hero РґР¶РµРєРїРѕС‚Р° = Legendary в†’ РµРґРёРЅС‹Р№ gold-РѕС‚С‚РµРЅРѕРє.
 const RAY_COUNT = 18;
-const RAY_COLORS = ['#FFE066', '#5CE8FF', '#A78BFA'];
+const RAY_COLORS = ['#FFF4AA'];
 
 function GodRays() {
   return (
@@ -328,12 +330,14 @@ function LiveDrawStrip() {
   if (!item) return null;
 
   const urgent = item.left > 0 && item.left <= URGENT_MS;
-  const accent = urgent ? 'var(--ruby)' : 'var(--emerald)';
+  const accent = urgent ? '#FF4D4F' : 'var(--emerald)';
 
   return (
     <motion.button
       type="button"
-      onClick={() => navigate(ROUTE_BY_SLUG[item.slug] ?? `/lottery/${item.slug}`)}
+      /* Якорь первого экрана: отклик только тактильный. Строка не поднимается
+         и не сжимается — движение здесь читается как дрожание макета. */
+      onClick={() => { hapticImpact('light'); navigate(ROUTE_BY_SLUG[item.slug] ?? `/lottery/${item.slug}`); }}
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.46, duration: 0.4, ease: 'easeOut' }}
@@ -347,7 +351,7 @@ function LiveDrawStrip() {
         gap: 12,
         padding: '0 12px',
         textAlign: 'left',
-        background: 'linear-gradient(180deg, #121522 0%, #0D0F17 100%)',
+        background: 'linear-gradient(180deg, #141C36 0%, #0D1428 100%)',
         borderTop: '1.5px solid rgba(255,255,255,0.10)',
         boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.05)',
         cursor: 'pointer',
@@ -446,11 +450,11 @@ export function GlobalJackpotHero({ showTicker = true, compact = false }: Global
         transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
         style={{
           position: 'relative',
-          borderRadius: compact ? 22 : 'var(--r-xl)',
+          borderRadius: 'var(--v2-radius-2xl)',
           overflow: 'hidden',
           // РќР°СЃС‹С‰РµРЅРЅР°СЏ С‡РёСЃС‚Р°СЏ Р·Р°Р»РёРІРєР°: РіР»СѓР±РѕРєРёР№ navy + Р»С‘РіРєРёР№ С„РёРѕР»РµС‚ СЃРІРµСЂС…Сѓ.
           // РЎРІРµС‚ (god-rays + Р·РѕР»РѕС‚Рѕ) РІС‹РЅРµСЃРµРЅ РІ РѕС‚РґРµР»СЊРЅС‹Рµ СЃР»РѕРё РІС‹С€Рµ, С‡С‚РѕР±С‹ РЅРµ РјСѓС‚РёС‚СЊ Р±Р°Р·Сѓ.
-          background: 'linear-gradient(165deg, #121522 0%, #0D0F17 44%, #08090E 100%)',
+          background: 'linear-gradient(165deg, #141e38 0%, #0d1733 44%, #060c22 100%)',
           borderTop: '2px solid rgba(255,255,255,0.22)',
           borderLeft: '1.5px solid rgba(255,255,255,0.11)',
           borderRight: '1.5px solid rgba(0,0,0,0.60)',
@@ -459,8 +463,7 @@ export function GlobalJackpotHero({ showTicker = true, compact = false }: Global
             inset 0 2px 0 rgba(255,255,255,0.18),
             inset 0 -4px 14px rgba(0,0,0,0.45),
             0 2px 6px rgba(0,0,0,0.6),
-            0 22px 54px -12px rgba(0,0,0,0.9),
-            0 0 40px -8px rgba(255, 184, 0, 0.15)
+            0 22px 54px -12px rgba(0,0,0,0.9)
           `,
         }}
       >
@@ -486,7 +489,7 @@ export function GlobalJackpotHero({ showTicker = true, compact = false }: Global
             position: 'absolute',
             inset: 0,
             background:
-              'radial-gradient(ellipse 56% 44% at 50% 44%, rgba(255,184,0,0.18) 0%, rgba(255,184,0,0.05) 32%, transparent 62%)',
+              'radial-gradient(ellipse 56% 44% at 50% 44%, rgba(250,219,20,0.18) 0%, rgba(250,219,20,0.05) 32%, transparent 62%)',
             pointerEvents: 'none',
             zIndex: 0,
           }}
@@ -551,25 +554,16 @@ export function GlobalJackpotHero({ showTicker = true, compact = false }: Global
             <span
               className="font-tabular"
               style={{
-                fontSize: 'clamp(48px, 13vw, 84px)',
-                lineHeight: 0.92,
-                letterSpacing: '-0.03em',
+                // Design System v2.0 text-4xl: 38px / lh 1.05 / Black(900) / Legendary Gold (#FFB800), flat.
+                fontSize: 'var(--v2-text-4xl)',
+                lineHeight: 1.05,
+                letterSpacing: '-0.04em',
                 fontFamily: 'var(--font-mono)',
-                fontWeight: 800,
-                background: `
-                  linear-gradient(100deg, transparent 44%, rgba(255,255,255,0.95) 50%, transparent 56%),
-                  linear-gradient(180deg, #FFE066 0%, #FFB800 25%, #D97706 60%, #92400E 100%)
-                `,
-                backgroundSize: '220% 100%, 100% 100%',
-                backgroundPosition: '220% 0, 0 0',
-                backgroundRepeat: 'no-repeat',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                backgroundClip: 'text',
-                                                filter: `
+                fontWeight: 900,
+                color: 'var(--v2-rarity-legendary)',
+                filter: `
                   drop-shadow(0 2px 4px rgba(0,0,0,0.8))
-                  drop-shadow(0 0 18px rgba(255,184,0,0.6))
-                  drop-shadow(0 0 40px rgba(255,184,0,0.3))
+                  drop-shadow(0 0 18px var(--v2-rarity-legendary-glow))
                 `,
               }}
             >
@@ -581,8 +575,8 @@ export function GlobalJackpotHero({ showTicker = true, compact = false }: Global
                 fontWeight: 800,
                 fontFamily: 'var(--font-mono)',
                 letterSpacing: '0.04em',
-                color: '#FFD000',
-                textShadow: '0 0 14px rgba(255,184,0,0.45), 0 2px 4px rgba(0,0,0,0.5)',
+                color: 'var(--gold-soft)',
+                textShadow: '0 0 14px var(--gold-glow), 0 2px 4px rgba(0,0,0,0.5)',
                 marginBottom: 4,
               }}
             >
@@ -601,8 +595,8 @@ export function GlobalJackpotHero({ showTicker = true, compact = false }: Global
               textTransform: 'uppercase',
               fontFamily: 'var(--font-mono)',
               fontWeight: 500,
-              color: 'rgba(255,184,0,0.55)',
-              textShadow: '0 0 12px rgba(255,184,0,0.2)',
+              color: 'rgba(250,219,20,0.55)',
+              textShadow: '0 0 12px rgba(250,219,20,0.2)',
             }}
             initial={{ opacity: 0, y: 6 }}
             animate={{ opacity: 1, y: 0 }}
@@ -628,7 +622,7 @@ export function GlobalJackpotHero({ showTicker = true, compact = false }: Global
               alignItems: 'center',
               height: compact ? 36 : 38,
               padding: 0,
-              background: 'linear-gradient(180deg, #0D0F17 0%, #08090E 100%)',
+              background: 'linear-gradient(180deg, #0C1629 0%, #080F1E 100%)',
               borderTop: '1.5px solid rgba(255,255,255,0.08)',
               boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.04)',
               zIndex: 3,

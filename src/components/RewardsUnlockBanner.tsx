@@ -1,6 +1,7 @@
 import { GiftIcon, GemIcon, TrophyIcon } from './AnimatedIcons';
 import { useGamification } from '../hooks/useGamification';
 import { useTonWallet } from '../hooks/useTonWallet';
+import { hapticImpact } from '../lib/haptic';
 
 const BEVEL = {
   borderTop: '2px solid rgba(255,255,255,0.14)',
@@ -115,7 +116,9 @@ export function RewardsUnlockBanner() {
             </p>
           </div>
           <button
+            /* Чип внутри карточки: тактильный отклик есть, движения нет. */
             onClick={() => {
+              hapticImpact('light');
               if (!connected) connect();
               else if (hasRewards) claimAllRewards();
             }}
@@ -188,7 +191,7 @@ export function RewardsUnlockBanner() {
             {unclaimedRewards.slice(0, 2).map(reward => (
               <button
                 key={reward.id}
-                onClick={() => claimReward(reward.id)}
+                onClick={() => { hapticImpact('light'); claimReward(reward.id); }}
                 className="rounded-lg px-2.5 py-1.5 text-left text-3xs font-bold flex items-center justify-between gap-2"
                 style={{ color: 'var(--ink-1)', background: 'rgba(255,255,255,0.045)', border: '1px solid rgba(255,255,255,0.07)' }}
               >

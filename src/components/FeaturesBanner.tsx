@@ -22,85 +22,91 @@ interface FeatureItem {
 const ITEMS: FeatureItem[] = [
   {
     title: 'Instant Payouts',
-    borderTop:    'rgba(0,229,255,0.55)',   // rare (cyan)
-    borderLeft:   'rgba(0,229,255,0.28)',
-    borderRight:  'rgba(0,40,60,0.55)',
-    borderBottom: 'rgba(0,30,50,0.70)',
-    borderTopH:   'rgba(0,229,255,0.85)',
-    borderLeftH:  'rgba(0,229,255,0.45)',
-    ring:         'rgba(0,229,255,0.08)',
-    glow:         'rgba(0,229,255,0.12)',
-    insetTop:     'rgba(100,240,255,0.14)',
+    borderTop:    'rgba(255,77,79,0.55)',   // coral
+    borderLeft:   'rgba(255,77,79,0.28)',
+    borderRight:  'rgba(60,10,0,0.55)',
+    borderBottom: 'rgba(50,8,0,0.70)',
+    borderTopH:   'rgba(255,77,79,0.85)',
+    borderLeftH:  'rgba(255,77,79,0.45)',
+    ring:         'rgba(255,77,79,0.08)',
+    glow:         'rgba(255,77,79,0.12)',
+    insetTop:     'rgba(255,160,130,0.14)',
   },
   {
-    title: 'Multi Currency',
-    borderTop:    'rgba(168,85,247,0.55)',  // epic (purple)
-    borderLeft:   'rgba(168,85,247,0.28)',
-    borderRight:  'rgba(40,10,60,0.55)',
-    borderBottom: 'rgba(30,8,50,0.70)',
-    borderTopH:   'rgba(168,85,247,0.85)',
-    borderLeftH:  'rgba(168,85,247,0.45)',
-    ring:         'rgba(168,85,247,0.08)',
-    glow:         'rgba(168,85,247,0.12)',
-    insetTop:     'rgba(180,150,255,0.14)',
+    title: 'TON & USDT',
+    borderTop:    'rgba(10,124,255,0.55)',  // primary
+    borderLeft:   'rgba(10,124,255,0.28)',
+    borderRight:  'rgba(0,20,60,0.55)',
+    borderBottom: 'rgba(0,15,50,0.70)',
+    borderTopH:   'rgba(10,124,255,0.85)',
+    borderLeftH:  'rgba(10,124,255,0.45)',
+    ring:         'rgba(10,124,255,0.08)',
+    glow:         'rgba(10,124,255,0.12)',
+    insetTop:     'rgba(100,170,255,0.14)',
   },
   {
     title: 'Provably Fair',
-    borderTop:    'rgba(168,85,247,0.55)',   // epic (purple)
-    borderLeft:   'rgba(168,85,247,0.28)',
-    borderRight:  'rgba(40,10,60,0.55)',
-    borderBottom: 'rgba(30,8,50,0.70)',
-    borderTopH:   'rgba(168,85,247,0.85)',
-    borderLeftH:  'rgba(168,85,247,0.45)',
-    ring:         'rgba(168,85,247,0.08)',
-    glow:         'rgba(168,85,247,0.12)',
-    insetTop:     'rgba(180,150,255,0.14)',
+    borderTop:    'rgba(82,196,26,0.55)',   // emerald
+    borderLeft:   'rgba(82,196,26,0.28)',
+    borderRight:  'rgba(0,40,20,0.55)',
+    borderBottom: 'rgba(0,30,15,0.70)',
+    borderTopH:   'rgba(82,196,26,0.85)',
+    borderLeftH:  'rgba(82,196,26,0.45)',
+    ring:         'rgba(82,196,26,0.08)',
+    glow:         'rgba(82,196,26,0.12)',
+    insetTop:     'rgba(120,230,160,0.14)',
   },
   {
     title: 'Massive Prizes',
-    borderTop:    'rgba(255,184,0,0.55)',  // legendary (gold)
-    borderLeft:   'rgba(255,184,0,0.28)',
+    borderTop:    'rgba(250,219,20,0.55)',  // gold
+    borderLeft:   'rgba(250,219,20,0.28)',
     borderRight:  'rgba(60,40,0,0.55)',
     borderBottom: 'rgba(50,32,0,0.70)',
-    borderTopH:   'rgba(255,184,0,0.85)',
-    borderLeftH:  'rgba(255,184,0,0.45)',
-    ring:         'rgba(255,184,0,0.08)',
-    glow:         'rgba(255,184,0,0.12)',
+    borderTopH:   'rgba(250,219,20,0.85)',
+    borderLeftH:  'rgba(250,219,20,0.45)',
+    ring:         'rgba(250,219,20,0.08)',
+    glow:         'rgba(250,219,20,0.12)',
     insetTop:     'rgba(255,230,120,0.14)',
   },
   {
     title: 'Smart Contract',
-    borderTop:    'rgba(0,229,255,0.55)',  // rare (cyan)
-    borderLeft:   'rgba(0,229,255,0.28)',
+    borderTop:    'rgba(14,165,233,0.55)',  // cyan
+    borderLeft:   'rgba(14,165,233,0.28)',
     borderRight:  'rgba(0,40,50,0.55)',
     borderBottom: 'rgba(0,30,40,0.70)',
-    borderTopH:   'rgba(0,229,255,0.85)',
-    borderLeftH:  'rgba(0,229,255,0.45)',
-    ring:         'rgba(0,229,255,0.08)',
-    glow:         'rgba(0,229,255,0.12)',
-    insetTop:     'rgba(100,240,255,0.14)',
+    borderTopH:   'rgba(14,165,233,0.85)',
+    borderLeftH:  'rgba(14,165,233,0.45)',
+    ring:         'rgba(14,165,233,0.08)',
+    glow:         'rgba(14,165,233,0.12)',
+    insetTop:     'rgba(100,240,250,0.14)',
   },
   {
     title: 'Audited Security',
-    borderTop:    'rgba(0,230,118,0.55)',  // emerald
-    borderLeft:   'rgba(0,230,118,0.28)',
+    borderTop:    'rgba(124,58,237,0.55)',  // secondary
+    borderLeft:   'rgba(124,58,237,0.28)',
     borderRight:  'rgba(0,40,20,0.55)',
     borderBottom: 'rgba(0,30,15,0.70)',
-    borderTopH:   'rgba(0,230,118,0.85)',
-    borderLeftH:  'rgba(0,230,118,0.45)',
-    ring:         'rgba(0,230,118,0.08)',
-    glow:         'rgba(0,230,118,0.12)',
-    insetTop:     'rgba(120,255,180,0.14)',
+    borderTopH:   'rgba(124,58,237,0.85)',
+    borderLeftH:  'rgba(124,58,237,0.45)',
+    ring:         'rgba(124,58,237,0.08)',
+    glow:         'rgba(124,58,237,0.12)',
+    insetTop:     'rgba(180,150,255,0.14)',
   },
 ];
 
 // ═══════════════════════════════════════════════════════════════════════════════
 // MOBILE FEATURE CARD — uses CSS class for 100%-width carousel slot (16:9)
+//
+// Карточка ничего не делает: это подпись-картинка в карусели, никакого роута за
+// ней нет и не планируется. Поэтому у неё нет ни hover-состояния, ни pressed, ни
+// тактильного отклика: раньше она показывала whileTap scale 0.97 и курсор-руку,
+// то есть обещала нажатие, которого не было. Класс --static глушит :hover из
+// lottery-cards.css (он остаётся у desktop-варианта в DesktopHome).
 // ═══════════════════════════════════════════════════════════════════════════════
 function FeatureCard({ item, index }: { item: FeatureItem; index: number }) {
   return (
     <motion.div
-      className="feature-card-img feature-card-img--carousel-item shrink-0"
+      className="feature-card-img feature-card-img--carousel-item feature-card-img--static shrink-0"
       style={{
         isolation: 'isolate',
         ['--fc-border-top' as string]:    item.borderTop,
@@ -116,7 +122,6 @@ function FeatureCard({ item, index }: { item: FeatureItem; index: number }) {
       initial={{ opacity: 0, y: 16, scale: 0.96 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
       transition={{ type: 'spring', stiffness: 300, damping: 28, mass: 0.8, delay: index * 0.05 }}
-      whileTap={{ scale: 0.97 }}
     >
       <div className="feature-card-img__bevel" aria-hidden="true" />
       <div className="feature-card-img__footer">
