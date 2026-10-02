@@ -96,11 +96,17 @@ const ITEMS: FeatureItem[] = [
 
 // ═══════════════════════════════════════════════════════════════════════════════
 // MOBILE FEATURE CARD — uses CSS class for 100%-width carousel slot (16:9)
+//
+// Карточка ничего не делает: это подпись-картинка в карусели, никакого роута за
+// ней нет и не планируется. Поэтому у неё нет ни hover-состояния, ни pressed, ни
+// тактильного отклика: раньше она показывала whileTap scale 0.97 и курсор-руку,
+// то есть обещала нажатие, которого не было. Класс --static глушит :hover из
+// lottery-cards.css (он остаётся у desktop-варианта в DesktopHome).
 // ═══════════════════════════════════════════════════════════════════════════════
 function FeatureCard({ item, index }: { item: FeatureItem; index: number }) {
   return (
     <motion.div
-      className="feature-card-img feature-card-img--carousel-item shrink-0"
+      className="feature-card-img feature-card-img--carousel-item feature-card-img--static shrink-0"
       style={{
         isolation: 'isolate',
         ['--fc-border-top' as string]:    item.borderTop,
@@ -116,7 +122,6 @@ function FeatureCard({ item, index }: { item: FeatureItem; index: number }) {
       initial={{ opacity: 0, y: 16, scale: 0.96 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
       transition={{ type: 'spring', stiffness: 300, damping: 28, mass: 0.8, delay: index * 0.05 }}
-      whileTap={{ scale: 0.97 }}
     >
       <div className="feature-card-img__bevel" aria-hidden="true" />
       <div className="feature-card-img__footer">
@@ -171,7 +176,7 @@ function DesktopCard({ item }: { item: FeatureItem }) {
 
 // ═══════════════════════════════════════════════════════════════════════════════
 // MOBILE SCROLL CAROUSEL — scroll-snap, 1 card per snap (100% width, 16:9)
-// ═══════════════════════════════════���══════�����════════════════════════════════════
+// ═══════════════════════════════════���═══════════════════════════════════════════
 function MobileCarousel({ compact = false }: { compact?: boolean }) {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [activeIndex, setActiveIndex] = useState(0);
@@ -250,55 +255,18 @@ function DesktopGrid() {
 }
 
 // ═══════════════════════════════════════════════════════════════════════════════
-// MOBILE INSTANT PAYOUTS BANNER
-// ═══════════════════════════════════════════════════════════════════════════════
-const TON_FIRE_COIN_SRC =
-  'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/grok-image-8d5ba273-cb3c-4b98-b981-1239c4bc14ca-hL9vouGJ4zXsM7iDztiRNVL7lIQXEn.png';
-
-function InstantPayoutsBanner() {
-  return (
-    <motion.div
-      className="relative flex h-[115px] min-h-[115px] items-center justify-between overflow-hidden rounded-[20px] border border-[#FFB800]/30 bg-[#0F121E] px-4 py-3"
-      style={{ isolation: 'isolate' }}
-      whileTap={{ scale: 0.98 }}
-    >
-      <div
-        className="pointer-events-none absolute right-0 top-1/2 z-0 h-40 w-40 -translate-y-1/2 rounded-full bg-[#FFB800]/25 blur-2xl"
-        aria-hidden="true"
-      />
-
-      <div className="relative z-10 max-w-[58%]">
-        <span className="mb-1 block w-max rounded-md border border-[#FFB800]/30 bg-[#FFB800]/10 px-2 py-0.5 text-[9px] font-black uppercase tracking-widest text-[#FFB800]">
-          Instant Payouts
-        </span>
-        <h2 className="text-[15px] font-bold leading-tight text-white">Lightning Payouts</h2>
-        <p className="mt-0.5 line-clamp-2 text-[11px] leading-snug text-[#8E9BAE]">
-          Sub-5 sec transfers directly to your TON wallet on-chain.
-        </p>
-      </div>
-
-      <motion.div
-        animate={{ y: [0, -4, 0] }}
-        transition={{ duration: 3.5, repeat: Infinity, ease: 'easeInOut' }}
-        className="pointer-events-none absolute -right-4 -top-2 z-[1] h-36 w-36"
-      >
-        <img
-          src={TON_FIRE_COIN_SRC}
-          alt="Instant TON"
-          className="h-full w-full scale-125 object-contain drop-shadow-[0_10px_20px_rgba(255,184,0,0.2)] mix-blend-screen"
-        />
-      </motion.div>
-    </motion.div>
-  );
-}
-
-// ═══════════════════════════════════════════════════════════════════════════════
 // MAIN COMPONENT
 // ═══════════════════════════════════════════════════════════════════════════════
 export function FeaturesBanner({ compact = false }: { compact?: boolean } = {}) {
   return (
     <section className="px-4 pt-2">
-      {compact ? <InstantPayoutsBanner /> : <DesktopGrid />}
+      {/*
+       * Ровно одна ветка в дереве. Раньше здесь стояла CSS-развилка
+       * md:hidden / hidden md:block — скрытый вариант всё равно монтировался
+       * и держал холостые entrance-анимации. Мобильная главная передаёт
+       * compact, DesktopHome вызывает баннер без пропа.
+       */}
+      {compact ? <MobileCarousel compact /> : <DesktopGrid />}
     </section>
   );
 }

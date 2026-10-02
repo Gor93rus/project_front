@@ -1,6 +1,7 @@
 import { useTonRate } from '../hooks/useTonRate';
 import { useTonWallet } from '../hooks/useTonWallet';
 import { useScrolled } from '../hooks/useScrolled';
+import { hapticImpact } from '../lib/haptic';
 
 // ── TonRatePill — TON price + 24h change ──────────────────────────────────────
 function TonRatePill() {
@@ -54,7 +55,8 @@ function WalletButton() {
 
   return (
     <button
-      onClick={connected ? disconnect : connect}
+      /* Шапка — фиксированный элемент: отклик только тактильный, без движения. */
+      onClick={() => { hapticImpact('light'); if (connected) disconnect(); else connect(); }}
       className="flex items-center gap-1.5 px-3 transition-all duration-200"
       style={{
         height: 30,

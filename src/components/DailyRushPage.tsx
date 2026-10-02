@@ -353,7 +353,7 @@ interface Ticket { id:number; numbers:number[]; }
 
 export function DailyRushPage({ config:cfg=DAILY_RUSH_CONFIG }: { config?:DailyLotteryConfig }) {
   const config = cfg;
-  const { maxPicks, numbersCount, ticketPrice, salesCloseMinutes, accentColor } = config;
+  const { maxPicks, numbersCount, ticketPrice, salesCloseMinutes } = config;
 
   const live = useLotteryDrawData(config.slug);
   const effectiveJackpot = live.jackpotCurrent ?? config.jackpotCurrent;

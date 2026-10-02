@@ -121,7 +121,6 @@ export function ScratchCard({ game, fluid = false }: { game: typeof SCRATCH_GAME
           <PremiumButton
             label={`Buy · ${game.ticketPrice} ${game.currency}`}
             accent={accent}
-            gradient={game.gradient}
           />
         </div>
       </div>

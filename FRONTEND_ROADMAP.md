@@ -2,7 +2,8 @@
 
 > Telegram Mini App · TON Blockchain · 10 тиражных + 5 скретч-лотерей  
 > Фокус: визуал, эмоции игрока, гэмблинг UX  
-> Последнее обновление: 24.07.2026 (главная страница: API-интеграция, фиксы багов, унификация компонентов)
+> Последнее обновление: 29.09.2026 (мобильная главная: миграция на дизайн-систему v2.0, геометрия 16px,
+> футер за фолдом, починенный haptic и отклик карточек)
 
 ---
 
@@ -214,6 +215,81 @@ _Порядок работы над каждой задачей._
 
 ---
 
+## ✅ Выполнено — Мобильная главная: дизайн-система v2.0 (19–29.09.2026)
+
+> Ветка `v0/gor93rus-3494-8455a7c0`, +14 коммитов к `origin/main`.
+> Канон токенов сменился: «Dark Vault» → **v2.0 (Carbon OLED / Drop Economy, шкала редкости)**.
+> Полный статус миграции — в `DESIGN_SYSTEM.md`, детали сессии — в `SESSION_CONTEXT.md`.
+
+### Этап 3 — миграция компонентов на токены `--v2-*`
+
+- [x] Шрифт: подключён **Switzer** вместо Space Grotesk в `--font-display`
+- [x] `GlobalJackpotHero`: god-rays сведены к одному золотому акценту, радиус → `--v2-radius-2xl`,
+      счётчик → `--v2-text-4xl`/900 flat Legendary Gold
+- [x] `FeaturesBanner` / `lottery-cards.css`: радиус `.feature-card-img` → `--v2-radius-lg`
+- [x] `CategoryEntryCard`: полный рерайт по Image Bible v2.0 — rarity border/shadow, radial spotlight,
+      `--v2-radius-xl`, `text-lg`/`text-3xs`. Rarity: Draw=Epic, Scratch=Rare, Mystic=Mythic
+- [x] `GamificationCompact`: `--gold*` → `--v2-rarity-legendary*`, `rounded-2xl` → `--v2-radius-lg`,
+      типографика 13/10/9/8px → `--v2-text-sm/xs/2xs/3xs`
+- [x] `RewardsPanel`: `rounded-2xl` → `--v2-radius-lg`, акценты Invite/Streak/Rewards → v2-токены
+- [x] Раскладка `MobileHome`: Draw Lotteries во всю ширину, Scratch/Mystic в 2 колонки ниже,
+      pill-чип (текст+стрелка) убран со всех трёх карточек
+- [x] Фон страницы: dot-grid микротекстура
+- [x] Удалён мёртвый импорт `LiveWinsPanel` и unused-переменные (найдено правильным прогоном
+      `tsc -p tsconfig.app.json`)
+
+### Геометрия: 16px-ритм и футер за фолдом (29.09.2026, коммит `55718ec`)
+
+- [x] Корневая причина найдена: `flex: X 1 0` + `min-height` — при `basis: 0` и включённом shrink строка
+      сжималась ниже собственного контента (104px бокс против 124–126px контента), карточки с
+      `overflow: hidden` вылезали на футер
+- [x] Второй источник: `.mobile-home--compact { min-height: 100vh − … }` считал футер частью высоты
+      и вытаскивал его в видимую зону
+- [x] Футер вынесен в отдельный враппер `.mh-stack`, `min-height` пересчитан от `100dvh` минус хэдер,
+      safe-area и док
+- [x] Строки: `flex: 1.3 0 auto` (Draw) / `1.15 0 auto` / `1 0 auto` — только grow, никогда shrink
+- [x] Гэпы унифицированы: 16px между карточками, 24px перед футером, горизонтальные 16px, hero inset 12px → 16px
+- [x] `grid-auto-rows: 1fr`; снят `max-height: 104px` у геймификации; убран лишний div 12px
+- [x] `main` paddingBottom 72px → `calc(var(--dock-h) + var(--safe-area-bottom))`
+- [x] Новые токены `--dock-h: 75px`, `--header-h: 53px`
+- [x] Проверено по пиксельному дифу (футер есть / `display:none`, анимации заморожены): зона карточек
+      y=300…798 — **0 AE**. 402×874 — верх футера 816 при доке 799 (было 39px видимой полосы),
+      430×932 — 873 при 857 (было 88px), 360×640 — 806 при 565
+- [x] Зафиксирован компромисс: на реальном iPhone с safe-area (62/34) контент 743px против свободных
+      642px — нижняя строка может уйти под док ~100px, страница тогда скроллится, а не сплющивается
+
+### Интерактив: haptic и отклик карточек (29.09.2026, коммит `fa931c3`)
+
+- [x] **Найден мёртвый код:** `src/lib/haptic.ts` вызывал `require('@twa-dev/sdk')` внутри try/catch.
+      В браузере `typeof require === "undefined"` → `ReferenceError` → молчаливый no-op. Хелпер не работал
+      никогда, ни в dev, ни в прод-бандле, а прошлые «галочки haptic ✓» были фиктивными. Доказано кликами:
+      роут менялся, вызовов `HapticFeedback` — 0
+- [x] Переписано на прямое `window.Telegram.WebApp.HapticFeedback`; сигнатуры не менялись; вне Telegram — no-op
+- [x] Отклик (`whileHover y −3` + `whileTap scale 0.97` + haptic): `CategoryEntryCard`,
+      `GamificationCompact`, `RewardsPanel` (два последних переведены с `<button>` на `<motion.button>`)
+- [x] Только haptic, без движения: hero-полоса `GlobalJackpotHero` и `WalletButton` в `Header` —
+      хэдер и hero не должны двигаться вообще
+- [x] `RewardsUnlockBanner`: haptic на обеих кнопках
+- [x] `FeaturesBanner`: карточки объявлены неинтерактивными — убраны `whileTap`, hover и haptic,
+      добавлен `.feature-card-img--static` (`cursor: default`), CSS-`:hover` сужен до
+      `:hover:not(.feature-card-img--static)`. Hover desktop-варианта в `DesktopHome` сохранён
+- [x] Проверено: rest-позиции всех элементов идентичны до/после, диф зоны карточек — **0 AE**,
+      haptic — ровно один `impact:light` на клик (6/6 сценариев)
+
+### Решения, зафиксированные на этой итерации
+
+- Хэдер и GlobalJackpotHero не двигаются вообще — им достаётся только haptic
+- FeaturesBanner — карточки-подписи: роутов за ними нет и не планируется, поэтому никакой интерактивности
+- Футер оставлен в разметке, но обязан уходить за фолд
+- Отступы гибридно: гэпы фиксированы, высоты карточек адаптивные
+- Порядок работы: геометрия → интерактив, каждый шаг отдельно со скриншотами и явным одобрением
+
+**Изменённые файлы (этап 3 + геометрия + интерактив):** `design-tokens.css`, `index.css`, `App.tsx`,
+`GlobalJackpotHero.tsx`, `FeaturesBanner.tsx`, `CategoryEntryCard.tsx`, `GamificationCompact.tsx`,
+`RewardsPanel.tsx`, `RewardsUnlockBanner.tsx`, `Header.tsx`, `lottery-cards.css`, `haptic.ts`, `tailwind.config.js`
+
+---
+
 ## 🎯 В плане — Priority 3: Остальные лотереи
 
 > **Примечание:** Каждая лотерея будет иметь уникальный визуальный стиль, отталкиваясь от лучших практик DailyRushPage, но не копируя её.
@@ -242,6 +318,10 @@ _Порядок работы над каждой задачей._
 
 ## 🎨 Dark Vault — Color Map
 
+> ⚠️ Историческая палитра. Канон с 19.09.2026 — дизайн-система v2.0 (Carbon OLED / Drop Economy,
+> шкала редкости, namespace `--v2-*`) в `DESIGN_SYSTEM.md`. Legacy-токены ниже ещё живы в
+> немигрированных компонентах, но новые правки идут на `--v2-*`.
+
 | Токен | HEX | Роль |
 |-------|-----|------|
 | `--primary` | `#0A7CFF` | Primary action, активные состояния, выбор, TON |
@@ -257,7 +337,7 @@ _Порядок работы над каждой задачей._
 
 ---
 
-## 🛠️ Технический долг (актуализация 24.07.2026)
+## 🛠️ Технический долг (актуализация 29.09.2026)
 
 ### Закрыто за 21-24.07
 - [x] Тип `Lottery` рассинхронизирован с `LOTTERIES` → исправлен
@@ -267,11 +347,38 @@ _Порядок работы над каждой задачей._
 - [x] GlobalJackpotHero: джекпот хардкожен → подвязан к API
 - [x] GamificationBanner: переход на `/profile` без кошелька → вызывает `connect()`
 
-### Накопленный (требует отдельного захода)
-- [ ] `useTonWallet.ts` + `api.ts` — конфликт `export const api` / `export namespace api` (TS2451)
-- [ ] `useTonWallet.ts` — отсутствует метод `api.walletAuth` в типе `api`
-- [ ] `api.getScratchGames()` — эндпоинт объявлен, но не используется
-- [ ] 4 TS-ошибки в файлах вне скоупа: DailyRushPage, LotteryPage, PremiumButton, useLotteryDrawData
+### Закрыто за 25.07 – 29.09
+
+- [x] `useTonWallet.ts` + `api.ts` — конфликт `export const api` / `export namespace api` (TS2451) → 25.07 восстановлен
+      только `export const api`, `walletAuth` живёт в `api.ts` как обычный метод, типизирован через `WalletAuthResponse`
+- [x] Дублирование scroll-логики Header/NavBar → 25.07 вынесено в `src/hooks/useScrolled.ts`
+- [x] 4 TS-ошибки (TS6133, неиспользуемые переменные) → 29.09 устранены; `tsc -p tsconfig.app.json --noEmit`
+      даёт код 0 при включённых `noUnusedLocals`/`noUnusedParameters`
+- [x] `haptic.ts` — мёртвый `require('@twa-dev/sdk')` внутри try/catch → 29.09 переписано на прямой доступ
+      к `window.Telegram.WebApp.HapticFeedback` (было: роут менялся, вызовов `HapticFeedback` — 0)
+- [x] Футер заезжал в видимую зону и карточки вылезали на него из-за `flex-shrink` ниже контента → 29.09 починено
+      (коммит `55718ec`)
+
+### Открыто (на 29.09.2026)
+
+- [ ] **Telegram-мост в `src/main.tsx` мёртв** — тот же `require('@twa-dev/sdk').default` внутри try/catch:
+      не работают `ready()`, `expand()`, `disableVerticalSwipes()`, `setHeaderColor()`/`setBackgroundColor()`,
+      `enableClosingConfirmation()`, `themeParams` → CSS-переменные, `themeChanged`, `viewportChanged`.
+      В `src/App.tsx` (~173) на том же паттерне висит `useTelegramBackButton()`. Всего 5 мест
+- [ ] **Haptic не проверен в живом Telegram-клиенте.** Доказана только цепочка вызова (стаб + 6/6 `impact:light`).
+      В `index.html` нет скрипта `telegram-web-app.js`, а продукт открывается как внешний сайт через бота —
+      значит `window.Telegram.WebApp` может не инжектиться и haptic в продакшене останется no-op
+- [ ] `useScratchGames()` написан (`src/hooks/useLotteries.ts`), но к UI не подключён — `src/data/lotteries.ts`
+      держит заглушку с TODO
+- [ ] `will-change: transform` остался на `.feature-card-img`, который больше не двигается — материал для
+      отдельного GPU/performance-PR
+- [ ] Инвертированная иерархия яркости: средний RGB строки Scratch/Mystic (49,48,74) выше hero (40,47,59) —
+      самый громкий блок на экране не hero
+- [ ] Кнопка Connect использует legacy `--primary` вместо v2-градиента cyan→blue
+- [ ] Док-бар: по доке плавающий (`--v2-radius-dock: 32px`), фактически плоская полоса во всю ширину
+- [ ] Фон страницы всё ещё на legacy `--bg-0`, не на `--v2-bg-page`
+- [ ] Bundle: `index-*.js` — 956 KB raw / gzip 289 KB, Vite ругается на чанк > 600 KB (нужен code-splitting)
+- [ ] `tsc` не в CI — vite build зелёный даже при красном тайпчеке
 
 ### Старый техдолг
 
@@ -305,4 +412,10 @@ _Порядок работы над каждой задачей._
 - **Цвета:** opacity-варианты токенов (`--primary-18`, `--coral-35`) вместо `rgba()`
 - **Перед каждым изменением** — проверять на мобильном viewport 390×844 через Playwright
 - **Коммиты** — атомарные, одна задача = один коммит
-- **Без согласования — никаких действий**
+- **Проверка типов** — `npx tsc -p tsconfig.app.json --noEmit`. Без `-p` корневой `tsconfig.json`
+  solution-style (`"files": []`), ничего не проверяет и всегда молча даёт код 0
+- **npm** — канонический пакетный менеджер, версии в `package-lock.json`; локи bun/yarn/pnpm не коммитить
+- **Визуальные шаги** — один шаг = одна проблема → скриншот до/после → показать пользователю;
+  технические улучшения и GPU/performance — отдельным PR
+- **Без согласования — никаких действий.** Push — отдельное явное разрешение на каждый коммит
+  (вопрос «Изменения готовы, запушить в origin?»)

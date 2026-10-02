@@ -1,105 +1,107 @@
 import { motion } from 'framer-motion';
+import { hapticImpact } from '../lib/haptic';
 
 /**
  * CategoryEntryCard — крупная карточка-вход в категорию для левой (тяжёлой)
  * колонки главной на мобилке. Заменяет карусель вариантов одной обложкой:
  * тап ведёт на страницу со списком всех вариантов категории.
+ *
+ * Переписана по Image Bible v2.0 (The Market style): фиксированный тёмный
+ * контейнер + rarity-рамка/тень + radial spotlight в углу. 3D hero-ассет
+ * (§3 промпта) сознательно пропущен — ждём готовых ассетов, добавим позже.
  */
+
+type Rarity = 'common' | 'rare' | 'epic' | 'legendary' | 'mythic';
+
+/* glow — насыщеннее и "кислотнее" прежних 30%-альфа версий (только на
+   glass-варианте, через spotlight-blob и rarity-обводку); border/shadow
+   для non-glass карточек не трогаем — это отдельная, ещё не форкнутая ветка. */
+const RARITY_STYLES: Record<Rarity, { border: string; shadow: string; glow: string; glowAcid: string }> = {
+  common: {
+    border: 'border-rarity-common/30',
+    shadow: 'shadow-[0_8px_25px_-5px_rgba(142,155,174,0.2)]',
+    glow: 'rgba(142,155,174,0.3)',
+    glowAcid: 'rgba(180,190,205,0.55)',
+  },
+  rare: {
+    border: 'border-rarity-rare/30',
+    shadow: 'shadow-[0_8px_25px_-5px_rgba(0,229,255,0.2)]',
+    glow: 'rgba(0,229,255,0.3)',
+    glowAcid: 'rgba(0,255,255,0.6)',
+  },
+  epic: {
+    border: 'border-rarity-epic/30',
+    shadow: 'shadow-[0_8px_25px_-5px_rgba(168,85,247,0.2)]',
+    glow: 'rgba(168,85,247,0.3)',
+    glowAcid: 'rgba(200,60,255,0.6)',
+  },
+  legendary: {
+    border: 'border-rarity-legendary/30',
+    shadow: 'shadow-[0_8px_25px_-5px_rgba(255,184,0,0.2)]',
+    glow: 'rgba(255,184,0,0.3)',
+    glowAcid: 'rgba(255,214,0,0.6)',
+  },
+  mythic: {
+    border: 'border-rarity-mythic/30',
+    shadow: 'shadow-[0_8px_25px_-5px_rgba(255,45,85,0.2)]',
+    glow: 'rgba(255,45,85,0.3)',
+    glowAcid: 'rgba(255,20,110,0.6)',
+  },
+};
 
 interface CategoryEntryCardProps {
   title: string;
-  /** Текст чипа-действия в правом нижнем углу: Enter now / Play / Unlock */
-  subtitle: string;
-  accent: string;
+  rarity: Rarity;
   onClick?: () => void;
   index?: number;
+  /** Frosted-glass вариант по референсу The Vault (Behance) — direction fork,
+   * пока только на одной карточке (Draw Lotteries), не распространён на все. */
+  glass?: boolean;
 }
 
-export function CategoryEntryCard({ title, subtitle, accent, onClick, index = 0 }: CategoryEntryCardProps) {
+export function CategoryEntryCard({ title, rarity, onClick, index = 0, glass = false }: CategoryEntryCardProps) {
   const clickable = Boolean(onClick);
+  const style = RARITY_STYLES[rarity];
 
   return (
     <motion.button
-      onClick={onClick}
+      onClick={() => { if (!clickable) return; hapticImpact('light'); onClick?.(); }}
       initial={{ opacity: 0, y: 16, scale: 0.97 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
       transition={{ delay: index * 0.06, duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
       whileHover={clickable ? { y: -3 } : undefined}
       whileTap={clickable ? { scale: 0.97 } : undefined}
-      style={{
-        position: 'relative',
-        flex: 1,
-        minHeight: 92,
-        borderRadius: 16,
-        overflow: 'hidden',
-        cursor: clickable ? 'pointer' : 'default',
-        textAlign: 'left',
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'flex-end',
-        padding: '10px 12px 12px',
-        borderTop: '2px solid rgba(255,255,255,0.16)',
-        borderLeft: '1.5px solid rgba(255,255,255,0.08)',
-        borderRight: '1.5px solid rgba(0,0,0,0.55)',
-        borderBottom: '3px solid rgba(0,0,0,0.8)',
-        boxShadow: `
-          inset 0 2px 0 rgba(255,255,255,0.14),
-          inset 0 -4px 12px rgba(0,0,0,0.45),
-          0 14px 30px -14px rgba(0,0,0,0.85),
-          0 0 22px -8px ${accent}55
-        `,
-      }}
+      className={`relative overflow-hidden rounded-[var(--v2-radius-xl)] p-4 flex flex-col justify-center min-h-[130px] w-full flex-1 border transition-all duration-300 text-left ${glass ? 'border-white/[0.08]' : style.border} ${style.shadow} ${clickable ? 'cursor-pointer' : 'cursor-default'}`}
+      style={glass ? { background: 'rgba(24,28,46,0.4)', backdropFilter: 'blur(24px) saturate(140%)', WebkitBackdropFilter: 'blur(24px) saturate(140%)' } : { background: '#0F121E' }}
     >
-      {/* Background */}
-      <div style={{ position: 'absolute', inset: 0, zIndex: 0 }}>
-        <div style={{
-          position: 'absolute', inset: 0,
-          background: `radial-gradient(ellipse 90% 70% at 12% 0%, ${accent}45 0%, transparent 60%),
-            linear-gradient(180deg, var(--bg-1) 0%, var(--bg-0) 100%)`,
-        }} />
-      </div>
+      {/* Radial spotlight — заготовка под будущий 3D hero-ассет.
+          На glass-варианте берём более насыщенный ("кислотный") тон и
+          чуть плотнее ядро, чтобы читалось на фоне полупрозрачного стекла. */}
+      <div
+        className={`absolute -right-2 -bottom-2 w-32 h-32 rounded-full pointer-events-none z-0 ${glass ? 'blur-xl' : 'blur-2xl'}`}
+        style={{ background: `radial-gradient(circle, ${glass ? style.glowAcid : style.glow} 0%, transparent 70%)` }}
+      />
+      {glass && (
+        <>
+          {/* Едва заметная процедурная текстура — см. .glass-grain в index.css */}
+          <div className="absolute inset-0 rounded-[var(--v2-radius-xl)] pointer-events-none z-0 glass-grain" />
+          {/* Rarity-цветная обводка, ярче прежней для явного "стеклянного" края */}
+          <div
+            className="absolute inset-0 rounded-[var(--v2-radius-xl)] pointer-events-none z-0"
+            style={{ border: `1.5px solid ${style.glowAcid}`, opacity: 0.7 }}
+          />
+          {/* Верхний глянцевый блик — типичный для frosted glass в референсе */}
+          <div
+            className="absolute inset-x-0 top-0 h-1/2 rounded-t-[var(--v2-radius-xl)] pointer-events-none z-0"
+            style={{ background: 'linear-gradient(180deg, rgba(255,255,255,0.10) 0%, transparent 100%)' }}
+          />
+        </>
+      )}
 
-      {/* Glass sheen */}
-      <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 1, background: 'linear-gradient(165deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.01) 35%, transparent 60%)' }} />
-
-      {/* Content */}
-      <div style={{ position: 'relative', zIndex: 2, display: 'flex', flexDirection: 'column', gap: 7 }}>
-        <p style={{
-          fontSize: 18, fontWeight: 700, color: '#fff',
-          lineHeight: 1.0, letterSpacing: '-0.03em',
-          fontFamily: 'var(--font-display)',
-          textShadow: '0 2px 10px rgba(0,0,0,0.5)',
-        }}>
-          {title}
-        </p>
-        {/* Чип-действие вместо блёклой подписи 11 кеглем: у карточки
-            появляется явная точка входа, а не описание */}
-        <span style={{
-          alignSelf: 'flex-start',
-          display: 'inline-flex',
-          alignItems: 'center',
-          gap: 5,
-          height: 26,
-          padding: '0 11px',
-          borderRadius: 'var(--r-pill)',
-          background: `linear-gradient(180deg, ${accent}59 0%, ${accent}33 100%)`,
-          border: `1px solid ${accent}A6`,
-          boxShadow: `inset 0 1px 0 rgba(255,255,255,0.18), 0 0 16px -6px ${accent}`,
-          fontFamily: 'var(--font-mono)',
-          fontSize: 11,
-          fontWeight: 700,
-          letterSpacing: '0.08em',
-          textTransform: 'uppercase',
-          color: '#fff',
-          whiteSpace: 'nowrap',
-        }}>
-          {subtitle}
-          <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M9 5l7 7-7 7" />
-          </svg>
-        </span>
-      </div>
-
+      {/* Content — только заголовок; pill-чип убран, карточки сами по себе тактильны (whileTap) */}
+      <p className="font-bold text-white text-lg leading-tight z-20 max-w-[75%]" style={{ fontFamily: 'var(--font-display)' }}>
+        {title}
+      </p>
     </motion.button>
   );
 }

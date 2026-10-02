@@ -3,6 +3,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { ALL_LOTTERY_CONFIGS } from '../data/lottery-configs';
 import { api } from '../lib/api';
+import { hapticImpact } from '../lib/haptic';
 
 // в”Ђв”Ђ Р РµР°Р»СЊРЅС‹Рµ РґР°РЅРЅС‹Рµ РёР· Р‘Р” (PostgreSQL) в”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђ
 // SELECT COALESCE(SUM("currentJackpot"), 0) FROM "Lottery" WHERE active = true;
@@ -66,10 +67,11 @@ function avatarFromName(name: string, index: number) {
 
 
 // в”Ђв”Ђ God-rays: РЅР°СЃС‚РѕСЏС‰РёРµ Р»СѓС‡Рё СЃРІРµС‚Р° РёР· С†РµРЅС‚СЂР° (СЏСЂРєРѕРµ СЏРґСЂРѕ + СѓР·РєРёРµ С‡С‘С‚РєРёРµ СЃРїРёС†С‹) в”Ђ
-// РљРѕРЅРёС‡РµСЃРєРёР№ РіСЂР°РґРёРµРЅС‚ СЃС‚СЂРѕРёРј РїСЂРѕРіСЂР°РјРјРЅРѕ: 18 Р»СѓС‡РµР№, С†РІРµС‚ С‡РµСЂРµРґСѓРµС‚СЃСЏ gold в†’ primary в†’ secondary
-// РґР»СЏ Р±РѕР»РµРµ Р±РѕРіР°С‚РѕРіРѕ, РјРЅРѕРіРѕС†РІРµС‚РЅРѕРіРѕ СЌС„С„РµРєС‚Р° (РІРјРµСЃС‚Рѕ РјРѕРЅРѕС…СЂРѕРјРЅРѕРіРѕ Р·РѕР»РѕС‚Р°).
+// РљРѕРЅРёС‡РµСЃРєРёР№ РіСЂР°РґРёРµРЅС‚ СЃС‚СЂРѕРёРј РїСЂРѕРіСЂР°РјРјРЅРѕ: 18 Р»СѓС‡РµР№.
+// Design Bible v2.0: РѕРґРёРЅ Р°РєС†РµРЅС‚РЅС‹Р№ С†РІРµС‚ РЅР° РєР°СЂС‚РѕС‡РєСѓ (СЂР°РЅСЊС€Рµ Р±С‹Р»Рѕ 3 СЂР°Р·РЅС‹С… С†РІРµС‚Р° вЂ” golВ†blueВ†purple).
+// Hero РґР¶РµРєРїРѕС‚Р° = Legendary в†’ РµРґРёРЅС‹Р№ gold-РѕС‚С‚РµРЅРѕРє.
 const RAY_COUNT = 18;
-const RAY_COLORS = ['#FFF4AA', '#78B4FF', '#C8A0FF'];
+const RAY_COLORS = ['#FFF4AA'];
 
 function GodRays() {
   return (
@@ -333,7 +335,9 @@ function LiveDrawStrip() {
   return (
     <motion.button
       type="button"
-      onClick={() => navigate(ROUTE_BY_SLUG[item.slug] ?? `/lottery/${item.slug}`)}
+      /* Якорь первого экрана: отклик только тактильный. Строка не поднимается
+         и не сжимается — движение здесь читается как дрожание макета. */
+      onClick={() => { hapticImpact('light'); navigate(ROUTE_BY_SLUG[item.slug] ?? `/lottery/${item.slug}`); }}
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.46, duration: 0.4, ease: 'easeOut' }}
@@ -414,9 +418,13 @@ interface GlobalJackpotHeroProps {
   /** РџРѕРєР°Р·С‹РІР°С‚СЊ РЅРёР¶РЅРёР№ С‚РёРєРµСЂ "Recent wins". РќР° РјРѕР±РёР»РєРµ РѕС‚РєР»СЋС‡Р°РµС‚СЃСЏ вЂ”
    *  С‚Р°Рј СѓР¶Рµ РµСЃС‚СЊ РѕС‚РґРµР»СЊРЅС‹Р№ РєРѕРјРїР°РєС‚РЅС‹Р№ Р±Р»РѕРє LiveWinsPanel РІ СЃРµС‚РєРµ. */
   showTicker?: boolean;
+  /** Мобильная компактная раскладка (совпадает с прежним `.mobile-home--compact`
+   *  под max-width:767px): чуть меньший радиус карточки, ужатая обёртка God Rays
+   *  и ниже полоса тикера. Перенесено из index.css 1:1, без изменения значений. */
+  compact?: boolean;
 }
 
-export function GlobalJackpotHero({ showTicker = true }: GlobalJackpotHeroProps = {}) {
+export function GlobalJackpotHero({ showTicker = true, compact = false }: GlobalJackpotHeroProps = {}) {
   // Jackpot is a static real value from DB. Fake ticker removed.
   // Reserved for future API (milestoneFlash mechanism):
   //   const [value, setValue] = useState(BASE_JACKPOT_FROM_DB);
@@ -442,7 +450,7 @@ export function GlobalJackpotHero({ showTicker = true }: GlobalJackpotHeroProps 
         transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
         style={{
           position: 'relative',
-          borderRadius: 'var(--r-xl)',
+          borderRadius: 'var(--v2-radius-2xl)',
           overflow: 'hidden',
           // РќР°СЃС‹С‰РµРЅРЅР°СЏ С‡РёСЃС‚Р°СЏ Р·Р°Р»РёРІРєР°: РіР»СѓР±РѕРєРёР№ navy + Р»С‘РіРєРёР№ С„РёРѕР»РµС‚ СЃРІРµСЂС…Сѓ.
           // РЎРІРµС‚ (god-rays + Р·РѕР»РѕС‚Рѕ) РІС‹РЅРµСЃРµРЅ РІ РѕС‚РґРµР»СЊРЅС‹Рµ СЃР»РѕРё РІС‹С€Рµ, С‡С‚РѕР±С‹ РЅРµ РјСѓС‚РёС‚СЊ Р±Р°Р·Сѓ.
@@ -459,7 +467,17 @@ export function GlobalJackpotHero({ showTicker = true }: GlobalJackpotHeroProps 
           `,
         }}
       >
-        <div style={{ position: 'absolute', inset: 0, zIndex: 0, pointerEvents: 'none' }}>
+        <div
+          style={{
+            position: 'absolute',
+            top: compact ? '38%' : 0,
+            right: 0,
+            bottom: 0,
+            left: 0,
+            zIndex: 0,
+            pointerEvents: 'none',
+          }}
+        >
           <GodRays />
         </div>
 
@@ -536,25 +554,16 @@ export function GlobalJackpotHero({ showTicker = true }: GlobalJackpotHeroProps 
             <span
               className="font-tabular"
               style={{
-                fontSize: 'clamp(48px, 13vw, 84px)',
-                lineHeight: 0.92,
-                letterSpacing: '-0.03em',
+                // Design System v2.0 text-4xl: 38px / lh 1.05 / Black(900) / Legendary Gold (#FFB800), flat.
+                fontSize: 'var(--v2-text-4xl)',
+                lineHeight: 1.05,
+                letterSpacing: '-0.04em',
                 fontFamily: 'var(--font-mono)',
-                fontWeight: 800,
-                background: `
-                  linear-gradient(100deg, transparent 44%, rgba(255,255,255,0.95) 50%, transparent 56%),
-                  linear-gradient(180deg, #FFF7B0 0%, #FADB14 25%, #D97706 60%, #92400E 100%)
-                `,
-                backgroundSize: '220% 100%, 100% 100%',
-                backgroundPosition: '220% 0, 0 0',
-                backgroundRepeat: 'no-repeat',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                backgroundClip: 'text',
-                                                filter: `
+                fontWeight: 900,
+                color: 'var(--v2-rarity-legendary)',
+                filter: `
                   drop-shadow(0 2px 4px rgba(0,0,0,0.8))
-                  drop-shadow(0 0 18px rgba(250,219,20,0.6))
-                  drop-shadow(0 0 40px rgba(250,219,20,0.3))
+                  drop-shadow(0 0 18px var(--v2-rarity-legendary-glow))
                 `,
               }}
             >
@@ -611,7 +620,7 @@ export function GlobalJackpotHero({ showTicker = true }: GlobalJackpotHeroProps 
               position: 'relative',
               display: 'flex',
               alignItems: 'center',
-              height: 38,
+              height: compact ? 36 : 38,
               padding: 0,
               background: 'linear-gradient(180deg, #0C1629 0%, #080F1E 100%)',
               borderTop: '1.5px solid rgba(255,255,255,0.08)',

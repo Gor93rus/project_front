@@ -1,15 +1,22 @@
+import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { useGamification } from '../hooks/useGamification';
 import { useTonWallet } from '../hooks/useTonWallet';
+import { hapticImpact } from '../lib/haptic';
 
-/* glass-3d directional bevel (светлый верх/лево, тёмный низ/право) */
-const BEVEL = {
-  borderTop: '2px solid rgba(255,255,255,0.16)',
-  borderLeft: '1.5px solid rgba(255,255,255,0.08)',
-  borderRight: '1.5px solid rgba(0,0,0,0.55)',
-  borderBottom: '3px solid rgba(0,0,0,0.8)',
-  boxShadow:
-    'inset 0 2px 0 rgba(255,255,255,0.12), inset 0 -4px 14px rgba(0,0,0,0.45), 0 18px 38px -16px rgba(0,0,0,0.85), 0 0 26px -10px var(--gold-glow)',
+/* Frosted glass по референсу The Vault (Behance) — тот же паттерн, что и
+ * на CategoryEntryCard (Draw Lotteries/Scratch Cards/Mystic Lootbox), чтобы
+ * правая колонка не выбивалась из общего стиля левой. */
+/* "Кислотный" gold — насыщеннее токена --v2-rarity-legendary-glow (35%
+ * альфа), чтобы обводка/сияние читались так же ярко, как на карточках слева. */
+const ACID_GOLD = 'rgba(255,214,0,0.6)';
+
+const GLASS = {
+  background: 'rgba(24,28,46,0.4)',
+  backdropFilter: 'blur(24px) saturate(140%)',
+  WebkitBackdropFilter: 'blur(24px) saturate(140%)',
+  border: `1.5px solid ${ACID_GOLD}`,
+  boxShadow: `0 18px 38px -16px rgba(0,0,0,0.85), 0 0 26px -10px ${ACID_GOLD}`,
 } as const;
 
 /**
@@ -25,15 +32,29 @@ export function GamificationCompact({ className = '' }: { className?: string } =
   const xpPct = level ? Math.min(100, Math.round(level.xpProgress.percentage)) : 0;
 
   return (
-    <button
-      onClick={() => { if (!connected) { connect(); } else { nav('/profile'); } }}
-      className={`relative w-full text-left overflow-hidden rounded-2xl p-2.5 flex flex-col justify-center ${className}`}
+    <motion.button
+      onClick={() => { hapticImpact('light'); if (!connected) { connect(); } else { nav('/profile'); } }}
+      className={`relative w-full text-left overflow-hidden p-2.5 flex flex-col justify-center ${className}`}
       style={{
-        background:
-          'linear-gradient(160deg, rgba(240,185,11,0.10) 0%, rgba(255,255,255,0.02) 35%, var(--bg-1) 100%)',
-        ...BEVEL,
+        borderRadius: 'var(--v2-radius-lg)',
+        ...GLASS,
       }}
+      /* Та же грамматика отклика, что у CategoryEntryCard: подъём под курсором
+         и лёгкое сжатие при нажатии. Карточка — не якорь, ей движение можно. */
+      whileHover={{ y: -3 }}
+      whileTap={{ scale: 0.97 }}
+      transition={{ duration: 0.18, ease: 'easeOut' }}
     >
+      {/* Едва заметная процедурная текстура — см. .glass-grain в index.css */}
+      <div
+        className="absolute inset-0 pointer-events-none z-0 glass-grain"
+        style={{ borderRadius: 'var(--v2-radius-lg)' }}
+      />
+      {/* Верхний глянцевый блик — та же грамматика frosted glass, что и у CategoryEntryCard */}
+      <div
+        className="absolute inset-x-0 top-0 h-1/2 pointer-events-none z-0"
+        style={{ borderRadius: 'var(--v2-radius-lg) var(--v2-radius-lg) 0 0', background: 'linear-gradient(180deg, rgba(255,255,255,0.10) 0%, transparent 100%)' }}
+      />
       {!connected ? (
         /* Locked-состояние теперь занимает всю высоту левой колонки минус
            мини-баннер, поэтому одной строки капсом мало: блок читался как
@@ -47,7 +68,7 @@ export function GamificationCompact({ className = '' }: { className?: string } =
               height: 44,
               background: 'linear-gradient(150deg, rgba(240,185,11,0.22), rgba(240,185,11,0.06))',
               border: '1px solid rgba(240,185,11,0.28)',
-              boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.18), 0 0 18px -6px var(--gold-glow)',
+              boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.18), 0 0 18px -6px var(--v2-rarity-legendary-glow)',
             }}
           >
             {/* Линейный замок в грамматике иконок CategoryEntryCard
@@ -63,7 +84,7 @@ export function GamificationCompact({ className = '' }: { className?: string } =
               strokeLinecap="round"
               strokeLinejoin="round"
               aria-hidden="true"
-              style={{ color: 'var(--gold-soft)' }}
+              style={{ color: 'var(--v2-rarity-legendary)' }}
             >
               <rect x="4.5" y="10.5" width="15" height="9.5" rx="2.5" />
               <path d="M8 10.5V7.8a4 4 0 0 1 8 0v2.7" />
@@ -76,7 +97,7 @@ export function GamificationCompact({ className = '' }: { className?: string } =
               className="text-center"
               style={{
                 fontFamily: 'var(--font-display)',
-                fontSize: 13,
+                fontSize: 'var(--v2-text-sm)',
                 fontWeight: 700,
                 lineHeight: 1.15,
                 letterSpacing: '-0.01em',
@@ -87,7 +108,7 @@ export function GamificationCompact({ className = '' }: { className?: string } =
             </p>
             <p
               className="text-center"
-              style={{ fontSize: 10, lineHeight: 1.3, color: 'var(--ink-2)' }}
+              style={{ fontSize: 'var(--v2-text-xs)', lineHeight: 1.3, color: 'var(--ink-2)' }}
             >
               Earn XP on every ticket
             </p>
@@ -100,11 +121,11 @@ export function GamificationCompact({ className = '' }: { className?: string } =
               background: 'rgba(240,185,11,0.14)',
               border: '1px solid rgba(240,185,11,0.3)',
               fontFamily: 'var(--font-mono)',
-              fontSize: 9,
+              fontSize: 'var(--v2-text-2xs)',
               fontWeight: 600,
               letterSpacing: '0.1em',
               textTransform: 'uppercase',
-              color: 'var(--gold-soft)',
+              color: 'var(--v2-rarity-legendary)',
             }}
           >
             Connect
@@ -117,20 +138,21 @@ export function GamificationCompact({ className = '' }: { className?: string } =
         <div>
           <div className="flex items-center gap-2 mb-2">
             <div
-              className="w-8 h-8 rounded-lg flex items-center justify-center text-xs font-black shrink-0"
+              className="w-8 h-8 rounded-lg flex items-center justify-center font-black shrink-0"
               style={{
+                fontSize: 'var(--v2-text-xs)',
                 color: 'var(--bg-0)',
-                background: 'linear-gradient(135deg, var(--gold), var(--gold-soft))',
-                boxShadow: '0 4px 10px var(--gold-glow), inset 0 1px 0 rgba(255,255,255,0.4)',
+                background: 'var(--v2-rarity-legendary)',
+                boxShadow: '0 4px 10px var(--v2-rarity-legendary-glow), inset 0 1px 0 rgba(255,255,255,0.4)',
               }}
             >
               {loading ? '·' : level?.level ?? 1}
             </div>
             <div className="min-w-0">
-              <p className="text-3xs font-extrabold leading-none truncate" style={{ color: 'var(--ink-0)' }}>
+              <p className="font-extrabold leading-none truncate" style={{ fontSize: 'var(--v2-text-3xs)', color: 'var(--ink-0)' }}>
                 Level {level?.level ?? 1}
               </p>
-              <p className="text-3xs font-semibold leading-none mt-0.5" style={{ color: 'var(--ink-2)' }}>
+              <p className="font-semibold leading-none mt-0.5" style={{ fontSize: 'var(--v2-text-3xs)', color: 'var(--ink-2)' }}>
                 {level ? `${xpPct}% to next` : '— XP'}
               </p>
             </div>
@@ -147,6 +169,6 @@ export function GamificationCompact({ className = '' }: { className?: string } =
           </div>
         </div>
       )}
-    </button>
+    </motion.button>
   );
 }

@@ -1,0 +1,17 @@
+/* ══════════════════════════════════════════════════
+   Switzer — self-hosted variable font (Fontshare, ITF Free License)
+   Заменяет Space Grotesk как --font-display в дизайн-системе v2.0.
+   Диапазон начертаний в файле: wght 100–900 (variable), italic не подключён —
+   в проекте не используется.
+   Источник: https://www.fontshare.com/fonts/switzer
+   Лицензия: https://www.fontshare.com/licenses/itf-ffl (коммерция + self-host разрешены)
+   ══════════════════════════════════════════════════ */
+
+@font-face {
+  font-family: 'Switzer';
+  src: url('../assets/fonts/switzer/Switzer-Variable.woff2') format('woff2-variations'),
+       url('../assets/fonts/switzer/Switzer-Variable.woff2') format('woff2');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
