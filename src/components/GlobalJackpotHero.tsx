@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { AnimatePresence, motion } from 'framer-motion';
+import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { ALL_LOTTERY_CONFIGS } from '../data/lottery-configs';
 import { api } from '../lib/api';
@@ -317,6 +317,7 @@ function formatClock(ms: number): string {
 }
 
 function LiveDrawStrip() {
+  const reduceMotion = useReducedMotion();
   const navigate = useNavigate();
   const items = useUpcomingDraws();
   const [slot, setSlot] = useState(0);
@@ -367,7 +368,7 @@ function LiveDrawStrip() {
           boxShadow: `0 0 10px ${accent}`,
           flexShrink: 0,
         }}
-        animate={{ opacity: [1, 0.25, 1] }}
+        animate={reduceMotion ? { opacity: 1 } : { opacity: [1, 0.25, 1] }}
         transition={{ duration: urgent ? 1 : 2, repeat: Infinity, ease: 'easeInOut' }}
       />
 
@@ -404,7 +405,7 @@ function LiveDrawStrip() {
         </motion.div>
       </AnimatePresence>
 
-      <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: 34, padding: '0 18px', flexShrink: 0, borderRadius: 'var(--r-pill)', background: 'linear-gradient(180deg, #FFEC3D 0%, #FADB14 55%, #D4B106 100%)', borderTop: '1px solid rgba(255,255,255,0.5)', borderBottom: '1px solid rgba(0,0,0,0.3)', boxShadow: '0 3px 10px rgba(250,219,20,0.30), inset 0 1px 0 rgba(255,255,255,0.5)', fontFamily: 'var(--font-display)', fontSize: 13, fontWeight: 800, letterSpacing: '0.02em', color: '#1A1500', whiteSpace: 'nowrap' }}>
+      <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: 34, padding: '0 18px', flexShrink: 0, borderRadius: 'var(--r-pill)', background: 'linear-gradient(180deg, #FFD047 0%, #FFB800 55%, #CC9200 100%)', borderTop: '1px solid rgba(255,255,255,0.5)', borderBottom: '1px solid rgba(0,0,0,0.3)', boxShadow: '0 3px 10px rgba(255,184,0,0.30), inset 0 1px 0 rgba(255,255,255,0.5)', fontFamily: 'var(--font-display)', fontSize: 13, fontWeight: 800, letterSpacing: '0.02em', color: '#1A1500', whiteSpace: 'nowrap' }}>
         Play
       </span>
     </motion.button>
@@ -502,6 +503,7 @@ export function GlobalJackpotHero({ showTicker = true, compact = false }: Global
             transition={{ delay: 0.05, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
           >
             <span
+              className="jackpot-title-sheen"
               style={{
                 display: 'block',
                 fontFamily: 'var(--font-display)',
@@ -544,6 +546,7 @@ export function GlobalJackpotHero({ showTicker = true, compact = false }: Global
             transition={{ delay: 0.22, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
           >
             <span
+              role="img"
               aria-label={`${formatted} TON global jackpot`}
               className="font-tabular"
               style={{
@@ -588,8 +591,8 @@ export function GlobalJackpotHero({ showTicker = true, compact = false }: Global
               textTransform: 'uppercase',
               fontFamily: 'var(--font-mono)',
               fontWeight: 500,
-              color: 'rgba(250,219,20,0.55)',
-              textShadow: '0 0 12px rgba(250,219,20,0.2)',
+              color: 'rgba(255,184,0,0.55)',
+              textShadow: '0 0 12px rgba(255,184,0,0.2)',
             }}
             initial={{ opacity: 0, y: 6 }}
             animate={{ opacity: 1, y: 0 }}

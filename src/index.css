@@ -644,3 +644,11 @@
 .scroll-carousel-progress {
   transition: stroke-dashoffset 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
+
+/* Hero джекпота: бесконечные декоративные анимации выключаются при prefers-reduced-motion.
+   Пульс точки LiveDrawStrip отключён в компоненте через useReducedMotion. */
+@media (prefers-reduced-motion: reduce) {
+  .global-jackpot-hero .god-rays-spinner,
+  .global-jackpot-hero .winners-scroll,
+  .global-jackpot-hero .jackpot-title-sheen { animation: none !important; }
+}
