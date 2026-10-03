@@ -128,16 +128,10 @@
 @keyframes ring-expand { 0%{transform:scale(0.4);opacity:0.8} 100%{transform:scale(1.6);opacity:0} }
 @keyframes confetti-fall { 0%{transform:translateY(-10px) rotate(0deg);opacity:0} 10%{opacity:1} 100%{transform:translateY(40px) rotate(360deg);opacity:0} }
 @keyframes text-sheen { 0%{background-position:220% 0,0 0} 55%,100%{background-position:-120% 0,0 0} }
-/* God-rays: вращение запечённого SVG-слоя через CSS (без JS-интерполяции,
-   без conic-gradient, без mask-image, без mix-blend-mode). */
-.god-rays-spinner {
-  will-change: transform;
-  transform: translateZ(0);
-  animation: godRaysSpin 70s linear infinite;
-}
-@keyframes godRaysSpin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+@keyframes text-sheen-once {
+  0% { background-position: 220% 0; }
+  60% { background-position: -120% 0; }
+  100% { background-position: -120% 0; }
 }
 @keyframes growRight { from{width:0} to{width:100%} }
 @keyframes fadeSlideUp { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
