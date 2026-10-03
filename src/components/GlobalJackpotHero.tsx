@@ -454,16 +454,14 @@ export function GlobalJackpotHero({ showTicker = true, compact = false }: Global
           overflow: 'hidden',
           // РќР°СЃС‹С‰РµРЅРЅР°СЏ С‡РёСЃС‚Р°СЏ Р·Р°Р»РёРІРєР°: РіР»СѓР±РѕРєРёР№ navy + Р»С‘РіРєРёР№ С„РёРѕР»РµС‚ СЃРІРµСЂС…Сѓ.
           // РЎРІРµС‚ (god-rays + Р·РѕР»РѕС‚Рѕ) РІС‹РЅРµСЃРµРЅ РІ РѕС‚РґРµР»СЊРЅС‹Рµ СЃР»РѕРё РІС‹С€Рµ, С‡С‚РѕР±С‹ РЅРµ РјСѓС‚РёС‚СЊ Р±Р°Р·Сѓ.
-          background: 'linear-gradient(165deg, #141e38 0%, #0d1733 44%, #060c22 100%)',
-          borderTop: '2px solid rgba(255,255,255,0.22)',
-          borderLeft: '1.5px solid rgba(255,255,255,0.11)',
-          borderRight: '1.5px solid rgba(0,0,0,0.60)',
-          borderBottom: '3px solid rgba(0,0,0,0.85)',
+          background: 'linear-gradient(155deg, var(--v2-bg-card-raised) 0%, var(--v2-bg-card) 48%, var(--v2-bg-page) 100%)',
+          border: '1px solid rgba(255,184,0,0.28)',
           boxShadow: `
-            inset 0 2px 0 rgba(255,255,255,0.18),
-            inset 0 -4px 14px rgba(0,0,0,0.45),
-            0 2px 6px rgba(0,0,0,0.6),
-            0 22px 54px -12px rgba(0,0,0,0.9)
+            inset 0 1px 0 rgba(255,255,255,0.08),
+            inset 0 -18px 36px rgba(0,0,0,0.32),
+            0 0 0 1px rgba(255,184,0,0.06),
+            0 18px 42px -14px rgba(0,0,0,0.92),
+            0 0 28px rgba(255,184,0,0.12)
           `,
         }}
       >
@@ -489,7 +487,7 @@ export function GlobalJackpotHero({ showTicker = true, compact = false }: Global
             position: 'absolute',
             inset: 0,
             background:
-              'radial-gradient(ellipse 56% 44% at 50% 44%, rgba(250,219,20,0.18) 0%, rgba(250,219,20,0.05) 32%, transparent 62%)',
+              'radial-gradient(ellipse 56% 44% at 50% 44%, rgba(255,184,0,0.18) 0%, rgba(255,184,0,0.06) 32%, transparent 62%)',
             pointerEvents: 'none',
             zIndex: 0,
           }}
@@ -622,9 +620,9 @@ export function GlobalJackpotHero({ showTicker = true, compact = false }: Global
               alignItems: 'center',
               height: compact ? 36 : 38,
               padding: 0,
-              background: 'linear-gradient(180deg, #0C1629 0%, #080F1E 100%)',
-              borderTop: '1.5px solid rgba(255,255,255,0.08)',
-              boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.04)',
+              background: 'linear-gradient(180deg, var(--v2-bg-surface-0) 0%, var(--v2-bg-page) 100%)',
+              borderTop: '1px solid rgba(255,184,0,0.14)',
+              boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.05)',
               zIndex: 3,
             }}
           >
