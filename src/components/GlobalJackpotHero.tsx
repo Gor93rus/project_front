@@ -454,17 +454,9 @@ export function GlobalJackpotHero({ showTicker = true, compact = false }: Global
           overflow: 'hidden',
           // РќР°СЃС‹С‰РµРЅРЅР°СЏ С‡РёСЃС‚Р°СЏ Р·Р°Р»РёРІРєР°: РіР»СѓР±РѕРєРёР№ navy + Р»С‘РіРєРёР№ С„РёРѕР»РµС‚ СЃРІРµСЂС…Сѓ.
           // РЎРІРµС‚ (god-rays + Р·РѕР»РѕС‚Рѕ) РІС‹РЅРµСЃРµРЅ РІ РѕС‚РґРµР»СЊРЅС‹Рµ СЃР»РѕРё РІС‹С€Рµ, С‡С‚РѕР±С‹ РЅРµ РјСѓС‚РёС‚СЊ Р±Р°Р·Сѓ.
-          background: 'linear-gradient(165deg, #141e38 0%, #0d1733 44%, #060c22 100%)',
-          borderTop: '2px solid rgba(255,255,255,0.22)',
-          borderLeft: '1.5px solid rgba(255,255,255,0.11)',
-          borderRight: '1.5px solid rgba(0,0,0,0.60)',
-          borderBottom: '3px solid rgba(0,0,0,0.85)',
-          boxShadow: `
-            inset 0 2px 0 rgba(255,255,255,0.18),
-            inset 0 -4px 14px rgba(0,0,0,0.45),
-            0 2px 6px rgba(0,0,0,0.6),
-            0 22px 54px -12px rgba(0,0,0,0.9)
-          `,
+          background: 'var(--surface-gradient)',
+          border: '1px solid var(--gold-18)',
+          boxShadow: 'var(--elev-3), 0 0 28px var(--gold-dim)',
         }}
       >
         <div
@@ -489,13 +481,13 @@ export function GlobalJackpotHero({ showTicker = true, compact = false }: Global
             position: 'absolute',
             inset: 0,
             background:
-              'radial-gradient(ellipse 56% 44% at 50% 44%, rgba(250,219,20,0.18) 0%, rgba(250,219,20,0.05) 32%, transparent 62%)',
+              'radial-gradient(ellipse 56% 44% at 50% 44%, rgba(255,184,0,0.18) 0%, rgba(255,184,0,0.06) 32%, transparent 62%)',
             pointerEvents: 'none',
             zIndex: 0,
           }}
         />
 
-        <div className="flex flex-col items-center" style={{ padding: 'clamp(20px,4vw,44px) clamp(16px,6vw,64px) 16px', position: 'relative', zIndex: 3 }}>
+        <div className="flex flex-col items-center" style={{ padding: 'clamp(16px,3.5vw,40px) clamp(16px,6vw,64px) 14px', position: 'relative', zIndex: 3 }}>
 
           {/* в”Ђв”Ђ РЁРђР“ 1: РќРђР—Р’РђРќРР• Р‘Р Р•РќР”Рђ в”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђ
               WEEKEND MILLIONS вЂ” РµРґРёРЅС‹Р№ Р±Р»РѕРє, РµРґРёРЅС‹Р№ СЂР°Р·РјРµСЂ, РµРґРёРЅС‹Р№ РІРµСЃ.
@@ -513,7 +505,7 @@ export function GlobalJackpotHero({ showTicker = true, compact = false }: Global
               style={{
                 display: 'block',
                 fontFamily: 'var(--font-display)',
-                fontSize: 'clamp(24px, 7vw, 52px)',
+                fontSize: 'clamp(18px, 5.4vw, 38px)',
                 fontWeight: 900,
                 letterSpacing: '0.06em',
                 lineHeight: 1,
@@ -552,10 +544,11 @@ export function GlobalJackpotHero({ showTicker = true, compact = false }: Global
             transition={{ delay: 0.22, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
           >
             <span
+              aria-label={`${formatted} TON global jackpot`}
               className="font-tabular"
               style={{
                 // Design System v2.0 text-4xl: 38px / lh 1.05 / Black(900) / Legendary Gold (#FFB800), flat.
-                fontSize: 'var(--v2-text-4xl)',
+                fontSize: 'clamp(42px, 11.5vw, 64px)',
                 lineHeight: 1.05,
                 letterSpacing: '-0.04em',
                 fontFamily: 'var(--font-mono)',
@@ -589,8 +582,8 @@ export function GlobalJackpotHero({ showTicker = true, compact = false }: Global
           в”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђ */}
           <motion.span
             style={{
-              marginTop: 6,
-              fontSize: 11,
+              marginTop: 4,
+              fontSize: 10,
               letterSpacing: '0.22em',
               textTransform: 'uppercase',
               fontFamily: 'var(--font-mono)',
@@ -622,9 +615,9 @@ export function GlobalJackpotHero({ showTicker = true, compact = false }: Global
               alignItems: 'center',
               height: compact ? 36 : 38,
               padding: 0,
-              background: 'linear-gradient(180deg, #0C1629 0%, #080F1E 100%)',
-              borderTop: '1.5px solid rgba(255,255,255,0.08)',
-              boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.04)',
+              background: 'linear-gradient(180deg, var(--v2-bg-surface-0) 0%, var(--v2-bg-page) 100%)',
+              borderTop: '1px solid rgba(255,184,0,0.14)',
+              boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.05)',
               zIndex: 3,
             }}
           >
