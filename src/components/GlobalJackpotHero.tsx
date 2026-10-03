@@ -505,7 +505,7 @@ export function GlobalJackpotHero({ showTicker = true, compact = false }: Global
               style={{
                 display: 'block',
                 fontFamily: 'var(--font-display)',
-                fontSize: 'clamp(24px, 7vw, 52px)',
+                fontSize: 'clamp(18px, 5.4vw, 38px)',
                 fontWeight: 900,
                 letterSpacing: '0.06em',
                 lineHeight: 1,
@@ -544,10 +544,11 @@ export function GlobalJackpotHero({ showTicker = true, compact = false }: Global
             transition={{ delay: 0.22, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
           >
             <span
+              aria-label={`${formatted} TON global jackpot`}
               className="font-tabular"
               style={{
                 // Design System v2.0 text-4xl: 38px / lh 1.05 / Black(900) / Legendary Gold (#FFB800), flat.
-                fontSize: 'var(--v2-text-4xl)',
+                fontSize: 'clamp(42px, 11.5vw, 64px)',
                 lineHeight: 1.05,
                 letterSpacing: '-0.04em',
                 fontFamily: 'var(--font-mono)',
@@ -581,8 +582,8 @@ export function GlobalJackpotHero({ showTicker = true, compact = false }: Global
           в”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђ */}
           <motion.span
             style={{
-              marginTop: 6,
-              fontSize: 11,
+              marginTop: 4,
+              fontSize: 10,
               letterSpacing: '0.22em',
               textTransform: 'uppercase',
               fontFamily: 'var(--font-mono)',
