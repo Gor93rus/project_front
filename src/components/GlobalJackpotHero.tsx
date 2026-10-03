@@ -489,33 +489,6 @@ export function GlobalJackpotHero({ showTicker = true, compact = false }: Global
 
         <div className="flex flex-col items-center" style={{ padding: 'clamp(16px,3.5vw,40px) clamp(16px,6vw,64px) 14px', position: 'relative', zIndex: 3 }}>
 
-          <motion.div
-            aria-label="Season 4 live vault"
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: 7,
-              padding: '5px 11px',
-              marginBottom: 12,
-              borderRadius: 'var(--r-pill)',
-              border: '1px solid var(--cyan-18)',
-              background: 'var(--primary-dim)',
-              color: 'rgb(var(--cyan-100))',
-              fontFamily: 'var(--font-mono)',
-              fontSize: 10,
-              fontWeight: 800,
-              letterSpacing: '0.18em',
-              textTransform: 'uppercase',
-              boxShadow: '0 0 16px rgba(var(--cyan-400), 0.14)',
-            }}
-            initial={{ opacity: 0, y: 6 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.02, duration: 0.4, ease: 'easeOut' }}
-          >
-            <span aria-hidden="true" style={{ width: 6, height: 6, borderRadius: '50%', background: 'rgb(var(--cyan-100))', boxShadow: '0 0 9px rgba(var(--cyan-100), 0.9)' }} />
-            Season 4 · Live Vault
-          </motion.div>
-
           {/* в”Ђв”Ђ РЁРђР“ 1: РќРђР—Р’РђРќРР• Р‘Р Р•РќР”Рђ в”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђ
               WEEKEND MILLIONS вЂ” РµРґРёРЅС‹Р№ Р±Р»РѕРє, РµРґРёРЅС‹Р№ СЂР°Р·РјРµСЂ, РµРґРёРЅС‹Р№ РІРµСЃ.
               РћР±Р° СЃР»РѕРІР° РёРґСѓС‚ С‡РµСЂРµР· РїСЂРѕР±РµР» РІ РѕРґРЅСѓ СЃС‚СЂРѕРєСѓ.
