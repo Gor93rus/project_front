@@ -116,19 +116,8 @@ export function Header() {
     >
       {/* Single row — brand · rate + wallet */}
       <div className="flex items-center justify-between px-4" style={{ height: 52 }}>
-        {/* Left — project name */}
-        <div className="flex items-center gap-2 shrink-0">
-          <span
-            className="text-xs font-light leading-none"
-            style={{
-              fontFamily: 'var(--font-display)',
-              color: 'var(--ink-0)',
-              letterSpacing: '-0.02em',
-            }}
-          >
-            Weekend Millions
-          </span>
-        </div>
+        {/* Left — пустой слот под будущее лого (правая группа от него не зависит) */}
+        <div className="flex items-center gap-2 shrink-0" aria-hidden="true" />
 
         {/* Right — rate pill + wallet button */}
         <div className="flex items-center gap-2 shrink-0">
