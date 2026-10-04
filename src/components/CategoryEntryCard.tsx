@@ -24,28 +24,28 @@ const RARITY_STYLES: Record<Rarity, { border: string; shadow: string; glow: stri
     glowAcid: 'rgba(180,190,205,0.55)',
   },
   rare: {
-    border: 'border-rarity-rare/30',
-    shadow: 'shadow-[0_8px_25px_-5px_rgba(0,229,255,0.2)]',
-    glow: 'rgba(0,229,255,0.3)',
-    glowAcid: 'rgba(0,255,255,0.6)',
+    border: 'border-rarity-rare/20',
+    shadow: 'shadow-[0_8px_25px_-5px_rgba(0,229,255,0.12)]',
+    glow: 'rgba(0,229,255,0.18)',
+    glowAcid: 'rgba(0,255,255,0.34)',
   },
   epic: {
-    border: 'border-rarity-epic/30',
-    shadow: 'shadow-[0_8px_25px_-5px_rgba(168,85,247,0.2)]',
-    glow: 'rgba(168,85,247,0.3)',
-    glowAcid: 'rgba(200,60,255,0.6)',
+    border: 'border-rarity-epic/22',
+    shadow: 'shadow-[0_8px_25px_-5px_rgba(168,85,247,0.14)]',
+    glow: 'rgba(168,85,247,0.2)',
+    glowAcid: 'rgba(200,60,255,0.4)',
   },
   legendary: {
-    border: 'border-rarity-legendary/30',
-    shadow: 'shadow-[0_8px_25px_-5px_rgba(255,184,0,0.2)]',
-    glow: 'rgba(255,184,0,0.3)',
-    glowAcid: 'rgba(255,214,0,0.6)',
+    border: 'border-rarity-legendary/22',
+    shadow: 'shadow-[0_8px_25px_-5px_rgba(255,184,0,0.14)]',
+    glow: 'rgba(255,184,0,0.2)',
+    glowAcid: 'rgba(255,214,0,0.4)',
   },
   mythic: {
-    border: 'border-rarity-mythic/30',
-    shadow: 'shadow-[0_8px_25px_-5px_rgba(255,45,85,0.2)]',
-    glow: 'rgba(255,45,85,0.3)',
-    glowAcid: 'rgba(255,20,110,0.6)',
+    border: 'border-rarity-mythic/20',
+    shadow: 'shadow-[0_8px_25px_-5px_rgba(255,45,85,0.12)]',
+    glow: 'rgba(255,45,85,0.16)',
+    glowAcid: 'rgba(255,20,110,0.32)',
   },
 };
 
@@ -71,7 +71,7 @@ export function CategoryEntryCard({ title, rarity, onClick, index = 0, glass = f
       transition={{ delay: index * 0.06, duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
       whileHover={clickable ? { y: -3 } : undefined}
       whileTap={clickable ? { scale: 0.97 } : undefined}
-      className={`relative overflow-hidden rounded-[var(--v2-radius-xl)] p-4 flex flex-col justify-center min-h-[130px] w-full flex-1 border transition-all duration-300 text-left ${glass ? 'border-white/[0.08]' : style.border} ${style.shadow} ${clickable ? 'cursor-pointer' : 'cursor-default'}`}
+      className={`relative overflow-hidden rounded-[var(--v2-radius-xl)] p-4 flex flex-col justify-center min-h-[130px] w-full flex-1 border transition-all duration-300 text-left ${glass ? 'border-white/[0.06]' : style.border} ${style.shadow} ${clickable ? 'cursor-pointer' : 'cursor-default'}`}
       style={glass ? { background: 'rgba(24,28,46,0.4)', backdropFilter: 'blur(24px) saturate(140%)', WebkitBackdropFilter: 'blur(24px) saturate(140%)' } : { background: '#0F121E' }}
     >
       {/* Radial spotlight — заготовка под будущий 3D hero-ассет.
@@ -88,12 +88,12 @@ export function CategoryEntryCard({ title, rarity, onClick, index = 0, glass = f
           {/* Rarity-цветная обводка, ярче прежней для явного "стеклянного" края */}
           <div
             className="absolute inset-0 rounded-[var(--v2-radius-xl)] pointer-events-none z-0"
-            style={{ border: `1.5px solid ${style.glowAcid}`, opacity: 0.7 }}
+            style={{ border: `1px solid ${style.glowAcid}`, opacity: 0.48 }}
           />
           {/* Верхний глянцевый блик — типичный для frosted glass в референсе */}
           <div
             className="absolute inset-x-0 top-0 h-1/2 rounded-t-[var(--v2-radius-xl)] pointer-events-none z-0"
-            style={{ background: 'linear-gradient(180deg, rgba(255,255,255,0.10) 0%, transparent 100%)' }}
+            style={{ background: 'linear-gradient(180deg, rgba(255,255,255,0.06) 0%, transparent 100%)' }}
           />
         </>
       )}
