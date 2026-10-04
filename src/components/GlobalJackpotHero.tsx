@@ -538,7 +538,7 @@ export function GlobalJackpotHero({ showTicker = true, compact = false }: Global
           в”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђ */}
           <motion.div
             className="flex items-baseline"
-            style={{ gap: 5 }}
+            style={{ gap: 7, alignItems: 'baseline' }}
             initial={{ opacity: 0, y: 16, scale: 0.92 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             transition={{ delay: 0.22, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
@@ -582,14 +582,15 @@ export function GlobalJackpotHero({ showTicker = true, compact = false }: Global
           в”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђ */}
           <motion.span
             style={{
-              marginTop: 4,
-              fontSize: 10,
-              letterSpacing: '0.22em',
+              marginTop: 2,
+              fontSize: 9,
+              letterSpacing: '0.2em',
               textTransform: 'uppercase',
               fontFamily: 'var(--font-mono)',
               fontWeight: 500,
-              color: 'rgba(250,219,20,0.55)',
-              textShadow: '0 0 12px rgba(250,219,20,0.2)',
+              color: 'var(--gold-soft)',
+              opacity: 0.72,
+              textShadow: '0 0 10px var(--gold-glow)',
             }}
             initial={{ opacity: 0, y: 6 }}
             animate={{ opacity: 1, y: 0 }}
