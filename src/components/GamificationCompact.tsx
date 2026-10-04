@@ -9,14 +9,14 @@ import { hapticImpact } from '../lib/haptic';
  * правая колонка не выбивалась из общего стиля левой. */
 /* "Кислотный" gold — насыщеннее токена --v2-rarity-legendary-glow (35%
  * альфа), чтобы обводка/сияние читались так же ярко, как на карточках слева. */
-const ACID_GOLD = 'rgba(255,214,0,0.6)';
+const ACID_GOLD = 'rgba(255,214,0,0.38)';
 
 const GLASS = {
-  background: 'rgba(24,28,46,0.4)',
-  backdropFilter: 'blur(24px) saturate(140%)',
-  WebkitBackdropFilter: 'blur(24px) saturate(140%)',
-  border: `1.5px solid ${ACID_GOLD}`,
-  boxShadow: `0 18px 38px -16px rgba(0,0,0,0.85), 0 0 26px -10px ${ACID_GOLD}`,
+  background: 'rgba(24,28,46,0.32)',
+  backdropFilter: 'blur(20px) saturate(120%)',
+  WebkitBackdropFilter: 'blur(20px) saturate(120%)',
+  border: `1px solid ${ACID_GOLD}`,
+  boxShadow: `0 14px 30px -16px rgba(0,0,0,0.78), 0 0 18px -10px ${ACID_GOLD}`,
 } as const;
 
 /**
@@ -53,7 +53,7 @@ export function GamificationCompact({ className = '' }: { className?: string } =
       {/* Верхний глянцевый блик — та же грамматика frosted glass, что и у CategoryEntryCard */}
       <div
         className="absolute inset-x-0 top-0 h-1/2 pointer-events-none z-0"
-        style={{ borderRadius: 'var(--v2-radius-lg) var(--v2-radius-lg) 0 0', background: 'linear-gradient(180deg, rgba(255,255,255,0.10) 0%, transparent 100%)' }}
+        style={{ borderRadius: 'var(--v2-radius-lg) var(--v2-radius-lg) 0 0', background: 'linear-gradient(180deg, rgba(255,255,255,0.06) 0%, transparent 100%)' }}
       />
       {!connected ? (
         /* Locked-состояние теперь занимает всю высоту левой колонки минус
