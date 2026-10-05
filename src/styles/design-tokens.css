@@ -241,6 +241,14 @@
   --v2-bg-card-raised: #181C2E;
   --v2-bg-input: #101320;
 
+  /* Floating Dock — исходные цвета из согласованного NavBar, без подмены на Carbon. */
+  --v2-dock-bg: linear-gradient(180deg, rgba(20,28,52,0.9) 0%, rgba(8,12,28,0.94) 100%);
+  --v2-dock-bg-scrolled: linear-gradient(180deg, rgba(20,28,52,0.94) 0%, rgba(8,12,28,0.96) 100%);
+  --v2-dock-border: rgba(255,255,255,0.09);
+  --v2-dock-border-scrolled: rgba(10,124,255,0.2);
+  --v2-dock-shadow: 0 14px 34px rgba(0,0,0,0.42), inset 0 1px 0 rgba(255,255,255,0.06);
+  --v2-dock-filter: blur(18px) saturate(125%);
+
   /* ── V2 Navy Underglow (мягкая глубинная подсветка подложек) ── */
   --v2-navy-glow-deep: rgba(14, 28, 64, 0.45);
   --v2-navy-glow-bright: rgba(26, 49, 110, 0.25);

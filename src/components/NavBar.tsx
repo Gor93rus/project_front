@@ -6,6 +6,7 @@ export type NavTab = 'home' | 'live' | 'cart' | 'history' | 'profile';
 interface Props {
   active: NavTab;
   onTabChange: (tab: NavTab) => void;
+  floating?: boolean;
 }
 
 const TABS: { id: NavTab; label: string; icon: React.ReactNode; live?: boolean }[] = [
@@ -54,20 +55,26 @@ const TABS: { id: NavTab; label: string; icon: React.ReactNode; live?: boolean }
   },
 ];
 
-export function NavBar({ active, onTabChange }: Props) {
+export function NavBar({ active, onTabChange, floating = false }: Props) {
   const scrolled = useScrolled(20);
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-50 flex items-center justify-around py-2 px-1"
+    <nav className={`fixed z-50 flex items-center justify-around py-2 px-1 ${floating
+      ? 'bottom-3 left-3 right-3 mx-auto max-w-[480px] rounded-[var(--v2-radius-dock)] border'
+      : 'bottom-0 left-0 right-0'}`}
       style={{
-        background: scrolled
-          ? 'var(--app-shell-bar-bg, linear-gradient(0deg, rgba(6,7,26,0.82) 0%, rgba(11,16,40,0.78) 100%))'
-          : 'var(--app-shell-bar-bg, linear-gradient(0deg, rgba(6,7,26,0.88) 0%, rgba(11,16,40,0.84) 100%))',
-        backdropFilter: 'blur(10px)',
-        WebkitBackdropFilter: 'blur(10px)',
-        borderTop: scrolled
+        background: floating
+          ? (scrolled ? 'var(--v2-dock-bg-scrolled)' : 'var(--v2-dock-bg)')
+          : (scrolled
+            ? 'var(--app-shell-bar-bg, linear-gradient(0deg, rgba(6,7,26,0.82) 0%, rgba(11,16,40,0.78) 100%))'
+            : 'var(--app-shell-bar-bg, linear-gradient(0deg, rgba(6,7,26,0.88) 0%, rgba(11,16,40,0.84) 100%))'),
+        backdropFilter: floating ? 'var(--v2-dock-filter)' : 'blur(10px)',
+        WebkitBackdropFilter: floating ? 'var(--v2-dock-filter)' : 'blur(10px)',
+        borderTop: floating ? undefined : scrolled
           ? '1px solid rgba(10,124,255,0.22)'
           : '1px solid rgba(255,255,255,0.07)',
+        borderColor: floating ? (scrolled ? 'var(--v2-dock-border-scrolled)' : 'var(--v2-dock-border)') : undefined,
+        boxShadow: floating ? 'var(--v2-dock-shadow)' : undefined,
         transition: 'background 0.3s, border-color 0.3s',
         paddingBottom: 'calc(8px + var(--safe-area-bottom, env(safe-area-inset-bottom, 0px)))',
       }}>

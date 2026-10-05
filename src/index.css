@@ -45,6 +45,10 @@
 /* Carbon OLED — только оболочка главной. Legacy-токены других страниц не меняем. */
 .app-shell--carbon {
   --app-shell-bar-bg: var(--v2-bg-surface-0);
+  /* Полный бордер добавляет 1px к прежнему доку; резерв округлён вверх. */
+  --dock-h: 77px;
+  --dock-offset: 12px;
+  --dock-clearance: 16px;
 }
 .app-shell--carbon .aurora {
   background:
@@ -485,8 +489,8 @@
     display: flex;
     flex-direction: column;
     flex: 0 0 auto;
-    min-height: calc(100vh - var(--header-h) - var(--safe-area-top) - 8px - var(--dock-h) - var(--safe-area-bottom) + 16px);
-    min-height: calc(100dvh - var(--header-h) - var(--safe-area-top) - 8px - var(--dock-h) - var(--safe-area-bottom) + 16px);
+    min-height: calc(100vh - var(--header-h) - var(--safe-area-top) - 8px - var(--dock-h) - var(--safe-area-bottom) - var(--dock-offset, 0px) + 16px);
+    min-height: calc(100dvh - var(--header-h) - var(--safe-area-top) - 8px - var(--dock-h) - var(--safe-area-bottom) - var(--dock-offset, 0px) + 16px);
   }
 
   /* Ряд главной — обёртка AnimatedSection. */
@@ -514,6 +518,11 @@
   .mobile-home--compact > .mh-row--footer {
     display: block;
     flex: 0 0 auto;
+  }
+
+  /* Футер не должен выглядывать в просвете под плавающей капсулой на первом экране. */
+  .app-shell--carbon .mobile-home--compact > .mh-row--footer {
+    margin-top: calc(var(--dock-h) + var(--safe-area-bottom));
   }
 
   /* Ряд Draw Lotteries: между обёрткой px-4 и кнопкой нужен flex-столбец,
