@@ -463,8 +463,8 @@
     display: flex;
     flex-direction: column;
     flex: 0 0 auto;
-    min-height: calc(100vh - var(--header-h) - var(--safe-area-top) - 8px - var(--dock-h) - var(--safe-area-bottom) + 16px);
-    min-height: calc(100dvh - var(--header-h) - var(--safe-area-top) - 8px - var(--dock-h) - var(--safe-area-bottom) + 16px);
+    min-height: calc(100vh - var(--header-h, 56px) - env(safe-area-inset-top, 0px) - 8px - 92px - env(safe-area-inset-bottom, 0px) + 16px);
+    min-height: calc(100dvh - var(--header-h, 56px) - env(safe-area-inset-top, 0px) - 8px - 92px - env(safe-area-inset-bottom, 0px) + 16px);
   }
 
   /* Ряд главной — обёртка AnimatedSection. */

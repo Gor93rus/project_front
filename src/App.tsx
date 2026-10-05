@@ -234,7 +234,7 @@ function AppLayout() {
             чего на реальном iPhone контент заезжал под док. */}
         <main
           className="flex-1 overflow-y-auto pt-2"
-          style={{ paddingBottom: isLotteryPage ? 0 : 'calc(var(--dock-h) + var(--safe-area-bottom))' }}
+          style={{ paddingBottom: isLotteryPage ? 0 : 'calc(92px + env(safe-area-inset-bottom, 0px))' }}
         >
           <Routes>
             <Route path="/" element={<HomePage />} />
