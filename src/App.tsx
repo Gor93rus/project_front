@@ -218,7 +218,10 @@ function AppLayout() {
     location.pathname === '/scratch-cards';
 
   return (
-    <div className="relative min-h-screen" style={{ background: 'var(--bg-0)' }}>
+    <div
+      className={`relative min-h-screen${location.pathname === '/' ? ' app-shell--carbon' : ''}`}
+      style={{ background: location.pathname === '/' ? 'var(--v2-bg-page)' : 'var(--bg-0)' }}
+    >
       {!isLotteryPage && <AuroraBackground />}
       {!isLotteryPage && <div className="dot-grid" aria-hidden="true" />}
       {!isLotteryPage && (
