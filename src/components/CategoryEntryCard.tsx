@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion';
+import { motion, useReducedMotion } from 'framer-motion';
 import { hapticImpact } from '../lib/haptic';
 
 /**
@@ -61,18 +61,19 @@ interface CategoryEntryCardProps {
 
 export function CategoryEntryCard({ title, rarity, onClick, index = 0, glass = false }: CategoryEntryCardProps) {
   const clickable = Boolean(onClick);
+  const reduceMotion = useReducedMotion();
   const style = RARITY_STYLES[rarity];
 
   return (
     <motion.button
       onClick={() => { if (!clickable) return; hapticImpact('light'); onClick?.(); }}
-      initial={{ opacity: 0, y: 16, scale: 0.97 }}
-      animate={{ opacity: 1, y: 0, scale: 1 }}
-      transition={{ delay: index * 0.06, duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-      whileHover={clickable ? { y: -3 } : undefined}
-      whileTap={clickable ? { scale: 0.97 } : undefined}
+      initial={reduceMotion ? false : { opacity: 0, y: 16, scale: 0.97 }}
+      animate={reduceMotion ? undefined : { opacity: 1, y: 0, scale: 1 }}
+      transition={reduceMotion ? { duration: 0 } : { delay: index * 0.06, duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+      whileHover={clickable && !reduceMotion ? { y: -3 } : undefined}
+      whileTap={clickable && !reduceMotion ? { scale: 0.97 } : undefined}
       className={`relative overflow-hidden rounded-[var(--v2-radius-xl)] p-4 flex flex-col justify-center min-h-[130px] w-full flex-1 border transition-all duration-300 text-left ${glass ? 'border-white/[0.06]' : style.border} ${style.shadow} ${clickable ? 'cursor-pointer' : 'cursor-default'}`}
-      style={glass ? { background: 'rgba(24,28,46,0.4)', backdropFilter: 'blur(24px) saturate(140%)', WebkitBackdropFilter: 'blur(24px) saturate(140%)' } : { background: '#0F121E' }}
+      style={glass ? { background: 'rgba(24,28,46,0.32)', backdropFilter: 'blur(20px) saturate(120%)', WebkitBackdropFilter: 'blur(20px) saturate(120%)' } : { background: '#0F121E' }}
     >
       {/* Radial spotlight — заготовка под будущий 3D hero-ассет.
           На glass-варианте берём более насыщенный ("кислотный") тон и

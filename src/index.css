@@ -4,6 +4,20 @@
    ══════════════════════════════════════════════════ */
 
 @import './styles/design-tokens.css';
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
 @import './styles/lottery-cards.css';
 @import './styles/fonts-switzer.css';
 @import '@fontsource/space-grotesk/index.css';
@@ -561,7 +575,7 @@
     min-width: 0;
   }
 
-  /* max-height убран: он фиксировал высоту правой нижней карточки и не давал
+  /* max-height убран: он фиксировал в��соту правой нижней карточки и не давал
      ряду растянуться вместе с левой. min-height остаётся как пол на коротких
      экранах. */
   .mobile-home--compact .mobile-home-gamification {
