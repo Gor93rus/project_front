@@ -487,6 +487,17 @@ export function GlobalJackpotHero({ showTicker = true, compact = false }: Global
           }}
         />
 
+        <div
+          aria-hidden="true"
+          style={{
+            position: 'absolute',
+            inset: 0,
+            pointerEvents: 'none',
+            zIndex: 1,
+            background: 'radial-gradient(ellipse 72% 64% at 50% 42%, transparent 42%, rgba(3,6,18,0.34) 100%)',
+          }}
+        />
+
         <div className="flex flex-col items-center" style={{ padding: 'clamp(16px,3.5vw,40px) clamp(16px,6vw,64px) 14px', position: 'relative', zIndex: 3 }}>
 
           {/* в”Ђв”Ђ РЁРђР“ 1: РќРђР—Р’РђРќРР• Р‘Р Р•РќР”Рђ в”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђ
@@ -538,7 +549,15 @@ export function GlobalJackpotHero({ showTicker = true, compact = false }: Global
           в”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђ */}
           <motion.div
             className="flex items-baseline"
-            style={{ gap: 7, alignItems: 'baseline' }}
+            style={{
+              gap: 7,
+              alignItems: 'baseline',
+              padding: '4px 10px 5px',
+              borderRadius: 'var(--v2-radius-lg)',
+              border: '1px solid rgba(255,184,0,0.16)',
+              background: 'linear-gradient(180deg, rgba(255,184,0,0.08), rgba(255,184,0,0.015))',
+              boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.08), inset 0 -8px 18px rgba(0,0,0,0.18)',
+            }}
             initial={{ opacity: 0, y: 16, scale: 0.92 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             transition={{ delay: 0.22, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
@@ -553,6 +572,9 @@ export function GlobalJackpotHero({ showTicker = true, compact = false }: Global
                 letterSpacing: '-0.04em',
                 fontFamily: 'var(--font-mono)',
                 fontWeight: 900,
+                minWidth: '5.8ch',
+                textAlign: 'right',
+                fontVariantNumeric: 'tabular-nums',
                 color: 'var(--v2-rarity-legendary)',
                 filter: `
                   drop-shadow(0 2px 4px rgba(0,0,0,0.8))
@@ -569,7 +591,8 @@ export function GlobalJackpotHero({ showTicker = true, compact = false }: Global
                 fontFamily: 'var(--font-mono)',
                 letterSpacing: '0.04em',
                 color: 'var(--gold-soft)',
-                textShadow: '0 0 14px var(--gold-glow), 0 2px 4px rgba(0,0,0,0.5)',
+                opacity: 0.86,
+                textShadow: '0 0 8px var(--gold-glow), 0 2px 4px rgba(0,0,0,0.5)',
                 marginBottom: 4,
               }}
             >
