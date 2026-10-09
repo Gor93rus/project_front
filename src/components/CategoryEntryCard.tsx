@@ -54,8 +54,7 @@ interface CategoryEntryCardProps {
   rarity: Rarity;
   onClick?: () => void;
   index?: number;
-  /** Frosted-glass вариант по референсу The Vault (Behance) — direction fork,
-   * пока только на одной карточке (Draw Lotteries), не распространён на все. */
+  /** Frosted-glass вариант; на мобильной главной используется во всех категориях. */
   glass?: boolean;
 }
 
@@ -71,8 +70,8 @@ export function CategoryEntryCard({ title, rarity, onClick, index = 0, glass = f
       transition={{ delay: index * 0.06, duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
       whileHover={clickable ? { y: -3 } : undefined}
       whileTap={clickable ? { scale: 0.97 } : undefined}
-      className={`relative overflow-hidden rounded-[var(--v2-radius-xl)] p-4 flex flex-col justify-center min-h-[130px] w-full flex-1 border transition-all duration-300 text-left ${glass ? 'border-white/[0.08]' : style.border} ${style.shadow} ${clickable ? 'cursor-pointer' : 'cursor-default'}`}
-      style={glass ? { background: 'rgba(24,28,46,0.4)', backdropFilter: 'blur(24px) saturate(140%)', WebkitBackdropFilter: 'blur(24px) saturate(140%)' } : { background: '#0F121E' }}
+      className={`relative overflow-hidden rounded-[var(--v2-radius-xl)] p-4 flex flex-col justify-center min-h-[130px] w-full flex-1 border transition-all duration-300 text-left ${glass ? 'home-material border-white/[0.08]' : style.border} ${style.shadow} ${clickable ? 'cursor-pointer' : 'cursor-default'}`}
+      style={glass ? { ['--home-card-accent' as string]: style.glowAcid.replace(/,[\d.]+\)$/, ',1)'), background: 'var(--home-card-glass, rgba(24,28,46,0.4))', backdropFilter: 'var(--home-card-filter, blur(24px) saturate(140%))', WebkitBackdropFilter: 'var(--home-card-filter, blur(24px) saturate(140%))' } : { background: '#0F121E' }}
     >
       {/* Radial spotlight — заготовка под будущий 3D hero-ассет.
           На glass-варианте берём более насыщенный ("кислотный") тон и
@@ -87,13 +86,13 @@ export function CategoryEntryCard({ title, rarity, onClick, index = 0, glass = f
           <div className="absolute inset-0 rounded-[var(--v2-radius-xl)] pointer-events-none z-0 glass-grain" />
           {/* Rarity-цветная обводка, ярче прежней для явного "стеклянного" края */}
           <div
-            className="absolute inset-0 rounded-[var(--v2-radius-xl)] pointer-events-none z-0"
+            className="home-material__legacy-border absolute inset-0 rounded-[var(--v2-radius-xl)] pointer-events-none z-0"
             style={{ border: `1.5px solid ${style.glowAcid}`, opacity: 0.7 }}
           />
           {/* Верхний глянцевый блик — типичный для frosted glass в референсе */}
           <div
             className="absolute inset-x-0 top-0 h-1/2 rounded-t-[var(--v2-radius-xl)] pointer-events-none z-0"
-            style={{ background: 'linear-gradient(180deg, rgba(255,255,255,0.10) 0%, transparent 100%)' }}
+            style={{ background: 'var(--home-card-highlight, linear-gradient(180deg, rgba(255,255,255,0.10) 0%, transparent 100%))' }}
           />
         </>
       )}

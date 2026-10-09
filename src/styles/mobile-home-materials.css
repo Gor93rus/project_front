@@ -1,0 +1,50 @@
+/* Материалы только мобильной главной: роли и геометрия компонентов сохранены.
+   Акцент приходит из компонента; кант, блик и внешнее свечение — общая грамматика. */
+@media (max-width: 767px) {
+  .mobile-home .home-material,
+  .mobile-home .feature-card-img--static {
+    --home-card-border: color-mix(in srgb, var(--home-card-accent) 42%, transparent);
+    --home-card-border-top: color-mix(in srgb, var(--home-card-accent) 58%, transparent);
+    --home-card-border-bottom: color-mix(in srgb, var(--home-card-accent) 28%, transparent);
+    --home-card-rim: inset 0 1px 0 rgba(255,255,255,0.14);
+    --home-card-elevation: 0 12px 28px -12px rgba(0,0,0,0.78);
+    /* Без отрицательного spread: свечение заметно за внешним краем всех карточек. */
+    --home-card-glow: 0 0 26px color-mix(in srgb, var(--home-card-accent) 20%, transparent);
+    --home-card-shadow: var(--home-card-rim), var(--home-card-elevation), var(--home-card-glow);
+    --home-card-glass: rgba(24,28,46,0.4);
+    --home-card-filter: blur(24px) saturate(140%);
+    --home-card-highlight: linear-gradient(180deg, rgba(255,255,255,0.10) 0%, transparent 100%);
+  }
+
+  .mobile-home .home-material {
+    border: 1px solid var(--home-card-border);
+    border-top-color: var(--home-card-border-top);
+    border-bottom-color: var(--home-card-border-bottom);
+    box-shadow: var(--home-card-shadow);
+  }
+
+  /* Старый второй кант категорий больше не дублирует системную рамку. */
+  .mobile-home .home-material__legacy-border { display: none; }
+
+  .mobile-home .home-material--hero {
+    --home-card-accent: var(--v2-rarity-legendary);
+    --home-card-glow: 0 0 28px color-mix(in srgb, var(--home-card-accent) 22%, transparent);
+  }
+
+  .mobile-home .home-material--level { --home-card-accent: var(--v2-rarity-legendary); }
+
+  /* Исходный Rewards не имел валидного border. Inset-рамка сохраняет ширину
+     текста и высоту ряда, не добавляя два пикселя в content box. */
+  .mobile-home .home-material--rewards {
+    border: 0;
+    box-shadow: inset 0 0 0 1px var(--home-card-border), var(--home-card-shadow);
+  }
+
+  /* Баннер не приглушён: исходные фон, bevel, footer и role palette сохранены. */
+  .mobile-home .feature-card-img--static {
+    border: 1px solid var(--home-card-border);
+    border-top-color: var(--home-card-border-top);
+    border-bottom-color: var(--home-card-border-bottom);
+    box-shadow: var(--home-card-shadow);
+  }
+}

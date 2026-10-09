@@ -1,4 +1,4 @@
-# Контекст сессии — 07.10.2026
+# Контекст сессии — 09.10.2026
 
 ## Проект и рабочая среда
 
@@ -82,23 +82,58 @@ Weekend Millions — фронтенд TON-лотерей, открываемый
 ## Предстоящая работа — согласованный порядок
 
 1. Выравнивание нижнего ряда завершено и принято. После коммита/push не расширять этот шаг.
-2. **Следующий визуальный шаг: общая грамматика border/surface/glow.** Сначала изучить текущий код
-   и выбранные ранее референсы, показать превью и дождаться отдельного одобрения.
-   Система не означает одинаковые карточки: роль определяет цвет, hero выразительнее,
-   информационный баннер тише; согласовать толщину/блик/силу glow и материал.
+2. **Текущий визуальный шаг: общая грамматика border/surface/glow.** Превью принято 09.10 с поправкой
+   вернуть внешнее свечение; реализация локально завершена, ждёт проверки пользователя. Роль определяет цвет,
+   hero выразительнее. Пользователь явно сказал НЕ делать информационный баннер тише.
 3. Затем, после одобрения системы, внутреннее содержимое `GlobalJackpotHero`.
+
+### 09.10.2026 — история превью (затем внедрено с усиленным glow)
+
+- Один рекомендуемый вариант: тонкий кант, общий верхний inset-блик и elevation/glow.
+  Ролевые цвета, радиусы, текущие glass/spotlight остаются; FeaturesBanner не приглушается.
+- Браузерная DOM/CSS-инъекция из `/home/user/material_preview.py`, UI-исходники не менялись.
+  Относительная alpha border top/side/bottom 58/42/28%, inset white14%; hero amber,
+  категории сохраняют текущие acid-тона, геймификация amber.
+- RewardsPanel: в превью валидный color-mix, inset-кант без изменения геометрии контента,
+  radial background и icon filter. Это НЕ исправление исходного TSX — баг там остаётся до реализации.
+- Снимки до/после на 402×874/430×932 и проверки360×640: rect карточек идентичны,
+  overflow отсутствует; проверены три слайда RewardsPanel. Анимации/таймеры заморожены только для сравнения.
+- Behance live reference вернул HTTP400. Изучены присланная v2-спецификация и текущий живой UI;
+  не утверждать, что недоступная страница была визуально изучена.
+- Эффекты сохранены без performance-правок: god-rays/ticker/title sheen/LiveDraw pulse,
+  blur карточек/spotlight/dock, grain overlay. Оптимизация не часть этой итерации.
+- Обновлены только ROADMAP и SESSION_CONTEXT; коммита/push нет.
+- После одобрения превью: реализация через scoped CSS/токены только мобильной главной,
+  измерения и screenshot снова, отдельное одобрение перед коммитом. Не трогать hero content сейчас.
+
+### 09.10.2026 — реализация после поправки пользователя
+
+- Пользователь принял канты, но попросил внешние свечения как «До» на всех блоках;
+  сравнения не показывать. Проверочные снимки сохранены внутренне.
+- `src/styles/mobile-home-materials.css` импортирован в index.css. Scope `.mobile-home` и max767px.
+  Общие custom props вычисляются на каждой карточке (НЕ на предке, иначе dynamic accent не подставится).
+- Border top/side/bottom58/42/28%, inset white14%, общая elevation;
+  заметный external glow26px/20% без отрицательного spread, hero28px/22%.
+- Классы `home-material`, `--hero`, `--level`, `--rewards`; Features через scoped static selector.
+  Фоны, blur, spotlight, роли, радиусы и тексты сохранены; overlay-border категорий выключен scoped.
+- Hero/Level amber; категории сохраняют acid RGB, Features сохраняет legacy role palette и не приглушён.
+- Rewards source bug исправлен: color-mix radial/filter, inset-кант и внешний glow с dynamic accent.
+  `border:0` здесь намеренно, это НЕ оставшийся баг: рамка нарисована inset-тенью без изменения content box.
+- App typecheck/build/diff-check прошли.360/402/430: все3 Rewards/6 Features проверены,
+  computed shadows/filter/radial валидны, horizontal overflow нет;1280 legacy hero сохранён.
+- Проверки `/home/user/material_implementation_verification.json`, снимки `material_implemented_*.png`.
+- Коммита/push НЕТ. Ждём проверки реализации пользователем и отдельного разрешения.
+  Не переходить к hero content до закрытия этого шага. Физический WebView не проверен.
 
 ### Находки аудита, которые нужно учесть на следующем шаге
 
-- **Реальный баг RewardsPanel:** `${slide.accent}99/33/70` при accent=`var(--...)`
-  даёт невалидный цвет. Computed: border `0px none`, radial background `none`, filter `none`.
-  `CSS.supports` с unresolved var давал true — проверять computed styles, не только синтаксис.
-  Исправить отдельно в шаге системы бордеров, не выдавать за выполненное сейчас.
-- Hero border/glow на legacy gold, поверхность legacy navy; явные число/подпись/Play уже amber.
+- **RewardsPanel исправлен локально09.10:** inset-кант, valid color-mix radial/filter.
+  Исходное `${var}99/33/70` удалено. Проверять computed styles, не только CSS.supports.
+- Hero border/glow на мобильной главной amber, desktop legacy; поверхность legacy navy сохранена.
 - FeaturesBanner: opaque navy + asymmetric bevel/ring/glow, hardcoded role RGBA в `ITEMS`.
   Instant Payouts остаётся coral; не менять роли на rarity автоматически.
 - Category: translucent glass + white/8 base и accent overlay; rarity `glowAcid` не равен канону напрямую.
-- Gamification: отдельный `ACID_GOLD=rgba(255,214,0,0.6)` и legacy gold детали.
+- Gamification: внешний материал на главной amber; ACID_GOLD оставлен fallback вне scope, legacy детали внутри не менялись.
 - Запрета всех inline-стилей в проверенных дизайн-документах нет. Динамический progress/цвет/CSS-vars
   допустимы; повторяющиеся статические материалы стоит вынести в общие CSS-токены/классы.
   Один механический перенос в CSS не доказывает визуального/performance улучшения.
@@ -126,6 +161,8 @@ Weekend Millions — фронтенд TON-лотерей, открываемый
 - `/home/user/alignment_check.py`, `alignment_before.json`, `alignment_after.json`;
   `alignment_compare_402.png`, `alignment_compare_430.png`, исходные first-fold/full-page и слайды360.
 - `/home/user/system_audit.py`, `system_audit.json`, `system_axis_audit.png` — read-only аудит.
+- `/home/user/material_preview.py`, `material_preview.json`, `material_compare_402.png`,
+  `material_compare_430.png`, `material_after_360_slide_0/1/2.png` — текущее невнедрённое превью.
 - `/home/user/floating_dock_verify.py`, `floating_dock_verification.json` — предыдущая проверка дока.
 - Референсы: `Attachments/image_NN64Co.png` (ось, старый UI),
   `Attachments/Текстовый_документ_(2)_oh04sj.txt` (точный выбранный floating NavBar).

@@ -449,6 +449,7 @@ export function GlobalJackpotHero({ showTicker = true, compact = false }: Global
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+        className="home-material home-material--hero"
         style={{
           position: 'relative',
           borderRadius: 'var(--v2-radius-2xl)',
@@ -456,8 +457,10 @@ export function GlobalJackpotHero({ showTicker = true, compact = false }: Global
           // РќР°СЃС‹С‰РµРЅРЅР°СЏ С‡РёСЃС‚Р°СЏ Р·Р°Р»РёРІРєР°: РіР»СѓР±РѕРєРёР№ navy + Р»С‘РіРєРёР№ С„РёРѕР»РµС‚ СЃРІРµСЂС…Сѓ.
           // РЎРІРµС‚ (god-rays + Р·РѕР»РѕС‚Рѕ) РІС‹РЅРµСЃРµРЅ РІ РѕС‚РґРµР»СЊРЅС‹Рµ СЃР»РѕРё РІС‹С€Рµ, С‡С‚РѕР±С‹ РЅРµ РјСѓС‚РёС‚СЊ Р±Р°Р·Сѓ.
           background: 'var(--surface-gradient)',
-          border: '1px solid var(--gold-18)',
-          boxShadow: 'var(--elev-3), 0 0 28px var(--gold-dim)',
+          border: '1px solid var(--home-card-border, var(--gold-18))',
+          borderTopColor: 'var(--home-card-border-top, var(--gold-18))',
+          borderBottomColor: 'var(--home-card-border-bottom, var(--gold-18))',
+          boxShadow: 'var(--home-card-shadow, var(--elev-3), 0 0 28px var(--gold-dim))',
         }}
       >
         <div
