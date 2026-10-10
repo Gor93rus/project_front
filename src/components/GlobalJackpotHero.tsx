@@ -336,6 +336,8 @@ function LiveDrawStrip() {
   return (
     <motion.button
       type="button"
+      className="jackpot-draw-strip"
+      aria-label={`Next draw: ${item.title}. Closes in ${formatClock(item.left)}. Play`}
       /* Якорь первого экрана: отклик только тактильный. Строка не поднимается
          и не сжимается — движение здесь читается как дрожание макета. */
       onClick={() => { hapticImpact('light'); navigate(ROUTE_BY_SLUG[item.slug] ?? `/lottery/${item.slug}`); }}
@@ -381,16 +383,16 @@ function LiveDrawStrip() {
           transition={{ duration: 0.26, ease: 'easeOut' }}
           style={{ display: 'flex', flexDirection: 'column', gap: 4, flex: 1, minWidth: 0 }}
         >
-          <span style={{ display: 'flex', alignItems: 'baseline', gap: 8, minWidth: 0 }}>
-            <span style={{ fontSize: 9, fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--ink-3)', fontFamily: 'var(--font-mono)', flexShrink: 0 }}>
+          <span className="jackpot-draw-strip__heading" style={{ display: 'flex', alignItems: 'baseline', gap: 8, minWidth: 0 }}>
+            <span className="jackpot-draw-strip__label" style={{ fontSize: 9, fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--ink-3)', fontFamily: 'var(--font-mono)', flexShrink: 0 }}>
               Next Draw
             </span>
-            <span style={{ fontFamily: 'var(--font-display)', fontSize: 14, fontWeight: 700, letterSpacing: '0.01em', lineHeight: 1, color: '#EAF0FF', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', minWidth: 0 }}>
+            <span className="jackpot-draw-strip__title" style={{ fontFamily: 'var(--font-display)', fontSize: 14, fontWeight: 700, letterSpacing: '0.01em', lineHeight: 1, color: '#EAF0FF', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', minWidth: 0 }}>
               {item.title}
             </span>
           </span>
           <span style={{ display: 'flex', alignItems: 'baseline', gap: 8, lineHeight: 1 }}>
-            <span style={{ fontSize: 9, fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--ink-3)', fontFamily: 'var(--font-mono)', flexShrink: 0 }}>
+            <span className="jackpot-draw-strip__closing" style={{ fontSize: 9, fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--ink-3)', fontFamily: 'var(--font-mono)', flexShrink: 0 }}>
               closes in
             </span>
             {urgent && (

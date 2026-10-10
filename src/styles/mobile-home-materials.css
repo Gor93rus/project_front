@@ -47,4 +47,26 @@
     border-bottom-color: var(--home-card-border-bottom);
     box-shadow: var(--home-card-shadow);
   }
+
+  /* Полоса сохраняет 56px: название получает всю ширину, а не делит её
+     с Next Draw. Точечные !important перекрывают legacy inline desktop-стили. */
+  .mobile-home .jackpot-draw-strip > div { gap: 2px !important; }
+  .mobile-home .jackpot-draw-strip__heading {
+    flex-direction: column;
+    align-items: stretch !important;
+    gap: 2px !important;
+  }
+  .mobile-home .jackpot-draw-strip__label,
+  .mobile-home .jackpot-draw-strip__closing {
+    color: var(--ink-2) !important;
+    letter-spacing: 0.04em !important;
+    line-height: 1.15;
+  }
+  .mobile-home .jackpot-draw-strip__label { font-size: 9px !important; }
+  .mobile-home .jackpot-draw-strip__closing { font-size: 11px !important; }
+  .mobile-home .jackpot-draw-strip__title {
+    font-size: 14px !important;
+    line-height: 1.1 !important;
+    color: var(--ink-0) !important;
+  }
 }
