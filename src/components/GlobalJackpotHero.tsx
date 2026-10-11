@@ -159,7 +159,7 @@ function WinnerRow({ entry, index }: { entry: WinnerEntry; index: number }) {
   );
 }
 
-// в•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђ
+// в•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђ��•ђв•ђв•ђв•ђ
 // РџРћР›РћРЎРђ Р–РР’РћР“Рћ РўРР РђР–Рђ
 // в•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђ
 // РћС‚СЃС‡С‘С‚ СЃС‡РёС‚Р°РµРј СЂРѕРІРЅРѕ С‚РµРјРё Р¶Рµ РїСЂР°РІРёР»Р°РјРё, С‡С‚Рѕ Рё СЃР°РјР° СЃС‚СЂР°РЅРёС†Р° С‚РёСЂР°Р¶Р°
@@ -496,7 +496,7 @@ export function GlobalJackpotHero({ showTicker = true, compact = false }: Global
               РЅР°РјРµСЂРµРЅРЅРѕ С…РѕР»РѕРґРЅС‹Р№ вЂ” С‡С‚РѕР±С‹ РЅРµ РєРѕРЅРєСѓСЂРёСЂРѕРІР°С‚СЊ СЃ С‚С‘РїР»С‹Рј Р·РѕР»РѕС‚РѕРј С†РёС„СЂ.
           в”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђ */}
           <motion.div
-            style={{ marginBottom: 8, display: 'flex', alignItems: 'center' }}
+            style={{ marginBottom: 14, display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%' }}
             initial={{ opacity: 0, y: 10, filter: 'blur(6px)' }}
             animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
             transition={{ delay: 0.05, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
@@ -505,28 +505,14 @@ export function GlobalJackpotHero({ showTicker = true, compact = false }: Global
               style={{
                 display: 'block',
                 fontFamily: 'var(--font-display)',
-                fontSize: 'clamp(18px, 5.4vw, 38px)',
-                fontWeight: 900,
-                letterSpacing: '0.06em',
+                fontSize: 'clamp(12px, 3.2vw, 16px)',
+                fontWeight: 800,
+                letterSpacing: '0.24em',
                 lineHeight: 1,
                 whiteSpace: 'nowrap',
-                background: `
-                  linear-gradient(110deg, transparent 36%, rgba(255,255,255,0.95) 50%, transparent 64%),
-                  linear-gradient(180deg, #FFFFFF 0%, #E8EEFF 20%, #B8CCFF 48%, #7899E8 78%, #4A6EC8 100%)
-                `,
-                backgroundSize: '260% 100%, 100% 100%',
-                backgroundPosition: '260% 0, 0 0',
-                backgroundRepeat: 'no-repeat',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                backgroundClip: 'text',
-                animation: 'text-sheen 6s ease-in-out infinite',
-                animationDelay: '0.8s',
-                filter: `
-                  drop-shadow(0 1px 0 rgba(255,255,255,0.2))
-                  drop-shadow(0 2px 12px rgba(120,160,255,0.4))
-                  drop-shadow(0 0 36px rgba(100,140,255,0.2))
-                `,
+                color: 'var(--text-secondary)',
+                opacity: 0.82,
+                textShadow: '0 1px 0 rgba(255,255,255,0.12)',
               }}
             >
               WEEKEND MILLIONS
@@ -555,8 +541,8 @@ export function GlobalJackpotHero({ showTicker = true, compact = false }: Global
                 fontWeight: 900,
                 color: 'var(--v2-rarity-legendary)',
                 filter: `
-                  drop-shadow(0 2px 4px rgba(0,0,0,0.8))
-                  drop-shadow(0 0 18px var(--v2-rarity-legendary-glow))
+                  drop-shadow(0 2px 4px rgba(0,0,0,0.82))
+                  drop-shadow(0 0 24px var(--v2-rarity-legendary-glow))
                 `,
               }}
             >
@@ -602,6 +588,17 @@ export function GlobalJackpotHero({ showTicker = true, compact = false }: Global
         </div>
 
         {/* РџРћР›РћРЎРђ Р–РР’РћР“Рћ РўРР РђР–Рђ вЂ” РµРґРёРЅСЃС‚РІРµРЅРЅРѕРµ РґРµР№СЃС‚РІРёРµ РЅР° РїРµСЂРІРѕРј СЌРєСЂР°РЅРµ */}
+        <div
+          aria-hidden="true"
+          style={{
+            height: 1,
+            margin: '0 18px',
+            background: 'linear-gradient(90deg, transparent, rgba(255,184,0,0.32), transparent)',
+            opacity: 0.7,
+            position: 'relative',
+            zIndex: 3,
+          }}
+        />
         <LiveDrawStrip />
 
         {/* РўРРљР•Р  вЂ” С€Р°Рі 4: РїРѕСЃР»РµРґРЅРёРј, clip overflow С‡С‚РѕР±С‹ РЅРµ РґС‘СЂРіР°Р»РѕСЃСЊ РїСЂРё slideUp */}
