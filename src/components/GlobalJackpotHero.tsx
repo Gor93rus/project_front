@@ -227,6 +227,7 @@ function msToSalesClose(drawTimes: string[], salesCloseMinutes: number): number 
 interface StripItem {
   slug: string;
   title: string;
+  jackpot: number | null;
   ticketPrice: number;
   left: number;
 }
@@ -234,6 +235,7 @@ interface StripItem {
 interface RawStripItem {
   slug: string;
   title: string;
+  jackpot: number | null;
   ticketPrice: number;
   salesCloseAt: number;
 }
@@ -266,6 +268,8 @@ function useUpcomingDraws(): StripItem[] {
           .map((d) => ({
             slug: d.lottery.slug,
             title: d.lottery.name,
+            jackpot: d.lottery.jackpot != null && Number.isFinite(Number(d.lottery.jackpot)) && Number(d.lottery.jackpot) >= 0
+              ? Number(d.lottery.jackpot) : null,
             ticketPrice: Number(d.lottery.ticketPrice),
             salesCloseAt: new Date(d.draw.salesCloseAt).getTime(),
           }));
@@ -274,6 +278,7 @@ function useUpcomingDraws(): StripItem[] {
         next = ALL_LOTTERY_CONFIGS.map((c) => ({
           slug: c.slug,
           title: c.title,
+          jackpot: null,
           ticketPrice: c.ticketPrice,
           salesCloseAt: Date.now() + msToSalesClose(c.drawTimes, c.salesCloseMinutes),
         }));
@@ -303,6 +308,7 @@ function useUpcomingDraws(): StripItem[] {
   return draws.map((d) => ({
     slug: d.slug,
     title: d.title,
+    jackpot: d.jackpot,
     ticketPrice: d.ticketPrice,
     left: Math.max(0, d.salesCloseAt - now),
   }));
@@ -316,7 +322,7 @@ function formatClock(ms: number): string {
   return `${pad(m)}:${pad(s)}`;
 }
 
-function LiveDrawStrip() {
+function LiveDrawStrip({ compact = false }: { compact?: boolean }) {
   const reduceMotion = useReducedMotion();
   const navigate = useNavigate();
   const items = useUpcomingDraws();
@@ -332,12 +338,13 @@ function LiveDrawStrip() {
 
   const urgent = item.left > 0 && item.left <= URGENT_MS;
   const accent = urgent ? '#FF4D4F' : 'var(--emerald)';
+  const jackpotText = item.jackpot === null ? '—' : item.jackpot.toLocaleString('en-US', { maximumFractionDigits: 2 });
 
   return (
     <motion.button
       type="button"
       className="jackpot-draw-strip"
-      aria-label={`Next draw: ${item.title}. Closes in ${formatClock(item.left)}. Play`}
+      aria-label={`Next draw: ${item.title}.${compact ? ` Jackpot: ${item.jackpot === null ? 'unavailable' : `${jackpotText} TON`}.` : ''} Closes in ${formatClock(item.left)}. Play`}
       /* Якорь первого экрана: отклик только тактильный. Строка не поднимается
          и не сжимается — движение здесь читается как дрожание макета. */
       onClick={() => { hapticImpact('light'); navigate(ROUTE_BY_SLUG[item.slug] ?? `/lottery/${item.slug}`); }}
@@ -391,6 +398,11 @@ function LiveDrawStrip() {
               {item.title}
             </span>
           </span>
+          {compact && (
+            <span className="jackpot-draw-strip__jackpot">
+              <span>Jackpot · </span><strong>{jackpotText} TON</strong>
+            </span>
+          )}
           <span style={{ display: 'flex', alignItems: 'baseline', gap: 8, lineHeight: 1 }}>
             <span className="jackpot-draw-strip__closing" style={{ fontSize: 9, fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--ink-3)', fontFamily: 'var(--font-mono)', flexShrink: 0 }}>
               closes in
@@ -609,7 +621,7 @@ export function GlobalJackpotHero({ showTicker = true, compact = false }: Global
         </div>
 
         {/* РџРћР›РћРЎРђ Р–РР’РћР“Рћ РўРР РђР–Рђ вЂ” РµРґРёРЅСЃС‚РІРµРЅРЅРѕРµ РґРµР№СЃС‚РІРёРµ РЅР° РїРµСЂРІРѕРј СЌРєСЂР°РЅРµ */}
-        <LiveDrawStrip />
+        <LiveDrawStrip compact={compact} />
 
         {/* РўРРљР•Р  вЂ” С€Р°Рі 4: РїРѕСЃР»РµРґРЅРёРј, clip overflow С‡С‚РѕР±С‹ РЅРµ РґС‘СЂРіР°Р»РѕСЃСЊ РїСЂРё slideUp */}
         {showTicker && (
