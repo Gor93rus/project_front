@@ -473,6 +473,26 @@ export function GlobalJackpotHero({ showTicker = true, compact = false }: Global
           <GodRays />
         </div>
 
+        <div
+          aria-hidden="true"
+          style={{
+            position: 'absolute',
+            inset: '-16% -10%',
+            zIndex: 1,
+            pointerEvents: 'none',
+            opacity: 0.34,
+            mixBlendMode: 'screen',
+            backgroundImage: `
+              radial-gradient(ellipse 34% 16% at 18% 35%, rgba(255,184,0,0.16) 0%, transparent 72%),
+              radial-gradient(ellipse 38% 14% at 80% 27%, rgba(255,214,80,0.12) 0%, transparent 74%),
+              linear-gradient(122deg, transparent 31%, rgba(255,184,0,0.12) 42%, transparent 53%),
+              linear-gradient(138deg, transparent 44%, rgba(255,220,120,0.08) 50%, transparent 58%),
+              url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.72' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.18'/%3E%3C/svg%3E")
+            `,
+            backgroundSize: '100% 100%, 100% 100%, 100% 100%, 100% 100%, 180px 180px',
+            filter: 'blur(0.35px)',
+          }}
+        />
 
         {/* Р¦РµРЅС‚СЂР°Р»СЊРЅРѕРµ Р·РѕР»РѕС‚РѕРµ СЃРІРµС‡РµРЅРёРµ вЂ” СЃРєРѕРЅС†РµРЅС‚СЂРёСЂРѕРІР°РЅРѕ Р·Р° СЃСѓРјРјРѕР№, РЅРµ СЂР°Р·РјС‹РІР°РµС‚ РІРµСЂС… */}
         <div
@@ -563,7 +583,7 @@ export function GlobalJackpotHero({ showTicker = true, compact = false }: Global
             </span>
           </motion.div>
 
-          {/* в”Ђв”Ђ РЁРђР“ 3: РџРћР”РџРРЎР¬ в”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђ
+          {/* в”Ђв”Ђ РЁРђР“ 3: РџРћР”РџРРЎР¬ в”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв���Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђ
               РЎРѕРєСЂР°С‰РµРЅРѕ: С‚РѕР»СЊРєРѕ В«Global JackpotВ»
           в”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђ */}
           <motion.span
