@@ -12,11 +12,13 @@ import { hapticImpact } from '../lib/haptic';
 const ACID_GOLD = 'rgba(255,214,0,0.6)';
 
 const GLASS = {
-  background: 'rgba(24,28,46,0.4)',
-  backdropFilter: 'blur(24px) saturate(140%)',
-  WebkitBackdropFilter: 'blur(24px) saturate(140%)',
-  border: `1.5px solid ${ACID_GOLD}`,
-  boxShadow: `0 18px 38px -16px rgba(0,0,0,0.85), 0 0 26px -10px ${ACID_GOLD}`,
+  background: 'var(--home-card-glass, rgba(24,28,46,0.4))',
+  backdropFilter: 'var(--home-card-filter, blur(24px) saturate(140%))',
+  WebkitBackdropFilter: 'var(--home-card-filter, blur(24px) saturate(140%))',
+  border: `1px solid var(--home-card-border, ${ACID_GOLD})`,
+  borderTopColor: `var(--home-card-border-top, ${ACID_GOLD})`,
+  borderBottomColor: `var(--home-card-border-bottom, ${ACID_GOLD})`,
+  boxShadow: `var(--home-card-shadow, 0 18px 38px -16px rgba(0,0,0,0.85), 0 0 26px -10px ${ACID_GOLD})`,
 } as const;
 
 /**
@@ -34,7 +36,7 @@ export function GamificationCompact({ className = '' }: { className?: string } =
   return (
     <motion.button
       onClick={() => { hapticImpact('light'); if (!connected) { connect(); } else { nav('/profile'); } }}
-      className={`relative w-full text-left overflow-hidden p-2.5 flex flex-col justify-center ${className}`}
+      className={`home-material home-material--level relative w-full text-left overflow-hidden p-2.5 flex flex-col justify-center ${className}`}
       style={{
         borderRadius: 'var(--v2-radius-lg)',
         ...GLASS,
@@ -53,7 +55,7 @@ export function GamificationCompact({ className = '' }: { className?: string } =
       {/* Верхний глянцевый блик — та же грамматика frosted glass, что и у CategoryEntryCard */}
       <div
         className="absolute inset-x-0 top-0 h-1/2 pointer-events-none z-0"
-        style={{ borderRadius: 'var(--v2-radius-lg) var(--v2-radius-lg) 0 0', background: 'linear-gradient(180deg, rgba(255,255,255,0.10) 0%, transparent 100%)' }}
+        style={{ borderRadius: 'var(--v2-radius-lg) var(--v2-radius-lg) 0 0', background: 'var(--home-card-highlight, linear-gradient(180deg, rgba(255,255,255,0.10) 0%, transparent 100%))' }}
       />
       {!connected ? (
         /* Locked-состояние теперь занимает всю высоту левой колонки минус

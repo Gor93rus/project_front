@@ -106,29 +106,18 @@ export function Header() {
       style={{
         // Safe area — covers Dynamic Island / notch / camera cutouts
         paddingTop: 'var(--safe-area-top)',
-        // Same translucent navy + blur language as NavBar, mirrored top→bottom
+        // Главная задаёт карбоновый фон оболочки; остальные страницы сохраняют navy.
         background: scrolled
-          ? 'linear-gradient(180deg, rgba(6,7,26,0.96) 0%, rgba(11,16,40,0.94) 100%)'
-          : 'linear-gradient(180deg, rgba(6,7,26,0.98) 0%, rgba(11,16,40,0.96) 100%)',
+          ? 'var(--app-shell-bar-bg, linear-gradient(180deg, rgba(6,7,26,0.96) 0%, rgba(11,16,40,0.94) 100%))'
+          : 'var(--app-shell-bar-bg, linear-gradient(180deg, rgba(6,7,26,0.98) 0%, rgba(11,16,40,0.96) 100%))',
         borderBottom: scrolled ? '1px solid var(--primary-18)' : '1px solid var(--line)',
         transition: 'background 0.3s, border-color 0.3s',
       }}
     >
       {/* Single row — brand · rate + wallet */}
       <div className="flex items-center justify-between px-4" style={{ height: 52 }}>
-        {/* Left — project name */}
-        <div className="flex items-center gap-2 shrink-0">
-          <span
-            className="text-xs font-light leading-none"
-            style={{
-              fontFamily: 'var(--font-display)',
-              color: 'var(--ink-0)',
-              letterSpacing: '-0.02em',
-            }}
-          >
-            Weekend Millions
-          </span>
-        </div>
+        {/* Left — пустой слот под будущее лого (правая группа от него не зависит) */}
+        <div className="flex items-center gap-2 shrink-0" aria-hidden="true" />
 
         {/* Right — rate pill + wallet button */}
         <div className="flex items-center gap-2 shrink-0">

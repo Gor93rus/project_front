@@ -109,6 +109,8 @@ function FeatureCard({ item, index }: { item: FeatureItem; index: number }) {
       className="feature-card-img feature-card-img--carousel-item feature-card-img--static shrink-0"
       style={{
         isolation: 'isolate',
+        // RGB текущей роли без alpha; фон и bevel продолжают использовать исходные значения.
+        ['--home-card-accent' as string]: item.borderTop.replace(/,[\d.]+\)$/, ',1)'),
         ['--fc-border-top' as string]:    item.borderTop,
         ['--fc-border-left' as string]:   item.borderLeft,
         ['--fc-border-right' as string]:  item.borderRight,

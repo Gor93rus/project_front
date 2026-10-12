@@ -106,8 +106,9 @@ export function RewardsPanel({
       whileHover={{ y: -3 }}
       whileTap={{ scale: 0.97 }}
       transition={{ duration: 0.18, ease: 'easeOut' }}
-      className={`relative w-full overflow-hidden text-left ${className}`}
+      className={`home-material home-material--rewards relative w-full overflow-hidden text-left ${className}`}
       style={{
+        ['--home-card-accent' as string]: slide.accent,
         borderRadius: 'var(--v2-radius-lg)',
         minHeight: 78,
         // button по умолчанию центрирует содержимое по вертикали — прижимаем
@@ -120,11 +121,10 @@ export function RewardsPanel({
         // Frosted glass по референсу The Vault (Behance) — тот же паттерн,
         // что и на CategoryEntryCard/GamificationCompact, чтобы правая
         // колонка не выбивалась из общего стиля левой.
-        background: 'rgba(24,28,46,0.4)',
-        backdropFilter: 'blur(24px) saturate(140%)',
-        WebkitBackdropFilter: 'blur(24px) saturate(140%)',
-        border: `1.5px solid ${slide.accent}99`,
-        boxShadow: '0 18px 38px -16px rgba(0,0,0,0.85)',
+        background: 'var(--home-card-glass, rgba(24,28,46,0.4))',
+        backdropFilter: 'var(--home-card-filter, blur(24px) saturate(140%))',
+        WebkitBackdropFilter: 'var(--home-card-filter, blur(24px) saturate(140%))',
+        // Inset-кант из scoped CSS не меняет существующую геометрию контента.
         ...style,
       }}
     >
@@ -137,7 +137,7 @@ export function RewardsPanel({
       {/* Верхний глянцевый блик — та же грамматика frosted glass, что и у CategoryEntryCard */}
       <div
         className="absolute inset-x-0 top-0 h-1/2 pointer-events-none z-0"
-        style={{ borderRadius: 'var(--v2-radius-lg) var(--v2-radius-lg) 0 0', background: 'linear-gradient(180deg, rgba(255,255,255,0.10) 0%, transparent 100%)' }}
+        style={{ borderRadius: 'var(--v2-radius-lg) var(--v2-radius-lg) 0 0', background: 'var(--home-card-highlight, linear-gradient(180deg, rgba(255,255,255,0.10) 0%, transparent 100%))' }}
       />
       {/* Мягкое свечение под акцент текущего слайда */}
       <motion.div
@@ -150,7 +150,7 @@ export function RewardsPanel({
           position: 'absolute',
           inset: 0,
           pointerEvents: 'none',
-          background: `radial-gradient(ellipse 85% 70% at 14% 0%, ${slide.accent}33 0%, transparent 62%)`,
+          background: `radial-gradient(ellipse 85% 70% at 14% 0%, color-mix(in srgb, ${slide.accent} 20%, transparent) 0%, transparent 62%)`,
         }}
       />
 
@@ -169,7 +169,7 @@ export function RewardsPanel({
               alignItems: 'center',
               gap: 6,
               color: slide.accent,
-              filter: `drop-shadow(0 0 9px ${slide.accent}70)`,
+              filter: `drop-shadow(0 0 9px color-mix(in srgb, ${slide.accent} 44%, transparent))`,
             }}
           >
             {slide.icon}

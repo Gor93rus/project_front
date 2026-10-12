@@ -63,9 +63,12 @@ export function useLotteryDrawData(slug: string): LiveDrawData {
 
         if (cancelled) return;
 
-        // Джекпот
-        const jp = detailRes.lottery.accumulatedJackpot ?? detailRes.lottery.jackpot;
-        setJackpotCurrent(parseFloat(jp) || null);
+        // Тот же отображаемый джекпот, что в полосе: baseJackpot + currentJackpot.
+        // Legacy accumulatedJackpot и общий totalPrizePool не используем.
+        const draw = drawsRes.draws.find((item) => item.lottery.slug === slug) ?? null;
+        const jp = draw?.lottery.jackpot;
+        const amount = jp == null ? NaN : Number(jp);
+        setJackpotCurrent(Number.isFinite(amount) && amount >= 0 ? amount : null);
 
         // Прошедшие тиражи
         const recentDraws = (detailRes.lottery.recentDraws ?? []).map((d) => ({
@@ -85,7 +88,6 @@ export function useLotteryDrawData(slug: string): LiveDrawData {
         setWinners(null);
 
         // Текущий тираж
-        const draw = drawsRes.draws[0] ?? null;
         setCurrentDraw(draw);
 
         setError(null);

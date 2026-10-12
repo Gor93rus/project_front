@@ -5,6 +5,7 @@
 
 @import './styles/design-tokens.css';
 @import './styles/lottery-cards.css';
+@import './styles/mobile-home-materials.css';
 @import './styles/fonts-switzer.css';
 @import '@fontsource/space-grotesk/index.css';
 @import '@fontsource/space-grotesk/500.css';
@@ -40,6 +41,32 @@
   background-image: radial-gradient(circle, rgba(255,255,255,0.07) 1px, transparent 1.5px);
   background-size: 22px 22px;
   opacity: 0.55;
+}
+
+/* Carbon OLED — только оболочка главной. Legacy-токены других страниц не меняем. */
+.app-shell--carbon {
+  --app-shell-bar-bg: var(--v2-bg-surface-0);
+  /* Полный бордер добавляет 1px к прежнему доку; резерв округлён вверх. */
+  --dock-h: 77px;
+  --dock-offset: 12px;
+  --dock-clearance: 16px;
+}
+.app-shell--carbon .aurora {
+  background:
+    radial-gradient(circle at 30% 20%, rgba(255,255,255,0.025) 0%, transparent 50%),
+    radial-gradient(circle at 75% 65%, rgba(255,255,255,0.015) 0%, transparent 50%),
+    var(--v2-bg-page);
+}
+@media (min-width: 768px) {
+  .app-shell--carbon .app-shell-capsule {
+    background: var(--v2-bg-page);
+  }
+  .app-shell--carbon .app-shell-decor::before {
+    background-image: radial-gradient(rgba(255,255,255,0.07) 1px, transparent 1px);
+  }
+  .app-shell--carbon .app-shell-decor::after {
+    background: radial-gradient(circle, rgba(255,255,255,0.025) 0%, transparent 70%);
+  }
 }
 
 /* Frosted-glass grain — тонкая процедурная текстура внутри стеклянных
@@ -128,10 +155,16 @@
 @keyframes ring-expand { 0%{transform:scale(0.4);opacity:0.8} 100%{transform:scale(1.6);opacity:0} }
 @keyframes confetti-fall { 0%{transform:translateY(-10px) rotate(0deg);opacity:0} 10%{opacity:1} 100%{transform:translateY(40px) rotate(360deg);opacity:0} }
 @keyframes text-sheen { 0%{background-position:220% 0,0 0} 55%,100%{background-position:-120% 0,0 0} }
-@keyframes text-sheen-once {
-  0% { background-position: 220% 0; }
-  60% { background-position: -120% 0; }
-  100% { background-position: -120% 0; }
+/* God-rays: вращение запечённого SVG-слоя через CSS (без JS-интерполяции,
+   без conic-gradient, без mask-image, без mix-blend-mode). */
+.god-rays-spinner {
+  will-change: transform;
+  transform: translateZ(0);
+  animation: godRaysSpin 70s linear infinite;
+}
+@keyframes godRaysSpin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }
 @keyframes growRight { from{width:0} to{width:100%} }
 @keyframes fadeSlideUp { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
@@ -457,8 +490,8 @@
     display: flex;
     flex-direction: column;
     flex: 0 0 auto;
-    min-height: calc(100vh - var(--header-h) - var(--safe-area-top) - 8px - var(--dock-h) - var(--safe-area-bottom) + 16px);
-    min-height: calc(100dvh - var(--header-h) - var(--safe-area-top) - 8px - var(--dock-h) - var(--safe-area-bottom) + 16px);
+    min-height: calc(100vh - var(--header-h) - var(--safe-area-top) - 8px - var(--dock-h) - var(--safe-area-bottom) - var(--dock-offset, 0px) + 16px);
+    min-height: calc(100dvh - var(--header-h) - var(--safe-area-top) - 8px - var(--dock-h) - var(--safe-area-bottom) - var(--dock-offset, 0px) + 16px);
   }
 
   /* Ряд главной — обёртка AnimatedSection. */
@@ -486,6 +519,11 @@
   .mobile-home--compact > .mh-row--footer {
     display: block;
     flex: 0 0 auto;
+  }
+
+  /* Футер не должен выглядывать в просвете под плавающей капсулой на первом экране. */
+  .app-shell--carbon .mobile-home--compact > .mh-row--footer {
+    margin-top: calc(var(--dock-h) + var(--safe-area-bottom));
   }
 
   /* Ряд Draw Lotteries: между обёрткой px-4 и кнопкой нужен flex-столбец,
@@ -544,7 +582,7 @@
 
   .mobile-home__secondary-grid {
     display: grid;
-    grid-template-columns: minmax(0, 1.08fr) minmax(0, 0.92fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 16px;
     grid-auto-rows: 1fr;
     align-items: stretch;
@@ -637,4 +675,12 @@
 /* Плавный ease для прогресс-кольца */
 .scroll-carousel-progress {
   transition: stroke-dashoffset 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Hero джекпота: бесконечные декоративные анимации выключаются при prefers-reduced-motion.
+   Пульс точки LiveDrawStrip отключён в компоненте через useReducedMotion. */
+@media (prefers-reduced-motion: reduce) {
+  .global-jackpot-hero .god-rays-spinner,
+  .global-jackpot-hero .winners-scroll,
+  .global-jackpot-hero .jackpot-title-sheen { animation: none !important; }
 }

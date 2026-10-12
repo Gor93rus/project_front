@@ -218,7 +218,10 @@ function AppLayout() {
     location.pathname === '/scratch-cards';
 
   return (
-    <div className="relative min-h-screen" style={{ background: 'var(--bg-0)' }}>
+    <div
+      className={`relative min-h-screen${location.pathname === '/' ? ' app-shell--carbon' : ''}`}
+      style={{ background: location.pathname === '/' ? 'var(--v2-bg-page)' : 'var(--bg-0)' }}
+    >
       {!isLotteryPage && <AuroraBackground />}
       {!isLotteryPage && <div className="dot-grid" aria-hidden="true" />}
       {!isLotteryPage && (
@@ -229,12 +232,13 @@ function AppLayout() {
       )}
       <div className={`relative z-10 flex flex-col min-h-screen${isLotteryPage ? '' : ' app-shell-capsule'}`}>
         {!isLotteryPage && <Header />}
-        {/* Резерв снизу = высота дока + safe-area. Раньше стояло магическое 72px:
+        {/* Резерв снизу = высота дока + safe-area + смещение и зазор floating dock.
+            Раньше стояло магическое 72px:
             оно на 3px меньше самого дока и вообще не учитывало safe-area, из-за
             чего на реальном iPhone контент заезжал под док. */}
         <main
           className="flex-1 overflow-y-auto pt-2"
-          style={{ paddingBottom: isLotteryPage ? 0 : 'calc(var(--dock-h) + var(--safe-area-bottom))' }}
+          style={{ paddingBottom: isLotteryPage ? 0 : 'calc(var(--dock-h) + var(--safe-area-bottom) + var(--dock-offset, 0px) + var(--dock-clearance, 0px))' }}
         >
           <Routes>
             <Route path="/" element={<HomePage />} />
@@ -259,7 +263,7 @@ function AppLayout() {
             <Route path="/lottery/:slug" element={<LotteryPage />} />
           </Routes>
         </main>
-        {!isLotteryPage && <NavBar active={activeTab} onTabChange={handleTabChange} />}
+        {!isLotteryPage && <NavBar active={activeTab} onTabChange={handleTabChange} floating={location.pathname === '/'} />}
       </div>
     </div>
   );
