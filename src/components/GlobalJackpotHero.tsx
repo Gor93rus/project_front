@@ -126,7 +126,7 @@ function GodRays() {
 function WinnerRow({ entry, index }: { entry: WinnerEntry; index: number }) {
   return (
     <span
-      className="flex items-center shrink-0"
+      className="winner-row flex items-center shrink-0"
       style={{
         gap: 8,
         paddingInline: 14,
@@ -138,13 +138,13 @@ function WinnerRow({ entry, index }: { entry: WinnerEntry; index: number }) {
       }}
     >
       {avatarFromName(entry.user, index)}
-      <span style={{ color: 'var(--ink-1)', fontWeight: 750, fontSize: 11 }}>{entry.user}</span>
-      <span style={{ color: 'var(--ink-2)', fontSize: 11, fontWeight: 600, fontFamily: 'var(--font-mono)' }}>won</span>
-      <span style={{ color: 'var(--emerald-soft)', fontWeight: 800, fontFamily: 'var(--font-mono)', fontSize: 11, textShadow: '0 0 8px var(--emerald-glow)' }}>
+      <span className="winner-row__user" style={{ color: 'var(--ink-1)', fontWeight: 750, fontSize: 11 }}>{entry.user}</span>
+      <span className="winner-row__verb" style={{ color: 'var(--ink-2)', fontSize: 11, fontWeight: 600, fontFamily: 'var(--font-mono)' }}>won</span>
+      <span className="winner-row__prize" style={{ color: 'var(--emerald-soft)', fontWeight: 800, fontFamily: 'var(--font-mono)', fontSize: 11, textShadow: '0 0 8px var(--emerald-glow)' }}>
         {entry.prize}
       </span>
       <span style={{ color: 'var(--ink-2)', fontSize: 11, fontWeight: 600 }}>in</span>
-      <span style={{
+      <span className="winner-row__lottery" style={{
         color: 'var(--primary-soft)',
         fontSize: 11,
         fontWeight: 600,
@@ -588,8 +588,8 @@ export function GlobalJackpotHero({ showTicker = true, compact = false }: Global
                 fontWeight: 800,
                 fontFamily: 'var(--font-mono)',
                 letterSpacing: '0.04em',
-                color: 'var(--gold-soft)',
-                textShadow: '0 0 14px var(--gold-glow), 0 2px 4px rgba(0,0,0,0.5)',
+                color: compact ? 'var(--v2-rarity-legendary)' : 'var(--gold-soft)',
+                textShadow: `0 0 14px ${compact ? 'var(--v2-rarity-legendary-glow)' : 'var(--gold-glow)'}, 0 2px 4px rgba(0,0,0,0.5)`,
                 marginBottom: 4,
               }}
             >

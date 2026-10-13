@@ -82,4 +82,14 @@
     line-height: 1.1 !important;
     color: var(--ink-0) !important;
   }
+  /* Тикер: имя → выигрыш → лотерея; высота и анимация дорожки прежние. */
+  .mobile-home .winner-row { white-space: nowrap; }
+  .mobile-home .winner-row__user {
+    color: var(--ink-0) !important;
+  }
+  .mobile-home .winner-row__lottery {
+    color: var(--ink-1) !important;
+    background: transparent !important;
+    border-color: transparent !important;
+  }
 }
