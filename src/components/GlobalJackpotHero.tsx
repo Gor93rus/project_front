@@ -470,7 +470,7 @@ export function GlobalJackpotHero({ showTicker = true, compact = false }: Global
           overflow: 'hidden',
           // РќР°СЃС‹С‰РµРЅРЅР°СЏ С‡РёСЃС‚Р°СЏ Р·Р°Р»РёРІРєР°: РіР»СѓР±РѕРєРёР№ navy + Р»С‘РіРєРёР№ С„РёРѕР»РµС‚ СЃРІРµСЂС…Сѓ.
           // РЎРІРµС‚ (god-rays + Р·РѕР»РѕС‚Рѕ) РІС‹РЅРµСЃРµРЅ РІ РѕС‚РґРµР»СЊРЅС‹Рµ СЃР»РѕРё РІС‹С€Рµ, С‡С‚РѕР±С‹ РЅРµ РјСѓС‚РёС‚СЊ Р±Р°Р·Сѓ.
-          background: 'var(--surface-gradient)',
+          background: 'var(--jackpot-hero-background, var(--surface-gradient))',
           border: '1px solid var(--home-card-border, var(--gold-18))',
           borderTopColor: 'var(--home-card-border-top, var(--gold-18))',
           borderBottomColor: 'var(--home-card-border-bottom, var(--gold-18))',
@@ -505,7 +505,7 @@ export function GlobalJackpotHero({ showTicker = true, compact = false }: Global
           }}
         />
 
-        <div className="flex flex-col items-center" style={{ padding: 'clamp(16px,3.5vw,40px) clamp(16px,6vw,64px) 14px', position: 'relative', zIndex: 3 }}>
+        <div className="jackpot-hero-content flex flex-col items-center" style={{ padding: 'clamp(16px,3.5vw,40px) clamp(16px,6vw,64px) 14px', position: 'relative', zIndex: 3 }}>
 
           {/* в”Ђв”Ђ РЁРђР“ 1: РќРђР—Р’РђРќРР• Р‘Р Р•РќР”Рђ в”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђ
               WEEKEND MILLIONS вЂ” РµРґРёРЅС‹Р№ Р±Р»РѕРє, РµРґРёРЅС‹Р№ СЂР°Р·РјРµСЂ, РµРґРёРЅС‹Р№ РІРµСЃ.
@@ -601,6 +601,7 @@ export function GlobalJackpotHero({ showTicker = true, compact = false }: Global
               РЎРѕРєСЂР°С‰РµРЅРѕ: С‚РѕР»СЊРєРѕ В«Global JackpotВ»
           в”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђ */}
           <motion.span
+            className="jackpot-hero-label"
             style={{
               marginTop: 4,
               fontSize: 10,
