@@ -244,8 +244,6 @@ function AppLayout() {
             <Route path="/" element={<HomePage />} />
             <Route path="/lotteries" element={<LotteriesPage />} />
             <Route path="/scratch-cards" element={<ScratchCardsPage />} />
-            <Route path="/lotteries" element={<LotteriesPage />} />
-            <Route path="/scratch-cards" element={<ScratchCardsPage />} />
             <Route path="/live" element={<PlaceholderPage title="Live Draw" />} />
             <Route path="/cart" element={<PlaceholderPage title="Cart" />} />
             <Route path="/history" element={<PlaceholderPage title="History" />} />
