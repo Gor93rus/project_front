@@ -1,0 +1,40 @@
+/* Материалы мобильного каталога следуют принятой главной.
+   Цвет игры — существующий accent; никаких новых анимаций или blur. */
+@media (max-width: 767px) {
+  .catalog-lottery-card {
+    border-radius: 22px;
+    border-color: color-mix(in srgb, var(--catalog-accent) 42%, transparent);
+    border-top-color: color-mix(in srgb, var(--catalog-accent) 58%, transparent);
+    border-bottom-color: color-mix(in srgb, var(--catalog-accent) 28%, transparent);
+    background:
+      linear-gradient(180deg, rgba(255,255,255,.10), transparent 48%),
+      radial-gradient(ellipse at 100% 0%, color-mix(in srgb, var(--catalog-accent) 12%, transparent), transparent 65%),
+      linear-gradient(155deg, #172B46, #0C1629 48%, #050B17);
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,.14),
+      0 12px 28px -12px rgba(0,0,0,.78),
+      0 0 26px color-mix(in srgb, var(--catalog-accent) 20%, transparent);
+  }
+
+  .catalog-lottery-card__footer a {
+    border-radius: 12px;
+    border-color: color-mix(in srgb, var(--catalog-accent) 42%, transparent);
+    border-top-color: color-mix(in srgb, var(--catalog-accent) 58%, transparent);
+    background: linear-gradient(180deg, color-mix(in srgb, var(--catalog-accent) 16%, #172B46), #0C1629);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.14);
+  }
+
+  .lottery-filters button {
+    border-radius: 12px;
+    background: #0C1629;
+    border-color: rgba(255,255,255,.08);
+  }
+
+  .lottery-filters button[aria-pressed='true'] {
+    border-color: rgba(152,187,232,.42);
+    border-top-color: rgba(152,187,232,.58);
+    border-bottom-color: rgba(152,187,232,.28);
+    background: linear-gradient(155deg, #172B46, #0C1629 48%, #050B17);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.14), 0 8px 20px -12px rgba(0,0,0,.78);
+  }
+}

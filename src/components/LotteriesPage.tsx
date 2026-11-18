@@ -7,6 +7,7 @@ import { LotteryFilters } from './lotteries/LotteryFilters';
 import { getCatalogGroup, type CatalogFilter } from './lotteries/catalog-groups';
 import { CatalogLotteryCard } from './lotteries/CatalogLotteryCard';
 import './lotteries/catalog-typography.css';
+import './lotteries/catalog-materials.css';
 
 export function LotteriesPage() {
   const nav = useNavigate();
