@@ -6,6 +6,7 @@ import { MobileCatalogIntro } from './lotteries/MobileCatalogIntro';
 import { LotteryFilters } from './lotteries/LotteryFilters';
 import { getCatalogGroup, type CatalogFilter } from './lotteries/catalog-groups';
 import { CatalogLotteryCard } from './lotteries/CatalogLotteryCard';
+import './lotteries/catalog-typography.css';
 
 export function LotteriesPage() {
   const nav = useNavigate();
@@ -35,7 +36,7 @@ export function LotteriesPage() {
         >
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M15 18l-6-6 6-6" /></svg>
         </button>
-        <span style={{
+        <span className="lotteries-page__title" style={{
           flex: 1, fontSize: 17, fontWeight: 700, color: '#fff', letterSpacing: '-0.02em',
           fontFamily: "'Space Grotesk', sans-serif",
           background: `linear-gradient(135deg, #fff, ${accent})`,

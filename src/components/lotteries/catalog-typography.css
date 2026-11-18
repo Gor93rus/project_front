@@ -1,0 +1,36 @@
+/* Только мобильный каталог: display для названий, mono для сумм и статусов.
+   Legacy inline-оформление заголовка остаётся неизменным на desktop. */
+@media (max-width: 767px) {
+  .lotteries-page__title {
+    font-family: var(--font-display) !important;
+    font-size: 18px !important;
+    line-height: 24px;
+    background: none !important;
+    -webkit-text-fill-color: var(--ink-0) !important;
+    color: var(--ink-0) !important;
+  }
+
+  .catalog-lottery-card h2 {
+    font-family: var(--font-display);
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+
+  .catalog-lottery-card__jackpot strong {
+    font-size: 26px;
+    font-weight: 700;
+    letter-spacing: -0.04em;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .catalog-lottery-card__label {
+    font-size: 11px;
+    font-weight: 500;
+  }
+
+  .catalog-lottery-card__currency {
+    font-size: 11px;
+    font-weight: 500;
+  }
+}
