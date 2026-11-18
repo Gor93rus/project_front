@@ -1,9 +1,17 @@
-import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { LOTTERIES } from '../data/lotteries';
 import { LotteryCard } from './LotteryCarousel';
+import { MobileCatalogIntro } from './lotteries/MobileCatalogIntro';
+import { LotteryFilters } from './lotteries/LotteryFilters';
+import { getCatalogGroup, type CatalogFilter } from './lotteries/catalog-groups';
+import { CatalogLotteryCard } from './lotteries/CatalogLotteryCard';
 
 export function LotteriesPage() {
   const nav = useNavigate();
+  const [filter, setFilter] = useState<CatalogFilter>('all');
+  const [searchParams] = useSearchParams();
+  const demo = searchParams.get('demo') === 'lotteries';
   const accent = 'var(--primary)';
 
   return (
@@ -44,14 +52,23 @@ export function LotteriesPage() {
         </span>
       </div>
 
+      <MobileCatalogIntro demo={demo} />
+      <LotteryFilters value={filter} onChange={setFilter} />
+
       <div
+        id="lotteries-catalog" className="lotteries-catalog" data-filter={filter}
         style={{
           display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 12,
           padding: '14px 16px 0',
         }}
       >
         {LOTTERIES.map((l, i) => (
-          <LotteryCard key={l.id} lottery={l} index={i} fluid />
+          <div key={l.id} className="lotteries-catalog__entry" data-group={getCatalogGroup(l.slug)} data-slug={l.slug}>
+            <CatalogLotteryCard lottery={l} />
+            <div className="lotteries-catalog__desktop">
+              <LotteryCard lottery={l} index={i} fluid />
+            </div>
+          </div>
         ))}
       </div>
     </div>
